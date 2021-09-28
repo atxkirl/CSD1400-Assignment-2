@@ -1,4 +1,4 @@
-#include "cprocessing.h"
+#include "../CProcessing/inc/cprocessing.h"
 
 void LevelEditorInit();
 void LevelEditorUpdate();
