@@ -10,21 +10,29 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-#include "../LevelEditor.h"
+#include "RenderManager.h"
+#include "GameObject.h"
+#include "GameObjectManager.h"
 
 void game_init(void)
 {
-    //CP_System_Fullscreen();
-    CP_System_SetWindowSize(1000, 1000);
-    LevelEditorInit();
+    RM_Init();
+    GOM_Init();
+
+    GameObject* g = GOM_CreateGameObject();
+    g->scale = CP_Vector_Set(20, 20);
+    g->position = CP_Vector_Set(20, 20);
+
+    RM_AddRenderObject(g);
 }
 
 void game_update(void)
 {
-    LevelEditorUpdate();
+    RM_Render();
 }
 
 void game_exit(void)
 {
-
+    RM_ClearRenderObjects();
+    GOM_Clear();
 }
