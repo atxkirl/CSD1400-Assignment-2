@@ -5,10 +5,24 @@
     <ClCompile Include="source\game.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="LevelEditor.c">
+      <Filter>Source\Level Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
       <UniqueIdentifier>{743b86c5-7816-4a00-afc9-a28a0c55af10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\File Reader">
+      <UniqueIdentifier>{4d0770b5-0857-4593-9131-ad52e2ac2636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Level Editor">
+      <UniqueIdentifier>{737ba686-be32-4030-9e78-48e88087b281}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LevelEditor.h">
+      <Filter>Source\Level Editor</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
