@@ -5,10 +5,39 @@
     <ClCompile Include="source\game.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Scene.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameObject.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderManager.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameObjectManager.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
       <UniqueIdentifier>{743b86c5-7816-4a00-afc9-a28a0c55af10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{a6768da8-5649-4a8d-bc42-62e58e37be36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\Scene.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameObject.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameObjectManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
