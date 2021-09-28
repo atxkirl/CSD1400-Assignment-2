@@ -17,6 +17,9 @@
     <ClCompile Include="source\GameObjectManager.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\LevelEditor.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -37,6 +40,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\GameObjectManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LevelEditor.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

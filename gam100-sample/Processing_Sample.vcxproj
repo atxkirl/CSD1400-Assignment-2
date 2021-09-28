@@ -194,22 +194,20 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="LevelEditor.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="source\game.c" />
     <ClCompile Include="source\GameObject.c" />
     <ClCompile Include="source\GameObjectManager.c" />
+    <ClCompile Include="source\LevelEditor.c" />
     <ClCompile Include="source\RenderManager.c" />
     <ClCompile Include="source\Scene.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\GameObject.h" />
     <ClInclude Include="source\GameObjectManager.h" />
+    <ClInclude Include="source\LevelEditor.h" />
     <ClInclude Include="source\RenderManager.h" />
     <ClInclude Include="source\Scene.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="LevelEditor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
