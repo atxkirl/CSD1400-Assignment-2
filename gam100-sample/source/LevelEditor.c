@@ -1,6 +1,8 @@
 #include "LevelEditor.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "GameObject.h"
+#include "FileParser.h"
 
 // For sizing
 #define NumGrids 30
@@ -18,6 +20,8 @@ typedef struct
 } Grid;
 
 Grid gGrids;
+
+extern GameObject *GameObjectList;
 
 void LevelEditorInit()
 {
@@ -106,4 +110,31 @@ void CheckGrid(float fMouseX, float fMouseY, int iObjType)
 	{
 		gGrids.gGrid[iCurrentY][iCurrentX] = iObjType;
 	}
+}
+
+void SaveGrid()
+{
+	char* GridObj;
+
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			if (gGrids.gGrid[i][j] != isEmpty)
+			{
+				strncat(GridObj, gGrids.gGrid[i][j] + '0', 2);
+				strncat(GridObj, ",", 2);
+				strncat(GridObj, j + '0', 2);
+				strncat(GridObj, ",", 2);
+				strncat(GridObj, i + '0', 2);
+				strncat(GridObj, "\n", 2);
+			}
+		}
+	}
+
+	char* cFileName;
+	printf("Input a file name: ");
+	scanf("%s\n", &cFileName);
+
+	Map->WriteFile(cFileName, GridObj);
 }

@@ -26,6 +26,9 @@
     <ClCompile Include="source\LinkedList.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\FileParser.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -55,6 +58,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\LinkedList.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FileParser.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

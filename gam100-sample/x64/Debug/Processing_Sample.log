@@ -1,5 +1,52 @@
-﻿  CollisionManager.c
-  Processing_Sample.vcxproj -> C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\x64\Debug\Processing_Sample.exe
-  1 File(s) copied
-  1 File(s) copied
-  1 File(s) copied
+﻿  main.c
+  CollisionManager.c
+  FileParser.c
+  game.c
+  GameObject.c
+  GameObjectManager.c
+  LevelEditor.c
+  LinkedList.c
+  RenderManager.c
+  Scene.c
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(19,31): error C2220: the following warning is treated as an error (compiling source file source\FileParser.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(19,31): warning C4030: first formal parameter list longer than the second list (compiling source file source\FileParser.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(19,31): warning C4028: formal parameter 1 different from declaration (compiling source file source\FileParser.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(19,6): error C2371: 'ReadFile': redefinition; different basic types (compiling source file source\FileParser.c)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\fileapi.h(1024): message : see declaration of 'ReadFile' (compiling source file source\FileParser.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(20,46): warning C4030: first formal parameter list longer than the second list (compiling source file source\FileParser.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(20,46): warning C4028: formal parameter 1 different from declaration (compiling source file source\FileParser.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(20,46): warning C4028: formal parameter 2 different from declaration (compiling source file source\FileParser.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(20,6): error C2371: 'WriteFile': redefinition; different basic types (compiling source file source\FileParser.c)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\fileapi.h(1221): message : see declaration of 'WriteFile' (compiling source file source\FileParser.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.c(5,23): warning C4305: 'initializing': truncation from 'int' to 'const char'
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.c(8,1): error C2491: 'ReadFile': definition of dllimport function not allowed
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.c(55,50): warning C4047: '=': 'int *' differs in levels of indirection from 'int'
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.c(56,47): warning C4047: '=': 'int *' differs in levels of indirection from 'int'
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.c(57,47): warning C4047: '=': 'int *' differs in levels of indirection from 'int'
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.c(14,10): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.c(63,1): error C2491: 'WriteFile': definition of dllimport function not allowed
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.c(65,10): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(19,31): error C2220: the following warning is treated as an error (compiling source file source\LevelEditor.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(19,31): warning C4030: first formal parameter list longer than the second list (compiling source file source\LevelEditor.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(19,31): warning C4028: formal parameter 1 different from declaration (compiling source file source\LevelEditor.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(19,6): error C2371: 'ReadFile': redefinition; different basic types (compiling source file source\LevelEditor.c)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\fileapi.h(1024): message : see declaration of 'ReadFile' (compiling source file source\LevelEditor.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(20,46): warning C4030: first formal parameter list longer than the second list (compiling source file source\LevelEditor.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(20,46): warning C4028: formal parameter 1 different from declaration (compiling source file source\LevelEditor.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(20,46): warning C4028: formal parameter 2 different from declaration (compiling source file source\LevelEditor.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\FileParser.h(20,6): error C2371: 'WriteFile': redefinition; different basic types (compiling source file source\LevelEditor.c)
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\fileapi.h(1221): message : see declaration of 'WriteFile' (compiling source file source\LevelEditor.c)
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(125,46): warning C4047: 'function': 'const char *' differs in levels of indirection from 'int'
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(125,41): warning C4024: 'strncat': different types for formal and actual parameter 2
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(127,29): warning C4047: 'function': 'const char *' differs in levels of indirection from 'int'
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(127,24): warning C4024: 'strncat': different types for formal and actual parameter 2
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(129,29): warning C4047: 'function': 'const char *' differs in levels of indirection from 'int'
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(129,24): warning C4024: 'strncat': different types for formal and actual parameter 2
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(137,8): warning C4477: 'scanf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'char **'
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(125,5): error C4996: 'strncat': This function or variable may be unsafe. Consider using strncat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(126,5): error C4996: 'strncat': This function or variable may be unsafe. Consider using strncat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(127,5): error C4996: 'strncat': This function or variable may be unsafe. Consider using strncat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(128,5): error C4996: 'strncat': This function or variable may be unsafe. Consider using strncat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(129,5): error C4996: 'strncat': This function or variable may be unsafe. Consider using strncat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(130,5): error C4996: 'strncat': This function or variable may be unsafe. Consider using strncat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\User\Desktop\Test Codes\CSD1400-Assignment-2\gam100-sample\source\LevelEditor.c(137,2): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.

@@ -52,8 +52,3 @@ Mkfile.old
 dkms.conf
 
 #update gitignore
-*.log
-*.tlog
-x64/
-x86/
-*.ipch

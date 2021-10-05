@@ -13,6 +13,5 @@ GameObject* GameObject_new() {
 		go->renderPriority = GAME_OBJECT;
 	}
 
-
 	return go;
 }
