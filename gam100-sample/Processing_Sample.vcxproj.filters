@@ -20,6 +20,12 @@
     <ClCompile Include="source\LevelEditor.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\CollisionManager.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LinkedList.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -43,6 +49,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\LevelEditor.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CollisionManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LinkedList.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

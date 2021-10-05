@@ -3,48 +3,54 @@
 
 void GOM_Init()
 {
-	objectCount = 0;
-	memset(objects, 0, 0);
+
 }
-GameObject* GOM_CreateGameObject()
-{
-	GameObject* go = GameObject_new();
-	objectCount++;
-	memset(objects, sizeof(GameObject*), objectCount);
-	objects[objectCount - 1] = go;
-	return go;
-}
+
 int GOM_Delete(GameObject* g)
 {
-	int i = GOM_GetIndex(g);
-	if (i < 0)
-		return i;
-
-	for (int j = i; j < objectCount - 1; ++j)
-	{
-		objects[i] = objects[i + 1];
-	}
-	objects[objectCount - 1] = NULL;
-	memset(objects, sizeof(GameObject*), objectCount - 1);
+	objects = LL_RemovePtr(objects, g);
 	free(g);
 
 	return 1;
 }
 void GOM_Clear()
 {
-	for (int i = 0; i < objectCount; ++i)
+	LinkedList* l = objects;
+	while (l)
 	{
-		free(objects[i]);
+		free(l->curr);
+		l = l->next;
 	}
-	objectCount = 0;
-	memset(objects, 0, 0);
+	LL_Clear(objects);
 }
 int GOM_GetIndex(GameObject* go)
 {
-	for (int i = 0; i < objectCount; ++i)
-	{
-		if (objects[i] == go)
-			return i;
-	}
-	return -1;
+	return LL_GetIndexPtr(objects, go);
+}
+
+GameObject* GOM_CreateGameObject()
+{
+	GameObject* go = GameObject_new();
+	objects = LL_Add(objects, go);
+	return go;
+}
+
+GameObject* GOM_FactoryCreateGO(int type)
+{
+	enum OBJECT_TYPE objType = (enum OBJECT_TYPE)type;
+
+	GameObject* go = GOM_CreateGameObject();
+	go->type = objType;
+	//switch (objType)
+	//{
+	//case CIRCLE:
+	//{
+	//}
+	//	break;
+	//case RECTANGLE:
+
+	//	break;
+
+	//}
+	return go;
 }

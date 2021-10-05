@@ -3,18 +3,21 @@
 #include "../CProcessing/inc/cprocessing.h"
 
 
-enum OBJECT_TYPE
+typedef enum OBJECT_TYPE
 {
 	CIRCLE,
 	RECTANGLE,
-};
-enum RENDER_PRIORITY //lowest to highest
+	WALL,
+	PLAYER
+
+}OBJECT_TYPE;
+typedef enum RENDER_PRIORITY //lowest to highest
 {
 	GAME_OBJECT,
 	UI,
-};
+}RENDER_PRIORITY;
 
-typedef struct Object
+typedef struct
 {
 	CP_Vector position;
 	CP_Vector scale;
