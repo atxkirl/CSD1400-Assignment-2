@@ -1,20 +1,20 @@
 #include <string.h>
 #include "../CProcessing/inc/cprocessing.h"
 
-struct StoreMap
+typedef struct StoreMap
 {
-	void (*ReadFile)(char* cFileName);
-	void (*WriteFile)(char* cFileName, char* cToAdd);
 	struct FileObj** fObjList;
 
-} *Map;
+} Map;
+
+Map* new_Map();
 
 struct FileObj
 {
-	int* iPosX;
-	int* iPosY;
-	int* iType;
+	int iPosX;
+	int iPosY;
+	int iType;
 };
 
-void ReadFile(char* cFileName);
-void WriteFile(char* cFileName, char* cToAdd);
+void ReadFromFile(char* cFileName, Map* mMap);
+void WriteToFile(char* cFileName, char* cToAdd);
