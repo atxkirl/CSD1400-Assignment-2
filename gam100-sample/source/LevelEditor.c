@@ -114,7 +114,7 @@ void CheckGrid(float fMouseX, float fMouseY, int iObjType)
 
 void SaveGrid()
 {
-	char* GridObj;
+	char* GridObj = "";
 
 	for (int i = 0; i < NumGrids; i++)
 	{
@@ -122,19 +122,31 @@ void SaveGrid()
 		{
 			if (gGrids.gGrid[i][j] != isEmpty)
 			{
-				strncat(GridObj, gGrids.gGrid[i][j] + '0', 2);
-				strncat(GridObj, ",", 2);
-				strncat(GridObj, j + '0', 2);
-				strncat(GridObj, ",", 2);
-				strncat(GridObj, i + '0', 2);
-				strncat(GridObj, "\n", 2);
+				char ObjType[10];
+
+				sprintf_s(ObjType, 2, "%d", gGrids.gGrid[i][j]);
+				strncat_s(GridObj, 6, ObjType, 2); //type
+				strncat_s(GridObj, 6, ",", 2);
+
+
+				sprintf_s(ObjType, 2, "%d", j);
+				strncat_s(GridObj, 6, ObjType, 2); // x
+				strncat_s(GridObj, 6, ",", 2);
+
+
+				sprintf_s(ObjType, 2, "%d", i);
+				strncat_s(GridObj, 6, ObjType, 2); // y
+				strncat_s(GridObj, 6, "\0", 2);
 			}
 		}
 	}
 
-	char* cFileName;
-	printf("Input a file name: ");
-	scanf("%s\n", &cFileName);
+	if (GridObj != NULL)
+	{
+		char cFileName[100];
+		printf("Input a file name: ");
+		scanf_s("%s\n", &cFileName, (unsigned)_countof(cFileName));
 
-	Map->WriteFile(cFileName, GridObj);
+		WriteToFile(cFileName, GridObj);
+	}
 }

@@ -2,71 +2,93 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char EOL = '\\0';
+Map* new_Map()
+{
+	Map* goMap = malloc(sizeof(Map));
 
-void ReadFile(char* cFileName)
+	return goMap;
+}
+
+void ReadFromFile(char* cFileName, Map* mMap)
 {
 	// type,xpos,ypos\n
 
-	FILE* fFile;
-	char* cFileRead;
-	
-	fFile = fopen(cFileName, "r"); // "r" opens the file for reading
+	FILE* fFile = malloc(sizeof(FILE));
+	char cFileRead[900];
 
-	if (fFile != NULL)
+	errno_t eError;
+	eError = fopen_s(&fFile, cFileName, "r"); // "r" opens the file for reading
+
+	if (eError != 0 && fFile != NULL)
 	{
-		if(fgets(cFileRead, 900, fFile) != NULL) // check if the file is not null before parsing it to char*
+		if (fgets(cFileRead, 900, fFile) != NULL) // check if the file is not null before parsing it to char*
 			puts(cFileRead);
+		fclose(fFile);
 	}
-	fclose(fFile);
 
 	int iObjNum = 0;
-	for (int i = 0; i < sizeof(cFileRead) / sizeof(cFileRead[0]);)
+	if (cFileRead != NULL)
 	{
-		// int = char - 48
-		char* cTempX, *cTempY, *cTempType;
-		int j = 0, k = 0, l = 0;
-
-		while (cFileRead[i] != ',') // find the type first
+		for (int i = 0; i < sizeof(cFileRead);)
 		{
-			cTempType[j] = cFileRead[i];
-			i++;
-			j++;
-		}
-		i ++;
+			// int = char - 48
+			char* cTempX, * cTempY, * cTempType;
+			cTempX = malloc(sizeof(char));
+			cTempY = malloc(sizeof(char));
+			cTempType = malloc(sizeof(char));
 
-		while (cFileRead[i] != ',') // find xpos
-		{
-			cTempX[k] = cFileRead[i];
-			i++;
-			k++;
-		}
-		i ++;
+			int j = 0, k = 0, l = 0;
+			cTempX = "0";
+			cTempY = "0";
+			cTempType = "0";
 
-		while (cFileRead[i] != EOL) // find y pos, which is before new line
-		{
-			cTempY[l] = cFileRead[i];
+			while (cFileRead[i] != ',') // find the type first
+			{
+				strncat_s(cTempType, 1, &cFileRead[i], 2);
+				i++;
+				j++;
+			}
 			i++;
-			l++;
-		}
-		i++;
 
-		//atoi converts a char* to int
-		Map->fObjList[iObjNum]->iType = atoi(cTempType);
-		Map->fObjList[iObjNum]->iPosX = atoi(cTempX);
-		Map->fObjList[iObjNum]->iPosY = atoi(cTempY);
-		iObjNum++;
+			while (cFileRead[i] != ',') // find xpos
+			{
+				strncat_s(cTempX, 1, &cFileRead[i], 2);
+				i++;
+				k++;
+			}
+			i++;
+
+			while (cFileRead[i] != '\\0') // find y pos, which is before new line
+			{
+				strncat_s(cTempY, 1, &cFileRead[i], 2);
+				i++;
+				l++;
+			}
+			i++;
+
+			//atoi converts a char* to int
+			if (cTempType != NULL)
+				mMap->fObjList[iObjNum]->iType = atoi(cTempType);
+
+			if (cTempX != NULL)
+				mMap->fObjList[iObjNum]->iPosX = atoi(cTempX);
+
+			if (cTempY != NULL)
+				mMap->fObjList[iObjNum]->iPosY = atoi(cTempY);
+			iObjNum++;
+		}
 	}
 }
 
-void WriteFile(char* cFileName, char* cToAdd)
+void WriteToFile(char* cFileName, char* cToAdd)
 {
 	FILE* fFile;
-	fFile = fopen(cFileName, "a"); // "a" opens the file for appending. if the file doesnt exist it will create it.
+	errno_t eError;
+	eError = fopen_s(&fFile, cFileName, "a"); // "a" opens the file for appending. if the file doesnt exist it will create it.
 
-	if (fFile != NULL)
+	if (eError != 0 && fFile != NULL)
 	{
 		fputs(cToAdd, fFile);
+		fclose(fFile);
 	}
-	fclose(fFile);
 }
