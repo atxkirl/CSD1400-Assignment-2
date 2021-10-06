@@ -29,6 +29,12 @@
     <ClCompile Include="source\FileParser.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\SceneManager.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\game2.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -61,6 +67,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\FileParser.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SceneManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Helpers.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

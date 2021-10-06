@@ -1,5 +1,3 @@
-
-
 /*---------------------------------------------------------
  * file:	main.c
  * author:	[NAME]
@@ -16,17 +14,20 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-
+#include "source/SceneManager.h"
 
 /* Forward declarations */
-void game_init(void);
-void game_update(void);
-void game_exit(void);
+//void game_init(void);
+//void game_update(void);
+//void game_exit(void);
 
 /* Entry point */
 int main(void)
 {
-    CP_Engine_SetNextGameState(game_init, game_update, game_exit);
+    SceneManager_Initialize();
+    SceneManager_ChangeScene(currentScene);
+
+    //CP_Engine_SetNextGameState(game_init, game_update, game_exit);
     CP_System_ShowConsole();
     CP_Engine_Run();
     return 0;

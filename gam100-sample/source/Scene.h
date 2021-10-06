@@ -2,7 +2,3 @@
 
 #include "../CProcessing/inc/cprocessing.h"
 
-struct Scene {
-
-	int id;
-};
