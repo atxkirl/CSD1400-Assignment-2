@@ -40,6 +40,12 @@ void LevelEditorInit()
 
 void LevelEditorUpdate()
 {
+	if (CP_Input_KeyTriggered(KEY_ENTER))
+	{
+		SaveGrid();
+		printf("Saved!! \n");
+	}
+
 	PlaceObject();
 	RenderObjects();
 }
@@ -113,36 +119,43 @@ void CheckGrid(float fMouseX, float fMouseY, int iObjType)
 
 void SaveGrid()
 {
-	char* GridObj = "";
+	char *GridObj;
+	GridObj = (char*)malloc(100 * sizeof(char));
 
 	for (int i = 0; i < NumGrids; i++)
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gGrids.gGrid[i][j] != isEmpty)
+			if (gGrids.gGrid[i][j] != isEmpty && GridObj != NULL)
 			{
-				char ObjType[10];
+				char ObjType[1];
+				char ObjPosX[1];
+				char ObjPosY[1];
 
-				sprintf_s(ObjType, 2, "%d", gGrids.gGrid[i][j]);
-				strncat_s(GridObj, 6, ObjType, 2); //type
-				strncat_s(GridObj, 6, ",", 2);
-
-
-				sprintf_s(ObjType, 2, "%d", j);
-				strncat_s(GridObj, 6, ObjType, 2); // x
-				strncat_s(GridObj, 6, ",", 2);
+				printf("%d,%d,%d\n", gGrids.gGrid[i][j], j, i);
+				sprintf_s(ObjType, 1, "%d", gGrids.gGrid[i][j]);
+				strcpy_s(GridObj, 100, ObjType); //type
+				strcat_s(GridObj, 100, ",");
 
 
-				sprintf_s(ObjType, 2, "%d", i);
-				strncat_s(GridObj, 6, ObjType, 2); // y
-				strncat_s(GridObj, 6, "\0", 2);
+				sprintf_s(ObjPosX, 1, "%d", j);
+				strcat_s(GridObj, 100, ObjPosX); // x
+				strcat_s(GridObj, 100, ",");
+
+
+				sprintf_s(ObjPosY, 1, "%d", i);
+				strcat_s(GridObj, 100, ObjPosY); // y
+				strcat_s(GridObj, 100, "\0");
 			}
 		}
+
+		//strncat_s(GridObj, 6, ObjType, 2); // y
+		//strncat_s(GridObj, 6, "\n", 2);
 	}
 
 	if (GridObj != NULL)
 	{
-		char cFileName[100];
+		char cFileName[50];
 		printf("Input a file name: ");
 		scanf_s("%s\n", &cFileName, (unsigned)_countof(cFileName));
 
