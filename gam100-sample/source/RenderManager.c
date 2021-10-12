@@ -19,7 +19,6 @@ void RM_ClearRenderObjects()
 void RM_Render()
 {
 	CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 255, 255));
-	int size = LL_GetCount(renderObjects);
 	LinkedList* currNode = renderObjects;
 	for (;currNode != NULL; currNode = currNode->next)
 	{
