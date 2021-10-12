@@ -23,4 +23,5 @@ LinkedList* LL_RemovePtr(LinkedList*, void*);
 int LL_GetIndexLL(LinkedList*, LinkedList*);
 int LL_GetIndexPtr(LinkedList*, void*);
 int LL_Contains(LinkedList*, LinkedList*);
-void LL_Clear(LinkedList*);
+LinkedList* LL_Clear(LinkedList*);
+void* LL_Find(LinkedList*, void*(void*, void*), void*);

@@ -24,6 +24,7 @@ void RM_ClearRenderObjects()
 }
 void RM_Render()
 {
+	CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 255, 255));
 	for (int i = 0; i < renderObjectCount; ++i)
 	{
 		GameObject* go = renderObjects[i];

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cprocessing.h"
+#include "LinkedList.h"
 
 /* Forward Declarations for all scene Init functions: */
 void game_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
@@ -23,3 +24,5 @@ void SceneManager_ChangeScene(Scene* nextScene);
 void SceneManager_ChangeSceneByName(char* sceneName);
 
 Scene* currentScene;
+
+LinkedList* sceneList;

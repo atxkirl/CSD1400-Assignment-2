@@ -159,15 +159,28 @@ int LL_Contains(LinkedList* ll, LinkedList* ptr)
 {
 	return (LL_GetIndexPtr(ll, ptr) < 0 ? 0 : 1);
 }
-void LL_Clear(LinkedList* ll)
+LinkedList* LL_Clear(LinkedList* ll)
 {
 	if (LL_IsEmpty(ll))
-		return;
+		return NULL;
 	while (ll)
 	{
 		LinkedList* prev = ll;
 		ll = ll->next;
 		free(prev);
 	}
-	return;
+	return NULL;
+}
+void* LL_Find(LinkedList* ll, void* func(void*, void*), void* arg)
+{
+	if (LL_IsEmpty(ll))
+		return NULL;
+	while (ll)
+	{
+		void* ret = func(ll->curr, arg);
+		if (ret != NULL)
+			return ret;
+		ll = ll->next;
+	}
+	return NULL;
 }

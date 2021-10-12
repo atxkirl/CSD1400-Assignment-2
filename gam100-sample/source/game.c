@@ -14,6 +14,7 @@
 #include "GameObject.h"
 #include "GameObjectManager.h"
 #include "Helpers.h"
+#include "SceneManager.h"
 
 void game_init(void)
 {
@@ -34,7 +35,8 @@ void game_update(void)
     if (CP_Input_KeyTriggered(KEY_1))
     {
         // Change to game2 scene.
-
+        SceneManager_ChangeSceneByName("game2");
+        printf("wAD");
     }
 }
 

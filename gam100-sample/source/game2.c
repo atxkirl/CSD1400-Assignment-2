@@ -22,7 +22,7 @@ void game2_init(void)
 
     GameObject* g = GOM_CreateGameObject();
     g->scale = CP_Vector_Set(20, 20);
-    g->position = CP_Vector_Set(20, 20);
+    g->position = CP_Vector_Set(50, 20);
 
     RM_AddRenderObject(g);
 }

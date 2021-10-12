@@ -21,7 +21,7 @@ void GOM_Clear()
 		free(l->curr);
 		l = l->next;
 	}
-	LL_Clear(objects);
+	objects = LL_Clear(objects);
 }
 int GOM_GetIndex(GameObject* go)
 {

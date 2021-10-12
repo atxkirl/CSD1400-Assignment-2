@@ -32,10 +32,12 @@ void SceneManager_Initialize()
 	// TODO: Add some way to store all the Scene* in a list or array or something.
 	// For now I'll just set currentScene to temp, so that game.c will be the first scene. PLS REMOVE LATER
 	currentScene = temp;
+	sceneList = LL_Add(sceneList, temp);
 
 	game2_sceneInit(&init, &update, &exit);
 	temp = CreateScene("game2", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
+	sceneList = LL_Add(sceneList, temp);
 }
 
 void SceneManager_ChangeScene(Scene* nextScene)
@@ -47,10 +49,22 @@ void SceneManager_ChangeScene(Scene* nextScene)
 	}
 }
 
+void* findScene(void* curr, void* arg) 
+{
+	char* name = (char*)arg;
+	Scene* s = (Scene*)curr;
+
+	if (strcmp(s->name, name) == 0)//match
+		return curr;
+	return NULL;
+}
 void SceneManager_ChangeSceneByName(char* sceneName)
 {
 	// TODO: 
 	// - Loop through the list of Scene* to find the one with the same name
 	//   then call SceneManager_ChangeScene to change to that scene.
 	// - This will allow for change scene calls to be called in other scenes by changing scenes by name.
+
+	Scene* nextScene = LL_Find(sceneList, findScene, (void*)sceneName);
+	SceneManager_ChangeScene(nextScene);
 }
