@@ -40,8 +40,8 @@ void LevelEditorInit()
 
 void LevelEditorUpdate()
 {
-	RenderObjects();
 	PlaceObject();
+	RenderObjects();
 }
 
 void LevelEditorExit()
@@ -51,9 +51,9 @@ void LevelEditorExit()
 
 void RenderObjects()
 {
+
 	/* This will fill the background with grey color */
 	CP_Graphics_ClearBackground(CP_Color_Create(128, 128, 128, 255));
-
 	// grids
 	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
 	for (int i = 0; i <= NumGrids; i++)
@@ -74,7 +74,6 @@ void RenderObjects()
 			switch (gGrids.gGrid[i][j])
 			{
 			case(Wall):
-				// Set the colour before rendering the circle.
 				CP_Settings_Fill(CP_Color_Create(255, 255, 0, 225)); // r, g, b, a
 				CP_Graphics_DrawRect((float)j * iSize, (float)i * iSize, (float)iSize, (float)iSize);
 				break;

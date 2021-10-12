@@ -35,6 +35,15 @@
     <ClCompile Include="source\game2.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Marcus.c">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HongYu.c">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Adrian.c">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -42,6 +51,9 @@
     </Filter>
     <Filter Include="Header">
       <UniqueIdentifier>{a6768da8-5649-4a8d-bc42-62e58e37be36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{45e0f046-1696-4933-9ab8-83f2d30c31e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +85,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\Helpers.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

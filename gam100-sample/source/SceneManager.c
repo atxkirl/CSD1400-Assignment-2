@@ -38,6 +38,21 @@ void SceneManager_Initialize()
 	temp = CreateScene("game2", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
 	sceneList = LL_Add(sceneList, temp);
+
+	Marcus_sceneInit(&init, &update, &exit);
+	temp = CreateScene("marcus", init, update, exit);
+	// TODO: Add some way to store all the Scene* in a list or array or something.
+	sceneList = LL_Add(sceneList, temp);
+
+	HongYu_sceneInit(&init, &update, &exit);
+	temp = CreateScene("hongyu", init, update, exit);
+	// TODO: Add some way to store all the Scene* in a list or array or something.
+	sceneList = LL_Add(sceneList, temp);
+
+	Adrian_sceneInit(&init, &update, &exit);
+	temp = CreateScene("adrian", init, update, exit);
+	// TODO: Add some way to store all the Scene* in a list or array or something.
+	sceneList = LL_Add(sceneList, temp);
 }
 
 void SceneManager_ChangeScene(Scene* nextScene)
