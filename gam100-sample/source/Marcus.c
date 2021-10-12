@@ -14,6 +14,7 @@
 #include "GameObject.h"
 #include "GameObjectManager.h"
 #include "Helpers.h"
+#include "LevelEditor.h"
 
 void Marcus_init(void)
 {
@@ -24,17 +25,18 @@ void Marcus_init(void)
     g->scale = CP_Vector_Set(20, 20);
     g->position = CP_Vector_Set(50, 20);
 
+    //RM_AddRenderObject(g);
+    LevelEditorInit();
 }
 
 void Marcus_update(void)
 {
-    CP_Settings_Fill(CP_Color_Create(255, 128, 128, 255));
-    RM_Render();
-    CP_Settings_Fill(CP_Color_Create(128, 128, 128, 255));
+    LevelEditorUpdate();
 }
 
 void Marcus_exit(void)
 {
+    LevelEditorExit();
     RM_ClearRenderObjects();
     GOM_Clear();
 }

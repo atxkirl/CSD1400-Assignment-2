@@ -14,6 +14,9 @@
 #include "GameObject.h"
 #include "GameObjectManager.h"
 #include "Helpers.h"
+#include "../DetectMemoryLeak.h"
+
+#include <stdlib.h>
 
 void Adrian_init(void)
 {
@@ -37,6 +40,8 @@ void Adrian_exit(void)
 {
     RM_ClearRenderObjects();
     GOM_Clear();
+
+    _CrtDumpMemoryLeaks();
 }
 
 void Adrian_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
