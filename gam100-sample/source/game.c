@@ -57,23 +57,26 @@ void game_init(void)
 
     GameObject* button = GOM_CreateGameObject();
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
-    button->position = CP_Vector_Set(50.0f, 30.0f);
-    button->tag = "adrian";
-    button->type = RECTANGLE;
-    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
-
-    button = GOM_CreateGameObject();
-    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
-    button->position = CP_Vector_Set(50.0f, 80.0f);
+    button->position = CP_Vector_Set(80.0f, 25.0f);
     button->tag = "marcus";
     button->type = RECTANGLE;
+    button->color = CP_Color_Create(255, 0, 0, 50);
     CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
 
     button = GOM_CreateGameObject();
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
-    button->position = CP_Vector_Set(50.0f, 130.0f);
+    button->position = CP_Vector_Set(80.0f, 75.0f);
     button->tag = "hongyu";
     button->type = RECTANGLE;
+    button->color = CP_Color_Create(255, 0, 0, 50);
+    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+    button = GOM_CreateGameObject();
+    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
+    button->position = CP_Vector_Set(80.0f, 125.0f);
+    button->tag = "adrian";
+    button->type = RECTANGLE;
+    button->color = CP_Color_Create(255, 0, 0, 50);
     CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
 }
 

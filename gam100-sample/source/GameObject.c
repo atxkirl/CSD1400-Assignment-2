@@ -12,6 +12,7 @@ GameObject* GameObject_new() {
 		go->type = CIRCLE;
 		go->renderPriority = GAME_OBJECT;
 		go->isEnabled = 1;
+		go->color = CP_Color_Create(0, 0, 0, 255);
 	}
 
 	return go;

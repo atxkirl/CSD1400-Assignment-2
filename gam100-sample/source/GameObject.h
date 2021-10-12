@@ -23,7 +23,7 @@ typedef struct
 	CP_Vector scale;
 	int isEnabled; //bool for rendering
 	char* tag;//tag same as unity tag
-	//CP_Color color;
+	CP_Color color;
 
 	enum OBJECT_TYPE type;
 	enum RENDER_PRIORITY renderPriority;

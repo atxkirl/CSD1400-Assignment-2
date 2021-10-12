@@ -25,6 +25,8 @@ void RM_Render()
 		GameObject* go = (GameObject*)currNode->curr;
 		if (!go->isEnabled)
 			continue;
+
+		CP_Settings_Fill(go->color);
 ;		switch (go->type)
 		{
 		case CIRCLE:
