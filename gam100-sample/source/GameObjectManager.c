@@ -1,4 +1,5 @@
 #include "GameObjectManager.h"
+#include "RenderManager.h"
 #include <stdlib.h>
 
 void GOM_Init()
@@ -32,6 +33,7 @@ GameObject* GOM_CreateGameObject()
 {
 	GameObject* go = GameObject_new();
 	objects = LL_Add(objects, go);
+	RM_AddRenderObject(go);
 	return go;
 }
 
