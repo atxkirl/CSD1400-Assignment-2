@@ -86,7 +86,7 @@ LinkedList* LL_Add(LinkedList* ll, void* ptr)
 		newPtr->next = NULL;
 	}
 
-	ll->next = newPtr;
+	lptr->next = newPtr;
 	return ll;
 }
 

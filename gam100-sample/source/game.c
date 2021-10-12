@@ -60,6 +60,7 @@ void game_update(void)
         else if (is_btn_colliding(CP_Input_GetMouseX(), CP_Input_GetMouseY(), 50.f, 60.f))
         {
             SceneManager_ChangeSceneByName("hongyu");
+            printf("WADAWD");
         }
 
         else if (is_btn_colliding(CP_Input_GetMouseX(), CP_Input_GetMouseY(), 50.f, 110.f))
