@@ -2,6 +2,8 @@
 #include "RenderManager.h"
 #include <stdlib.h>
 
+LinkedList* GOM_objects;
+
 void GOM_Init()
 {
 
@@ -9,30 +11,30 @@ void GOM_Init()
 
 int GOM_Delete(GameObject* g)
 {
-	objects = LL_RemovePtr(objects, g);
+	GOM_objects = LL_RemovePtr(GOM_objects, g);
 	free(g);
 
 	return 1;
 }
 void GOM_Clear()
 {
-	LinkedList* l = objects;
+	LinkedList* l = GOM_objects;
 	while (l)
 	{
 		free(l->curr);
 		l = l->next;
 	}
-	objects = LL_Clear(objects);
+	GOM_objects = LL_Clear(GOM_objects);
 }
 int GOM_GetIndex(GameObject* go)
 {
-	return LL_GetIndexPtr(objects, go);
+	return LL_GetIndexPtr(GOM_objects, go);
 }
 
 GameObject* GOM_CreateGameObject()
 {
 	GameObject* go = GameObject_new();
-	objects = LL_Add(objects, go);
+	GOM_objects = LL_Add(GOM_objects, go);
 	RM_AddRenderObject(go);
 	return go;
 }

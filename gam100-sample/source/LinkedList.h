@@ -20,8 +20,11 @@ LinkedList* LL_Add(LinkedList*, void*);
 LinkedList* LL_RemoveLL(LinkedList*, LinkedList*);
 LinkedList* LL_RemovePtr(LinkedList*, void*);
 //LinkedList* LL_Remove(LinkedList*, int);
+LinkedList* LL_SetAdd(LinkedList*, void*);//Add unique
 int LL_GetIndexLL(LinkedList*, LinkedList*);
 int LL_GetIndexPtr(LinkedList*, void*);
 int LL_Contains(LinkedList*, LinkedList*);
+int LL_ContainsPtr(LinkedList*, void*);
 LinkedList* LL_Clear(LinkedList*);
 void* LL_Find(LinkedList*, void*(void*, void*), void*);
+void** LL_ToArray(LinkedList*);

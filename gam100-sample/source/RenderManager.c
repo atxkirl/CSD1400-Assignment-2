@@ -30,6 +30,10 @@ void RM_Render()
 		case CIRCLE:
 			CP_Graphics_DrawCircle(go->position.x, go->position.y, go->scale.x);
 			break;
+		case RECTANGLE:
+			//rectangle is drawn w ref to topleft
+			CP_Graphics_DrawRect(go->position.x - go->scale.x * 0.5f, go->position.y - go->scale.y * 0.5f, go->scale.x, go->scale.y);
+			break;
 		default:
 			break;
 		}

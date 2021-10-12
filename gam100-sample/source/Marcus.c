@@ -24,7 +24,6 @@ void Marcus_init(void)
     g->scale = CP_Vector_Set(20, 20);
     g->position = CP_Vector_Set(50, 20);
 
-    RM_AddRenderObject(g);
 }
 
 void Marcus_update(void)

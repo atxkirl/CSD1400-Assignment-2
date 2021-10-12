@@ -6,7 +6,6 @@
 #include "GameObject.h"
 #include "LinkedList.h"
 
-LinkedList* objects;
 
 void GOM_Init();
 GameObject* GOM_CreateGameObject();

@@ -2,25 +2,26 @@
 #include <stdio.h> //for NULL
 #include <stdlib.h>//for malloc
 
-LinkedList* RemoveThis(LinkedList* currPtr)
+void RemoveThis(LinkedList* currPtr)
 {
 	if (currPtr->prev == NULL)
 	{
 		LinkedList* old = currPtr;
 		currPtr = currPtr->next;
 		free(old);
-		return currPtr;
+		return;
 	}
 	
 	LinkedList* prev = currPtr->prev;
 	LinkedList* next = currPtr->next;
 	prev->next = currPtr->next;
-	next->prev = prev;
+	if (next)
+		next->prev = prev;
 	currPtr->prev = NULL;
 	currPtr->next = NULL;
 	currPtr->curr = NULL;
 	free(currPtr);
-	return prev;
+	return;
 }
 
 int LL_GetCount(LinkedList* ll)
@@ -89,6 +90,15 @@ LinkedList* LL_Add(LinkedList* ll, void* ptr)
 	lptr->next = newPtr;
 	return ll;
 }
+LinkedList* LL_SetAdd(LinkedList* ll, void* ptr)//Add unique
+{
+	if (LL_IsEmpty(ll))
+		return LL_Add(ll, ptr);
+
+	if (!LL_ContainsPtr(ll, ptr))
+		return LL_Add(ll, ptr);
+	return ll;
+}
 
 LinkedList* LL_RemoveLL(LinkedList* ll, LinkedList* ptr)
 {
@@ -96,7 +106,7 @@ LinkedList* LL_RemoveLL(LinkedList* ll, LinkedList* ptr)
 		return NULL;
 
 	if (LL_Contains(ll, ptr))
-		ll = RemoveThis(ptr);
+		RemoveThis(ptr);
 
 	return ll;
 }
@@ -105,13 +115,17 @@ LinkedList* LL_RemovePtr(LinkedList* ll, void* ptr)
 	if (LL_IsEmpty(ll))
 		return NULL;
 
-	while (ll)
+	LinkedList* node = ll;
+	while (node)
 	{
-		if (ll->curr == ptr)
-			return RemoveThis(ll);
-		ll = ll->next;
+		if (node->curr == ptr)
+		{
+			RemoveThis(node);
+			return ll;
+		}
+		node = node->next;
 	}
-
+	//return head
 	return ll;
 }
 //LinkedList* LL_Remove(LinkedList* ll, int index)
@@ -126,13 +140,13 @@ int LL_GetIndexLL(LinkedList* ll, LinkedList* ptr)
 {
 	if (LL_IsEmpty(ll))
 		return -1;
-
+	LinkedList* node = ll;
 	int index = 0;
-	while (ll != NULL)
+	while (node != NULL)
 	{
-		if (ll == ptr)
+		if (node == ptr)
 			return index;
-		ll = ll->next;
+		node = node->next;
 		index++;
 	}
 
@@ -142,13 +156,13 @@ int LL_GetIndexPtr(LinkedList* ll, void* ptr)
 {
 	if (LL_IsEmpty(ll))
 		return -1;
-
+	LinkedList* node = ll;
 	int index = 0;
-	while (ll != NULL)
+	while (node != NULL)
 	{
-		if (ll->curr == ptr)
+		if (node->curr == ptr)
 			return index;
-		ll = ll->next;
+		node = node->next;
 		index++;
 	}
 
@@ -159,6 +173,19 @@ int LL_Contains(LinkedList* ll, LinkedList* ptr)
 {
 	return (LL_GetIndexPtr(ll, ptr) < 0 ? 0 : 1);
 }
+int LL_ContainsPtr(LinkedList* ll, void* ptr)
+{
+	if (LL_IsEmpty(ll))
+		return 0;
+	LinkedList* node = ll;
+	for (; node != NULL; node = node->next)
+	{
+		if (node->curr == ptr)
+			return 1;
+	}
+	return 0;
+}
+
 LinkedList* LL_Clear(LinkedList* ll)
 {
 	if (LL_IsEmpty(ll))
@@ -183,4 +210,18 @@ void* LL_Find(LinkedList* ll, void* func(void*, void*), void* arg)
 		ll = ll->next;
 	}
 	return NULL;
+}
+void** LL_ToArray(LinkedList* ll)
+{
+	if (LL_IsEmpty(ll))
+		return NULL;
+	int count = LL_GetCount(ll);
+	void** ret = (void**)calloc(count, sizeof(void*));
+	LinkedList* node = ll;
+	for (int i = 0; i < count; ++i, node = node->next)
+	{
+		if (ret)
+			ret[i] = node->curr;
+	}
+	return ret;
 }
