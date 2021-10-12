@@ -11,6 +11,7 @@ GameObject* GameObject_new() {
 		go->scale = CP_Vector_Set(1.0f, 1.0f);
 		go->type = CIRCLE;
 		go->renderPriority = GAME_OBJECT;
+		go->isEnabled = 1;
 	}
 
 	return go;

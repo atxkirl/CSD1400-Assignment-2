@@ -21,6 +21,7 @@ typedef struct
 {
 	CP_Vector position;
 	CP_Vector scale;
+	int isEnabled; //bool for rendering
 
 	enum OBJECT_TYPE type;
 	enum RENDER_PRIORITY renderPriority;

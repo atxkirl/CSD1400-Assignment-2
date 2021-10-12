@@ -350,3 +350,9 @@ MigrationBackup/
 .ionide/
 
 *.db
+gam100-sample/.vs/Processing_Sample/v16/.suo
+gam100-sample/.vs/Processing_Sample/v16/Browse.VC.db
+gam100-sample/x64/Debug/Processi.14B654ED.tlog/CL.read.1.tlog
+gam100-sample/x64/Debug/Processi.14B654ED.tlog/Processing_Sample.lastbuildstate
+gam100-sample/x64/Debug/Processing_Sample.exe.recipe
+gam100-sample/x64/Debug/Processing_Sample.log

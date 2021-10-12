@@ -1,11 +1,11 @@
 #pragma once
 
 #include "GameObject.h"
+#include "LinkedList.h"
 
 //PREFIX : RM
 
-GameObject* renderObjects[1];
-int renderObjectCount;
+LinkedList* renderObjects;
 
 void RM_Init();
 void RM_AddRenderObject(GameObject*);

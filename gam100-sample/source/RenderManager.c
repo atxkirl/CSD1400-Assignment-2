@@ -2,33 +2,30 @@
 
 void RM_Init() 
 {
-	renderObjectCount = 0;
-	memset(renderObjects, 0, 0);
+
 }
 void RM_AddRenderObject(GameObject* g)
 {
-	renderObjectCount++;
-	memset(renderObjects, sizeof(GameObject*), renderObjectCount);
-	renderObjects[renderObjectCount - 1] = g;
+	renderObjects = LL_Add(renderObjects, g);
 }
 void RM_RemoveRenderObject(GameObject* g)
 {
-	renderObjectCount--;
-	renderObjects[renderObjectCount - 1] = NULL;
-	memset(renderObjects, sizeof(GameObject*), renderObjectCount);
+	renderObjects = LL_RemovePtr(renderObjects, g);
 }
 void RM_ClearRenderObjects()
 {
-	renderObjectCount = 0;
-	memset(renderObjects, 0, 0);
+	renderObjects = LL_Clear(renderObjects);
 }
 void RM_Render()
 {
 	CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 255, 255));
-	for (int i = 0; i < renderObjectCount; ++i)
+	LinkedList* currNode = renderObjects;
+	for (;currNode != NULL; currNode = currNode->next)
 	{
-		GameObject* go = renderObjects[i];
-		switch (go->type)
+		GameObject* go = (GameObject*)currNode->curr;
+		if (!go->isEnabled)
+			continue;
+;		switch (go->type)
 		{
 		case CIRCLE:
 			CP_Graphics_DrawCircle(go->position.x, go->position.y, go->scale.x);

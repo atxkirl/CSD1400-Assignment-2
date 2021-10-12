@@ -40,7 +40,6 @@ void game_init(void)
     g->scale = CP_Vector_Set(20, 20);
     g->position = CP_Vector_Set(20, 20);
 
-    RM_AddRenderObject(g);
 }
 
 void game_update(void)
