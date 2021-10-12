@@ -19,7 +19,7 @@ void ReadFromFile(char* cFileName, Map* mMap)
 	errno_t eError;
 	eError = fopen_s(&fFile, cFileName, "r"); // "r" opens the file for reading
 
-	if (eError != 0 && fFile != NULL)
+	if (eError == 0 && fFile != NULL)
 	{
 		if (fgets(cFileRead, 900, fFile) != NULL) // check if the file is not null before parsing it to char*
 			puts(cFileRead);
@@ -84,11 +84,21 @@ void WriteToFile(char* cFileName, char* cToAdd)
 {
 	FILE* fFile;
 	errno_t eError;
+
 	eError = fopen_s(&fFile, cFileName, "a"); // "a" opens the file for appending. if the file doesnt exist it will create it.
 
-	if (eError != 0 && fFile != NULL)
+	if (eError == 0 && fFile != NULL)
 	{
 		fputs(cToAdd, fFile);
+		printf("Saved!! \n");
 		fclose(fFile);
+	}
+	else if (eError != 0)
+	{
+		printf("Error opening file! %s\n", cFileName);
+	}
+	else
+	{
+		printf("File does not exist!\n");
 	}
 }

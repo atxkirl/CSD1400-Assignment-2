@@ -43,7 +43,6 @@ void LevelEditorUpdate()
 	if (CP_Input_KeyTriggered(KEY_ENTER))
 	{
 		SaveGrid();
-		printf("Saved!! \n");
 	}
 
 	PlaceObject();
@@ -128,37 +127,36 @@ void SaveGrid()
 		{
 			if (gGrids.gGrid[i][j] != isEmpty && GridObj != NULL)
 			{
-				char ObjType[1];
-				char ObjPosX[1];
-				char ObjPosY[1];
+				char ObjType[10];
+				char ObjPosX[10];
+				char ObjPosY[10];
 
-				printf("%d,%d,%d\n", gGrids.gGrid[i][j], j, i);
-				sprintf_s(ObjType, 1, "%d", gGrids.gGrid[i][j]);
+				sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]);
 				strcpy_s(GridObj, 100, ObjType); //type
 				strcat_s(GridObj, 100, ",");
 
 
-				sprintf_s(ObjPosX, 1, "%d", j);
+				sprintf_s(ObjPosX, 10, "%d", j);
 				strcat_s(GridObj, 100, ObjPosX); // x
 				strcat_s(GridObj, 100, ",");
 
 
-				sprintf_s(ObjPosY, 1, "%d", i);
+				sprintf_s(ObjPosY, 10, "%d", i);
 				strcat_s(GridObj, 100, ObjPosY); // y
 				strcat_s(GridObj, 100, "\0");
+				printf("%s\n", GridObj);
 			}
 		}
-
-		//strncat_s(GridObj, 6, ObjType, 2); // y
-		//strncat_s(GridObj, 6, "\n", 2);
 	}
 
 	if (GridObj != NULL)
 	{
 		char cFileName[50];
 		printf("Input a file name: ");
-		scanf_s("%s\n", &cFileName, (unsigned)_countof(cFileName));
-
-		WriteToFile(cFileName, GridObj);
+		scanf_s("%s", &cFileName, 50);
+		char cFileLocation[50] = "Levels/";
+		strcat_s(cFileLocation, sizeof(cFileLocation), cFileName);
+		printf("%s \n", cFileLocation);
+		WriteToFile(cFileLocation, GridObj);
 	}
 }
