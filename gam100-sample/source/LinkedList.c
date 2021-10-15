@@ -8,6 +8,9 @@ void RemoveThis(LinkedList* currPtr)
 	{
 		LinkedList* old = currPtr;
 		currPtr = currPtr->next;
+		currPtr->prev = NULL; //release head
+		old->curr = NULL;
+		old->next = NULL;
 		free(old);
 		return;
 	}
@@ -29,9 +32,10 @@ int LL_GetCount(LinkedList* ll)
 	if (LL_IsEmpty(ll))
 		return 0;
 	int count = 1;
-	while (ll->next != NULL)
+	LinkedList* node = ll;
+	while (node->next != NULL)
 	{
-		ll = ll->next;
+		node = node->next;
 		count++;
 	}
 	return count;
@@ -45,11 +49,12 @@ LinkedList* LL_Get(LinkedList* ll, int index)
 	if (LL_IsEmpty(ll))
 		return NULL;
 	int count = 0;
-	while (ll != NULL)
+	LinkedList* node = ll;
+	while (node != NULL)
 	{
 		if (count == index)
-			return ll;
-		ll = ll->next;
+			return node;
+		node = node->next;
 		count++;
 	}
 	return NULL;
@@ -92,9 +97,6 @@ LinkedList* LL_Add(LinkedList* ll, void* ptr)
 }
 LinkedList* LL_SetAdd(LinkedList* ll, void* ptr)//Add unique
 {
-	if (LL_IsEmpty(ll))
-		return LL_Add(ll, ptr);
-
 	if (!LL_ContainsPtr(ll, ptr))
 		return LL_Add(ll, ptr);
 	return ll;
@@ -102,9 +104,6 @@ LinkedList* LL_SetAdd(LinkedList* ll, void* ptr)//Add unique
 
 LinkedList* LL_RemoveLL(LinkedList* ll, LinkedList* ptr)
 {
-	if (LL_IsEmpty(ll))
-		return NULL;
-
 	if (LL_Contains(ll, ptr))
 		RemoveThis(ptr);
 
@@ -202,12 +201,13 @@ void* LL_Find(LinkedList* ll, void* func(void*, void*), void* arg)
 {
 	if (LL_IsEmpty(ll))
 		return NULL;
-	while (ll)
+	LinkedList* node = ll;
+	while (node)
 	{
-		void* ret = func(ll->curr, arg);
+		void* ret = func(node->curr, arg);
 		if (ret != NULL)
 			return ret;
-		ll = ll->next;
+		node = node->next;
 	}
 	return NULL;
 }
