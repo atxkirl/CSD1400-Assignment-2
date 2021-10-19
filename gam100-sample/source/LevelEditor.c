@@ -152,10 +152,13 @@ void SaveGrid()
 	if (GridObj != NULL)
 	{
 		char cFileName[50];
+		const char *cFileLocation = (char*)malloc(7);
+		cFileLocation = "Levels/";
+
 		printf("Input a file name: ");
 		scanf_s("%s", &cFileName, 50);
-		char cFileLocation[50] = "Levels/";
-		strcat_s(cFileLocation, sizeof(cFileLocation), cFileName);
+		strcat_s(cFileName, 50, ".txt");
+		strcat_s(cFileLocation, 7, cFileName);
 		printf("%s \n", cFileLocation);
 		WriteToFile(cFileLocation, GridObj);
 	}

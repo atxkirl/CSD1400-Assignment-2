@@ -209,6 +209,8 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\RenderManager.c" />
     <ClCompile Include="source\Scene.c" />
     <ClCompile Include="source\SceneManager.c" />
+    <ClCompile Include="source\Weiyi.c" />
+    <ClCompile Include="source\Xinyun.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />

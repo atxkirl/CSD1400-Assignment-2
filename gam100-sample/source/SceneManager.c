@@ -53,6 +53,16 @@ void SceneManager_Initialize()
 	temp = CreateScene("adrian", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
 	sceneList = LL_Add(sceneList, temp);
+
+	Weiyi_sceneInit(&init, &update, &exit);
+	temp = CreateScene("weiyi", init, update, exit);
+	// TODO: Add some way to store all the Scene* in a list or array or something.
+	sceneList = LL_Add(sceneList, temp);
+
+	Xinyun_sceneInit(&init, &update, &exit);
+	temp = CreateScene("xinyun", init, update, exit);
+	// TODO: Add some way to store all the Scene* in a list or array or something.
+	sceneList = LL_Add(sceneList, temp);
 }
 
 void SceneManager_ChangeScene(Scene* nextScene)

@@ -42,6 +42,10 @@ int game_OnCollision(Collider* left, Collider* right)
             SceneManager_ChangeSceneByName("marcus");
         else if (strcmp(((GameObject*)left->obj)->tag, "hongyu") == 0)
             SceneManager_ChangeSceneByName("hongyu");
+        else if (strcmp(((GameObject*)left->obj)->tag, "weiyi") == 0)
+            SceneManager_ChangeSceneByName("weiyi");
+        else if (strcmp(((GameObject*)left->obj)->tag, "xinyun") == 0)
+            SceneManager_ChangeSceneByName("xinyun");
     }
     printf("INSIDE!");
     return CLM_RESPONSE_REMOVENONE;
@@ -75,6 +79,22 @@ void game_init(void)
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 125.0f);
     button->tag = "adrian";
+    button->type = RECTANGLE;
+    button->color = CP_Color_Create(255, 0, 0, 50);
+    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+    button = GOM_CreateGameObject();
+    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
+    button->position = CP_Vector_Set(80.0f, 175.0f);
+    button->tag = "weiyi";
+    button->type = RECTANGLE;
+    button->color = CP_Color_Create(255, 0, 0, 50);
+    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+    button = GOM_CreateGameObject();
+    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
+    button->position = CP_Vector_Set(80.0f, 225.0f);
+    button->tag = "xinyun";
     button->type = RECTANGLE;
     button->color = CP_Color_Create(255, 0, 0, 50);
     CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -156,4 +176,14 @@ void gameUI_render()
     CP_Graphics_DrawRect(50.f, 110.f, BUTTON_WIDTH, BUTTON_HEIGHT);
     CP_Settings_Fill(COLOR_BLACK); // r, g, b, a
     CP_Font_DrawText("Adrian", 55, 130);
+
+    CP_Settings_Fill(COLOR_WHITE); // r, g, b, a
+    CP_Graphics_DrawRect(50.f, 160.f, BUTTON_WIDTH, BUTTON_HEIGHT);
+    CP_Settings_Fill(COLOR_BLACK); // r, g, b, a
+    CP_Font_DrawText("Weiyi", 55, 180);
+
+    CP_Settings_Fill(COLOR_WHITE); // r, g, b, a
+    CP_Graphics_DrawRect(50.f, 210.f, BUTTON_WIDTH, BUTTON_HEIGHT);
+    CP_Settings_Fill(COLOR_BLACK); // r, g, b, a
+    CP_Font_DrawText("Xinyun", 55, 230);
 }

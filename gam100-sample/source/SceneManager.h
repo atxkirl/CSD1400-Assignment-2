@@ -9,6 +9,8 @@ void game2_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 void Marcus_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 void HongYu_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 void Adrian_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
+void Weiyi_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
+void Xinyun_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 
 /* Scene Struct */
 typedef struct

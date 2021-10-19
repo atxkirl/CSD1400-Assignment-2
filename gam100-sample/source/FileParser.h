@@ -16,5 +16,5 @@ struct FileObj
 	int iType;
 };
 
-void ReadFromFile(char* cFileName, Map* mMap);
+void ReadLevelFromFile(char* cFileName, Map* mMap);
 void WriteToFile(char* cFileName, char* cToAdd);

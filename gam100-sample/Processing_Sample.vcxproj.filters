@@ -44,6 +44,12 @@
     <ClCompile Include="source\Adrian.c">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="source\Weiyi.c">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Xinyun.c">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

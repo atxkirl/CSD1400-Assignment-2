@@ -9,7 +9,7 @@ Map* new_Map()
 	return goMap;
 }
 
-void ReadFromFile(char* cFileName, Map* mMap)
+void ReadLevelFromFile(char* cFileName, Map* mMap)
 {
 	// type,xpos,ypos\n
 
