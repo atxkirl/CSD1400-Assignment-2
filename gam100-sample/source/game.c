@@ -31,6 +31,7 @@ int is_btn_colliding(float x, float y, float buttonX, float buttonY) {
     return x >= buttonX && x <= buttonX + BUTTON_WIDTH &&
         y >= buttonY && y <= buttonY + BUTTON_HEIGHT;
 }
+
 int game_OnCollision(Collider* left, Collider* right)
 {
     //me, other
@@ -50,6 +51,7 @@ int game_OnCollision(Collider* left, Collider* right)
     printf("INSIDE!");
     return CLM_RESPONSE_REMOVENONE;
 }
+
 void game_init(void)
 {
     RM_Init();
