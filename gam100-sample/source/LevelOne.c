@@ -22,10 +22,6 @@ void LevelOne_init(void)
     RM_Init();
     GOM_Init();
 
-    GameObject* g = GOM_CreateGameObject();
-    g->scale = CP_Vector_Set(20, 20);
-    g->position = CP_Vector_Set(50, 20);
-
     //RM_AddRenderObject(g);
     LevelEditorInit();
     LoadGrid("test");
