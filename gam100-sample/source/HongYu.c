@@ -15,22 +15,57 @@
 #include "GameObjectManager.h"
 #include "Helpers.h"
 
+GameObject* g = NULL;
+
 void HongYu_init(void)
 {
     RM_Init();
     GOM_Init();
 
-    GameObject* g = GOM_CreateGameObject();
-    g->scale = CP_Vector_Set(20, 20);
+    g = GOM_CreateGameObject(CIRCLE, PRI_GAME_OBJECT);
+    g->scale = CP_Vector_Set(10, 10);
     g->position = CP_Vector_Set(50, 20);
 
+    int width = CP_System_GetWindowWidth();
+    int height = CP_System_GetWindowHeight();
+
+    GameObject* button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    button->position = CP_Vector_Set(0.1f * width, 0.9f * height);
+    //button->rotation = 10.0f;
+    button->scale = CP_Vector_Set(0.1f * width, 30);
+    button->color = CP_Color_Create(255, 255, 255, 255);
+    button->text = "test";
+    
+
+    //GameObject* wad = GOM_CreateGameObject(CIRCLE, GAME_OBJECT);
+    //wad->position = CP_Vector_Set(0.1f * width, 0.9f * height);
+    //wad->scale = CP_Vector_Set(0.1f * width, 30);
+    //wad->color = CP_Color_Create(255, 255, 255, 255);
 }
 
 void HongYu_update(void)
 {
-    CP_Settings_Fill(CP_Color_Create(128, 128, 128, 255));
+    float dt = CP_System_GetDt();
+    float spd = 200.0f;
+    if (CP_Input_KeyDown((enum CP_KEY)KEY_W))
+    {
+        g->position.y -= spd * dt;
+    }
+    if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
+    {
+        g->position.y += spd * dt;
+    }
+    if (CP_Input_KeyDown((enum CP_KEY)KEY_A))
+    {
+        g->position.x -= spd * dt;
+    }
+    if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
+    {
+        g->position.x += spd * dt;
+    }
+
+
     RM_Render();
-    CP_Settings_Fill(CP_Color_Create(128, 128, 128, 255));
 }
 
 void HongYu_exit(void)

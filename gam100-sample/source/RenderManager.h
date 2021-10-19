@@ -5,7 +5,6 @@
 
 //PREFIX : RM
 
-LinkedList* renderObjects;
 
 void RM_Init();
 void RM_AddRenderObject(GameObject*);

@@ -23,7 +23,7 @@ void Adrian_init(void)
     RM_Init();
     GOM_Init();
 
-    GameObject* g = GOM_CreateGameObject();
+    GameObject* g = GOM_CreateGameObject(CIRCLE, PRI_GAME_OBJECT);
     g->scale = CP_Vector_Set(20, 20);
     g->position = CP_Vector_Set(50, 20);
 

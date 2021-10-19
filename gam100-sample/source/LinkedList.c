@@ -127,13 +127,14 @@ LinkedList* LL_RemovePtr(LinkedList* ll, void* ptr)
 	//return head
 	return ll;
 }
-//LinkedList* LL_Remove(LinkedList* ll, int index)
-//{
-//	LinkedList* rem = LL_Get(ll, index);
-//	if (rem != NULL) //contains
-//		ll = RemoveThis(rem);
-//	return ll;
-//}
+LinkedList* LL_RemoveIndex(LinkedList* ll, int index)
+{
+	LinkedList* rem = LL_Get(ll, index);
+	if (!rem)
+		return ll;
+	RemoveThis(rem);
+	return ll;
+}
 
 int LL_GetIndexLL(LinkedList* ll, LinkedList* ptr)
 {
@@ -170,7 +171,7 @@ int LL_GetIndexPtr(LinkedList* ll, void* ptr)
 
 int LL_Contains(LinkedList* ll, LinkedList* ptr)
 {
-	return (LL_GetIndexPtr(ll, ptr) < 0 ? 0 : 1);
+	return (LL_GetIndexPtr(ll, ptr->curr) < 0 ? 0 : 1);
 }
 int LL_ContainsPtr(LinkedList* ll, void* ptr)
 {
