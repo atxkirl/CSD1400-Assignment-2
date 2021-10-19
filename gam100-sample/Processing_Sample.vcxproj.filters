@@ -8,9 +8,6 @@
     <ClCompile Include="source\Scene.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\GameObject.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="source\RenderManager.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -49,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="source\Xinyun.c">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MatrixStack.c">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +94,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\MatrixStack.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
