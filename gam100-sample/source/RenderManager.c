@@ -38,10 +38,28 @@ void RM_Render()
 {
 	CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 255, 255));
 	
+	float w = (float)CP_System_GetWindowWidth();
+	float h = (float)CP_System_GetWindowHeight();
+	//printf("%.0f %.0f\n", w, h);
+	float hworld = WORLD_HEIGHT; //fit 500 grid in window height
+	float hratio = h / hworld;
+	float whratio = w / (float)h;
+	float wscale = whratio * hworld; //how many pixels to be rendered
+	//printf("%f %f\n", wscale, hworld);
+	RM_SetCameraScale(CP_Vector_Set(w / wscale, hratio));
+	//CP_Vector sc = RM_GetCameraScale();
+	//printf("%f %f\n", sc.x, sc.y);
+	
+	//coz 0,0 is top left.
+	CP_Vector camFinalPos = CP_Vector_Subtract(cameraPos, CP_Vector_Scale(CP_Vector_Set((float)w * 1.0f / cameraScale.x, (float)h * 1.0f / cameraScale.y), 0.5f));
+	CP_Matrix view = CP_Matrix_Multiply(CP_Matrix_Scale(cameraScale) , CP_Matrix_Translate(CP_Vector_Negate(camFinalPos)));
+	CP_Settings_ApplyMatrix(view);
+	//MS_Translate(matrixStack, CP_Vector_Negate(cameraPos));
+
 	RenderAllOfType(PRI_GAME_OBJECT);
 	CP_Settings_ResetMatrix();
 	RenderAllOfType(PRI_UI);
-	CP_Settings_ResetMatrix();
+	//CP_Settings_ResetMatrix();
 }
 
 void RM_SetCameraPosition(CP_Vector pos)
@@ -73,11 +91,7 @@ void RenderAllOfType(RENDER_PRIORITY type)
 		CP_Settings_Fill(go->color);
 
 		MS_PushMatrix(matrixStack); 
-		if (type == PRI_GAME_OBJECT)
-		{
-			CP_Settings_ApplyMatrix(CP_Matrix_Scale(cameraScale));
-			MS_Translate(matrixStack, CP_Vector_Negate(cameraPos));
-		}
+
 		MS_Translate(matrixStack, go->position);
 		MS_Rotate(matrixStack, -go->rotation);//coz if camera tilt left, image will tilt right. but i want image to tilt left
 		//MS_Scale(matrixStack, go->scale);
@@ -99,11 +113,16 @@ void RenderAllOfType(RENDER_PRIORITY type)
 		case WALL:
 				CP_Graphics_DrawRect(-go->scale.x * 0.5f, -go->scale.y * 0.5f, go->scale.x, go->scale.y);
 				break;
+		case LINE:
+			CP_Graphics_DrawLine(0,0,go->scale.x, 0);
+			break;
 		default:
 			break;
 		}
+
+		CP_Settings_ApplyMatrix(CP_Matrix_Inverse(*MS_Top(matrixStack)));
 		MS_PopMatrix(matrixStack);
-		CP_Settings_ResetMatrix();
+		//CP_Settings_ResetMatrix();
 
 		if (go->text)
 		{
@@ -119,8 +138,10 @@ void RenderAllOfType(RENDER_PRIORITY type)
 			CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 
 			CP_Font_DrawText(go->text, 0.0f, 0.0f);
+
+			CP_Settings_ApplyMatrix(CP_Matrix_Inverse(*MS_Top(matrixStack)));
 			MS_PopMatrix(matrixStack);
-			CP_Settings_ResetMatrix();
+			//CP_Settings_ResetMatrix();
 		}
 
 	}

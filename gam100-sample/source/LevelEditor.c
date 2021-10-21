@@ -111,8 +111,7 @@ void LevelEditorUpdate()
 	PlaceObject();
 	RenderObjects();
 
-	//Override and refresh all renders
-	RM_Render();
+	//RM_Render();
 }
 
 /*!
@@ -292,8 +291,15 @@ void LoadGrid(char* cInput)
 	Map* objList = new_Map();
 	ReadLevelFromFile(cFileLocation, objList);
 
+	float fWorldHeight = WORLD_HEIGHT;
+	float fCellSize = fWorldHeight / NumGrids; //fit 30 grids vertically in the screen
 	for (int i = 0; i < objList->iSize; i++)
 	{
-		gGrids.gGrid[objList->fObjList[i]->iPosY][objList->fObjList[i]->iPosX]->type = objList->fObjList[i]->iType;
+		int iY = objList->fObjList[i]->iPosY;
+		int iX = objList->fObjList[i]->iPosX;
+		gGrids.gGrid[iY][iX]->type = objList->fObjList[i]->iType;
+		gGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * fCellSize + fCellSize * 0.5f, iY * fCellSize + fCellSize * 0.5f);
+		gGrids.gGrid[iY][iX]->scale = CP_Vector_Set(fCellSize, fCellSize);
+		gGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 	}
 }

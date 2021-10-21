@@ -130,28 +130,16 @@ void HongYu_update(void)
         clickPoint->tag = "Click";
         CLM_AddCollider(clickPoint, NULL, COL_POINT);
     }
-    if (CP_Input_KeyDown((enum CP_KEY)KEY_1))
+    if (CP_Input_KeyTriggered((enum CP_KEY)KEY_1))
     {
         RM_SetCameraScale(CP_Vector_Set(1.0f, 1.0f));
     }
-    if (CP_Input_KeyDown((enum CP_KEY)KEY_2))
+    else if (CP_Input_KeyTriggered((enum CP_KEY)KEY_2))
     {
-        float w = (float)CP_System_GetWindowWidth();
-        float h = (float)CP_System_GetWindowHeight();
-        printf("%.0f %.0f\n", w, h);
-        float hworld = 500.0f; //fit 500 grid in window height
-        float hratio = h / hworld;
-        float whratio = w / (float)h;
-        float wscale = whratio * hworld; //how many pixels to be rendered
-        printf("%f %f\n", wscale, hworld);
-        RM_SetCameraScale(CP_Vector_Set(w / wscale, hratio));
-        CP_Vector sc = RM_GetCameraScale();
-        printf("%f %f\n", sc.x, sc.y);
+        
     }
-    int w = CP_System_GetWindowWidth();
-    int h = CP_System_GetWindowHeight();
-    CP_Vector s = RM_GetCameraScale();
-    RM_SetCameraPosition(CP_Vector_Subtract(g->position, CP_Vector_Scale(CP_Vector_Set((float)w * 1.0f/s.x , (float)h * 1.0f / s.y), 0.5f)));
+
+    RM_SetCameraPosition(g->position);
 
     CLM_CheckCollisions();
 

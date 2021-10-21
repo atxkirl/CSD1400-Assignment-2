@@ -2,6 +2,13 @@
 
 #define LL_SUCCESS 1
 #define LL_ERROR 0
+
+/*
+* Some functions returns a linkedlist* because when linkedlist is empty, it is simple a null pointer. 
+(im sorry im too lazy to make it user friendly)
+Just assign the operation back to itself: objectList = LL_Add(objectList, obj);
+*/
+
 //PREFIX: LL
 
 typedef struct LinkedList LinkedList;
