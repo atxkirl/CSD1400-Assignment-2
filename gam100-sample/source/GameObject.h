@@ -8,7 +8,8 @@ typedef enum OBJECT_TYPE
 	CIRCLE,
 	RECTANGLE,
 	WALL,
-	PLAYER
+	PLAYER,
+	EMPTY
 
 }OBJECT_TYPE;
 typedef enum RENDER_PRIORITY //lowest to highest

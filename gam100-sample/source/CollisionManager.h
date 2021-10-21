@@ -50,3 +50,4 @@ int IsPointCollidePoint(Collider* left, Collider* right);
 int IsCircleCollideBox(Collider* left, Collider* right);
 int IsCircleCollidePoint(Collider* left, Collider* right);
 int IsBoxCollidePoint(Collider* left, Collider* right);
+Collider* CLM_GetComponent(GameObject*);

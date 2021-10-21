@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "GameObject.h"
 #include "FileParser.h"
+#include "GameObjectManager.h"
+#include "RenderManager.h"
 
 // For sizing
 #define NumGrids 30
@@ -20,7 +22,7 @@ CP_Matrix mScale;
 
 typedef struct 
 {
-	int gGrid[NumGrids][NumGrids];
+	GameObject* gGrid[NumGrids][NumGrids];
 } Grid;
 
 Grid gGrids;
@@ -37,19 +39,26 @@ void LevelEditorInit()
 	objType = WALL; // initialize to 0;
 	iSize = CP_System_GetWindowHeight() / NumGrids;
 
-	// set all to empty first
-	for (int i = 0; i < NumGrids; i++)
-	{
-		for (int j = 0; j < NumGrids; j++)
-		{
-			gGrids.gGrid[i][j] = isEmpty;
-		}
-	}
 	fMoveX = 0.f;
 	fMoveY = 0.f;
 	fScaleBy = 1.f;
 	vScale = CP_Vector_Set(fScaleBy, fScaleBy);
 	mScale = CP_Matrix_Scale(vScale);
+
+	// set all to empty first
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			//gGrids.gGrid[i][j] = isEmpty;
+			GameObject* go = GOM_CreateGameObject(EMPTY, PRI_GAME_OBJECT);
+			go->position = CP_Vector_Set(j * vScale.x, i * vScale.y);
+			go->scale = CP_Vector_Set(vScale.x, vScale.y);
+			go->color = CP_Color_Create(255, 255, 0, 255);
+			gGrids.gGrid[i][j] = go;
+		}
+	}
+
 }
 
 /*!
@@ -101,6 +110,9 @@ void LevelEditorUpdate()
 
 	PlaceObject();
 	RenderObjects();
+
+	//Override and refresh all renders
+	RM_Render();
 }
 
 /*!
@@ -110,7 +122,10 @@ void LevelEditorUpdate()
 */
 void LevelEditorExit()
 {
-
+	//clean rendermanager
+	RM_ClearRenderObjects();
+	//clean gom
+	GOM_Clear();
 }
 
 /*!
@@ -150,7 +165,7 @@ void RenderObjects()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			switch (gGrids.gGrid[i][j])
+			switch (gGrids.gGrid[i][j]->type)
 			{
 			case(WALL):
 				CP_Settings_Fill(CP_Color_Create(255, 255, 0, 225)); // r, g, b, a
@@ -202,9 +217,9 @@ void CheckGrid(float fMouseX, float fMouseY, int iObjType)
 	int iCurrentX = (int)(fMouseX - iModPosX) / iSize;
 	int iCurrentY = (int)(fMouseY - iModPosY) / iSize;
 
-	if (gGrids.gGrid[iCurrentY][iCurrentX] != iObjType)
+	if (gGrids.gGrid[iCurrentY][iCurrentX]->type != iObjType)
 	{
-		gGrids.gGrid[iCurrentY][iCurrentX] = iObjType;
+		gGrids.gGrid[iCurrentY][iCurrentX]->type = iObjType;
 	}
 }
 
@@ -230,7 +245,7 @@ void SaveGrid()
 				char ObjPosX[10];
 				char ObjPosY[10];
 
-				sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]);
+				sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]->type);
 				strcat_s(GridObj, 900, ObjType); //type
 				strcat_s(GridObj, 900, ",");
 
@@ -279,6 +294,6 @@ void LoadGrid(char* cInput)
 
 	for (int i = 0; i < objList->iSize; i++)
 	{
-		gGrids.gGrid[objList->fObjList[i]->iPosY][objList->fObjList[i]->iPosX] = objList->fObjList[i]->iType;
+		gGrids.gGrid[objList->fObjList[i]->iPosY][objList->fObjList[i]->iPosX]->type = objList->fObjList[i]->iType;
 	}
 }

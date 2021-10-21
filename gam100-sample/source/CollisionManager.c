@@ -32,7 +32,7 @@ void CLM_AddCollider(GameObject* g, OnCollision func, COLLIDER_TYPE type, ...)
 			va_list arg;
 			va_start(arg, type);
 			float r = (float)va_arg(arg, double); //float variables are changed to double after being passed thr ...
-			c->radius = r;
+			c->radius = r * 0.5f; //value passed in in diameter
 			va_end(arg);
 		}
 		break;
@@ -260,4 +260,17 @@ int IsBoxCollidePoint(Collider* left, Collider* right)
 		fabs(relative.y) < left->height * 0.5f)
 		return 1;
 	return 0;
+}
+
+void* FindCollider(void* curr, void* arg)
+{
+	Collider* c = (Collider*)curr;
+	GameObject* go = (GameObject*)arg;
+	if (c->obj == go)
+		return curr;
+	return NULL;
+}
+Collider* CLM_GetComponent(GameObject* go)
+{
+	return LL_Find(CLM_objects, FindCollider, go);
 }
