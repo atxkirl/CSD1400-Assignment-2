@@ -41,9 +41,11 @@ GameObject* GOM_CreateGameObject(OBJECT_TYPE type, RENDER_PRIORITY priority)
 		go->rotation = 0.0f;
 		go->scale = CP_Vector_Set(1.0f, 1.0f);
 		go->type = type;
+		go->tag = "";
 		go->renderPriority = priority;
 		go->isEnabled = 1;
 		go->color = CP_Color_Create(0, 0, 0, 255);
+
 		go->text = NULL;
 		go->textColor = CP_Color_Create(0, 0, 0, 255);
 		go->textLocalPosition = CP_Vector_Set(0.0f, 0.0f);

@@ -1,5 +1,4 @@
 #include "CollisionManager.h"
-//#include "GameObject.h"
 #include <math.h> //for fabs()
 #include "Helpers.h" //for FLT_EPS
 #include <stdlib.h> //for malloc/calloc
@@ -7,6 +6,184 @@
 #include <stdarg.h>
 
 LinkedList* CLM_objects = NULL;
+
+/*!
+@brief Handle which collider to be added to the delList according to del code
+@param list - pointer to the delete-list
+@param l - ptr to left collider
+@param r - ptr to right collider
+@param del - del code
+@return void
+*/
+void AddToDelList(LinkedList* list, Collider* l, Collider* r, int del)
+{
+	switch (del)
+	{
+	case CLM_RESPONSE_REMOVELEFT: list = LL_SetAdd(list, (void*)l);
+		break;
+	case CLM_RESPONSE_REMOVERIGHT: list = LL_SetAdd(list, (void*)r);
+		break;
+	case CLM_RESPONSE_REMOVEBOTH:
+		list = LL_SetAdd(list, (void*)l);
+		list = LL_SetAdd(list, (void*)r);
+		break;
+	}
+}
+/*!
+@brief Snap Circle object out of another Circle object.
+	Snaps both position to nearest free space
+@param l - one of circle collider
+@param r - another circle collider
+@return void
+*/
+void SnapCircleOutOfCircle(Collider* l, Collider* r)
+{
+	//See which one is locked pos, if locked means the one no lock take full movement, else share half
+	if (l->isLockedPos && r->isLockedPos) //both locked pos and somehow they colliding.
+		return; //since both locked means both cannot move 
+	float lWeight = 0.5f;
+	float rWeight = 0.5f;
+	l->isLockedPos ? (lWeight = 0.0f, rWeight = 1.0f) :
+		r->isLockedPos ? (lWeight = 1.0f, rWeight = 0.0f) :
+		(lWeight = rWeight = 0.5f);
+
+	//imagine left is stationary
+	GameObject* lGo = l->obj;
+	GameObject* rGo = r->obj;
+	CP_Vector vLtoR = CP_Vector_Subtract(rGo->position, lGo->position);
+	//CP_Vector midPoint = CP_Vector_Add(lGo->position, CP_Vector_Scale(vLtoR, 0.5f));
+	float snapLen = l->radius + r->radius;
+	float intersectLen = snapLen - CP_Vector_Length(vLtoR);
+	CP_Vector vhatLtoR = CP_Vector_Normalize(vLtoR);
+	//case where normalize causes problem when lpos == rpos, just assume go down
+	if (fabs(vhatLtoR.x) < FLT_EPS && fabs(vhatLtoR.y) < FLT_EPS)
+		vhatLtoR = CP_Vector_Set(0, 1);
+	CP_Vector vhatRtoL = CP_Vector_Negate(vhatLtoR);
+	rGo->position = CP_Vector_Add(rGo->position, CP_Vector_Scale(vhatLtoR, intersectLen * rWeight));
+	lGo->position = CP_Vector_Add(lGo->position, CP_Vector_Scale(vhatRtoL, intersectLen * lWeight));
+}
+/*!
+@brief Snap Circle object out of another Box object.
+	Snaps both position to nearest free space
+@param l - circle collider
+@param r - box collider
+@return void
+*/
+void SnapCircleOutOfBox(Collider* l, Collider* r)
+{
+	if (l->isLockedPos && r->isLockedPos) //both locked pos and somehow they colliding.
+		return; //since both locked means both cannot move 
+	float lWeight = 0.5f;
+	float rWeight = 0.5f;
+	l->isLockedPos ? (lWeight = 0.0f, rWeight = 1.0f) :
+		r->isLockedPos ? (lWeight = 1.0f, rWeight = 0.0f) :
+		(lWeight = rWeight = 0.5f);
+
+	//imagine left is stationary
+	GameObject* lGo = l->obj;
+	GameObject* rGo = r->obj;
+
+	CP_Vector BoxToCircle = CP_Vector_Subtract(lGo->position, rGo->position);
+	float a = CP_Vector_Angle(CP_Vector_Set(r->width * 0.5f, r->height * 0.5f), CP_Vector_Set(1.f, 0.f));
+	float b = CP_Vector_Angle(BoxToCircle, CP_Vector_Set(1.f, 0.f));
+	if (b <= a)
+	{
+		//on rightside
+		float intersectLen = (r->width * 0.5f + l->radius) - (float)fabs(BoxToCircle.x);
+		lGo->position.x += intersectLen * lWeight;
+		rGo->position.x -= intersectLen * rWeight;
+		return;
+	}
+	a = CP_Vector_Angle(CP_Vector_Set(-r->width * 0.5f, -r->height * 0.5f), CP_Vector_Set(-1.f, 0.f));
+	b = CP_Vector_Angle(BoxToCircle, CP_Vector_Set(-1.f, 0.f));
+	if (b <= a)
+	{
+		float intersectLen = (r->width * 0.5f + l->radius) - (float)fabs(BoxToCircle.x);
+		lGo->position.x -= intersectLen * lWeight;
+		rGo->position.x += intersectLen * rWeight;
+		return;
+	}
+	a = CP_Vector_Angle(CP_Vector_Set(r->width * 0.5f, -r->height * 0.5f), CP_Vector_Set(0.f, -1.f));
+	b = CP_Vector_Angle(BoxToCircle, CP_Vector_Set(0.f, -1.f));
+	if (b <= a)
+	{
+		float intersectLen = (r->height * 0.5f + l->radius) - (float)fabs(BoxToCircle.y);
+		lGo->position.y -= intersectLen * lWeight;
+		rGo->position.y += intersectLen * rWeight;
+		return;
+	}
+	a = CP_Vector_Angle(CP_Vector_Set(-r->width * 0.5f, r->height * 0.5f), CP_Vector_Set(0.f, 1.f));
+	b = CP_Vector_Angle(BoxToCircle, CP_Vector_Set(0.f, 1.f));
+	if (b <= a)
+	{
+		float intersectLen = (r->height * 0.5f + l->radius) - (float)fabs(BoxToCircle.y);
+		lGo->position.y += intersectLen * lWeight;
+		rGo->position.y -= intersectLen * rWeight;
+		return;
+	}
+
+}
+/*!
+@brief Snap Box object out of another Box object.
+	Snaps both position to nearest free space
+@param l - box collider
+@param r - box collider
+@return void
+*/
+void SnapBoxOutOfBox(Collider* l, Collider* r)
+{
+	if (l->isLockedPos && r->isLockedPos) //both locked pos and somehow they colliding.
+		return; //since both locked means both cannot move 
+	float lWeight = 0.5f;
+	float rWeight = 0.5f;
+	l->isLockedPos ? (lWeight = 0.0f, rWeight = 1.0f) :
+		r->isLockedPos ? (lWeight = 1.0f, rWeight = 0.0f) :
+		(lWeight = rWeight = 0.5f);
+
+	//imagine left is stationary
+	GameObject* lGo = l->obj;
+	GameObject* rGo = r->obj;
+
+	CP_Vector BoxToCircle = CP_Vector_Subtract(lGo->position, rGo->position);
+	float a = CP_Vector_Angle(CP_Vector_Set(r->width * 0.5f, r->height * 0.5f), CP_Vector_Set(1.f, 0.f));
+	float b = CP_Vector_Angle(BoxToCircle, CP_Vector_Set(1.f, 0.f));
+	if (b <= a)
+	{
+		//on rightside
+		float intersectLen = (r->width * 0.5f + l->width * 0.5f) - (float)fabs(BoxToCircle.x);
+		lGo->position.x += intersectLen * lWeight;
+		rGo->position.x -= intersectLen * rWeight;
+		return;
+	}
+	a = CP_Vector_Angle(CP_Vector_Set(-r->width * 0.5f, -r->height * 0.5f), CP_Vector_Set(-1.f, 0.f));
+	b = CP_Vector_Angle(BoxToCircle, CP_Vector_Set(-1.f, 0.f));
+	if (b <= a)
+	{
+		float intersectLen = (r->width * 0.5f + l->width * 0.5f) - (float)fabs(BoxToCircle.x);
+		lGo->position.x -= intersectLen * lWeight;
+		rGo->position.x += intersectLen * rWeight;
+		return;
+	}
+	a = CP_Vector_Angle(CP_Vector_Set(r->width * 0.5f, -r->height * 0.5f), CP_Vector_Set(0.f, -1.f));
+	b = CP_Vector_Angle(BoxToCircle, CP_Vector_Set(0.f, -1.f));
+	if (b <= a)
+	{
+		float intersectLen = (r->height * 0.5f + l->height * 0.5f) - (float)fabs(BoxToCircle.y);
+		lGo->position.y -= intersectLen * lWeight;
+		rGo->position.y += intersectLen * rWeight;
+		return;
+	}
+	a = CP_Vector_Angle(CP_Vector_Set(-r->width * 0.5f, r->height * 0.5f), CP_Vector_Set(0.f, 1.f));
+	b = CP_Vector_Angle(BoxToCircle, CP_Vector_Set(0.f, 1.f));
+	if (b <= a)
+	{
+		float intersectLen = (r->height * 0.5f + l->height * 0.5f) - (float)fabs(BoxToCircle.y);
+		lGo->position.y += intersectLen * lWeight;
+		rGo->position.y -= intersectLen * rWeight;
+		return;
+	}
+
+}
 
 void CLM_Init()
 {
@@ -16,13 +193,16 @@ void CLM_Add(Collider* c)
 {
 	CLM_objects = LL_Add(CLM_objects, (void*)c);
 }
-void CLM_AddCollider(GameObject* g, OnCollision func, COLLIDER_TYPE type, ...)
+Collider* CLM_AddCollider(GameObject* g, OnCollision func, COLLIDER_TYPE type, ...)
 {
 	Collider* c = malloc(sizeof(Collider));
 	if (c)
 	{
 		c->obj = g;
 		c->type = type;
+		//c->velocity = CP_Vector_Set(0, 0);
+		c->isKinematic = 0;
+		c->isLockedPos = 0;
 		c->isEnabled = 1;
 		c->OnCollision = func;
 		switch (type)
@@ -52,7 +232,7 @@ void CLM_AddCollider(GameObject* g, OnCollision func, COLLIDER_TYPE type, ...)
 		}
 	}
 	CLM_objects = LL_Add(CLM_objects, c);
-
+	return c;
 }
 int CLM_Remove(Collider* c)
 {
@@ -113,6 +293,14 @@ void CLM_CheckCollisions()
 			
 			if (IsCollide(left, right))
 			{
+				if (left->type == COL_CIRCLE && right->type == COL_CIRCLE)
+					SnapCircleOutOfCircle(left, right);
+				else if (left->type == COL_CIRCLE && right->type == COL_BOX)
+					SnapCircleOutOfBox(left, right);
+				else if (left->type == COL_BOX && right->type == COL_CIRCLE)
+					SnapCircleOutOfBox(right, left);
+				else if (left->type == COL_BOX && right->type == COL_BOX)
+					SnapBoxOutOfBox(left, right);
 				//response
 				int ret = CLM_RESPONSE_REMOVENONE;
 				int ret2 = CLM_RESPONSE_REMOVENONE;
@@ -121,30 +309,8 @@ void CLM_CheckCollisions()
 				if (right->OnCollision != NULL)
 					ret2 = right->OnCollision(right, left);
 
-				switch (ret)
-				{
-				case CLM_RESPONSE_REMOVELEFT: delList = LL_SetAdd(delList, (void*)left);
-					break;
-				case CLM_RESPONSE_REMOVERIGHT: delList = LL_SetAdd(delList, (void*)right);
-					break;
-				case CLM_RESPONSE_REMOVEBOTH:
-					delList = LL_SetAdd(delList, (void*)left);
-					delList = LL_SetAdd(delList, (void*)right);
-					break;
-				}
-					
-				switch (ret2)
-				{
-				case CLM_RESPONSE_REMOVELEFT: delList = LL_SetAdd(delList, (void*)right);
-					break;
-				case CLM_RESPONSE_REMOVERIGHT: delList = LL_SetAdd(delList, (void*)left);
-					break;
-				case CLM_RESPONSE_REMOVEBOTH:
-					delList = LL_SetAdd(delList, (void*)left);
-					delList = LL_SetAdd(delList, (void*)right);
-					break;
-				}
-				
+				AddToDelList(delList, left, right, ret);
+				AddToDelList(delList, right, left, ret2);
 
 			}
 		}

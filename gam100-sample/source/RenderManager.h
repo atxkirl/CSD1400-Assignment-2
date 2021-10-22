@@ -27,5 +27,6 @@ void RM_Render();
 @return void
 */
 void RM_SetCameraPosition(CP_Vector);
+CP_Vector RM_GetCameraPosition();
 void RM_SetCameraScale(CP_Vector);
 CP_Vector RM_GetCameraScale();

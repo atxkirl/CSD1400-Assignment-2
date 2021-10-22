@@ -67,6 +67,11 @@ void RM_SetCameraPosition(CP_Vector pos)
 	cameraPos = pos;
 }
 
+CP_Vector RM_GetCameraPosition()
+{
+	return cameraPos;
+}
+
 void RM_SetCameraScale(CP_Vector s)
 {
 	cameraScale = s;
@@ -95,7 +100,12 @@ void RenderAllOfType(RENDER_PRIORITY type)
 		MS_Translate(matrixStack, go->position);
 		MS_Rotate(matrixStack, -go->rotation);//coz if camera tilt left, image will tilt right. but i want image to tilt left
 		//MS_Scale(matrixStack, go->scale);
-		CP_Settings_ApplyMatrix(*MS_Top(matrixStack));
+		CP_Matrix* mat = MS_Top(matrixStack);
+		CP_Matrix transform;
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
+				transform.m[i][j] = mat->m[i][j];
+		CP_Settings_ApplyMatrix(transform);
 		//RM_ApplyMatrix(MS_Top(matrixStack));
 		
 		switch (go->type)
@@ -108,10 +118,12 @@ void RenderAllOfType(RENDER_PRIORITY type)
 			//rectangle is drawn w ref to topleft. i wan it centered
 			//somehow cannot scale drawrect
 
-			CP_Graphics_DrawRect(-go->scale.x * 0.5f, -go->scale.y * 0.5f, go->scale.x, go->scale.y);
+			CP_Graphics_DrawRect(-go->scale.x * 0.5f, -go->scale.y * 0.5f,
+				go->scale.x, go->scale.y);
 			break;
 		case WALL:
-				CP_Graphics_DrawRect(-go->scale.x * 0.5f, -go->scale.y * 0.5f, go->scale.x, go->scale.y);
+				CP_Graphics_DrawRect(-go->scale.x * 0.5f, -go->scale.y * 0.5f, 
+					go->scale.x, go->scale.y);
 				break;
 		case LINE:
 			CP_Graphics_DrawLine(0,0,go->scale.x, 0);
@@ -120,7 +132,9 @@ void RenderAllOfType(RENDER_PRIORITY type)
 			break;
 		}
 
-		CP_Settings_ApplyMatrix(CP_Matrix_Inverse(*MS_Top(matrixStack)));
+		//printf("matrixSize: %d\n", LL_GetCount(matrixStack));
+		//MS_Print(MS_Top(matrixStack));
+		CP_Settings_ApplyMatrix(CP_Matrix_Inverse(transform));
 		MS_PopMatrix(matrixStack);
 		//CP_Settings_ResetMatrix();
 
@@ -133,13 +147,21 @@ void RenderAllOfType(RENDER_PRIORITY type)
 			MS_Translate(matrixStack, go->textLocalPosition);
 			MS_Rotate(matrixStack, -go->textRotation);
 			MS_Scale(matrixStack, go->textScale);
-			CP_Settings_ApplyMatrix(*MS_Top(matrixStack));
+			CP_Matrix* matTop = MS_Top(matrixStack);
+			CP_Matrix textTransform;
+			for (int i = 0; i < 3; i++)
+				for (int j = 0; j < 3; j++)
+					textTransform.m[i][j] = matTop->m[i][j];
+			CP_Settings_ApplyMatrix(textTransform);
 			
 			CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 
 			CP_Font_DrawText(go->text, 0.0f, 0.0f);
 
-			CP_Settings_ApplyMatrix(CP_Matrix_Inverse(*MS_Top(matrixStack)));
+			//printf("matrixSize: %d\n", LL_GetCount(matrixStack));
+			//MS_Print(MS_Top(matrixStack));
+			
+			CP_Settings_ApplyMatrix(CP_Matrix_Inverse(textTransform));
 			MS_PopMatrix(matrixStack);
 			//CP_Settings_ResetMatrix();
 		}

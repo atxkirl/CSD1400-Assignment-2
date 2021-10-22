@@ -38,8 +38,9 @@ typedef struct Collider
 {
 	GameObject* obj;
 	COLLIDER_TYPE type;
-	CP_Vector velocity;
+	//CP_Vector velocity;
 	int isKinematic;//aka isStatic, does not move due to force
+	int isLockedPos;//aka unity's locked x,y
 	int isEnabled;
 	float radius;
 	float width, height;
@@ -51,7 +52,7 @@ typedef struct Collider
 
 void CLM_Init();
 void CLM_Add(Collider* );
-void CLM_AddCollider(GameObject*, OnCollision, COLLIDER_TYPE type, ...);
+Collider* CLM_AddCollider(GameObject*, OnCollision, COLLIDER_TYPE type, ...);
 int CLM_Remove(Collider*);
 void CLM_RemoveGO(GameObject*);
 void CLM_Clear();
