@@ -54,27 +54,24 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 				}
 				strncpy_s(cTempType, 10, cFileRead, i - j);
 				strcat_s(cTempType, 10, "\0");
-				j = i;
 				i += 1;
+				j = i;
 
 				while (cFileRead[i] != ',') // find xpos
 				{
 					i++;
-					j++;
 				}
 				strncpy_s(cTempX, 10, cFileRead+ j, i - j);
 				strcat_s(cTempX, 10, "\0");
-				j = i;
 				i += 1;
+				j = i;
 		
 				while (cFileRead[i] != '\n') // find y pos, which is before new line
 				{
 					i++;
-					j++;
 				}
 				strncpy_s(cTempY, 10, cFileRead+ j, i - j);
 				strcat_s(cTempY, 10, "\0");
-				i += 1;
 
 				mMap->fObjList[iObjNum] = (FileObj*)malloc(sizeof(FileObj));
 

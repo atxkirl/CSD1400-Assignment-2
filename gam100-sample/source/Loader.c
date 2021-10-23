@@ -50,6 +50,27 @@ void LoaderExit()
 
 void LoaderRender()
 {
+	// grids
+	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+	for (int i = 0; i <= NumGrids; i++)
+	{
+		CP_Graphics_DrawLine(0,
+			(float)i * iSize,
+			(float)NumGrids * iSize,
+			(float)i * iSize); // Draw horizontal line
+
+	}
+
+	for (int i = 0; i <= NumGrids; i++)
+	{
+		CP_Graphics_DrawLine((float)i * iSize,
+			0,
+			(float)i * iSize,
+			(float)NumGrids * iSize); // Draw Vertical line
+
+
+	}
+
 	//render obj
 	for (int i = 0; i < NumGrids; i++)
 	{
@@ -108,6 +129,7 @@ void LoadGrid(char* cInput, int iLoad)
 
 	float fWorldHeight = WORLD_HEIGHT;
 	float fCellSize = fWorldHeight / NumGrids; //fit 30 grids vertically in the screen
+
 	for (int i = 0; i < objList->iSize; i++)
 	{
 		int iY = objList->fObjList[i]->iPosY;
