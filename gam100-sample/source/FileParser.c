@@ -8,7 +8,7 @@ Map* new_Map()
 
 	if (goMap)
 	{
-		goMap->fObjList = (FileObj**)malloc(sizeof(FileObj*));
+		goMap->fObjList = (FileObj**)malloc(sizeof(FileObj*) * 900);
 		goMap->iSize = 0;
 	}
 	return goMap;
