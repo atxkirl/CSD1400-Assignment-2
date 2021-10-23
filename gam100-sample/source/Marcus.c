@@ -44,8 +44,9 @@ void Marcus_init(void)
     button->position = CP_Vector_Set(80.0f, 25.0f);
     button->tag = "editor";
     button->type = RECTANGLE;
-    r->color = CP_Color_Create(255, 0, 0, 50);
+    //r->color = CP_Color_Create(255, 0, 0, 50);
     r->renderPriority = PRI_UI;
+    r->text = "Editor";
     CLM_Set(CLM_AddComponent(button), COL_BOX, Marcus_OnCollision);
 
     button = GOM_Create(RECTANGLE);
@@ -54,8 +55,9 @@ void Marcus_init(void)
     button->position = CP_Vector_Set(80.0f, 75.0f);
     button->tag = "levelone";
     button->type = RECTANGLE;
-    r->color = CP_Color_Create(255, 0, 0, 50);
+    //r->color = CP_Color_Create(255, 0, 0, 50);
     r->renderPriority = PRI_UI;
+    r->text = "One";
     CLM_Set(CLM_AddComponent(button), COL_BOX, Marcus_OnCollision);
 }
 
@@ -66,7 +68,7 @@ void Marcus_update(void)
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
         //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateTemp(RECTANGLE);
+        clickPoint = GOM_CreateTemp(EMPTY);
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
@@ -75,14 +77,7 @@ void Marcus_update(void)
 
     SM_SystemsUpdate();
 
-    //imagine late update
-    if (clickPoint)
-    {
-        CLM_RemoveGO(clickPoint);
-        GOM_Delete(clickPoint);
-    }
-
-    MarcusUI_render();
+    //MarcusUI_render();
     SM_SystemsLateUpdate();
 }
 
