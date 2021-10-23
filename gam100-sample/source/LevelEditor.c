@@ -4,8 +4,6 @@
 #include "FileParser.h"
 #include "SystemManager.h"
 
-#define isEmpty 0
-
 int iSize;
 OBJECT_TYPE objType;
 
@@ -98,19 +96,22 @@ void LevelEditorUpdate()
 		mScale = CP_Matrix_Scale(vScale);
 	}
 
-	if (CP_Input_KeyDown(KEY_Q))
+	if (CP_Input_KeyTriggered(KEY_Q))
 	{
 		objType++;
-
 		if (objType >= END)
 			objType = END - 1;
+
+		printf("Object Type: %d\n", objType);
 	}
-	else if (CP_Input_KeyDown(KEY_W))
+	else if (CP_Input_KeyTriggered(KEY_E))
 	{
 		objType--;
 
 		if (objType < 0)
 			objType = 0;
+
+		printf("Object Type: %d\n", objType);
 	}
 
 	PlaceObject();
@@ -204,7 +205,7 @@ void PlaceObject()
 	}
 	if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
 	{
-		CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, isEmpty);
+		CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
 	}
 }
 
@@ -246,7 +247,7 @@ void SaveGrid()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gGrids.gGrid[i][j] != isEmpty)
+			if (gGrids.gGrid[i][j]->type !=  EMPTY)
 			{
 				char ObjType[10];
 				char ObjPosX[10];

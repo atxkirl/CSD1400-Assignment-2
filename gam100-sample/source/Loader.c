@@ -80,11 +80,11 @@ void LoaderRender()
 	{
 		if (!oObjectiveList[i].isComplete)
 		{
-			CP_Font_DrawText(oObjectiveList[i].cObjective, 55.f, 30.f + i * 20.f);
+			CP_Font_DrawText(oObjectiveList[i].cObjective, 115.f, 30.f + i * 20.f);
 		}
 		else
 		{
-			CP_Font_DrawText("DONE", 55.f, 30.f + i * 20.f);
+			CP_Font_DrawText("DONE", 75.f, 30.f + i * 20.f);
 		}
 	}
 }

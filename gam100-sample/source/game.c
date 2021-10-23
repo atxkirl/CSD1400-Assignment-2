@@ -58,7 +58,7 @@ void game_init(void)
     Renderer* r = RM_AddComponent(button);
     button->tag = "marcus"; //For collision
     r->renderPriority = PRI_UI;
-    r->text = "gayboy";
+    r->text = "marcus";
     CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
 
     button = GOM_Create2(RECTANGLE,

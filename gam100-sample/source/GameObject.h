@@ -5,11 +5,11 @@
 
 typedef enum OBJECT_TYPE
 {
+	EMPTY = 0,
 	CIRCLE,
 	RECTANGLE,
 	WALL,
 	PLAYER,
-	EMPTY,
 	LINE,
 	END // LAST 
 
