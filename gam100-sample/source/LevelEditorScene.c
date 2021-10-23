@@ -24,10 +24,10 @@ void LevelEditorScene_init(void)
 
 void LevelEditorScene_update(void)
 {
-    SM_SystemsPreUpdate();
+    //SM_SystemsPreUpdate();
     LevelEditorUpdate();
-    SM_SystemsUpdate();
-    SM_SystemsLateUpdate();
+    //SM_SystemsUpdate();
+    //SM_SystemsLateUpdate();
 }
 
 void LevelEditorScene_exit(void)

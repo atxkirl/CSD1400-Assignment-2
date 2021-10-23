@@ -47,6 +47,7 @@ void LevelOne_init(void)
     button->type = RECTANGLE;
     Renderer* r = RM_AddComponent(button);
     r->color = CP_Color_Create(255, 0, 0, 50);
+    r->text = "From INIT";
     CLM_Set(CLM_AddComponent(button), COL_BOX, LevelOne_OnCollision);
 }
 
