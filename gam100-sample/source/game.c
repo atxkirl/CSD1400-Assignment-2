@@ -13,12 +13,9 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-#include "RenderManager.h"
-//#include "GameObject.h"
-#include "GameObjectManager.h"
 #include "Helpers.h"
 #include "SceneManager.h"
-#include "CollisionManager.h"
+#include "SystemManager.h"
 #include "Colors.h"
 
 void gameUI_render();
@@ -50,42 +47,41 @@ int game_OnCollision(Collider* left, Collider* right)
 
 void game_init(void)
 {
-    RM_Init();
-    GOM_Init();
+    SM_SystemsInit();
 
-    GameObject* g = GOM_CreateGameObject(CIRCLE, PRI_GAME_OBJECT);
+    GameObject* g = GOM_Create(CIRCLE, PRI_GAME_OBJECT);
     g->scale = CP_Vector_Set(20, 20);
     g->position = CP_Vector_Set(20, 20);
 
-    GameObject* button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    GameObject* button = GOM_Create(RECTANGLE, PRI_UI);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 25.0f);
     button->tag = "marcus"; //For collision
     button->color = CP_Color_Create(255, 0, 0, 50);
     CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    button = GOM_Create(RECTANGLE, PRI_UI);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 75.0f);
     button->tag = "hongyu";
     button->color = CP_Color_Create(255, 0, 0, 50);
     CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    button = GOM_Create(RECTANGLE, PRI_UI);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 125.0f);
     button->tag = "adrian";
     button->color = CP_Color_Create(255, 0, 0, 50);
     CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    button = GOM_Create(RECTANGLE, PRI_UI);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 175.0f);
     button->tag = "weiyi";
     button->color = CP_Color_Create(255, 0, 0, 50);
     CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    button = GOM_Create(RECTANGLE, PRI_UI);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 225.0f);
     button->tag = "xinyun";
@@ -95,6 +91,7 @@ void game_init(void)
 
 void game_update(void)
 {
+    SM_SystemsPreUpdate();
     if (CP_Input_KeyTriggered(KEY_1))
     {
         // Change to game2 scene.
@@ -104,7 +101,7 @@ void game_update(void)
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
         //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateGameObject(CIRCLE, PRI_GAME_OBJECT);//param doesnt matter
+        clickPoint = GOM_CreateTemp(CIRCLE, PRI_GAME_OBJECT);//param doesnt matter
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
@@ -125,25 +122,17 @@ void game_update(void)
         //    SceneManager_ChangeSceneByName("adrian");
         //}
     }
-    
-    CLM_CheckCollisions();
-
-    //imagine late update
-    if (clickPoint)
-    {
-        CLM_RemoveGO(clickPoint);
-        GOM_Delete(clickPoint);
-    }
+    SM_SystemsUpdate();
 
     gameUI_render();
-    RM_Render();
+    SM_SystemsLateUpdate();
+
+    //RM_Render();
 }
 
 void game_exit(void)
 {
-    CLM_Clear();
-    RM_ClearRenderObjects();
-    GOM_Clear();
+    SM_SystemsExit();
 }
 
 void game_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

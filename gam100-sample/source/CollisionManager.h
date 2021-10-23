@@ -52,7 +52,7 @@ typedef struct Collider
 
 void CLM_Init();
 void CLM_Add(Collider* );
-Collider* CLM_AddComponent(GameObject*, OnCollision, COLLIDER_TYPE type, ...);
+Collider* CLM_AddCollider(GameObject*, OnCollision, COLLIDER_TYPE type, ...);
 int CLM_Remove(Collider*);
 void CLM_RemoveGO(GameObject*);
 void CLM_Clear();

@@ -59,6 +59,9 @@
     <ClCompile Include="source\Loader.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\SystemManager.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -112,6 +115,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\Loader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SystemManager.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

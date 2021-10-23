@@ -275,7 +275,7 @@ int CLM_GetIndex(Collider* c)
 {
 	return LL_GetIndexPtr(CLM_objects, c);
 }
-void CLM_CheckCollisions()
+void CLM_Update()
 {
 	void** objArray = LL_ToArray(CLM_objects);
 	int size = LL_GetCount(CLM_objects);

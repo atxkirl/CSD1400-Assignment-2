@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include "CollisionManager.h"
 
-LinkedList* GOM_objects;
+LinkedList* objectList = NULL;
+LinkedList* tempList = NULL;
 
 void GOM_Init()
 {
@@ -12,27 +13,40 @@ void GOM_Init()
 
 int GOM_Delete(GameObject* g)
 {
-	GOM_objects = LL_RemovePtr(GOM_objects, g);
+	objectList = LL_RemovePtr(objectList, g);
 	free(g);
 
 	return 1;
 }
 void GOM_Clear()
 {
-	LinkedList* l = GOM_objects;
+	LinkedList* l = objectList;
 	while (l)
 	{
 		free(l->curr);
 		l = l->next;
 	}
-	GOM_objects = LL_Clear(GOM_objects);
+	objectList = LL_Clear(objectList);
+	tempList = LL_Clear(tempList);
 }
 int GOM_GetIndex(GameObject* go)
 {
-	return LL_GetIndexPtr(GOM_objects, go);
+	return LL_GetIndexPtr(objectList, go);
 }
 
-GameObject* GOM_CreateGameObject(OBJECT_TYPE type, RENDER_PRIORITY priority)
+void GOM_ClearTempObjects()
+{
+	LinkedList* l = tempList;
+	while (l)
+	{
+		objectList = LL_RemovePtr(objectList, l->curr);
+		free(l->curr);
+		l = l->next;
+	}
+	tempList = LL_Clear(tempList);
+}
+
+GameObject* GOM_Create(OBJECT_TYPE type, RENDER_PRIORITY priority)
 {
 	GameObject* go = malloc(sizeof(GameObject));
 
@@ -54,16 +68,28 @@ GameObject* GOM_CreateGameObject(OBJECT_TYPE type, RENDER_PRIORITY priority)
 		go->textScale = CP_Vector_Set(1.0f, 1.0f);
 	}
 
-	GOM_objects = LL_Add(GOM_objects, go);
+	objectList = LL_Add(objectList, go);
 	RM_AddRenderObject(go);
 	return go;
+}
+
+GameObject* GOM_CreateTemp(OBJECT_TYPE type, RENDER_PRIORITY priority)
+{
+	GameObject* go = GOM_Create(type, priority);
+	tempList = LL_Add(tempList, go);
+	return go;
+}
+
+int GOM_GetCount()
+{
+	return LL_GetCount(objectList);
 }
 
 GameObject* GOM_FactoryCreateGO(int type)
 {
 	enum OBJECT_TYPE objType = (enum OBJECT_TYPE)type;
 
-	GameObject* go = GOM_CreateGameObject(objType, PRI_GAME_OBJECT);
+	GameObject* go = GOM_Create(objType, PRI_GAME_OBJECT);
 	go->type = objType;
 	//switch (objType)
 	//{
@@ -77,9 +103,4 @@ GameObject* GOM_FactoryCreateGO(int type)
 
 	//}
 	return go;
-}
-
-void* GOM_AddComponent(GameObject* go, COMPONENT c)
-{
-	return NULL;
 }

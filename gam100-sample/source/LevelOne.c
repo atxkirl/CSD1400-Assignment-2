@@ -10,15 +10,12 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-#include "RenderManager.h"
-#include "GameObject.h"
-#include "GameObjectManager.h"
 #include "Helpers.h"
 #include "LevelEditor.h"
 #include "FileParser.h"
 #include "Loader.h"
-#include "CollisionManager.h"
 #include "Colors.h"
+#include "SystemManager.h"
 
 void LevelOneUI_render();
 
@@ -35,9 +32,7 @@ int LevelOne_OnCollision(Collider* left, Collider* right)
 
 void LevelOne_init(void)
 {
-    RM_Init();
-    GOM_Init();
-
+    SM_SystemsInit();
     //RM_AddRenderObject(g);
     LoaderInit();
 
@@ -45,8 +40,8 @@ void LevelOne_init(void)
     //here is where ill load objectives
     LoadObjectives("Obj1");
 
-    GameObject* button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
-    button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    GameObject* button = GOM_Create(RECTANGLE, PRI_UI);
+    button = GOM_Create(RECTANGLE, PRI_UI);
     button->scale = CP_Vector_Set(75.f, 50.f);
     button->position = CP_Vector_Set(80.0f, 200.0f);
     button->tag = "objone";
@@ -57,25 +52,21 @@ void LevelOne_init(void)
 
 void LevelOne_update(void)
 {
+    SM_SystemsPreUpdate();
     GameObject* clickPoint = NULL;
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
         //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateGameObject(RECTANGLE, PRI_GAME_OBJECT);
+        clickPoint = GOM_CreateTemp(RECTANGLE, PRI_GAME_OBJECT);
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
         CLM_AddCollider(clickPoint, NULL, COL_POINT);
     }
 
-    CLM_CheckCollisions();
+    SM_SystemsUpdate();
 
-    //imagine late update
-    if (clickPoint)
-    {
-        CLM_RemoveGO(clickPoint);
-        GOM_Delete(clickPoint);
-    }
+    SM_SystemsLateUpdate();
 
     CP_Graphics_ClearBackground(COLOR_BLUE);
     LevelOneUI_render();
@@ -85,8 +76,7 @@ void LevelOne_update(void)
 void LevelOne_exit(void)
 {
     LoaderExit();
-    RM_ClearRenderObjects();
-    GOM_Clear();
+    SM_SystemsExit();
 }
 
 void LevelOne_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

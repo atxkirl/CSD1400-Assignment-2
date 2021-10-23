@@ -10,20 +10,17 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-#include "RenderManager.h"
-#include "GameObject.h"
-#include "GameObjectManager.h"
 #include "Helpers.h"
 #include "../DetectMemoryLeak.h"
+#include "SystemManager.h"
 
 #include <stdlib.h>
 
 void Xinyun_init(void)
 {
-    RM_Init();
-    GOM_Init();
+    SM_SystemsInit();
 
-    GameObject* g = GOM_CreateGameObject(CIRCLE, PRI_GAME_OBJECT);
+    GameObject* g = GOM_Create(CIRCLE, PRI_GAME_OBJECT);
     g->scale = CP_Vector_Set(20, 20);
     g->position = CP_Vector_Set(50, 20);
 
@@ -31,15 +28,19 @@ void Xinyun_init(void)
 
 void Xinyun_update(void)
 {
-    CP_Settings_Fill(CP_Color_Create(255, 0, 128, 255));
-    RM_Render();
-    CP_Settings_Fill(CP_Color_Create(128, 128, 128, 255));
+    SM_SystemsPreUpdate();
+
+    //Do stuff here...
+
+
+    SM_SystemsUpdate();
+
+    SM_SystemsLateUpdate();
 }
 
 void Xinyun_exit(void)
 {
-    RM_ClearRenderObjects();
-    GOM_Clear();
+    SM_SystemsExit();
 
     _CrtDumpMemoryLeaks();
 }

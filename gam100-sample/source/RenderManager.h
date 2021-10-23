@@ -23,7 +23,7 @@ typedef struct Renderer
 void RM_Init();
 void RM_AddRenderObject(GameObject*);
 void RM_RemoveRenderObject(GameObject*);
-void RM_ClearRenderObjects();
+void RM_Clear();
 void RM_Render();
 /*!
 @brief Set camera center point to the position param

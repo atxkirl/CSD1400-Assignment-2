@@ -10,11 +10,8 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-#include "RenderManager.h"
-#include "GameObject.h"
-#include "GameObjectManager.h"
 #include "Helpers.h"
-#include "CollisionManager.h"
+#include "SystemManager.h"
 
 GameObject* g = NULL;
 int tempSize = 0;
@@ -58,10 +55,9 @@ int hy_OnCollision(Collider* left, Collider* right)
 
 void HongYu_init(void)
 {
-    RM_Init();
-    GOM_Init();
+    SM_SystemsInit();
 
-    g = GOM_CreateGameObject(RECTANGLE, PRI_GAME_OBJECT);
+    g = GOM_Create(RECTANGLE, PRI_GAME_OBJECT);
     g->scale = CP_Vector_Set(15, 15);
     g->position = CP_Vector_Set(50, 20);
     g->tag = "player";
@@ -70,7 +66,7 @@ void HongYu_init(void)
     //int width = CP_System_GetWindowWidth();
     //int height = CP_System_GetWindowHeight();
 
-    GameObject* button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    GameObject* button = GOM_Create(RECTANGLE, PRI_UI);
     button->position = CP_Vector_Set(80, 20);
     //button->rotation = 10.0f;
     button->scale = CP_Vector_Set(30, 20);
@@ -79,7 +75,7 @@ void HongYu_init(void)
     button->tag = "test";
     CLM_AddCollider(button, hy_OnCollision, RECTANGLE, button->scale.x, button->scale.y);
 
-    GameObject* wall = GOM_CreateGameObject(RECTANGLE, PRI_GAME_OBJECT);
+    GameObject* wall = GOM_Create(RECTANGLE, PRI_GAME_OBJECT);
     wall->position = CP_Vector_Set(0,0);
     //button->rotation = 10.0f;
     wall->scale = CP_Vector_Set(50,25);
@@ -87,14 +83,14 @@ void HongYu_init(void)
     wall->tag = "wall";
     CLM_AddCollider(wall, hy_OnCollision, COL_BOX, wall->scale.x, wall->scale.y);
     
-    wall = GOM_CreateGameObject(CIRCLE, PRI_GAME_OBJECT);
+    wall = GOM_Create(CIRCLE, PRI_GAME_OBJECT);
     wall->position = CP_Vector_Set(30, 80);
     wall->scale = CP_Vector_Set(30, 30);
     wall->color = CP_Color_Create(200, 200, 200, 255);
     //wall->tag = "wall";
     CLM_AddCollider(wall, NULL, COL_CIRCLE, wall->scale.x);
 
-    wall = GOM_CreateGameObject(CIRCLE, PRI_GAME_OBJECT);
+    wall = GOM_Create(CIRCLE, PRI_GAME_OBJECT);
     wall->position = CP_Vector_Set(30, 80);
     wall->scale = CP_Vector_Set(30, 30);
     wall->color = CP_Color_Create(200, 180, 180, 255);
@@ -110,6 +106,7 @@ void HongYu_init(void)
 
 void HongYu_update(void)
 {
+    SM_SystemsPreUpdate();
     float dt = CP_System_GetDt();
     float spd = 200.0f;
     //Collider* gc = CLM_GetComponent(g);
@@ -134,7 +131,7 @@ void HongYu_update(void)
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
         //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateGameObject(CIRCLE, PRI_GAME_OBJECT);//param doesnt matter
+        clickPoint = GOM_CreateTemp(CIRCLE, PRI_GAME_OBJECT);//param doesnt matter
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
@@ -154,26 +151,21 @@ void HongYu_update(void)
     //g->text = str;
     g->textColor = CP_Color_Create(255, 255, 255, 255);
 
-    //CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 255, 255));
-    CLM_CheckCollisions();
+    SM_SystemsUpdate();
     RM_SetCameraPosition(g->position);
 
-    //imagine late update
-    if (clickPoint)
-    {
-        CLM_RemoveGO(clickPoint);
-        GOM_Delete(clickPoint);
-    }
-
-
-    RM_Render();
+    ////imagine late update
+    //if (clickPoint)
+    //{
+    //    CLM_RemoveGO(clickPoint);
+    //    GOM_Delete(clickPoint);
+    //}
+    SM_SystemsLateUpdate();
 }
 
 void HongYu_exit(void)
 {
-    CLM_Clear();
-    RM_ClearRenderObjects();
-    GOM_Clear();
+    SM_SystemsExit();
 }
 
 void HongYu_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

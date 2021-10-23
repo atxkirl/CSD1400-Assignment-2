@@ -10,16 +10,13 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-#include "RenderManager.h"
-#include "GameObject.h"
-#include "GameObjectManager.h"
 #include "Helpers.h"
 #include "LevelEditor.h"
+#include "SystemManager.h"
 
 void LevelEditorScene_init(void)
 {
-    RM_Init();
-    GOM_Init();
+    SM_SystemsInit();
 
     //RM_AddRenderObject(g);
     LevelEditorInit();
@@ -27,14 +24,16 @@ void LevelEditorScene_init(void)
 
 void LevelEditorScene_update(void)
 {
+    SM_SystemsPreUpdate();
     LevelEditorUpdate();
+    SM_SystemsUpdate();
+    SM_SystemsLateUpdate();
 }
 
 void LevelEditorScene_exit(void)
 {
     LevelEditorExit();
-    RM_ClearRenderObjects();
-    GOM_Clear();
+    SM_SystemsExit();
 }
 
 void LevelEditorScene_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

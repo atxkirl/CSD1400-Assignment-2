@@ -30,7 +30,7 @@ void LoaderInit()
 		for (int j = 0; j < NumGrids; j++)
 		{
 			//gGrids.gGrid[i][j] = isEmpty;
-			GameObject* go = GOM_CreateGameObject(EMPTY, PRI_GAME_OBJECT);
+			GameObject* go = GOM_Create(EMPTY, PRI_GAME_OBJECT);
 			go->position = CP_Vector_Set((float)j , (float)i);
 			go->scale = CP_Vector_Set(1.f, 1.f);
 			go->color = CP_Color_Create(255, 255, 0, 255);

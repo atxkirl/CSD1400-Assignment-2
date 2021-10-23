@@ -29,7 +29,7 @@ void RM_RemoveRenderObject(GameObject* g)
 {
 	renderObjects = LL_RemovePtr(renderObjects, g);
 }
-void RM_ClearRenderObjects()
+void RM_Clear()
 {
 	renderObjects = LL_Clear(renderObjects);
 	matrixStack = LL_Clear(matrixStack);

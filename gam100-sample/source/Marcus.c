@@ -10,13 +10,10 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-#include "RenderManager.h"
-//#include "GameObject.h"
-#include "GameObjectManager.h"
 #include "Helpers.h"
 #include "SceneManager.h"
-#include "CollisionManager.h"
 #include "Colors.h"
+#include "SystemManager.h"
 
 #define BUTTON_WIDTH 60.f
 #define BUTTON_HEIGHT 30.f
@@ -38,11 +35,10 @@ int Marcus_OnCollision(Collider* left, Collider* right)
 
 void Marcus_init(void)
 {
-    RM_Init();
-    GOM_Init();
+    SM_SystemsInit();
 
     //RM_AddRenderObject(g);
-    GameObject* button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    GameObject* button = GOM_Create(RECTANGLE, PRI_UI);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 25.0f);
     button->tag = "editor";
@@ -50,7 +46,7 @@ void Marcus_init(void)
     button->color = CP_Color_Create(255, 0, 0, 50);
     CLM_AddCollider(button, Marcus_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
+    button = GOM_Create(RECTANGLE, PRI_UI);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 75.0f);
     button->tag = "levelone";
@@ -61,18 +57,19 @@ void Marcus_init(void)
 
 void Marcus_update(void)
 {
+    SM_SystemsPreUpdate();
     GameObject* clickPoint = NULL;
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
         //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateGameObject(RECTANGLE, PRI_GAME_OBJECT);
+        clickPoint = GOM_CreateTemp(RECTANGLE, PRI_GAME_OBJECT);
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
         CLM_AddCollider(clickPoint, NULL, COL_POINT);
     }
 
-    CLM_CheckCollisions();
+    SM_SystemsUpdate();
 
     //imagine late update
     if (clickPoint)
@@ -82,13 +79,12 @@ void Marcus_update(void)
     }
 
     MarcusUI_render();
-    RM_Render();
+    SM_SystemsLateUpdate();
 }
 
 void Marcus_exit(void)
 {
-    RM_ClearRenderObjects();
-    GOM_Clear();
+    SM_SystemsExit();
 }
 
 void Marcus_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

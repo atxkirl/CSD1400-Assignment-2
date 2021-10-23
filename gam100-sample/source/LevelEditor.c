@@ -42,7 +42,7 @@ void LevelEditorInit()
 		for (int j = 0; j < NumGrids; j++)
 		{
 			//gGrids.gGrid[i][j] = isEmpty;
-			GameObject* go = GOM_CreateGameObject(EMPTY, PRI_GAME_OBJECT);
+			GameObject* go = GOM_Create(EMPTY, PRI_GAME_OBJECT);
 			go->position = CP_Vector_Set(j * vScale.x, i * vScale.y);
 			go->scale = CP_Vector_Set(vScale.x, vScale.y);
 			go->color = CP_Color_Create(255, 255, 0, 255);
@@ -127,7 +127,7 @@ void LevelEditorUpdate()
 void LevelEditorExit()
 {
 	//clean rendermanager
-	RM_ClearRenderObjects();
+	RM_Clear();
 	//clean gom
 	GOM_Clear();
 
