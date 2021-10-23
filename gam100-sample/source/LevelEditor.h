@@ -1,4 +1,12 @@
 #include "../CProcessing/inc/cprocessing.h"
+#include "GameObject.h"
+// For sizing
+#define NumGrids 30
+
+typedef struct Grid
+{
+	GameObject* gGrid[NumGrids][NumGrids];
+} Grid;
 
 /*!
 @brief Initialises the variables
@@ -46,11 +54,3 @@ void RenderObjects();
 @return void
 */
 void SaveGrid();
-
-/*!
-@brief Loads the Grid based on the cInput which is the file name.
-
-@param char* - File name
-@return void
-*/
-void LoadGrid(char* cInput);

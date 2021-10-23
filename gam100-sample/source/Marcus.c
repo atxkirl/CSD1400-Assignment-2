@@ -16,15 +16,10 @@
 #include "Helpers.h"
 #include "SceneManager.h"
 #include "CollisionManager.h"
-#include "LevelEditor.h"
+#include "Colors.h"
 
 #define BUTTON_WIDTH 60.f
 #define BUTTON_HEIGHT 30.f
-#define COLOR_RED CP_Color_Create(255, 0, 0, 255)
-#define COLOR_GREEN CP_Color_Create(0, 255, 0, 255)
-#define COLOR_BLUE CP_Color_Create(0, 0, 255, 255)
-#define COLOR_BLACK CP_Color_Create(0, 0, 0, 255)
-#define COLOR_WHITE CP_Color_Create(255, 255, 255, 255)
 
 void MarcusUI_render();
 
@@ -92,7 +87,6 @@ void Marcus_update(void)
 
 void Marcus_exit(void)
 {
-    LevelEditorExit();
     RM_ClearRenderObjects();
     GOM_Clear();
 }

@@ -10,11 +10,6 @@
 
 #define BUTTON_WIDTH 60.f
 #define BUTTON_HEIGHT 30.f
-#define COLOR_RED CP_Color_Create(255, 0, 0, 255)
-#define COLOR_GREEN CP_Color_Create(0, 255, 0, 255)
-#define COLOR_BLUE CP_Color_Create(0, 0, 255, 255)
-#define COLOR_BLACK CP_Color_Create(0, 0, 0, 255)
-#define COLOR_WHITE CP_Color_Create(255, 255, 255, 255)
 
 #include <stdio.h>
 #include "cprocessing.h"
@@ -24,6 +19,7 @@
 #include "Helpers.h"
 #include "SceneManager.h"
 #include "CollisionManager.h"
+#include "Colors.h"
 
 void gameUI_render();
 

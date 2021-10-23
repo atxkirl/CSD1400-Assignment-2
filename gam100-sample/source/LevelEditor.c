@@ -1,13 +1,9 @@
 #include "LevelEditor.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "GameObject.h"
 #include "FileParser.h"
 #include "GameObjectManager.h"
 #include "RenderManager.h"
-
-// For sizing
-#define NumGrids 30
 
 #define isEmpty 0
 
@@ -19,11 +15,6 @@ float fMoveY;
 float fScaleBy;
 CP_Vector vScale;
 CP_Matrix mScale;
-
-typedef struct 
-{
-	GameObject* gGrid[NumGrids][NumGrids];
-} Grid;
 
 Grid gGrids;
 
@@ -58,7 +49,6 @@ void LevelEditorInit()
 			gGrids.gGrid[i][j] = go;
 		}
 	}
-
 }
 
 /*!
@@ -108,6 +98,21 @@ void LevelEditorUpdate()
 		mScale = CP_Matrix_Scale(vScale);
 	}
 
+	if (CP_Input_KeyDown(KEY_Q))
+	{
+		objType++;
+
+		if (objType >= END)
+			objType = END - 1;
+	}
+	else if (CP_Input_KeyDown(KEY_W))
+	{
+		objType--;
+
+		if (objType < 0)
+			objType = 0;
+	}
+
 	PlaceObject();
 	RenderObjects();
 
@@ -125,6 +130,8 @@ void LevelEditorExit()
 	RM_ClearRenderObjects();
 	//clean gom
 	GOM_Clear();
+
+	//free(gGrids.gGrid);
 }
 
 /*!
@@ -138,23 +145,24 @@ void RenderObjects()
 
 	/* This will fill the background with grey color */
 	CP_Graphics_ClearBackground(CP_Color_Create(128, 128, 128, 255));
+
 	// grids
 	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
 	for (int i = 0; i <= NumGrids; i++)
 	{
-		CP_Graphics_DrawLine(0 + fMoveX, 
-			(float)i * iSize + fMoveY, 
-			(float) NumGrids * iSize + fMoveX, 
+		CP_Graphics_DrawLine(0 + fMoveX,
+			(float)i * iSize + fMoveY,
+			(float)NumGrids * iSize + fMoveX,
 			(float)i * iSize + fMoveY); // Draw horizontal line
 
 	}
 
 	for (int i = 0; i <= NumGrids; i++)
 	{
-		CP_Graphics_DrawLine((float)i * iSize + fMoveX, 
+		CP_Graphics_DrawLine((float)i * iSize + fMoveX,
 			0 + fMoveY,
-			(float)i * iSize + fMoveX, 
-			(float) NumGrids * iSize + fMoveY); // Draw Vertical line
+			(float)i * iSize + fMoveX,
+			(float)NumGrids * iSize + fMoveY); // Draw Vertical line
 
 
 	}
@@ -169,7 +177,10 @@ void RenderObjects()
 			case(WALL):
 				CP_Settings_Fill(CP_Color_Create(255, 255, 0, 225)); // r, g, b, a
 				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
-
+				break;
+			case(RECTANGLE):
+				CP_Settings_Fill(CP_Color_Create(255, 128, 128, 225)); // r, g, b, a
+				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
 			default:
 				break;
@@ -272,34 +283,5 @@ void SaveGrid()
 		strcat_s(cFileLocation, 100, cFileName);
 		printf("%s \n", cFileLocation);
 		WriteToFile(cFileLocation, GridObj);
-	}
-}
-
-/*!
-@brief Loads the Grid based on the cInput which is the file name.
-
-@param char* - File name
-@return void
-*/
-void LoadGrid(char* cInput)
-{
-	char cFileLocation[100] = { "Levels/" };
-
-	strcat_s(cFileLocation, 100, cInput);
-	strcat_s(cFileLocation, 100, ".txt");
-
-	Map* objList = new_Map();
-	ReadLevelFromFile(cFileLocation, objList);
-
-	float fWorldHeight = WORLD_HEIGHT;
-	float fCellSize = fWorldHeight / NumGrids; //fit 30 grids vertically in the screen
-	for (int i = 0; i < objList->iSize; i++)
-	{
-		int iY = objList->fObjList[i]->iPosY;
-		int iX = objList->fObjList[i]->iPosX;
-		gGrids.gGrid[iY][iX]->type = objList->fObjList[i]->iType;
-		gGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * fCellSize + fCellSize * 0.5f, iY * fCellSize + fCellSize * 0.5f);
-		gGrids.gGrid[iY][iX]->scale = CP_Vector_Set(fCellSize, fCellSize);
-		gGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 	}
 }

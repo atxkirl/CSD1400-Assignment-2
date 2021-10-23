@@ -50,6 +50,15 @@
     <ClCompile Include="source\MatrixStack.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\LevelEditorScene.c">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LevelOne.c">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Loader.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -97,6 +106,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\MatrixStack.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Colors.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Loader.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

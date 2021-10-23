@@ -10,9 +10,11 @@ typedef enum OBJECT_TYPE
 	WALL,
 	PLAYER,
 	EMPTY,
-	LINE
+	LINE,
+	END // LAST 
 
 }OBJECT_TYPE;
+
 typedef enum RENDER_PRIORITY //lowest to highest
 {
 	PRI_GAME_OBJECT,

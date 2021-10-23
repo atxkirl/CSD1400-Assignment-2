@@ -103,9 +103,62 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 		printf("File does not exist!\n");
 		return;
 	}
+}
+
+void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
+{
+	FILE* fFile = malloc(sizeof(FILE));
+	char cFileRead[900];
+
+	errno_t eError;
+	eError = fopen_s(&fFile, cFileName, "r"); // "r" opens the file for reading
+
+	int iObjNum = 0;
+	if (eError == 0 && fFile != NULL)
+	{
 
 
-	
+		while (fgets(cFileRead, 900, fFile))
+		{
+			int i = 0, j = 0;
+
+			printf("%s", cFileRead);
+
+			if (cFileRead != NULL)
+			{
+				// id,text
+				while (cFileRead[i] != ',') // find the type first
+				{
+					i++;
+				}
+				i += 1;
+				j = i; // cFileRead[j] is at the first character after ','
+
+				while (cFileRead[i] != '\n')
+				{
+					i++;
+				}
+				if (cOutputObjectives)
+				{
+					strncpy_s(cOutputObjectives[iObjNum], 100, cFileRead + j, i - j); // at this point, i is the length of string. i - j will return everything from the first character from the ',' to the last character.
+					strcat_s(cOutputObjectives[iObjNum], 100, "\0");
+				}
+				iObjNum++;
+			}
+
+		}
+		fclose(fFile);
+	}
+	else if (eError != 0)
+	{
+		printf("Error opening file! %s\n", cFileName);
+		return;
+	}
+	else
+	{
+		printf("File does not exist!\n");
+		return;
+	}
 }
 
 /*!
