@@ -98,6 +98,11 @@ int GOM_GetCount()
 	return LL_GetCount(objectList);
 }
 
+LinkedList* GOM_GetTempObjects()
+{
+	return tempList;
+}
+
 GameObject* GOM_FactoryCreateGO(int type)
 {
 	enum OBJECT_TYPE objType = (enum OBJECT_TYPE)type;

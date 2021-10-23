@@ -20,7 +20,8 @@
 typedef enum COMPONENT
 {
 	COM_RENDERER,
-	COM_COLLISION
+	COM_COLLISION,
+	COM_COUNT
 }COMPONENT;
 
 
@@ -32,3 +33,4 @@ void SM_SystemsExit();
 
 void* SM_GetComponent(GameObject*, COMPONENT);
 //void* SM_AddComponent(GameObject*, COMPONENT);
+void SM_DeleteFromAllSystems(GameObject*);

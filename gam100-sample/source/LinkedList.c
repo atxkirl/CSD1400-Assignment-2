@@ -2,6 +2,16 @@
 #include <stdio.h> //for NULL
 #include <stdlib.h>//for malloc
 
+LinkedList* GetHead(LinkedList* l)
+{
+	if (LL_IsEmpty(l))
+		return NULL;
+	while (l->prev)
+	{
+		l = l->prev;
+	}
+	return l;
+}
 //Returns node that took the slot
 LinkedList* RemoveThis(LinkedList* currPtr)
 {
@@ -14,7 +24,7 @@ LinkedList* RemoveThis(LinkedList* currPtr)
 		old->curr = NULL;
 		old->next = NULL;
 		free(old);
-		return currPtr;
+		return GetHead(currPtr);
 	}
 	
 	LinkedList* prev = currPtr->prev;
@@ -26,7 +36,7 @@ LinkedList* RemoveThis(LinkedList* currPtr)
 	currPtr->next = NULL;
 	currPtr->curr = NULL;
 	free(currPtr);
-	return next;
+	return GetHead(prev);
 }
 
 int LL_GetCount(LinkedList* ll)

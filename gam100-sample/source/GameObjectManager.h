@@ -74,4 +74,10 @@ void GOM_ClearTempObjects();
 */
 int GOM_GetCount();
 
+/*!
+@brief Get list of temp objects
+@return LinkedList* of temp objects
+*/
+LinkedList* GOM_GetTempObjects();
+
 GameObject* GOM_FactoryCreateGO(int type);//int according to OBJECT_TYPE
