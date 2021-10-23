@@ -52,13 +52,13 @@ typedef struct Collider
 
 void CLM_Init();
 void CLM_Add(Collider* );
-Collider* CLM_AddCollider(GameObject*, OnCollision, COLLIDER_TYPE type, ...);
+Collider* CLM_AddComponent(GameObject*, OnCollision, COLLIDER_TYPE type, ...);
 int CLM_Remove(Collider*);
 void CLM_RemoveGO(GameObject*);
 void CLM_Clear();
 int CLM_GetIndex(Collider*);
 int IsCollide(Collider* left, Collider* right);
-void CLM_CheckCollisions();
+void CLM_Update();
 int IsCircleCollideCircle(Collider* left, Collider* right);
 int IsBoxCollideBox(Collider* left, Collider* right);
 int IsPointCollidePoint(Collider* left, Collider* right);

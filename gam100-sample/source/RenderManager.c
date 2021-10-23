@@ -51,7 +51,7 @@ void RM_Render()
 	//printf("%f %f\n", sc.x, sc.y);
 	
 	//coz 0,0 is top left.
-	CP_Vector camFinalPos = CP_Vector_Subtract(cameraPos, CP_Vector_Scale(CP_Vector_Set((float)w * 1.0f / cameraScale.x, (float)h * 1.0f / cameraScale.y), 0.5f));
+	CP_Vector camFinalPos = CP_Vector_Subtract(cameraPos, CP_Vector_Set(w * 0.5f / cameraScale.x, h * 0.5f / cameraScale.y));
 	CP_Matrix view = CP_Matrix_Multiply(CP_Matrix_Scale(cameraScale) , CP_Matrix_Translate(CP_Vector_Negate(camFinalPos)));
 	CP_Settings_ApplyMatrix(view);
 	//MS_Translate(matrixStack, CP_Vector_Negate(cameraPos));

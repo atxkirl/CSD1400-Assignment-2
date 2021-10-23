@@ -6,6 +6,11 @@
 #include "GameObject.h"
 #include "LinkedList.h"
 
+typedef enum COMPONENT
+{
+	COM_RENDERER,
+	COM_COLLISION
+}COMPONENT;
 
 void GOM_Init();
 
@@ -26,3 +31,11 @@ int GOM_GetIndex(GameObject*);
 
 
 GameObject* GOM_FactoryCreateGO(int type);//int according to OBJECT_TYPE
+
+/*!
+@brief Adds component to gameobject similarly to unity
+@param go - pointer to gameobject for component to be added
+@param com - enum of component to be added
+@return pointer of the component added
+*/
+void* GOM_AddComponent(GameObject*, COMPONENT);

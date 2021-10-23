@@ -73,7 +73,7 @@ void HongYu_init(void)
     GameObject* button = GOM_CreateGameObject(RECTANGLE, PRI_UI);
     button->position = CP_Vector_Set(80, 20);
     //button->rotation = 10.0f;
-    button->scale = CP_Vector_Set(20, 10);
+    button->scale = CP_Vector_Set(30, 20);
     button->color = CP_Color_Create(255, 255, 255, 255);
     button->text = "test";
     button->tag = "test";

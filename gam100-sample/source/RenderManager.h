@@ -14,7 +14,11 @@ this is the worldspace size vertically. rendering is based on this size.
 */
 #define WORLD_HEIGHT 500.0f
 
+typedef struct Renderer
+{
+	CP_Image sprite;
 
+} Renderer;
 
 void RM_Init();
 void RM_AddRenderObject(GameObject*);

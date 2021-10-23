@@ -1,6 +1,7 @@
 #include "GameObjectManager.h"
 #include "RenderManager.h"
 #include <stdlib.h>
+#include "CollisionManager.h"
 
 LinkedList* GOM_objects;
 
@@ -76,4 +77,9 @@ GameObject* GOM_FactoryCreateGO(int type)
 
 	//}
 	return go;
+}
+
+void* GOM_AddComponent(GameObject* go, COMPONENT c)
+{
+	return NULL;
 }
