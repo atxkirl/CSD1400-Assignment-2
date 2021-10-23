@@ -46,9 +46,12 @@ void LevelOne_init(void)
     button->tag = "objone";
     button->type = RECTANGLE;
     Renderer* r = RM_AddComponent(button);
-    r->color = CP_Color_Create(255, 0, 0, 50);
-    r->text = "From INIT";
-    CLM_Set(CLM_AddComponent(button), COL_BOX, LevelOne_OnCollision);
+    r->color = CP_Color_Create(255, 255, 255, 255);
+    r->text = "Objective";
+    r->renderPriority = PRI_UI;
+    Collider* c = CLM_AddComponent(button);
+    c->space = COLSPC_SCREEN;
+    CLM_Set(c, COL_BOX, LevelOne_OnCollision);
 }
 
 void LevelOne_update(void)
@@ -62,7 +65,9 @@ void LevelOne_update(void)
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
-        CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
+        Collider* c = CLM_AddComponent(clickPoint);
+        c->space = COLSPC_SCREEN;
+        CLM_Set(c, COL_POINT, NULL);
     }
 
     SM_SystemsUpdate();
@@ -90,7 +95,7 @@ void LevelOne_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exi
 void LevelOneUI_render()
 {
     CP_Settings_Fill(COLOR_WHITE); // r, g, b, a
-    CP_Graphics_DrawRect(50.f, 170.f, 75.f, 50.f);
+    //CP_Graphics_DrawRect(50.f, 170.f, 75.f, 50.f);
     CP_Settings_Fill(COLOR_BLACK); // r, g, b, a
-    CP_Font_DrawText("Objective", 55, 200);
+    //CP_Font_DrawText("Objective", 55, 200);
 }
