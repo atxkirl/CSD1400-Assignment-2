@@ -28,6 +28,14 @@ typedef enum COLLIDER_TYPE
 
 } COLLIDER_TYPE;
 
+typedef enum COLLIDER_SPACE
+{
+	COLSPC_WORLD,
+	COLSPC_SCREEN
+	//Can add more "space"
+
+} COLLIDER_SPACE;
+
 /*
 GameObject* obj: reference to the gameobject. needs its positional information
 OnCollision OnCollision: function pointer to the OnCollide() response. To be passed in during init if there is a collision 	response expected. Function pointer has to match int(Collider*, Collider*)
@@ -38,10 +46,12 @@ typedef struct Collider
 {
 	GameObject* obj;
 	COLLIDER_TYPE type;
+	COLLIDER_SPACE space;
 	//CP_Vector velocity;
 	int isKinematic;//aka isStatic, does not move due to force
 	int isLockedPos;//aka unity's locked x,y
 	int isEnabled;
+	int useScaleValue;
 	float radius;
 	float width, height;
 	//Response. //-1 to remove left, 1 to remove right
@@ -52,7 +62,9 @@ typedef struct Collider
 
 void CLM_Init();
 void CLM_Add(Collider* );
-Collider* CLM_AddCollider(GameObject*, OnCollision, COLLIDER_TYPE type, ...);
+void CLM_Set(Collider*, COLLIDER_TYPE, OnCollision);
+Collider* CLM_AddComponent(GameObject*);
+Collider* CLM_GetComponent(GameObject*);
 int CLM_Remove(Collider*);
 void CLM_RemoveGO(GameObject*);
 void CLM_Clear();
@@ -65,4 +77,3 @@ int IsPointCollidePoint(Collider* left, Collider* right);
 int IsCircleCollideBox(Collider* left, Collider* right);
 int IsCircleCollidePoint(Collider* left, Collider* right);
 int IsBoxCollidePoint(Collider* left, Collider* right);
-Collider* CLM_GetComponent(GameObject*);

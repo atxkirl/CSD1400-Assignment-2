@@ -29,3 +29,33 @@ void SM_SystemsExit()
 	RM_Clear();
 	GOM_Clear();
 }
+
+void* SM_GetComponent(GameObject* g, COMPONENT c)
+{
+	void* ret = NULL;
+	switch (c)
+	{
+	case COM_RENDERER:
+		ret = RM_GetComponent(g);
+		break;
+	case COM_COLLISION:
+		ret = CLM_GetComponent(g);
+		break;
+	}
+	return ret;
+}
+
+//void* SM_AddComponent(GameObject* g, COMPONENT c)
+//{
+//	void* ret = NULL;
+//	switch (c)
+//	{
+//	case COM_RENDERER:
+//		ret = RM_AddComponent(g);
+//		break;
+//	case COM_COLLISION:
+//		ret = CLM_AddComponent(g);
+//		break;
+//	}
+//	return ret;
+//}

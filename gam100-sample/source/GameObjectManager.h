@@ -6,12 +6,11 @@
 #include "GameObject.h"
 #include "LinkedList.h"
 
-typedef enum COMPONENT
-{
-	COM_RENDERER,
-	COM_COLLISION
-}COMPONENT;
 
+/*!
+@brief Initialises the GameObjectManager
+@return void
+*/
 void GOM_Init();
 
 /*!
@@ -20,20 +19,49 @@ This function takes as input a type and priority.
 Gameobject is automatically stored in container for better control of lifespan.
 Special scenarios: -
 @param type - the type of the object is used on how it is rendered
-@param priority - higher priority means render on top
 @return pointer to gameobject created
 */
-GameObject* GOM_Create(OBJECT_TYPE type, RENDER_PRIORITY priority);
+GameObject* GOM_Create(OBJECT_TYPE type);
 /*!
 @brief Creates a GameObject that lasts for one frame
 @param type - the type of the object is used on how it is rendered
-@param priority - higher priority means render on top
 @return pointer to gameobject created
 */
-GameObject* GOM_CreateTemp(OBJECT_TYPE type, RENDER_PRIORITY priority);
+GameObject* GOM_CreateTemp(OBJECT_TYPE type);
+/*!
+@brief Creates a GameObject and return the pointer to it
+@param type - type of the object
+@param pos - position of the object
+@param rot - rotation of the object
+@param scale - scale of the object
+@return pointer to gameobject created
+*/
+GameObject* GOM_Create2(OBJECT_TYPE type, CP_Vector pos, float rot, CP_Vector scale);
+/*!
+@brief Creates a GameObject and return the pointer to it
+@param pos - position of the object
+@param rot - rotation of the object
+@param scale - scale of the object
+@return pointer to gameobject created
+*/
+GameObject* GOM_Create3(CP_Vector pos, float rot, CP_Vector scale);
 
+/*!
+@brief Deletes the gameobject
+@param go - ptr of the gameobject to be deleted
+@return int 1 if successful else 0
+*/
 int GOM_Delete(GameObject*);
+/*!
+@brief Clear and free memory of all the gameobjects
+@return void
+*/
 void GOM_Clear();
+/*!
+@brief Returns the index of the gameobject in the objectList
+@param go - ptr to the gameobject
+@return int index of the gameobject
+*/
 int GOM_GetIndex(GameObject*);
 /*!
 @brief Clears all the temp objects for the frame

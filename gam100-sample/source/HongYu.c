@@ -57,46 +57,44 @@ void HongYu_init(void)
 {
     SM_SystemsInit();
 
-    g = GOM_Create(RECTANGLE, PRI_GAME_OBJECT);
-    g->scale = CP_Vector_Set(15, 15);
-    g->position = CP_Vector_Set(50, 20);
+    g = GOM_Create2(RECTANGLE, CP_Vector_Set(50, 20), 0.0f, CP_Vector_Set(30, 30));
     g->tag = "player";
-    CLM_AddCollider(g, hy_OnCollision, COL_BOX, g->scale.x, g->scale.y);
+    Renderer* r = RM_AddComponent(g);
+    RM_LoadImage(r, "Assets/bananaboi.png");
+    CLM_Set(CLM_AddComponent(g), COL_BOX, hy_OnCollision);
 
     //int width = CP_System_GetWindowWidth();
     //int height = CP_System_GetWindowHeight();
 
-    GameObject* button = GOM_Create(RECTANGLE, PRI_UI);
-    button->position = CP_Vector_Set(80, 20);
-    //button->rotation = 10.0f;
-    button->scale = CP_Vector_Set(30, 20);
-    button->color = CP_Color_Create(255, 255, 255, 255);
-    button->text = "test";
+    GameObject* button = GOM_Create2(RECTANGLE, 
+        CP_Vector_Set(80, 20), 0.0f, CP_Vector_Set(30, 20));
+    r = RM_AddComponent(button);
+    r->text = "test";
+    r->renderPriority = PRI_UI;
     button->tag = "test";
-    CLM_AddCollider(button, hy_OnCollision, RECTANGLE, button->scale.x, button->scale.y);
+    Collider* c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, hy_OnCollision);
+    c->space = COLSPC_SCREEN;
 
-    GameObject* wall = GOM_Create(RECTANGLE, PRI_GAME_OBJECT);
-    wall->position = CP_Vector_Set(0,0);
-    //button->rotation = 10.0f;
-    wall->scale = CP_Vector_Set(50,25);
-    wall->color = CP_Color_Create(200, 200, 200, 122);
-    wall->tag = "wall";
-    CLM_AddCollider(wall, hy_OnCollision, COL_BOX, wall->scale.x, wall->scale.y);
+    GameObject* wall = GOM_Create2(RECTANGLE, 
+        CP_Vector_Set(0, 0), 0.0f, CP_Vector_Set(50, 25));
+    RM_AddComponent(wall);
+    CLM_Set(CLM_AddComponent(wall), COL_BOX, hy_OnCollision);
     
-    wall = GOM_Create(CIRCLE, PRI_GAME_OBJECT);
-    wall->position = CP_Vector_Set(30, 80);
-    wall->scale = CP_Vector_Set(30, 30);
-    wall->color = CP_Color_Create(200, 200, 200, 255);
+    wall = GOM_Create2(CIRCLE,
+        CP_Vector_Set(30, 80), 0.0f, CP_Vector_Set(30, 30));
+    RM_AddComponent(wall);
     //wall->tag = "wall";
-    CLM_AddCollider(wall, NULL, COL_CIRCLE, wall->scale.x);
+    CLM_Set(CLM_AddComponent(wall), COL_CIRCLE, NULL);
 
-    wall = GOM_Create(CIRCLE, PRI_GAME_OBJECT);
-    wall->position = CP_Vector_Set(30, 80);
-    wall->scale = CP_Vector_Set(30, 30);
-    wall->color = CP_Color_Create(200, 180, 180, 255);
-    Collider* c = CLM_AddCollider(wall, NULL, COL_CIRCLE, wall->scale.x);
+    wall = GOM_Create2(CIRCLE,
+        CP_Vector_Set(30, 80), 0.0f, CP_Vector_Set(30, 30));
+    r = RM_AddComponent(wall);
+    r->color = CP_Color_Create(200, 180, 180, 255);
+    r->text = "lock";
+    c = CLM_AddComponent(wall);
+    CLM_Set(c, COL_CIRCLE, NULL);
     c->isLockedPos = 1;
-    wall->text = "lock";
 
     //GameObject* wad = GOM_CreateGameObject(CIRCLE, GAME_OBJECT);
     //wad->position = CP_Vector_Set(0.1f * width, 0.9f * height);
@@ -131,11 +129,13 @@ void HongYu_update(void)
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
         //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateTemp(CIRCLE, PRI_GAME_OBJECT);//param doesnt matter
+        clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
-        CLM_AddCollider(clickPoint, NULL, COL_POINT);
+        Collider* c = CLM_AddComponent(clickPoint);
+        CLM_Set(c, COL_POINT, NULL);
+        c->space = COLSPC_SCREEN;
     }
     if (CP_Input_KeyTriggered((enum CP_KEY)KEY_1))
     {
@@ -149,7 +149,8 @@ void HongYu_update(void)
     char str[20];
     sprintf_s(str, 20,"%.1f,%.1f", g->position.x, g->position.y);
     //g->text = str;
-    g->textColor = CP_Color_Create(255, 255, 255, 255);
+    Renderer* r = (Renderer*)SM_GetComponent(g, COM_RENDERER);
+    r->textColor = CP_Color_Create(255, 255, 255, 255);
 
     SM_SystemsUpdate();
     RM_SetCameraPosition(g->position);

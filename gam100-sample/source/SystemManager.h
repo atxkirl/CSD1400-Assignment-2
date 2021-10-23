@@ -17,9 +17,18 @@
 
 //Prefix: SM
 
+typedef enum COMPONENT
+{
+	COM_RENDERER,
+	COM_COLLISION
+}COMPONENT;
+
+
 void SM_SystemsInit();
 void SM_SystemsPreUpdate();
 void SM_SystemsUpdate();
 void SM_SystemsLateUpdate();
 void SM_SystemsExit();
 
+void* SM_GetComponent(GameObject*, COMPONENT);
+//void* SM_AddComponent(GameObject*, COMPONENT);

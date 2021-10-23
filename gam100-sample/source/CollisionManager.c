@@ -193,45 +193,36 @@ void CLM_Add(Collider* c)
 {
 	CLM_objects = LL_Add(CLM_objects, (void*)c);
 }
-Collider* CLM_AddCollider(GameObject* g, OnCollision func, COLLIDER_TYPE type, ...)
+void CLM_Set(Collider* c, COLLIDER_TYPE t, OnCollision func)
+{
+	c->type = t;
+	if (c->useScaleValue)
+	{
+		c->width = c->obj->scale.x;
+		c->height = c->obj->scale.y;
+		c->radius = c->obj->scale.x * 0.5f;
+	}
+	c->OnCollision = func;
+}
+Collider* CLM_AddComponent(GameObject* g)
 {
 	Collider* c = malloc(sizeof(Collider));
 	if (c)
 	{
 		c->obj = g;
-		c->type = type;
+		c->type = COL_POINT;
+		c->space = COLSPC_WORLD;
 		//c->velocity = CP_Vector_Set(0, 0);
 		c->isKinematic = 0;
 		c->isLockedPos = 0;
 		c->isEnabled = 1;
-		c->OnCollision = func;
-		switch (type)
-		{
-		case COL_CIRCLE:
-		{
-			va_list arg;
-			va_start(arg, type);
-			float r = (float)va_arg(arg, double); //float variables are changed to double after being passed thr ...
-			c->radius = r * 0.5f; //value passed in in diameter
-			va_end(arg);
-		}
-		break;
-		case COL_BOX:
-		{
-			va_list arg;
-			va_start(arg, type);
-			float w = (float)va_arg(arg, double);
-			float h = (float)va_arg(arg, double);
-			c->width = w;
-			c->height = h;
-			va_end(arg);
-		}
-			break;
-		default: //point
-			break;
-		}
+		c->OnCollision = NULL;
+		c->useScaleValue = 1;
+		c->radius = g->scale.x * 0.5f;
+		c->width = g->scale.x;
+		c->height = g->scale.y;
+		CLM_objects = LL_Add(CLM_objects, c);
 	}
-	CLM_objects = LL_Add(CLM_objects, c);
 	return c;
 }
 int CLM_Remove(Collider* c)
@@ -241,7 +232,12 @@ int CLM_Remove(Collider* c)
 	return 0;
 }
 
-//Need "lambda" func for LL_find
+/*!
+@brief "Lambda" function to find collider with matching go
+@param curr - ptr of curr data to be checked
+@param arg - ptr of argument
+@return ptr of found obj
+*/
 void* findGO(void* curr, void* arg)
 {
 	GameObject* obj = (GameObject*)arg;
@@ -283,12 +279,26 @@ void CLM_Update()
 	for (int i = 0; i < size; ++i)
 	{
 		Collider* left = (Collider*)objArray[i];
+		if (left->useScaleValue)
+		{
+			left->radius = left->obj->scale.x * 0.5f;
+			left->width = left->obj->scale.x;
+			left->height = left->obj->scale.y;
+		}
 		if (!left->isEnabled)
 			continue;
 		for (int j = i + 1; j < size; ++j)
 		{
 			Collider* right = (Collider*)objArray[j];
+			if (right->useScaleValue)
+			{
+				right->radius = right->obj->scale.x * 0.5f;
+				right->width = right->obj->scale.x;
+				right->height = right->obj->scale.y;
+			}
 			if (!right->isEnabled)
+				continue;
+			if (right->space != left->space) //only same space collider w each other
 				continue;
 			
 			if (IsCollide(left, right))
@@ -428,15 +438,8 @@ int IsBoxCollidePoint(Collider* left, Collider* right)
 	return 0;
 }
 
-void* FindCollider(void* curr, void* arg)
-{
-	Collider* c = (Collider*)curr;
-	GameObject* go = (GameObject*)arg;
-	if (c->obj == go)
-		return curr;
-	return NULL;
-}
+
 Collider* CLM_GetComponent(GameObject* go)
 {
-	return LL_Find(CLM_objects, FindCollider, go);
+	return LL_Find(CLM_objects, findGO, go);
 }

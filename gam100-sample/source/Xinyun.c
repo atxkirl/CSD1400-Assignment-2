@@ -20,10 +20,10 @@ void Xinyun_init(void)
 {
     SM_SystemsInit();
 
-    GameObject* g = GOM_Create(CIRCLE, PRI_GAME_OBJECT);
+    GameObject* g = GOM_Create(CIRCLE);
     g->scale = CP_Vector_Set(20, 20);
     g->position = CP_Vector_Set(50, 20);
-
+    RM_AddComponent(g);
 }
 
 void Xinyun_update(void)

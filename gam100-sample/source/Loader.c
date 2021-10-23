@@ -1,10 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "..\CProcessing\inc\cprocessing.h"
-#include "GameObject.h"
+#include "SystemManager.h"
 #include "FileParser.h"
-#include "GameObjectManager.h"
-#include "RenderManager.h"
 #include"Loader.h"
 #include "Colors.h"
 #include "LevelEditor.h"
@@ -30,10 +28,11 @@ void LoaderInit()
 		for (int j = 0; j < NumGrids; j++)
 		{
 			//gGrids.gGrid[i][j] = isEmpty;
-			GameObject* go = GOM_Create(EMPTY, PRI_GAME_OBJECT);
+			GameObject* go = GOM_Create(EMPTY);
+			Renderer* r = RM_AddComponent(go);
 			go->position = CP_Vector_Set((float)j , (float)i);
 			go->scale = CP_Vector_Set(1.f, 1.f);
-			go->color = CP_Color_Create(255, 255, 0, 255);
+			r->color = CP_Color_Create(255, 255, 0, 255);
 			gLoadedGrids.gGrid[i][j] = go;
 		}
 	}
@@ -46,6 +45,7 @@ void LoaderUpdate()
 
 void LoaderExit()
 {
+	SM_SystemsExit();
 }
 
 void LoaderRender()
@@ -115,7 +115,9 @@ void LoadGrid(char* cInput, int iLoad)
 		gLoadedGrids.gGrid[iY][iX]->type = objList->fObjList[i]->iType;
 		gLoadedGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * fCellSize + fCellSize * 0.5f, iY * fCellSize + fCellSize * 0.5f);
 		gLoadedGrids.gGrid[iY][iX]->scale = CP_Vector_Set(fCellSize, fCellSize);
-		gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
+		Renderer* r = RM_GetComponent(gLoadedGrids.gGrid[iY][iX]);
+		//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
+		r->color = CP_Color_Create(255, 255, 255, 255);
 	}
 }
 

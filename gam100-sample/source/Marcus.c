@@ -37,22 +37,26 @@ void Marcus_init(void)
 {
     SM_SystemsInit();
 
-    //RM_AddRenderObject(g);
-    GameObject* button = GOM_Create(RECTANGLE, PRI_UI);
+    //RM_AddComponent(g);
+    GameObject* button = GOM_Create(RECTANGLE);
+    Renderer* r = RM_AddComponent(button);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 25.0f);
     button->tag = "editor";
     button->type = RECTANGLE;
-    button->color = CP_Color_Create(255, 0, 0, 50);
-    CLM_AddCollider(button, Marcus_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+    r->color = CP_Color_Create(255, 0, 0, 50);
+    r->renderPriority = PRI_UI;
+    CLM_Set(CLM_AddComponent(button), COL_BOX, Marcus_OnCollision);
 
-    button = GOM_Create(RECTANGLE, PRI_UI);
+    button = GOM_Create(RECTANGLE);
+    r = RM_AddComponent(button);
     button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
     button->position = CP_Vector_Set(80.0f, 75.0f);
     button->tag = "levelone";
     button->type = RECTANGLE;
-    button->color = CP_Color_Create(255, 0, 0, 50);
-    CLM_AddCollider(button, Marcus_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+    r->color = CP_Color_Create(255, 0, 0, 50);
+    r->renderPriority = PRI_UI;
+    CLM_Set(CLM_AddComponent(button), COL_BOX, Marcus_OnCollision);
 }
 
 void Marcus_update(void)
@@ -62,11 +66,11 @@ void Marcus_update(void)
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
         //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateTemp(RECTANGLE, PRI_GAME_OBJECT);
+        clickPoint = GOM_CreateTemp(RECTANGLE);
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
-        CLM_AddCollider(clickPoint, NULL, COL_POINT);
+        CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
     }
 
     SM_SystemsUpdate();

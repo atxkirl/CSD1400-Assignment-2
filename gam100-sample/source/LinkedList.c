@@ -2,17 +2,19 @@
 #include <stdio.h> //for NULL
 #include <stdlib.h>//for malloc
 
-void RemoveThis(LinkedList* currPtr)
+//Returns node that took the slot
+LinkedList* RemoveThis(LinkedList* currPtr)
 {
 	if (currPtr->prev == NULL)
 	{
 		LinkedList* old = currPtr;
 		currPtr = currPtr->next;
-		currPtr->prev = NULL; //release head
+		if (currPtr) 
+			currPtr->prev = NULL; //release head
 		old->curr = NULL;
 		old->next = NULL;
 		free(old);
-		return;
+		return currPtr;
 	}
 	
 	LinkedList* prev = currPtr->prev;
@@ -24,7 +26,7 @@ void RemoveThis(LinkedList* currPtr)
 	currPtr->next = NULL;
 	currPtr->curr = NULL;
 	free(currPtr);
-	return;
+	return next;
 }
 
 int LL_GetCount(LinkedList* ll)
@@ -105,7 +107,11 @@ LinkedList* LL_SetAdd(LinkedList* ll, void* ptr)//Add unique
 LinkedList* LL_RemoveLL(LinkedList* ll, LinkedList* ptr)
 {
 	if (LL_Contains(ll, ptr))
-		RemoveThis(ptr);
+	{
+		LinkedList* ret = RemoveThis(ptr);
+		if (LL_IsEmpty(ret))
+			return NULL;
+	}
 
 	return ll;
 }
@@ -119,7 +125,9 @@ LinkedList* LL_RemovePtr(LinkedList* ll, void* ptr)
 	{
 		if (node->curr == ptr)
 		{
-			RemoveThis(node);
+			LinkedList* ret = RemoveThis(node);
+			if (LL_IsEmpty(ret))
+				return NULL;
 			return ll;
 		}
 		node = node->next;
@@ -132,7 +140,10 @@ LinkedList* LL_RemoveIndex(LinkedList* ll, int index)
 	LinkedList* rem = LL_Get(ll, index);
 	if (!rem)
 		return ll;
-	RemoveThis(rem);
+	rem = RemoveThis(rem);
+	if (LL_IsEmpty(rem))
+		return NULL;
+	
 	return ll;
 }
 

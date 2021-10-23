@@ -46,7 +46,7 @@ void GOM_ClearTempObjects()
 	tempList = LL_Clear(tempList);
 }
 
-GameObject* GOM_Create(OBJECT_TYPE type, RENDER_PRIORITY priority)
+GameObject* GOM_Create(OBJECT_TYPE type)
 {
 	GameObject* go = malloc(sizeof(GameObject));
 
@@ -57,27 +57,40 @@ GameObject* GOM_Create(OBJECT_TYPE type, RENDER_PRIORITY priority)
 		go->scale = CP_Vector_Set(1.0f, 1.0f);
 		go->type = type;
 		go->tag = "";
-		go->renderPriority = priority;
 		go->isEnabled = 1;
-		go->color = CP_Color_Create(0, 0, 0, 255);
+		//go->renderPriority = priority;
+		//go->color = CP_Color_Create(0, 0, 0, 255);
 
-		go->text = NULL;
-		go->textColor = CP_Color_Create(0, 0, 0, 255);
-		go->textLocalPosition = CP_Vector_Set(0.0f, 0.0f);
-		go->textRotation = 0.0f;
-		go->textScale = CP_Vector_Set(1.0f, 1.0f);
+		//go->text = NULL;
+		//go->textColor = CP_Color_Create(0, 0, 0, 255);
+		//go->textLocalPosition = CP_Vector_Set(0.0f, 0.0f);
+		//go->textRotation = 0.0f;
+		//go->textScale = CP_Vector_Set(1.0f, 1.0f);
 	}
 
 	objectList = LL_Add(objectList, go);
-	RM_AddRenderObject(go);
+	//RM_AddComponent(go);
 	return go;
 }
 
-GameObject* GOM_CreateTemp(OBJECT_TYPE type, RENDER_PRIORITY priority)
+GameObject* GOM_CreateTemp(OBJECT_TYPE type)
 {
-	GameObject* go = GOM_Create(type, priority);
+	GameObject* go = GOM_Create(type);
 	tempList = LL_Add(tempList, go);
 	return go;
+}
+
+GameObject* GOM_Create2(OBJECT_TYPE type, CP_Vector pos, float rot, CP_Vector scale)
+{
+	GameObject* go = GOM_Create(type);
+	go->position = pos;
+	go->rotation = rot;
+	go->scale = scale;
+	return go;
+}
+GameObject* GOM_Create3(CP_Vector pos, float rot, CP_Vector scale)
+{
+	return GOM_Create2(RECTANGLE, pos, rot, scale);
 }
 
 int GOM_GetCount()
@@ -89,7 +102,7 @@ GameObject* GOM_FactoryCreateGO(int type)
 {
 	enum OBJECT_TYPE objType = (enum OBJECT_TYPE)type;
 
-	GameObject* go = GOM_Create(objType, PRI_GAME_OBJECT);
+	GameObject* go = GOM_Create(objType);
 	go->type = objType;
 	//switch (objType)
 	//{

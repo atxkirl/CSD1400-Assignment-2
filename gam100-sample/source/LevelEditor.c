@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "FileParser.h"
-#include "GameObjectManager.h"
-#include "RenderManager.h"
+#include "SystemManager.h"
 
 #define isEmpty 0
 
@@ -42,10 +41,11 @@ void LevelEditorInit()
 		for (int j = 0; j < NumGrids; j++)
 		{
 			//gGrids.gGrid[i][j] = isEmpty;
-			GameObject* go = GOM_Create(EMPTY, PRI_GAME_OBJECT);
+			GameObject* go = GOM_Create(EMPTY);
+			Renderer* r = RM_AddComponent(go);
 			go->position = CP_Vector_Set(j * vScale.x, i * vScale.y);
 			go->scale = CP_Vector_Set(vScale.x, vScale.y);
-			go->color = CP_Color_Create(255, 255, 0, 255);
+			r->color = CP_Color_Create(255, 255, 0, 255);
 			gGrids.gGrid[i][j] = go;
 		}
 	}
@@ -126,10 +126,7 @@ void LevelEditorUpdate()
 */
 void LevelEditorExit()
 {
-	//clean rendermanager
-	RM_Clear();
-	//clean gom
-	GOM_Clear();
+	SM_SystemsExit();
 
 	//free(gGrids.gGrid);
 }

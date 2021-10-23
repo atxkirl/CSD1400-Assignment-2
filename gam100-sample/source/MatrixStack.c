@@ -42,12 +42,13 @@ void MS_PushMatrix(LinkedList* ms)
 	ms = LL_Add(ms, (void*)(MS_MatCopy2(MS_Top(ms))));
 }
 
-void MS_PopMatrix(LinkedList* ms)
+LinkedList* MS_PopMatrix(LinkedList* ms)
 {
 	LinkedList* last = LL_GetLast(ms);
 	CP_Matrix* lmat = (CP_Matrix*)last->curr;
 	free(lmat);
 	ms = LL_RemoveLL(ms, last);
+	return ms;
 }
 
 CP_Matrix* MS_Top(LinkedList* ms)
@@ -55,10 +56,11 @@ CP_Matrix* MS_Top(LinkedList* ms)
 	return (CP_Matrix*)(LL_GetLast(ms)->curr);
 }
 
-void MS_Clear(LinkedList* ms)
+LinkedList* MS_Clear(LinkedList* ms)
 {
 	while (LL_GetCount(ms))
-		MS_PopMatrix(ms);
+		ms = MS_PopMatrix(ms);
+	return NULL;
 }
 
 void MS_Rotate(LinkedList* ms, float deg)

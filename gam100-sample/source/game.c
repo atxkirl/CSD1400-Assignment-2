@@ -49,44 +49,49 @@ void game_init(void)
 {
     SM_SystemsInit();
 
-    GameObject* g = GOM_Create(CIRCLE, PRI_GAME_OBJECT);
-    g->scale = CP_Vector_Set(20, 20);
-    g->position = CP_Vector_Set(20, 20);
+    //GameObject* g = 
+    GOM_Create2(CIRCLE,
+        CP_Vector_Set(20, 20), 0.0f, CP_Vector_Set(20, 20));
 
-    GameObject* button = GOM_Create(RECTANGLE, PRI_UI);
-    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
-    button->position = CP_Vector_Set(80.0f, 25.0f);
+    GameObject* button = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(80.0f, 25.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
+    Renderer* r = RM_AddComponent(button);
     button->tag = "marcus"; //For collision
-    button->color = CP_Color_Create(255, 0, 0, 50);
-    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+    r->renderPriority = PRI_UI;
+    r->text = "gayboy";
+    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
 
-    button = GOM_Create(RECTANGLE, PRI_UI);
-    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
-    button->position = CP_Vector_Set(80.0f, 75.0f);
+    button = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(80.0f, 75.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
+    r = RM_AddComponent(button);
     button->tag = "hongyu";
-    button->color = CP_Color_Create(255, 0, 0, 50);
-    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+    r->renderPriority = PRI_UI;
+    r->text = "hongyu";
+    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
 
-    button = GOM_Create(RECTANGLE, PRI_UI);
-    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
-    button->position = CP_Vector_Set(80.0f, 125.0f);
+    button = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(80.0f, 125.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
+    r = RM_AddComponent(button);
     button->tag = "adrian";
-    button->color = CP_Color_Create(255, 0, 0, 50);
-    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+    r->renderPriority = PRI_UI;
+    r->text = "adrian";
+    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
 
-    button = GOM_Create(RECTANGLE, PRI_UI);
-    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
-    button->position = CP_Vector_Set(80.0f, 175.0f);
+    button = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(80.0f, 175.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
+    r = RM_AddComponent(button);
     button->tag = "weiyi";
-    button->color = CP_Color_Create(255, 0, 0, 50);
-    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+    r->renderPriority = PRI_UI;
+    r->text = "weiyi";
+    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
 
-    button = GOM_Create(RECTANGLE, PRI_UI);
-    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
-    button->position = CP_Vector_Set(80.0f, 225.0f);
+    button = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(80.0f, 225.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
+    r = RM_AddComponent(button);
     button->tag = "xinyun";
-    button->color = CP_Color_Create(255, 0, 0, 50);
-    CLM_AddCollider(button, game_OnCollision, COL_BOX, BUTTON_WIDTH, BUTTON_HEIGHT);
+    r->renderPriority = PRI_UI;
+    r->text = "xinyun";
+    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
 }
 
 void game_update(void)
@@ -101,11 +106,11 @@ void game_update(void)
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
         //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateTemp(CIRCLE, PRI_GAME_OBJECT);//param doesnt matter
+        clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
-        CLM_AddCollider(clickPoint, NULL, COL_POINT);
+        CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
 
         //if (is_btn_colliding(CP_Input_GetMouseX(), CP_Input_GetMouseY(), 50.f, 10.f))
         //{
@@ -124,7 +129,7 @@ void game_update(void)
     }
     SM_SystemsUpdate();
 
-    gameUI_render();
+    //gameUI_render();
     SM_SystemsLateUpdate();
 
     //RM_Render();

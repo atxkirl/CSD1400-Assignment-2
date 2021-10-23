@@ -18,7 +18,7 @@ void LevelEditorScene_init(void)
 {
     SM_SystemsInit();
 
-    //RM_AddRenderObject(g);
+    //RM_AddComponent(g);
     LevelEditorInit();
 }
 
