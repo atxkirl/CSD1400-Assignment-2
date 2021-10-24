@@ -17,6 +17,8 @@
 #include "Colors.h"
 #include "SystemManager.h"
 
+GameObject* gLOne = NULL;
+
 void LevelOneUI_render();
 
 int LevelOne_OnCollision(Collider* left, Collider* right)
@@ -52,11 +54,39 @@ void LevelOne_init(void)
     Collider* c = CLM_AddComponent(button);
     c->space = COLSPC_SCREEN;
     CLM_Set(c, COL_BOX, LevelOne_OnCollision);
+
+    gLOne = GOM_Create2(RECTANGLE, CP_Vector_Set(50, 20), 0.0f, CP_Vector_Set(50, 50));
+    gLOne->tag = "player";
+    r = RM_AddComponent(gLOne);
+    RM_LoadImage(r, "Assets/bananaboi.png");
+    CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
 }
 
 void LevelOne_update(void)
 {
     SM_SystemsPreUpdate();
+
+    float dt = CP_System_GetDt();
+    float spd = 200.0f;
+    //Collider* gc = CLM_GetComponent(g);
+    //gc->velocity = CP_Vector_Set(0, 0);
+    if (CP_Input_KeyDown((enum CP_KEY)KEY_W))
+    {
+        gLOne->position.y -= spd * dt;
+    }
+    if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
+    {
+        gLOne->position.y += spd * dt;
+    }
+    if (CP_Input_KeyDown((enum CP_KEY)KEY_A))
+    {
+        gLOne->position.x -= spd * dt;
+    }
+    if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
+    {
+        gLOne->position.x += spd * dt;
+    }
+
     GameObject* clickPoint = NULL;
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
@@ -74,9 +104,9 @@ void LevelOne_update(void)
 
     SM_SystemsLateUpdate();
 
-    CP_Graphics_ClearBackground(COLOR_BLUE);
+    //CP_Graphics_ClearBackground(COLOR_BLUE);
     LevelOneUI_render();
-    LoaderUpdate();
+    //LoaderUpdate();
 }
 
 void LevelOne_exit(void)

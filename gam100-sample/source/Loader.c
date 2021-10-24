@@ -107,7 +107,6 @@ void LoaderRender()
 	}
 }
 
-
 /*!
 @brief Loads the Grid based on the cInput which is the file name.
 
