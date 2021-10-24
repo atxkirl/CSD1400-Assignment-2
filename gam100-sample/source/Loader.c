@@ -50,26 +50,23 @@ void LoaderExit()
 
 void LoaderRender()
 {
-	// grids
-	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
-	for (int i = 0; i <= NumGrids; i++)
-	{
-		CP_Graphics_DrawLine(0,
-			(float)i * iSize,
-			(float)NumGrids * iSize,
-			(float)i * iSize); // Draw horizontal line
+	//// grids
+	//CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+	//for (int i = 0; i <= NumGrids; i++)
+	//{
+	//	CP_Graphics_DrawLine(0,
+	//		(float)i * iSize,
+	//		(float)NumGrids * iSize,
+	//		(float)i * iSize); // Draw horizontal line
+	//}
 
-	}
-
-	for (int i = 0; i <= NumGrids; i++)
-	{
-		CP_Graphics_DrawLine((float)i * iSize,
-			0,
-			(float)i * iSize,
-			(float)NumGrids * iSize); // Draw Vertical line
-
-
-	}
+	//for (int i = 0; i <= NumGrids; i++)
+	//{
+	//	CP_Graphics_DrawLine((float)i * iSize,
+	//		0,
+	//		(float)i * iSize,
+	//		(float)NumGrids * iSize); // Draw Vertical line
+	//}
 
 	//render obj
 	for (int i = 0; i < NumGrids; i++)
@@ -132,14 +129,17 @@ void LoadGrid(char* cInput, int iLoad)
 
 	for (int i = 0; i < objList->iSize; i++)
 	{
-		int iY = objList->fObjList[i]->iPosY;
-		int iX = objList->fObjList[i]->iPosX;
-		gLoadedGrids.gGrid[iY][iX]->type = objList->fObjList[i]->iType;
-		gLoadedGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * fCellSize + fCellSize * 0.5f, iY * fCellSize + fCellSize * 0.5f);
-		gLoadedGrids.gGrid[iY][iX]->scale = CP_Vector_Set(fCellSize, fCellSize);
-		Renderer* r = RM_GetComponent(gLoadedGrids.gGrid[iY][iX]);
-		//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
-		r->color = CP_Color_Create(255, 255, 255, 255);
+		if (objList->fObjList[i])
+		{
+			int iY = objList->fObjList[i]->iPosY;
+			int iX = objList->fObjList[i]->iPosX;
+			gLoadedGrids.gGrid[iY][iX]->type = objList->fObjList[i]->iType;
+			gLoadedGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * fCellSize + fCellSize * 0.5f, iY * fCellSize + fCellSize * 0.5f);
+			gLoadedGrids.gGrid[iY][iX]->scale = CP_Vector_Set(fCellSize, fCellSize);
+			Renderer* r = RM_GetComponent(gLoadedGrids.gGrid[iY][iX]);
+			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
+			r->color = CP_Color_Create(255, 255, 255, 255);
+		}
 	}
 }
 

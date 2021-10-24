@@ -10,7 +10,23 @@ Map* new_Map()
 	{
 		goMap->fObjList = (FileObj**)malloc(sizeof(FileObj*) * 900);
 		goMap->iSize = 0;
+
+		if (goMap->fObjList)
+		{
+			for (int i = 0; i < 900; i++)
+			{
+				goMap->fObjList[i] = malloc(sizeof(FileObj));
+
+				if (goMap->fObjList[i])
+				{
+					goMap->fObjList[i]->iPosX = 0;
+					goMap->fObjList[i]->iPosY = 0;
+					goMap->fObjList[i]->iType = 0;
+				}
+			}
+		}
 	}
+
 	return goMap;
 }
 
@@ -73,8 +89,6 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 				strncpy_s(cTempY, 10, cFileRead+ j, i - j);
 				strcat_s(cTempY, 10, "\0");
 
-				mMap->fObjList[iObjNum] = (FileObj*)malloc(sizeof(FileObj));
-
 				if (mMap->fObjList[iObjNum])
 				{
 					//atoi converts a char* to int
@@ -113,8 +127,6 @@ void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
 	int iObjNum = 0;
 	if (eError == 0 && fFile != NULL)
 	{
-
-
 		while (fgets(cFileRead, 900, fFile))
 		{
 			int i = 0, j = 0;
