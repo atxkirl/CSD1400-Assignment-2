@@ -6,15 +6,18 @@ void SM_SystemsInit()
 	GOM_Init();
 	RM_Init();
 	CLM_Init();
+	AM_Init();
 }
 
 void SM_SystemsPreUpdate()
 {
+	//physics if there is
 }
 
 void SM_SystemsUpdate()
 {
 	CLM_Update();
+	AM_Update();
 }
 
 void SM_SystemsLateUpdate()
@@ -30,6 +33,7 @@ void SM_SystemsLateUpdate()
 
 void SM_SystemsExit()
 {
+	AM_Clear();
 	CLM_Clear();
 	RM_Clear();
 	GOM_Clear();
@@ -45,6 +49,9 @@ void* SM_GetComponent(GameObject* g, COMPONENT c)
 		break;
 	case COM_COLLISION:
 		ret = CLM_GetComponent(g);
+		break;
+	case COM_ANIMATION:
+		ret = AM_GetComponent(g);
 		break;
 	}
 	return ret;
@@ -64,6 +71,9 @@ void SM_DeleteFromAllSystems(GameObject* g)
 				break;
 			case COM_COLLISION:
 				CLM_Remove((Collider*)c);
+				break;
+			case COM_ANIMATION:
+				AM_Remove((Animation*)c);
 				break;
 			}
 		}

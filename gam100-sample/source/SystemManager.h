@@ -14,6 +14,7 @@
 #include "GameObjectManager.h"
 #include "RenderManager.h"
 #include "CollisionManager.h"
+#include "AnimationManager.h"
 
 //Prefix: SM
 
@@ -21,6 +22,7 @@ typedef enum COMPONENT
 {
 	COM_RENDERER,
 	COM_COLLISION,
+	COM_ANIMATION,
 	COM_COUNT
 }COMPONENT;
 

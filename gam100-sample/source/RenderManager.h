@@ -27,6 +27,11 @@ typedef struct Renderer
 	CP_Image sprite;
 	CP_Color color;
 	enum RENDER_PRIORITY renderPriority;
+	int width;
+	int height;
+
+	CP_Vector startUV;
+	CP_Vector endUV;
 
 	char* text;//to be directly rendered on top of object
 	CP_Color textColor;//defaulted black

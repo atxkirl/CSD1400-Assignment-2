@@ -31,6 +31,11 @@ Renderer* RM_AddComponent(GameObject* g)
 		r->sprite = NULL;
 		r->color = CP_Color_Create(200, 200, 200, 255);
 		r->renderPriority = PRI_GAME_OBJECT;
+		r->width = 32;
+		r->height = 32;
+
+		r->startUV = CP_Vector_Set(0, 0);
+		r->endUV = CP_Vector_Set(1, 1);
 
 		r->text = NULL;
 		r->textColor = CP_Color_Create(0, 0, 0, 255);
@@ -121,12 +126,16 @@ CP_Vector RM_GetCameraScale()
 Renderer* RM_LoadImage(Renderer* r , const char* filepath)
 {
 	r->sprite = CP_Image_Load(filepath);
+	r->width = CP_Image_GetWidth(r->sprite);
+	r->height = CP_Image_GetHeight(r->sprite);
 	return r;
 }
 
 Renderer* RM_AddImage(Renderer* r, CP_Image img)
 {
 	r->sprite = img;
+	r->width = CP_Image_GetWidth(img);
+	r->height = CP_Image_GetHeight(img);
 	return r;
 }
 
@@ -156,17 +165,17 @@ void RenderAllOfType(RENDER_PRIORITY type)
 		MS_Translate(matrixStack, go->position);
 		MS_Rotate(matrixStack, -go->rotation);//coz if camera tilt left, image will tilt right. but i want image to tilt left
 		//MS_Scale(matrixStack, go->scale);
-		CP_Matrix* mat = MS_Top(matrixStack);
-		CP_Matrix transform;
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 3; j++)
-				transform.m[i][j] = mat->m[i][j];
-		CP_Settings_ApplyMatrix(transform);
-		//RM_ApplyMatrix(MS_Top(matrixStack));
+		CP_Settings_ApplyMatrix(*MS_Top(matrixStack));
 		
 		if (r->sprite)
 		{
-			CP_Image_Draw(r->sprite, 0,0, go->scale.x, go->scale.y, r->color.a);
+			//CP_Image_Draw(r->sprite, 0,0, go->scale.x, go->scale.y, r->color.a);
+			//CP_Image_DrawSubImage(r->sprite, 0, 0, go->scale.x, go->scale.y,
+			//	r->startUV.x, r->startUV.y, r->endUV.x * go->scale.x, r->endUV.y * go->scale.y, r->color.a);
+			CP_Image_DrawSubImage(r->sprite, 0, 0, go->scale.x, go->scale.y,
+				r->startUV.x * (float)r->width, r->startUV.y * (float)r->height,
+				r->endUV.x * (float)r->width, r->endUV.y * (float)r->height,
+				r->color.a);
 		}
 		else
 		{
@@ -196,11 +205,8 @@ void RenderAllOfType(RENDER_PRIORITY type)
 		}
 		
 
-		//printf("matrixSize: %d\n", LL_GetCount(matrixStack));
-		//MS_Print(MS_Top(matrixStack));
-		CP_Settings_ApplyMatrix(CP_Matrix_Inverse(transform));
+		CP_Settings_ApplyMatrix(CP_Matrix_Inverse(*MS_Top(matrixStack)));
 		MS_PopMatrix(matrixStack);
-		//CP_Settings_ResetMatrix();
 
 		if (r->text)
 		{
@@ -211,23 +217,14 @@ void RenderAllOfType(RENDER_PRIORITY type)
 			MS_Translate(matrixStack, r->textLocalPosition);
 			MS_Rotate(matrixStack, -r->textRotation);
 			MS_Scale(matrixStack, r->textScale);
-			CP_Matrix* matTop = MS_Top(matrixStack);
-			CP_Matrix textTransform;
-			for (int i = 0; i < 3; i++)
-				for (int j = 0; j < 3; j++)
-					textTransform.m[i][j] = matTop->m[i][j];
-			CP_Settings_ApplyMatrix(textTransform);
+			CP_Settings_ApplyMatrix(*MS_Top(matrixStack));
 			
 			CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 
 			CP_Font_DrawText(r->text, 0.0f, 0.0f);
 
-			//printf("matrixSize: %d\n", LL_GetCount(matrixStack));
-			//MS_Print(MS_Top(matrixStack));
-			
-			CP_Settings_ApplyMatrix(CP_Matrix_Inverse(textTransform));
+			CP_Settings_ApplyMatrix(CP_Matrix_Inverse(*MS_Top(matrixStack)));
 			MS_PopMatrix(matrixStack);
-			//CP_Settings_ResetMatrix();
 		}
 
 	}

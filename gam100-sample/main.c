@@ -19,6 +19,8 @@
 /* Entry point */
 int main(void)
 {
+    CP_System_SetWindowSize(3000, 1000);
+
     SceneManager_Initialize();
     SceneManager_ChangeScene(currentScene);
 

@@ -57,7 +57,7 @@ void HongYu_init(void)
 {
     SM_SystemsInit();
 
-    g = GOM_Create2(RECTANGLE, CP_Vector_Set(50, 20), 0.0f, CP_Vector_Set(30, 30));
+    g = GOM_Create2(RECTANGLE, CP_Vector_Set(50, 20), 0.0f, CP_Vector_Set(50, 50));
     g->tag = "player";
     Renderer* r = RM_AddComponent(g);
     RM_LoadImage(r, "Assets/bananaboi.png");
@@ -77,8 +77,11 @@ void HongYu_init(void)
     c->space = COLSPC_SCREEN;
 
     GameObject* wall = GOM_Create2(RECTANGLE, 
-        CP_Vector_Set(0, 0), 0.0f, CP_Vector_Set(50, 25));
-    RM_AddComponent(wall);
+        CP_Vector_Set(0, 0), 0.0f, CP_Vector_Set(50, 50));
+    r = RM_AddComponent(wall);
+    RM_LoadImage(r, "Assets/testspritesheet.png");
+    Animation* a = AM_AddComponent(wall);
+    AM_SetSprite(a, 4, 2, 8, 4);
     CLM_Set(CLM_AddComponent(wall), COL_BOX, hy_OnCollision);
     
     wall = GOM_Create2(CIRCLE,

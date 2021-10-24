@@ -62,6 +62,9 @@
     <ClCompile Include="source\SystemManager.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\AnimationManager.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -118,6 +121,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\SystemManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AnimationManager.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
