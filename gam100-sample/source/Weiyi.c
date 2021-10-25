@@ -13,26 +13,38 @@
 #include "Helpers.h"
 #include "../DetectMemoryLeak.h"
 #include "SystemManager.h"
+#include "CollisionManager.h"
+#include "Player.h"
 
+#include <time.h>
 #include <stdlib.h>
 
+GameObject* e = NULL;
+Renderer* r;
+
+int wy_OnCollision(Collider* left, Collider* right) {
+
+    return CLM_RESPONSE_REMOVENONE;
+}
 void Weiyi_init(void)
 {
     SM_SystemsInit();
 
-    GameObject* g = GOM_Create(CIRCLE);
-    g->scale = CP_Vector_Set(20, 20);
-    g->position = CP_Vector_Set(50, 20);
-    RM_AddComponent(g);
+    PLY_CreatePlayer();
+
+    e = GOM_Create2(CIRCLE, CP_Vector_Set(20, 20), 0.0f, CP_Vector_Set(50, 50));
+    e->tag = "enemy";
+    CLM_Set(CLM_AddComponent(e),COL_CIRCLE, wy_OnCollision);
+
+    r = RM_AddComponent(e);
+
 }
 
 void Weiyi_update(void)
 {
     SM_SystemsPreUpdate();
-
-    //Do stuff here...
-
-
+   
+    PLY_Update();
     SM_SystemsUpdate();
 
     SM_SystemsLateUpdate();

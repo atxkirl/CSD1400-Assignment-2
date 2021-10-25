@@ -2,8 +2,11 @@
 #include <stdio.h>
 #include "CProcessing\inc\cprocessing.h"
 
-typedef struct
+
+
+typedef struct Player
 {
 	CP_Vector vPosition;
 
 } Player;
+

@@ -210,6 +210,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Loader.c" />
     <ClCompile Include="source\Marcus.c" />
     <ClCompile Include="source\MatrixStack.c" />
+    <ClCompile Include="source\Player.c" />
     <ClCompile Include="source\RenderManager.c" />
     <ClCompile Include="source\Scene.c" />
     <ClCompile Include="source\SceneManager.c" />
@@ -218,7 +219,6 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Xinyun.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Player.h" />
     <ClInclude Include="source\AnimationManager.h" />
     <ClInclude Include="source\CollisionManager.h" />
     <ClInclude Include="source\Colors.h" />
@@ -230,6 +230,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\LinkedList.h" />
     <ClInclude Include="source\Loader.h" />
     <ClInclude Include="source\MatrixStack.h" />
+    <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\RenderManager.h" />
     <ClInclude Include="source\Scene.h" />
     <ClInclude Include="source\SceneManager.h" />

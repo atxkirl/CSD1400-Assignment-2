@@ -65,6 +65,9 @@
     <ClCompile Include="source\AnimationManager.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Player.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -108,9 +111,6 @@
     <ClInclude Include="source\Helpers.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="source\MatrixStack.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -124,6 +124,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\AnimationManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Player.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
