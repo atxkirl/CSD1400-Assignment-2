@@ -44,7 +44,7 @@ Renderer* RM_AddComponent(GameObject* g)
 		r->textRotation = 0.0f;
 	}
 
-	renderObjects = LL_Add(renderObjects, r);
+	LL_Add(&renderObjects, r);
 	return r;
 }
 void* FindRenderer(void* curr, void* arg)
@@ -61,7 +61,7 @@ Renderer* RM_GetComponent(GameObject* g)
 }
 void RM_RemoveRenderObject(Renderer* r)
 {
-	renderObjects = LL_RemovePtr(renderObjects, r);
+	LL_RemovePtr(&renderObjects, r);
 	free(r);
 }
 void RM_Clear()
@@ -72,7 +72,7 @@ void RM_Clear()
 			RM_DeleteImage((Renderer*)renderObjects->curr);
 		free(renderObjects->curr);
 	}
-	renderObjects = LL_Clear(renderObjects);
+	LL_Clear(&renderObjects);
 	matrixStack = MS_Clear(matrixStack);
 }
 void RM_Render()
@@ -169,9 +169,6 @@ void RenderAllOfType(RENDER_PRIORITY type)
 		
 		if (r->sprite)
 		{
-			//CP_Image_Draw(r->sprite, 0,0, go->scale.x, go->scale.y, r->color.a);
-			//CP_Image_DrawSubImage(r->sprite, 0, 0, go->scale.x, go->scale.y,
-			//	r->startUV.x, r->startUV.y, r->endUV.x * go->scale.x, r->endUV.y * go->scale.y, r->color.a);
 			CP_Image_DrawSubImage(r->sprite, 0, 0, go->scale.x, go->scale.y,
 				r->startUV.x * (float)r->width, r->startUV.y * (float)r->height,
 				r->endUV.x * (float)r->width, r->endUV.y * (float)r->height,

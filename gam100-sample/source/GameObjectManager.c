@@ -13,7 +13,7 @@ void GOM_Init()
 
 int GOM_Delete(GameObject* g)
 {
-	objectList = LL_RemovePtr(objectList, g);
+	LL_RemovePtr(&objectList, g);
 	free(g);
 
 	return 1;
@@ -26,8 +26,8 @@ void GOM_Clear()
 		free(l->curr);
 		l = l->next;
 	}
-	objectList = LL_Clear(objectList);
-	tempList = LL_Clear(tempList);
+	LL_Clear(&objectList);
+	LL_Clear(&tempList);
 }
 int GOM_GetIndex(GameObject* go)
 {
@@ -39,11 +39,11 @@ void GOM_ClearTempObjects()
 	LinkedList* l = tempList;
 	while (l)
 	{
-		objectList = LL_RemovePtr(objectList, l->curr);
+		LL_RemovePtr(&objectList, l->curr);
 		free(l->curr);
 		l = l->next;
 	}
-	tempList = LL_Clear(tempList);
+	LL_Clear(&tempList);
 }
 
 GameObject* GOM_Create(OBJECT_TYPE type)
@@ -68,7 +68,7 @@ GameObject* GOM_Create(OBJECT_TYPE type)
 		//go->textScale = CP_Vector_Set(1.0f, 1.0f);
 	}
 
-	objectList = LL_Add(objectList, go);
+	LL_Add(&objectList, go);
 	//RM_AddComponent(go);
 	return go;
 }
@@ -76,7 +76,7 @@ GameObject* GOM_Create(OBJECT_TYPE type)
 GameObject* GOM_CreateTemp(OBJECT_TYPE type)
 {
 	GameObject* go = GOM_Create(type);
-	tempList = LL_Add(tempList, go);
+	LL_Add(&tempList, go);
 	return go;
 }
 

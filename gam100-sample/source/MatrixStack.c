@@ -6,7 +6,7 @@ LinkedList* MS_InitIdentity()
 {
 	CP_Matrix* identity = MS_MatCopy(CP_Matrix_Identity());
 	LinkedList* ms = NULL;
-	ms = LL_Add(ms, (void*)(identity));
+	LL_Add(&ms, (void*)(identity));
 	return ms;
 }
 
@@ -39,7 +39,7 @@ void MS_MatCopy4(CP_Matrix* l, CP_Matrix r)
 
 void MS_PushMatrix(LinkedList* ms)
 {
-	ms = LL_Add(ms, (void*)(MS_MatCopy2(MS_Top(ms))));
+	LL_Add(&ms, (void*)(MS_MatCopy2(MS_Top(ms))));
 }
 
 LinkedList* MS_PopMatrix(LinkedList* ms)
@@ -47,7 +47,7 @@ LinkedList* MS_PopMatrix(LinkedList* ms)
 	LinkedList* last = LL_GetLast(ms);
 	CP_Matrix* lmat = (CP_Matrix*)last->curr;
 	free(lmat);
-	ms = LL_RemoveLL(ms, last);
+	LL_RemoveLL(&ms, last);
 	return ms;
 }
 

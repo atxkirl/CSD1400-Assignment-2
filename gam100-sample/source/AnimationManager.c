@@ -47,7 +47,8 @@ void AM_Clear()
 	{
 		free(node->curr);
 	}
-	animationList = LL_Clear(animationList);
+	//animationList = LL_Clear(animationList);
+	LL_Clear(&animationList);
 }
 
 Animation* AM_AddComponent(GameObject* go)
@@ -63,13 +64,14 @@ Animation* AM_AddComponent(GameObject* go)
 		ani->frameCount = 0;
 		ani->fps = 0.0f;
 	}
-	animationList = LL_Add(animationList, ani);
+	LL_Add(&animationList, ani);
 	return ani;
 }
 
 /*!
 @brief Gets Animation from go object if go has added animation
-@param go - gameobject to have animation retrieved
+@param curr - curr node data
+@param arg - gameobject to find
 @return animation component that exists
 */
 void* FindAnimation(void* curr, void* arg)
@@ -90,7 +92,7 @@ void AM_Remove(Animation* a)
 {
 	if (!LL_ContainsPtr(animationList, a))
 		return;
-	animationList = LL_RemovePtr(animationList, (void*)a);
+	LL_RemovePtr(&animationList, (void*)a);
 	free(a);
 }
 

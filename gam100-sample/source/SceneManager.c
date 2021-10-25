@@ -32,47 +32,47 @@ void SceneManager_Initialize()
 	// TODO: Add some way to store all the Scene* in a list or array or something.
 	// For now I'll just set currentScene to temp, so that game.c will be the first scene. PLS REMOVE LATER
 	currentScene = temp;
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 
 	game2_sceneInit(&init, &update, &exit);
 	temp = CreateScene("game2", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 
 	Marcus_sceneInit(&init, &update, &exit);
 	temp = CreateScene("marcus", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 
 	HongYu_sceneInit(&init, &update, &exit);
 	temp = CreateScene("hongyu", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 
 	Adrian_sceneInit(&init, &update, &exit);
 	temp = CreateScene("adrian", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 
 	Weiyi_sceneInit(&init, &update, &exit);
 	temp = CreateScene("weiyi", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 
 	Xinyun_sceneInit(&init, &update, &exit);
 	temp = CreateScene("xinyun", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 
 	LevelEditorScene_sceneInit(&init, &update, &exit);
 	temp = CreateScene("editor", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 
 	LevelOne_sceneInit(&init, &update, &exit);
 	temp = CreateScene("levelone", init, update, exit);
 	// TODO: Add some way to store all the Scene* in a list or array or something.
-	sceneList = LL_Add(sceneList, temp);
+	LL_Add(&sceneList, temp);
 }
 
 void SceneManager_ChangeScene(Scene* nextScene)

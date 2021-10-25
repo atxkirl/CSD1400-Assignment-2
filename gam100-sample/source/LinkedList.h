@@ -11,6 +11,8 @@ Just assign the operation back to itself: objectList = LL_Add(objectList, obj);
 
 //PREFIX: LL
 
+//Maybe can typedef a list* list to see less stars
+
 typedef struct LinkedList LinkedList;
 struct LinkedList
 {
@@ -30,12 +32,12 @@ Special scenarios: The case where ll param is null, function will return the new
 to the head of the list.
 @param ll - pointer of the head of the list
 @param ptr - void* of the object
-@return pointer of the head of the list
+@return void
 */
-LinkedList* LL_Add(LinkedList*, void*);
-LinkedList* LL_RemoveLL(LinkedList*, LinkedList*);
-LinkedList* LL_RemovePtr(LinkedList*, void*);
-LinkedList* LL_RemoveIndex(LinkedList*, int);
+void LL_Add(LinkedList**, void*);
+void LL_RemoveLL(LinkedList**, LinkedList*);
+void LL_RemovePtr(LinkedList**, void*);
+void LL_RemoveIndex(LinkedList**, int);
 /*!
 @brief Adds a UNIQUE node to the linkedlist containing the void* as data.
 	This function check if the data exists. if it doesnt,
@@ -44,14 +46,14 @@ Special scenarios: The case where ll param is null, function will return the new
 to the head of the list.
 @param ll - pointer of the head of the list
 @param ptr - void* of the object
-@return pointer of the head of the list
+@return void
 */
-LinkedList* LL_SetAdd(LinkedList*, void*);
+void LL_SetAdd(LinkedList**, void*);
 
 int LL_GetIndexLL(LinkedList*, LinkedList*);
 int LL_GetIndexPtr(LinkedList*, void*);
 int LL_Contains(LinkedList*, LinkedList*);
 int LL_ContainsPtr(LinkedList*, void*);
-LinkedList* LL_Clear(LinkedList*);
+void LL_Clear(LinkedList**);
 void* LL_Find(LinkedList*, void*(void*, void*), void*);
 void** LL_ToArray(LinkedList*);

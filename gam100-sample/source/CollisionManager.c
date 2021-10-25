@@ -9,23 +9,23 @@ LinkedList* CLM_objects = NULL;
 
 /*!
 @brief Handle which collider to be added to the delList according to del code
-@param list - pointer to the delete-list
+@param list - reference to the delete-list
 @param l - ptr to left collider
 @param r - ptr to right collider
 @param del - del code
 @return void
 */
-void AddToDelList(LinkedList* list, Collider* l, Collider* r, int del)
+void AddToDelList(LinkedList** list, Collider* l, Collider* r, int del)
 {
 	switch (del)
 	{
-	case CLM_RESPONSE_REMOVELEFT: list = LL_SetAdd(list, (void*)l);
+	case CLM_RESPONSE_REMOVELEFT: LL_SetAdd(list, (void*)l);
 		break;
-	case CLM_RESPONSE_REMOVERIGHT: list = LL_SetAdd(list, (void*)r);
+	case CLM_RESPONSE_REMOVERIGHT: LL_SetAdd(list, (void*)r);
 		break;
 	case CLM_RESPONSE_REMOVEBOTH:
-		list = LL_SetAdd(list, (void*)l);
-		list = LL_SetAdd(list, (void*)r);
+		LL_SetAdd(list, (void*)l);
+		LL_SetAdd(list, (void*)r);
 		break;
 	}
 }
@@ -191,7 +191,7 @@ void CLM_Init()
 }
 void CLM_Add(Collider* c)
 {
-	CLM_objects = LL_Add(CLM_objects, (void*)c);
+	LL_Add(&CLM_objects, (void*)c);
 }
 void CLM_Set(Collider* c, COLLIDER_TYPE t, OnCollision func)
 {
@@ -221,13 +221,13 @@ Collider* CLM_AddComponent(GameObject* g)
 		c->radius = g->scale.x * 0.5f;
 		c->width = g->scale.x;
 		c->height = g->scale.y;
-		CLM_objects = LL_Add(CLM_objects, c);
+		LL_Add(&CLM_objects, c);
 	}
 	return c;
 }
 int CLM_Remove(Collider* c)
 {
-	CLM_objects = LL_RemovePtr(CLM_objects, (void*)(c));
+	LL_RemovePtr(&CLM_objects, (void*)(c));
 	free(c);
 	return 0;
 }
@@ -253,7 +253,7 @@ void CLM_RemoveGO(GameObject* go)
 	//printf("REMOVE!");
 	if (c)
 	{
-		CLM_objects = LL_RemovePtr(CLM_objects, (void*)c);
+		LL_RemovePtr(&CLM_objects, (void*)c);
 		free(c);
 	}
 }
@@ -265,7 +265,7 @@ void CLM_Clear()
 		free(l->curr);
 		l = l->next;
 	}
-	CLM_objects = LL_Clear(CLM_objects);
+	LL_Clear(&CLM_objects);
 }
 int CLM_GetIndex(Collider* c)
 {
@@ -319,8 +319,8 @@ void CLM_Update()
 				if (right->OnCollision != NULL)
 					ret2 = right->OnCollision(right, left);
 
-				AddToDelList(delList, left, right, ret);
-				AddToDelList(delList, right, left, ret2);
+				AddToDelList(&delList, left, right, ret);
+				AddToDelList(&delList, right, left, ret2);
 
 			}
 		}
@@ -330,9 +330,9 @@ void CLM_Update()
 	for (; delList; delList = delList->next)
 	{
 		//printf("Removing from CollisionManager %s", ((Collider*)delList->curr)->obj->tag);
-		CLM_objects = LL_RemovePtr(CLM_objects, delList->curr);
+		LL_RemovePtr(&CLM_objects, delList->curr);
 	}
-	delList = LL_Clear(delList);
+	LL_Clear(&delList);
 }
 
 int IsCollide(Collider* left, Collider* right)
@@ -388,8 +388,8 @@ int IsBoxCollideBox(Collider* left, Collider* right)
 	CP_Vector posRight = ((GameObject*)right->obj)->position;
 
 	CP_Vector relative = CP_Vector_Subtract(posRight, posLeft);
-	if (fabs(relative.x) < left->width * 0.5f + right->width * 0.5f &&
-		fabs(relative.y) < left->height * 0.5f + right->height * 0.5f)
+	if (fabsf(relative.x) < left->width * 0.5f + right->width * 0.5f &&
+		fabsf(relative.y) < left->height * 0.5f + right->height * 0.5f)
 		return 1;
 	return 0;
 }
@@ -410,8 +410,8 @@ int IsCircleCollideBox(Collider* left, Collider* right)
 	CP_Vector posRight = ((GameObject*)right->obj)->position;
 
 	CP_Vector relative = CP_Vector_Subtract(posRight, posLeft);
-	if (fabs(relative.x) < left->radius + right->width * 0.5f &&
-		fabs(relative.y) < left->radius + right->height * 0.5f)
+	if (fabsf(relative.x) < left->radius + right->width * 0.5f &&
+		fabsf(relative.y) < left->radius + right->height * 0.5f)
 		return 1;
 	return 0;
 }
@@ -432,8 +432,8 @@ int IsBoxCollidePoint(Collider* left, Collider* right)
 
 	CP_Vector relative = CP_Vector_Subtract(posRight, posLeft);
 	//printf("%f,%f %f,%f\n", relative.x, relative.y, left->width * 0.5f, left->height * 0.5f);
-	if (fabs(relative.x) < left->width * 0.5f &&
-		fabs(relative.y) < left->height * 0.5f)
+	if (fabsf(relative.x) < left->width * 0.5f &&
+		fabsf(relative.y) < left->height * 0.5f)
 		return 1;
 	return 0;
 }

@@ -26,10 +26,10 @@ typedef struct
 	CP_Vector position;
 	CP_Vector scale;
 	float rotation;
-	int isEnabled; //bool for rendering
-	char* tag;//tag same as unity tag/name
+	int isEnabled; //think as unity go's isenabled bool
+	char* tag;//think as unity go's name
 
-	//imagine unity tag?
+	//think as unity go's tag
 	enum OBJECT_TYPE type;
 
 } GameObject;

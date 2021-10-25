@@ -26,13 +26,44 @@ typedef enum COMPONENT
 	COM_COUNT
 }COMPONENT;
 
-
+/*!
+@brief Inits all systems
+@return void
+*/
 void SM_SystemsInit();
+/*!
+@brief Update systems at the start of the frame
+@return void
+*/
 void SM_SystemsPreUpdate();
+/*!
+@brief Update systems
+@return void
+*/
 void SM_SystemsUpdate();
+/*!
+@brief Update systems at the end of the frame
+@return void
+*/
 void SM_SystemsLateUpdate();
+/*!
+@brief Exit and clean up systems
+@return void
+*/
 void SM_SystemsExit();
 
+/*!
+@brief Find component that is attached to gameobject
+@param g - gameobject to find
+@param c - component id to find for
+@return ptr of component
+*/
 void* SM_GetComponent(GameObject*, COMPONENT);
 //void* SM_AddComponent(GameObject*, COMPONENT);
+
+/*!
+@brief Delete gameobject from all systems
+@param g - gameobject clean delete
+@return void
+*/
 void SM_DeleteFromAllSystems(GameObject*);

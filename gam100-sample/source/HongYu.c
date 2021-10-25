@@ -103,6 +103,11 @@ void HongYu_init(void)
     //wad->position = CP_Vector_Set(0.1f * width, 0.9f * height);
     //wad->scale = CP_Vector_Set(0.1f * width, 30);
     //wad->color = CP_Color_Create(255, 255, 255, 255);
+    //LinkedList* l = NULL;
+    //int ab = 69;
+    //LL_DeepAdd(&l, &ab);
+    //if (l)
+    //    printf("%d", *((int*)l->curr));
 }
 
 void HongYu_update(void)
@@ -140,14 +145,7 @@ void HongYu_update(void)
         CLM_Set(c, COL_POINT, NULL);
         c->space = COLSPC_SCREEN;
     }
-    if (CP_Input_KeyTriggered((enum CP_KEY)KEY_1))
-    {
-        RM_SetCameraScale(CP_Vector_Set(1.0f, 1.0f));
-    }
-    else if (CP_Input_KeyTriggered((enum CP_KEY)KEY_2))
-    {
-        
-    }
+
 
     char str[20];
     sprintf_s(str, 20,"%.1f,%.1f", g->position.x, g->position.y);
@@ -158,12 +156,6 @@ void HongYu_update(void)
     SM_SystemsUpdate();
     RM_SetCameraPosition(g->position);
 
-    ////imagine late update
-    //if (clickPoint)
-    //{
-    //    CLM_RemoveGO(clickPoint);
-    //    GOM_Delete(clickPoint);
-    //}
     SM_SystemsLateUpdate();
 }
 
