@@ -14,6 +14,7 @@ CP_Vector vScale;
 CP_Matrix mScale;
 
 Grid gGrids;
+int iAutoGenerate;
 
 extern GameObject *GameObjectList;
 
@@ -39,14 +40,20 @@ void LevelEditorInit()
 		for (int j = 0; j < NumGrids; j++)
 		{
 			//gGrids.gGrid[i][j] = isEmpty;
-			GameObject* go = GOM_Create(EMPTY);
+			GameObject* go = GOM_Create((i == 0 || i == NumGrids - 1 || j == 0 || j == NumGrids -1)? WALL : EMPTY);
 			Renderer* r = RM_AddComponent(go);
 			go->position = CP_Vector_Set(j * vScale.x, i * vScale.y);
 			go->scale = CP_Vector_Set(vScale.x, vScale.y);
 			r->color = CP_Color_Create(255, 255, 0, 255);
 			gGrids.gGrid[i][j] = go;
+
+			gGrids.nGrid[i][j].Curr = (enum GridNodeState) NotVisited;
+			gGrids.nGrid[i][j].Next = (enum GridNodeState) NotVisited;
+			gGrids.nGrid[i][j].Prev = (enum GridNodeState) NotVisited;
 		}
 	}
+
+	iAutoGenerate = 0;
 }
 
 /*!
@@ -112,6 +119,11 @@ void LevelEditorUpdate()
 			objType = 0;
 
 		printf("Object Type: %d\n", objType);
+	}
+
+	if (CP_Input_KeyTriggered(KEY_SPACE))
+	{
+		iAutoGenerate = !iAutoGenerate;
 	}
 
 	PlaceObject();
@@ -180,6 +192,10 @@ void RenderObjects()
 				CP_Settings_Fill(CP_Color_Create(255, 128, 128, 225)); // r, g, b, a
 				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
+			case(CIRCLE):
+				CP_Settings_Fill(CP_Color_Create(128, 128, 255, 225)); // r, g, b, a
+				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
+				break;
 			default:
 				break;
 			}
@@ -199,13 +215,20 @@ void PlaceObject()
 	// In this case CP_InputGetMouse is my global coordinates, so to get the local coordinates need to divide by the scale.
 	// Subtracting the fMoveX resets the position back to global.
 
-	if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
+	if (!iAutoGenerate)
 	{
-		CheckGrid(CP_Input_GetMouseX() / fScaleBy - fMoveX, CP_Input_GetMouseY() / fScaleBy - fMoveY, objType);
+		if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
+		{
+			CheckGrid(CP_Input_GetMouseX() / fScaleBy - fMoveX, CP_Input_GetMouseY() / fScaleBy - fMoveY, objType);
+		}
+		if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
+		{
+			CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
+		}
 	}
-	if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
+	else
 	{
-		CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
+		AutoGenerateGrid();
 	}
 }
 
@@ -282,4 +305,30 @@ void SaveGrid()
 		printf("%s \n", cFileLocation);
 		WriteToFile(cFileLocation, GridObj);
 	}
+}
+
+void AutoGenerateGrid()
+{
+	for (int i = 1; i < NumGrids - 1; i++)
+	{
+		for (int j = 1; j < NumGrids - 1; j++)
+		{
+			int iObjType = EMPTY;
+			int iPercentage = rand() % 10;
+
+			if (iPercentage > 6 && iPercentage < 9)
+			{
+				iObjType = WALL;
+			}
+
+			else if (iPercentage == 9)
+			{
+				iObjType = (rand() % 2) + 1;
+			}
+
+			gGrids.gGrid[j][i]->type = iObjType;
+		}
+	}
+
+	iAutoGenerate = 0;
 }

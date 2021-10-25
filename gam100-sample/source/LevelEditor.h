@@ -3,9 +3,23 @@
 // For sizing
 #define NumGrids 30
 
+enum GridNodeState
+{
+	NotVisited = 0,
+	Visited,
+};
+
+typedef struct GridNode
+{
+	int Curr;
+	int Next;
+	int Prev;
+} GridNode;
+
 typedef struct Grid
 {
 	GameObject* gGrid[NumGrids][NumGrids];
+	GridNode nGrid[NumGrids][NumGrids];
 } Grid;
 
 /*!
@@ -54,3 +68,5 @@ void RenderObjects();
 @return void
 */
 void SaveGrid();
+
+void AutoGenerateGrid();
