@@ -267,35 +267,57 @@ void CheckGrid(float fMouseX, float fMouseY, int iObjType)
 */
 void SaveGrid()
 {
-	char GridObj[900] = { "" };
+	//450, 30
+	char **GridObj = malloc(sizeof(char*) * 450);
+
+	for (int i = 0; i < 450; i++)
+	{
+		if (GridObj)
+		{
+			GridObj[i] = malloc(sizeof(char) * 30);
+
+			if (GridObj[i])
+			{
+				GridObj[i][0] = '\0';
+			}
+		}
+	}
+
 	//GridObj = (char*)malloc(900 * sizeof(char));
 	//GridObj = "";
-
+	int iObjNum = 0;
 	for (int i = 0; i < NumGrids; i++)
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gGrids.gGrid[i][j]->type !=  EMPTY)
+			if (gGrids.gGrid[i][j]->type !=  EMPTY && iObjNum < 450)
 			{
 				char ObjType[10];
 				char ObjPosX[10];
 				char ObjPosY[10];
+				if (GridObj)
+				{
+					if (GridObj[iObjNum])
+					{
+						sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]->type);
+						strcpy_s(GridObj[iObjNum], 30, ObjType); //type
+						strcat_s(GridObj[iObjNum], 30, ",");
 
-				sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]->type);
-				strcat_s(GridObj, 900, ObjType); //type
-				strcat_s(GridObj, 900, ",");
+						sprintf_s(ObjPosX, 10, "%d", j);
+						strcat_s(GridObj[iObjNum], 30, ObjPosX); // x
+						strcat_s(GridObj[iObjNum], 30, ",");
 
-				sprintf_s(ObjPosX, 10, "%d", j);
-				strcat_s(GridObj, 900, ObjPosX); // x
-				strcat_s(GridObj, 900, ",");
+						sprintf_s(ObjPosY, 10, "%d", i);
+						strcat_s(GridObj[iObjNum], 30, ObjPosY); // y
+						strcat_s(GridObj[iObjNum], 30, "\n");
+						printf("%s\n", GridObj[iObjNum]);
 
-				sprintf_s(ObjPosY, 10, "%d", i);
-				strcat_s(GridObj, 900, ObjPosY); // y
-				strcat_s(GridObj, 900, "\n");
+						iObjNum++;
+					}
+				}
 			}
 		}
 	}
-	printf("%s\n", GridObj);
 
 	if (GridObj != NULL)
 	{

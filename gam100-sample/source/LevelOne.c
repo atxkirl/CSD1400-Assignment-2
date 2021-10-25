@@ -18,6 +18,7 @@
 #include "SystemManager.h"
 
 GameObject* gLOne = NULL;
+GameObject* ObjectiveUI = NULL;
 
 void LevelOneUI_render();
 
@@ -27,7 +28,21 @@ int LevelOne_OnCollision(Collider* left, Collider* right)
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
         if (strcmp(((GameObject*)left->obj)->tag, "objone") == 0)
+        {
             SetObjectiveComplete(1, 1);
+            for (int i = 0; i < MAX_OBJECTIVES; i++)
+            {
+                if (oObjectiveList[i].isComplete)
+                {
+                    ObjectiveUI->position = CP_Vector_Set(180.0f, 50.0f + i * 50.f);
+
+                    Renderer* rObjUI = RM_AddComponent(ObjectiveUI);
+                    rObjUI->color = CP_Color_Create(255, 255, 255, 255);
+                    rObjUI->text = "Done.";
+                    rObjUI->renderPriority = PRI_UI;
+                }
+            }
+        }
     }
     return CLM_RESPONSE_REMOVENONE;
 }
@@ -54,12 +69,55 @@ void LevelOne_init(void)
     Collider* c = CLM_AddComponent(button);
     c->space = COLSPC_SCREEN;
     CLM_Set(c, COL_BOX, LevelOne_OnCollision);
+    
+
+    GameObject* ObjectiveUIBox = GOM_Create(WALL);
+    ObjectiveUIBox->scale = CP_Vector_Set(200.f, 70.f);
+    ObjectiveUIBox->position = CP_Vector_Set(120.0f, 50.0f);
+    ObjectiveUIBox->tag = "ObjectiveUI";
+    Renderer* rObjUIBox = RM_AddComponent(ObjectiveUIBox);
+    rObjUIBox->color = CP_Color_Create(255, 255, 255, 255);
+    rObjUIBox->renderPriority = PRI_UI;
+
+    for (int i = 0; i < MAX_OBJECTIVES; i++)
+    {
+        //if (!oObjectiveList[i].isComplete)
+        //{
+        ObjectiveUI = GOM_Create(EMPTY);
+        ObjectiveUI->scale = CP_Vector_Set(175.f, 50.f);
+        ObjectiveUI->tag = "ObjectiveUI";
+        ObjectiveUI->position = CP_Vector_Set(100.0f, 50.0f + i * 50.f);
+        Renderer* rObjUI = RM_AddComponent(ObjectiveUI);
+        rObjUI->color = CP_Color_Create(255, 255, 255, 255);
+        rObjUI->text = oObjectiveList[i].cObjective;
+        rObjUI->renderPriority = PRI_UI;
+        /*}
+        else
+        {
+            rObjUI->text = "DONE";
+        }*/
+    }
 
     gLOne = GOM_Create2(RECTANGLE, CP_Vector_Set(50, 20), 0.0f, CP_Vector_Set(50, 50));
     gLOne->tag = "player";
     r = RM_AddComponent(gLOne);
     RM_LoadImage(r, "Assets/bananaboi.png");
     CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
+
+    Grid temp = GetLoadedGrid();
+
+    for (int i = 0; i < NumGrids; i++)
+    {
+        for (int j = 0; j < NumGrids; j++)
+        {
+            if (temp.gGrid[i][j]->type != EMPTY)
+            {
+                Collider* cLOne = CLM_AddComponent(temp.gGrid[i][j]);
+                CLM_Set(cLOne, COL_BOX, LevelOne_OnCollision);
+                cLOne->isLockedPos = 1;
+            }
+        }
+    }
 }
 
 void LevelOne_update(void)
@@ -102,6 +160,7 @@ void LevelOne_update(void)
 
     SM_SystemsUpdate();
 
+    RM_SetCameraPosition(gLOne->position);
     SM_SystemsLateUpdate();
 
     //CP_Graphics_ClearBackground(COLOR_BLUE);

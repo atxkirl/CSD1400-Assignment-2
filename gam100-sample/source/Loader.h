@@ -1,7 +1,7 @@
 #pragma once
-
-
 #define MAX_OBJECTIVES 10
+
+typedef struct Grid Grid;
 
 typedef struct Objectives
 {
@@ -49,4 +49,6 @@ void LoadGrid(char* cInput, int iLoad);
 
 void LoadObjectives(char* cInput);
 
-void SetObjectiveComplete(int index, int iSetter);
+void SetObjectiveComplete(int iIndex, int iSetter);
+
+Grid GetLoadedGrid();

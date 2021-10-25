@@ -1,11 +1,12 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include"Loader.h"
 #include "..\CProcessing\inc\cprocessing.h"
 #include "SystemManager.h"
 #include "FileParser.h"
-#include"Loader.h"
 #include "Colors.h"
 #include "LevelEditor.h"
+
 
 #define UIHEIGHT 50.f
 #define UIWIDTH 300.f
@@ -124,7 +125,7 @@ void LoadGrid(char* cInput, int iLoad)
 	ReadLevelFromFile(cFileLocation, objList);
 
 	float fWorldHeight = WORLD_HEIGHT;
-	float fCellSize = fWorldHeight / NumGrids; //fit 30 grids vertically in the screen
+	float fScale = fWorldHeight / NumGrids * 4.f; //fit 30 grids vertically in the screen
 
 	for (int i = 0; i < objList->iSize; i++)
 	{
@@ -133,8 +134,8 @@ void LoadGrid(char* cInput, int iLoad)
 			int iY = objList->fObjList[i]->iPosY;
 			int iX = objList->fObjList[i]->iPosX;
 			gLoadedGrids.gGrid[iY][iX]->type = objList->fObjList[i]->iType;
-			gLoadedGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * fCellSize + fCellSize * 0.5f, iY * fCellSize + fCellSize * 0.5f);
-			gLoadedGrids.gGrid[iY][iX]->scale = CP_Vector_Set(fCellSize, fCellSize);
+			gLoadedGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * fScale - fScale, iY * fScale - fScale);
+			gLoadedGrids.gGrid[iY][iX]->scale = CP_Vector_Set(fScale, fScale);
 			Renderer* r = RM_GetComponent(gLoadedGrids.gGrid[iY][iX]);
 			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 			r->color = CP_Color_Create(255, 255, 255, 255);
@@ -183,4 +184,9 @@ void LoadObjectives(char* cInput)
 void SetObjectiveComplete(int iIndex, int iSetter)
 {
 	oObjectiveList[iIndex - 1].isComplete = iSetter;
+}
+
+Grid GetLoadedGrid()
+{
+	return gLoadedGrids;
 }

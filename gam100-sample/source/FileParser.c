@@ -177,7 +177,7 @@ void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
 @param char* - Stuff to add to the file
 @return void
 */
-void WriteToFile(char* cFileName, char* cToAdd)
+void WriteToFile(char* cFileName, char** cToAdd)
 {
 	FILE* fFile;
 	errno_t eError;
@@ -186,7 +186,10 @@ void WriteToFile(char* cFileName, char* cToAdd)
 
 	if (eError == 0 && fFile != NULL)
 	{
-		fputs(cToAdd, fFile);
+		for (int i = 0; i < 450; i++)
+		{
+			fputs(cToAdd[i], fFile);
+		}
 		printf("Saved!! \n");
 		fclose(fFile);
 	}
