@@ -12,8 +12,10 @@ enum GridNodeState
 typedef struct GridNode
 {
 	int Curr;
-	int Next;
-	int Prev;
+	int Up;
+	int Down;
+	int Left;
+	int Right;
 } GridNode;
 
 typedef struct Grid

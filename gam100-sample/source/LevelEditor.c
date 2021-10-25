@@ -47,9 +47,11 @@ void LevelEditorInit()
 			r->color = CP_Color_Create(255, 255, 0, 255);
 			gGrids.gGrid[i][j] = go;
 
-			gGrids.nGrid[i][j].Curr = (enum GridNodeState) NotVisited;
-			gGrids.nGrid[i][j].Next = (enum GridNodeState) NotVisited;
-			gGrids.nGrid[i][j].Prev = (enum GridNodeState) NotVisited;
+			gGrids.nGrid[i][j].Curr = go->type == WALL ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Up = go->type == WALL ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Down = go->type == WALL ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Left = go->type == WALL ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Right = go->type == WALL ? Visited : NotVisited;
 		}
 	}
 
@@ -217,13 +219,16 @@ void PlaceObject()
 
 	if (!iAutoGenerate)
 	{
-		if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
+		if (CP_Input_GetMouseX() < NumGrids * iSize && CP_Input_GetMouseY() < NumGrids * iSize)
 		{
-			CheckGrid(CP_Input_GetMouseX() / fScaleBy - fMoveX, CP_Input_GetMouseY() / fScaleBy - fMoveY, objType);
-		}
-		if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
-		{
-			CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
+			if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
+			{
+				CheckGrid(CP_Input_GetMouseX() / fScaleBy - fMoveX, CP_Input_GetMouseY() / fScaleBy - fMoveY, objType);
+			}
+			if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
+			{
+				CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
+			}
 		}
 	}
 	else
@@ -309,24 +314,81 @@ void SaveGrid()
 
 void AutoGenerateGrid()
 {
+	//for (int i = 1; i < NumGrids - 1; i++)
+	//{
+	//	for (int j = 1; j < NumGrids - 1; j++)
+	//	{
+	//		int iObjType = EMPTY;
+	//		int iPercentage = rand() % 10;
+
+	//		if (iPercentage > 6 && iPercentage < 9)
+	//		{
+	//			iObjType = WALL;
+	//		}
+
+	//		else if (iPercentage == 9)
+	//		{
+	//			iObjType = (rand() % 2) + 1;
+	//		}
+
+	//		gGrids.gGrid[j][i]->type = iObjType;
+	//	}
+	//}
 	for (int i = 1; i < NumGrids - 1; i++)
 	{
 		for (int j = 1; j < NumGrids - 1; j++)
 		{
+			gGrids.nGrid[j][i].Curr = NotVisited;
+		}
+	}
+
+	int positionX = 1, positionY = 1;
+
+	while (1)
+	{
+		gGrids.nGrid[positionY][positionX].Up = gGrids.nGrid[positionY > 0 ? positionY - 1 : positionY][positionX].Curr;
+		gGrids.nGrid[positionY][positionX].Down = gGrids.nGrid[positionY < NumGrids ? positionY + 1 : positionY][positionX].Curr;
+		gGrids.nGrid[positionY][positionX].Left = gGrids.nGrid[positionY][positionX > 0 ? positionX - 1 : positionX].Curr;
+		gGrids.nGrid[positionY][positionX].Right = gGrids.nGrid[positionY][positionX < NumGrids ? positionX + 1 : positionX].Curr;
+
+		if (!(gGrids.nGrid[positionY][positionX].Up == NotVisited
+			|| gGrids.nGrid[positionY][positionX].Down == NotVisited
+			|| gGrids.nGrid[positionY][positionX].Left == NotVisited
+			|| gGrids.nGrid[positionY][positionX].Right == NotVisited))
+		{
+			break;
+		}
+
+		if (gGrids.nGrid[positionY][positionX].Curr == NotVisited)
+		{
 			int iObjType = EMPTY;
 			int iPercentage = rand() % 10;
 
-			if (iPercentage > 6 && iPercentage < 9)
+			if (iPercentage > 6)
 			{
 				iObjType = WALL;
 			}
 
-			else if (iPercentage == 9)
-			{
-				iObjType = (rand() % 2) + 1;
-			}
+			gGrids.gGrid[positionY][positionX]->type = iObjType;
+			gGrids.nGrid[positionY][positionX].Curr = Visited;
+		}
 
-			gGrids.gGrid[j][i]->type = iObjType;
+
+		if (gGrids.nGrid[positionY][positionX].Down == NotVisited)
+		{
+			positionY += 1;
+		}
+		else if (gGrids.nGrid[positionY][positionX].Right == NotVisited)
+		{
+			positionX += 1;
+		}
+		else if (gGrids.nGrid[positionY][positionX].Up == NotVisited)
+		{
+			positionY -= 1;
+		}
+		else if (gGrids.nGrid[positionY][positionX].Left == NotVisited)
+		{
+			positionX -= 1;
 		}
 	}
 
