@@ -32,7 +32,7 @@ int LevelOne_OnCollision(Collider* left, Collider* right)
             SetObjectiveComplete(1, 1);
             for (int i = 0; i < MAX_OBJECTIVES; i++)
             {
-                if (oObjectiveList[i].isComplete)
+                if (oObjectiveList[i].isComplete && !oObjectiveList[i].isSet)
                 {
                     ObjectiveUI->position = CP_Vector_Set(180.0f, 50.0f + i * 50.f);
 
@@ -40,6 +40,7 @@ int LevelOne_OnCollision(Collider* left, Collider* right)
                     rObjUI->color = CP_Color_Create(255, 255, 255, 255);
                     rObjUI->text = "Done.";
                     rObjUI->renderPriority = PRI_UI;
+                    oObjectiveList[i].isSet = 1;
                 }
             }
         }

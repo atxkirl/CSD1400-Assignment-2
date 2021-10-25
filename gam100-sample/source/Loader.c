@@ -21,6 +21,7 @@ void LoaderInit()
 	for (int i = 0; i < MAX_OBJECTIVES; i++)
 	{
 		oObjectiveList[i].isComplete = 0;
+		oObjectiveList[i].isSet = 0;
 	}
 
 	// set all to empty first

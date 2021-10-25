@@ -7,6 +7,7 @@ typedef struct Objectives
 {
 	char cObjective[100];
 	int isComplete;
+	int isSet;
 }Objectives;
 
 Objectives oObjectiveList[MAX_OBJECTIVES];
