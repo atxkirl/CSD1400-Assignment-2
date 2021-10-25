@@ -20,18 +20,15 @@ int hy_OnCollision(Collider* left, Collider* right)
 {
     //me, other
     if (strcmp(left->obj->tag, "player") == 0 
-        && strcmp(right->obj->tag, "wall") == 0)
+        && strcmp(right->obj->tag, "Trigger") == 0)
     {
-        //GameObject* p = left->obj;
-        //GameObject* w = right->obj;
-        //printf("OUCH!");
-        //push the player out of wall
-        //wall -> player vector
-        //CP_Vector relative = CP_Vector_Subtract(p->position, w->position);
-        //CP_Vector pVel = CP_Vector_Normalize(left->velocity);
-        //if x is positive, check minx
-        
-        //p->position = CP_Vector_Subtract(p->position, CP_Vector_Scale(left->velocity, CP_System_GetDt()));
+        printf("HELLO");
+
+        //LinkedList* t = GOM_GetTempObjects();
+        //LL_Add(&t, right->obj);
+        SM_DeleteGameObject(right->obj);
+        //deletes the trigger when collided
+        return CLM_RESPONSE_REMOVENONE;
     }
     else if (strcmp(left->obj->tag, "test") == 0 && strcmp(right->obj->tag, "Click") == 0)
     {
@@ -98,6 +95,17 @@ void HongYu_init(void)
     c = CLM_AddComponent(wall);
     CLM_Set(c, COL_CIRCLE, NULL);
     c->isLockedPos = 1;
+
+    wall = GOM_Create2(CIRCLE,
+        CP_Vector_Set(80, 80), 0.0f, CP_Vector_Set(30, 30));
+    r = RM_AddComponent(wall);
+    r->color = CP_Color_Create(200, 100, 100, 200);
+    r->text = "TRIGGER";
+    wall->tag = "Trigger";
+    c = CLM_AddComponent(wall);
+    CLM_Set(c, COL_CIRCLE, NULL);
+    //c->isLockedPos = 1;
+    c->isTrigger = 1;
 
     //GameObject* wad = GOM_CreateGameObject(CIRCLE, GAME_OBJECT);
     //wad->position = CP_Vector_Set(0.1f * width, 0.9f * height);

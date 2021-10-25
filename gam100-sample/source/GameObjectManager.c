@@ -1,10 +1,9 @@
 #include "GameObjectManager.h"
-#include "RenderManager.h"
 #include <stdlib.h>
-#include "CollisionManager.h"
+#include "SystemManager.h"
 
 LinkedList* objectList = NULL;
-LinkedList* tempList = NULL;
+//LinkedList* tempList = NULL;
 
 void GOM_Init()
 {
@@ -27,24 +26,24 @@ void GOM_Clear()
 		l = l->next;
 	}
 	LL_Clear(&objectList);
-	LL_Clear(&tempList);
+	//LL_Clear(&tempList);
 }
 int GOM_GetIndex(GameObject* go)
 {
 	return LL_GetIndexPtr(objectList, go);
 }
 
-void GOM_ClearTempObjects()
-{
-	LinkedList* l = tempList;
-	while (l)
-	{
-		LL_RemovePtr(&objectList, l->curr);
-		free(l->curr);
-		l = l->next;
-	}
-	LL_Clear(&tempList);
-}
+//void GOM_ClearTempObjects()
+//{
+//	LinkedList* l = tempList;
+//	while (l)
+//	{
+//		LL_RemovePtr(&objectList, l->curr);
+//		free(l->curr);
+//		l = l->next;
+//	}
+//	LL_Clear(&tempList);
+//}
 
 GameObject* GOM_Create(OBJECT_TYPE type)
 {
@@ -76,7 +75,8 @@ GameObject* GOM_Create(OBJECT_TYPE type)
 GameObject* GOM_CreateTemp(OBJECT_TYPE type)
 {
 	GameObject* go = GOM_Create(type);
-	LL_Add(&tempList, go);
+	//LL_Add(&tempList, go);
+	SM_DeleteGameObject(go);
 	return go;
 }
 
@@ -98,10 +98,10 @@ int GOM_GetCount()
 	return LL_GetCount(objectList);
 }
 
-LinkedList* GOM_GetTempObjects()
-{
-	return tempList;
-}
+//LinkedList* GOM_GetTempObjects()
+//{
+//	return tempList;
+//}
 
 GameObject* GOM_FactoryCreateGO(int type)
 {

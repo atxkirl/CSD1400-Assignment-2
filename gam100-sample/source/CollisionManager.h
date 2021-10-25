@@ -51,6 +51,7 @@ typedef struct Collider
 	int isKinematic;//aka isStatic, does not move due to force
 	int isLockedPos;//aka unity's locked x,y
 	int isEnabled;
+	int isTrigger;
 	int useScaleValue;
 	float radius;
 	float width, height;

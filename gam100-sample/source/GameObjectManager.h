@@ -63,21 +63,21 @@ void GOM_Clear();
 @return int index of the gameobject
 */
 int GOM_GetIndex(GameObject*);
-/*!
-@brief Clears all the temp objects for the frame
-@return void
-*/
-void GOM_ClearTempObjects();
+///*!
+//@brief Clears all the temp objects for the frame
+//@return void
+//*/
+//void GOM_ClearTempObjects();
 /*!
 @brief Get the number of objects
 @return int number of objects
 */
 int GOM_GetCount();
 
-/*!
-@brief Get list of temp objects
-@return LinkedList* of temp objects
-*/
-LinkedList* GOM_GetTempObjects();
+///*!
+//@brief Get list of temp objects
+//@return LinkedList* of temp objects
+//*/
+//LinkedList* GOM_GetTempObjects();
 
 GameObject* GOM_FactoryCreateGO(int type);//int according to OBJECT_TYPE

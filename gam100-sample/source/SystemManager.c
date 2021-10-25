@@ -1,5 +1,35 @@
 #include "SystemManager.h"
+#include "LinkedList.h"
 
+LinkedList* delList;
+
+/*!
+@brief Delete gameobject from all systems
+@param g - gameobject clean delete
+@return void
+*/
+void SM_DeleteFromAllSystems(GameObject* g)
+{
+	for (int i = 0; i < COM_COUNT; i++)
+	{
+		void* c = SM_GetComponent(g, i);
+		if (c)
+		{
+			switch (i)
+			{
+			case COM_RENDERER:
+				RM_RemoveRenderObject((Renderer*)c);
+				break;
+			case COM_COLLISION:
+				CLM_Remove((Collider*)c);
+				break;
+			case COM_ANIMATION:
+				AM_Remove((Animation*)c);
+				break;
+			}
+		}
+	}
+}
 
 void SM_SystemsInit()
 {
@@ -22,12 +52,13 @@ void SM_SystemsUpdate()
 
 void SM_SystemsLateUpdate()
 {
-	LinkedList* arr = GOM_GetTempObjects();
+	LinkedList* arr = delList;
 	for (; arr; arr = arr->next)
 	{
 		SM_DeleteFromAllSystems((GameObject*)(arr->curr));
 	}
-	GOM_ClearTempObjects();
+	LL_Clear(&delList);
+	//GOM_ClearTempObjects();
 	RM_Render();
 }
 
@@ -57,28 +88,11 @@ void* SM_GetComponent(GameObject* g, COMPONENT c)
 	return ret;
 }
 
-void SM_DeleteFromAllSystems(GameObject* g)
+void SM_DeleteGameObject(GameObject* g)
 {
-	for (int i = 0; i < COM_COUNT; i++)
-	{
-		void* c = SM_GetComponent(g, i);
-		if (c)
-		{
-			switch (i)
-			{
-			case COM_RENDERER:
-				RM_RemoveRenderObject((Renderer*)c);
-				break;
-			case COM_COLLISION:
-				CLM_Remove((Collider*)c);
-				break;
-			case COM_ANIMATION:
-				AM_Remove((Animation*)c);
-				break;
-			}
-		}
-	}
+	LL_Add(&delList, g);
 }
+
 
 //void* SM_AddComponent(GameObject* g, COMPONENT c)
 //{

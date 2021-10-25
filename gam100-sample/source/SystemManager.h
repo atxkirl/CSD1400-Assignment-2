@@ -62,8 +62,8 @@ void* SM_GetComponent(GameObject*, COMPONENT);
 //void* SM_AddComponent(GameObject*, COMPONENT);
 
 /*!
-@brief Delete gameobject from all systems
+@brief Delete gameobject from all systems AFTER Update()
 @param g - gameobject clean delete
 @return void
 */
-void SM_DeleteFromAllSystems(GameObject*);
+void SM_DeleteGameObject(GameObject*);

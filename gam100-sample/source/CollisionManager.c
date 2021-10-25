@@ -216,6 +216,7 @@ Collider* CLM_AddComponent(GameObject* g)
 		c->isKinematic = 0;
 		c->isLockedPos = 0;
 		c->isEnabled = 1;
+		c->isTrigger = 0;
 		c->OnCollision = NULL;
 		c->useScaleValue = 1;
 		c->radius = g->scale.x * 0.5f;
@@ -303,14 +304,18 @@ void CLM_Update()
 			
 			if (IsCollide(left, right))
 			{
-				if (left->type == COL_CIRCLE && right->type == COL_CIRCLE)
-					SnapCircleOutOfCircle(left, right);
-				else if (left->type == COL_CIRCLE && right->type == COL_BOX)
-					SnapCircleOutOfBox(left, right);
-				else if (left->type == COL_BOX && right->type == COL_CIRCLE)
-					SnapCircleOutOfBox(right, left);
-				else if (left->type == COL_BOX && right->type == COL_BOX)
-					SnapBoxOutOfBox(left, right);
+				if (!left->isTrigger && !right->isTrigger)
+				{
+					if (left->type == COL_CIRCLE && right->type == COL_CIRCLE)
+						SnapCircleOutOfCircle(left, right);
+					else if (left->type == COL_CIRCLE && right->type == COL_BOX)
+						SnapCircleOutOfBox(left, right);
+					else if (left->type == COL_BOX && right->type == COL_CIRCLE)
+						SnapCircleOutOfBox(right, left);
+					else if (left->type == COL_BOX && right->type == COL_BOX)
+						SnapBoxOutOfBox(left, right);
+				}
+
 				//response
 				int ret = CLM_RESPONSE_REMOVENONE;
 				int ret2 = CLM_RESPONSE_REMOVENONE;
