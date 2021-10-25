@@ -2,6 +2,7 @@
 #define MAX_OBJECTIVES 10
 
 typedef struct Grid Grid;
+Grid *gLoadedGrids;
 
 typedef struct Objectives
 {
@@ -11,7 +12,6 @@ typedef struct Objectives
 }Objectives;
 
 Objectives oObjectiveList[MAX_OBJECTIVES];
-
 /*!
 @brief Initialises the variables
 @param void
@@ -34,13 +34,6 @@ void LoaderUpdate();
 void LoaderExit();
 
 /*!
-@brief Render
-@param void
-@return void
-*/
-void LoaderRender();
-
-/*!
 @brief Loads the Grid based on the cInput which is the file name.
 
 @param char* - File name
@@ -51,5 +44,3 @@ void LoadGrid(char* cInput, int iLoad);
 void LoadObjectives(char* cInput);
 
 void SetObjectiveComplete(int iIndex, int iSetter);
-
-Grid GetLoadedGrid();

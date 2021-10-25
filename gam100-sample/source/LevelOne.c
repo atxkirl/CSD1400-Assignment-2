@@ -21,6 +21,7 @@ GameObject* gLOne = NULL;
 GameObject* ObjectiveUI = NULL;
 
 void LevelOneUI_render();
+void LevelOneGridColliderInit();
 
 int LevelOne_OnCollision(Collider* left, Collider* right)
 {
@@ -76,9 +77,9 @@ void LevelOne_init(void)
     ObjectiveUIBox->scale = CP_Vector_Set(200.f, 70.f);
     ObjectiveUIBox->position = CP_Vector_Set(120.0f, 50.0f);
     ObjectiveUIBox->tag = "ObjectiveUI";
-    Renderer* rObjUIBox = RM_AddComponent(ObjectiveUIBox);
-    rObjUIBox->color = CP_Color_Create(255, 255, 255, 255);
-    rObjUIBox->renderPriority = PRI_UI;
+    r = RM_AddComponent(ObjectiveUIBox);
+    r->color = CP_Color_Create(255, 255, 255, 255);
+    r->renderPriority = PRI_UI;
 
     for (int i = 0; i < MAX_OBJECTIVES; i++)
     {
@@ -88,10 +89,10 @@ void LevelOne_init(void)
         ObjectiveUI->scale = CP_Vector_Set(175.f, 50.f);
         ObjectiveUI->tag = "ObjectiveUI";
         ObjectiveUI->position = CP_Vector_Set(100.0f, 50.0f + i * 50.f);
-        Renderer* rObjUI = RM_AddComponent(ObjectiveUI);
-        rObjUI->color = CP_Color_Create(255, 255, 255, 255);
-        rObjUI->text = oObjectiveList[i].cObjective;
-        rObjUI->renderPriority = PRI_UI;
+        r= RM_AddComponent(ObjectiveUI);
+        r->color = CP_Color_Create(255, 255, 255, 255);
+        r->text = oObjectiveList[i].cObjective;
+        r->renderPriority = PRI_UI;
         /*}
         else
         {
@@ -104,21 +105,7 @@ void LevelOne_init(void)
     r = RM_AddComponent(gLOne);
     RM_LoadImage(r, "Assets/bananaboi.png");
     CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
-
-    Grid temp = GetLoadedGrid();
-
-    for (int i = 0; i < NumGrids; i++)
-    {
-        for (int j = 0; j < NumGrids; j++)
-        {
-            if (temp.gGrid[i][j]->type != EMPTY)
-            {
-                Collider* cLOne = CLM_AddComponent(temp.gGrid[i][j]);
-                CLM_Set(cLOne, COL_BOX, LevelOne_OnCollision);
-                cLOne->isLockedPos = 1;
-            }
-        }
-    }
+    LevelOneGridColliderInit();
 }
 
 void LevelOne_update(void)
@@ -188,4 +175,19 @@ void LevelOneUI_render()
     //CP_Graphics_DrawRect(50.f, 170.f, 75.f, 50.f);
     CP_Settings_Fill(COLOR_BLACK); // r, g, b, a
     //CP_Font_DrawText("Objective", 55, 200);
+}
+
+void LevelOneGridColliderInit()
+{
+    for (int i = 0; i < NumGrids; i++)
+    {
+        for (int j = 0; j < NumGrids; j++)
+        {
+            if (gLoadedGrids->gGrid[i][j]->type != EMPTY)
+            {
+                CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOne_OnCollision);
+                CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;
+            }
+        }
+    }
 }
