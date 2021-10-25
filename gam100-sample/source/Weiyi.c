@@ -22,9 +22,9 @@
 GameObject* e = NULL;
 Renderer* r;
 
-int wy_OnCollision(Collider* left, Collider* right) {
+void wy_OnCollision(Collider* left, Collider* right) {
 
-    return CLM_RESPONSE_REMOVENONE;
+    return;
 }
 void Weiyi_init(void)
 {

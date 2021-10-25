@@ -16,7 +16,7 @@
 GameObject* g = NULL;
 int tempSize = 0;
 
-int hy_OnCollision(Collider* left, Collider* right)
+void hy_OnCollision(Collider* left, Collider* right)
 {
     //me, other
     if (strcmp(left->obj->tag, "player") == 0 
@@ -24,11 +24,9 @@ int hy_OnCollision(Collider* left, Collider* right)
     {
         printf("HELLO");
 
-        //LinkedList* t = GOM_GetTempObjects();
-        //LL_Add(&t, right->obj);
         SM_DeleteGameObject(right->obj);
         //deletes the trigger when collided
-        return CLM_RESPONSE_REMOVENONE;
+        return;
     }
     else if (strcmp(left->obj->tag, "test") == 0 && strcmp(right->obj->tag, "Click") == 0)
     {
@@ -47,7 +45,6 @@ int hy_OnCollision(Collider* left, Collider* right)
         }
 
     }
-    return CLM_RESPONSE_REMOVENONE;
 }
 
 void HongYu_init(void)

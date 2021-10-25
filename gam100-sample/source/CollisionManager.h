@@ -5,10 +5,10 @@
 #include "LinkedList.h"
 #include "GameObject.h"
 
-#define CLM_RESPONSE_REMOVENONE 0
-#define CLM_RESPONSE_REMOVELEFT -1
-#define CLM_RESPONSE_REMOVERIGHT -2
-#define CLM_RESPONSE_REMOVEBOTH -3
+//#define CLM_RESPONSE_REMOVENONE 0
+//#define CLM_RESPONSE_REMOVELEFT -1
+//#define CLM_RESPONSE_REMOVERIGHT -2
+//#define CLM_RESPONSE_REMOVEBOTH -3
 
 /*
 * Not all Gameobjects has collision. To create a collider for gameobject, call function CLM_AddCollider(...);
@@ -41,7 +41,7 @@ GameObject* obj: reference to the gameobject. needs its positional information
 OnCollision OnCollision: function pointer to the OnCollide() response. To be passed in during init if there is a collision 	response expected. Function pointer has to match int(Collider*, Collider*)
 */
 typedef struct Collider Collider;
-typedef int (*OnCollision)(Collider*, Collider*);
+typedef void (*OnCollision)(Collider*, Collider*);
 typedef struct Collider
 {
 	GameObject* obj;

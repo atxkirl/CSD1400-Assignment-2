@@ -20,7 +20,7 @@
 
 void MarcusUI_render();
 
-int Marcus_OnCollision(Collider* left, Collider* right)
+void Marcus_OnCollision(Collider* left, Collider* right)
 {
     //me, other
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
@@ -30,7 +30,7 @@ int Marcus_OnCollision(Collider* left, Collider* right)
         else if (strcmp(((GameObject*)left->obj)->tag, "levelone") == 0)
             SceneManager_ChangeSceneByName("levelone");
     }
-    return CLM_RESPONSE_REMOVENONE;
+    return;
 }
 
 void Marcus_init(void)

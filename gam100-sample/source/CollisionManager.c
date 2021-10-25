@@ -7,28 +7,7 @@
 
 LinkedList* CLM_objects = NULL;
 
-/*!
-@brief Handle which collider to be added to the delList according to del code
-@param list - reference to the delete-list
-@param l - ptr to left collider
-@param r - ptr to right collider
-@param del - del code
-@return void
-*/
-void AddToDelList(LinkedList** list, Collider* l, Collider* r, int del)
-{
-	switch (del)
-	{
-	case CLM_RESPONSE_REMOVELEFT: LL_SetAdd(list, (void*)l);
-		break;
-	case CLM_RESPONSE_REMOVERIGHT: LL_SetAdd(list, (void*)r);
-		break;
-	case CLM_RESPONSE_REMOVEBOTH:
-		LL_SetAdd(list, (void*)l);
-		LL_SetAdd(list, (void*)r);
-		break;
-	}
-}
+
 /*!
 @brief Snap Circle object out of another Circle object.
 	Snaps both position to nearest free space
@@ -276,7 +255,6 @@ void CLM_Update()
 {
 	void** objArray = LL_ToArray(CLM_objects);
 	int size = LL_GetCount(CLM_objects);
-	LinkedList* delList = NULL;
 	for (int i = 0; i < size; ++i)
 	{
 		Collider* left = (Collider*)objArray[i];
@@ -317,27 +295,13 @@ void CLM_Update()
 				}
 
 				//response
-				int ret = CLM_RESPONSE_REMOVENONE;
-				int ret2 = CLM_RESPONSE_REMOVENONE;
 				if (left->OnCollision != NULL)
-					ret = left->OnCollision(left, right);
+					left->OnCollision(left, right);
 				if (right->OnCollision != NULL)
-					ret2 = right->OnCollision(right, left);
-
-				AddToDelList(&delList, left, right, ret);
-				AddToDelList(&delList, right, left, ret2);
-
+					right->OnCollision(right, left);
 			}
 		}
 	}
-
-	//printf("SIZE del %d", LL_GetCount(CLM_objects));
-	for (; delList; delList = delList->next)
-	{
-		//printf("Removing from CollisionManager %s", ((Collider*)delList->curr)->obj->tag);
-		LL_RemovePtr(&CLM_objects, delList->curr);
-	}
-	LL_Clear(&delList);
 }
 
 int IsCollide(Collider* left, Collider* right)

@@ -25,7 +25,7 @@ int is_btn_colliding(float x, float y, float buttonX, float buttonY) {
         y >= buttonY && y <= buttonY + BUTTON_HEIGHT;
 }
 
-int game_OnCollision(Collider* left, Collider* right)
+void game_OnCollision(Collider* left, Collider* right)
 {
     //me, other
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
@@ -42,7 +42,6 @@ int game_OnCollision(Collider* left, Collider* right)
             SceneManager_ChangeSceneByName("xinyun");
     }
     printf("INSIDE!");
-    return CLM_RESPONSE_REMOVENONE;
 }
 
 void game_init(void)

@@ -23,7 +23,7 @@ GameObject* ObjectiveUI = NULL;
 void LevelOneUI_render();
 void LevelOneGridColliderInit();
 
-int LevelOne_OnCollision(Collider* left, Collider* right)
+void LevelOne_OnCollision(Collider* left, Collider* right)
 {
     //me, other
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
@@ -46,7 +46,6 @@ int LevelOne_OnCollision(Collider* left, Collider* right)
             }
         }
     }
-    return CLM_RESPONSE_REMOVENONE;
 }
 
 void LevelOne_init(void)

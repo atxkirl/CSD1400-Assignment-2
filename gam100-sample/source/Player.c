@@ -27,7 +27,7 @@ void counter(void) {
     }
 }
 
-int Player_OnCollision(Collider* left, Collider* right) 
+void Player_OnCollision(Collider* left, Collider* right) 
 {
     while (p_invincible == 0) {
         if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "enemy") == 0) {
@@ -36,7 +36,6 @@ int Player_OnCollision(Collider* left, Collider* right)
             p_invincible = 1;
         }
     }
-    return CLM_RESPONSE_REMOVENONE;
 }
 
 void PLY_CreatePlayer(){
