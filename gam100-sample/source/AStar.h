@@ -1,21 +1,33 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
 #include "LinkedList.h"
 
 /*-------------------*/
 /*	AStar Variables  */
 /*-------------------*/
 
-typedef struct
+typedef enum
+{
+	NODE_DEFAULT,
+	NODE_HIDINGSPOT,
+	NODE_WALL
+}AStar_Type;
+
+typedef struct AStar_Node AStar_Node;
+struct AStar_Node
 {
 	int row; // Position of this Node in a map.
 	int column; // Position of this Node in a map.
+	AStar_Type type; // Type of this node. Is it walkable? Is it a wall?
 
 	int fCost; // Total cost of this node. (f = g + h)
 	int gCost; // Distance travelled from start node, to get to this node.
 	int hCost; // Estimated distance remaining to end node.
-}AStar_Node;
+	AStar_Node* parent; // Parent node, used to "remember" the path.
+};
 
 typedef struct
 {
@@ -24,19 +36,22 @@ typedef struct
 	int columns; // Number of columns in this map.
 }AStar_Map;
 
-int deltaRow[] = {-1, 0, 1};
-int deltaCol[] = {-1, 0, 1};
+static int directions = 8; // Number of directions to check around a node for it's neighbours.
+static int deltaRow[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
+static int deltaCol[] = { -1, -1, -1, 0, 0, 1, 1, 1 };
+static AStar_Node* neighbours[8];
 
-// Lists needed for A*
-// - Open List (stores nodes that we want to test)
-// - Closed List (stores nodes that we've already tested)
-// - Return List (list of path nodes, from start node to end node)
+//static int directions = 4; // Number of directions to check around a node for it's neighbours.
+//static int deltaRow[] = { -1, 0, 0, 1 };
+//static int deltaCol[] = { 0, -1, 1, 0 };
+//static AStar_Node* neighbours[4];
 
 
 /*-------------------*/
 /*	AStar Functions  */
 /*-------------------*/
 
+static int Estimate(int currRow, int currCol, int destRow, int destCol);
 /// <summary>
 /// Returns a path from the starting node, to the ending node.
 /// Path is a LinkedList of Node*.
