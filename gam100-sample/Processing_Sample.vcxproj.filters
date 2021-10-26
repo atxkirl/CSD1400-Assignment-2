@@ -68,6 +68,9 @@
     <ClCompile Include="source\Player.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\AStar.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -128,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="source\Player.h">
       <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AStar.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
