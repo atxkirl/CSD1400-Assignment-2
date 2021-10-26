@@ -37,10 +37,10 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 		int lowestFIndex = 0;
 		for (int i = 0; i < LL_GetCount(openList); ++i) // Loop through openList to find node with the lowest F cost.
 		{
-			LinkedList* temp = LL_Get(openList, i);
+			void* temp = LL_Get(openList, i);
 			if (temp)
 			{
-				AStar_Node* tempNode = (AStar_Node*)temp->curr;
+				AStar_Node* tempNode = (AStar_Node*)temp;
 				if (tempNode)
 				{
 					if (lowestF == NULL || tempNode->fCost < lowestF->fCost)
@@ -53,7 +53,7 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 		}
 		if (lowestF) // We found it!!
 		{
-			LL_Add(&closedList, LL_Get(openList, lowestFIndex)->curr);
+			LL_Add(&closedList, LL_Get(openList, lowestFIndex));
 			LL_RemoveIndex(&openList, lowestFIndex);
 
 			if (lowestF->row == ending->row && lowestF->column == ending->column) // Found ending node!

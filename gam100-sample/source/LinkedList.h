@@ -23,8 +23,8 @@ struct LinkedList
 
 int LL_GetCount(LinkedList*);
 int LL_IsEmpty(LinkedList*);
-LinkedList* LL_Get(LinkedList* ,int);
-LinkedList* LL_GetLast(LinkedList*);
+void* LL_Get(LinkedList* ,int);
+void* LL_GetLast(LinkedList*);
 /*!
 @brief Adds a node to the linkedlist containing the void* as data.
 	This function creates and add a node to the end of the list.

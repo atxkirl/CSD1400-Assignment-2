@@ -44,16 +44,15 @@ void MS_PushMatrix(LinkedList* ms)
 
 LinkedList* MS_PopMatrix(LinkedList* ms)
 {
-	LinkedList* last = LL_GetLast(ms);
-	CP_Matrix* lmat = (CP_Matrix*)last->curr;
+	CP_Matrix* lmat = (CP_Matrix*)LL_GetLast(ms);
+	LL_RemovePtr(&ms, lmat);
 	free(lmat);
-	LL_RemoveLL(&ms, last);
 	return ms;
 }
 
 CP_Matrix* MS_Top(LinkedList* ms)
 {
-	return (CP_Matrix*)(LL_GetLast(ms)->curr);
+	return (CP_Matrix*)(LL_GetLast(ms));
 }
 
 LinkedList* MS_Clear(LinkedList* ms)

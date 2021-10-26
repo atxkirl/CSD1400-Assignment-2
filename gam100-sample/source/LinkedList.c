@@ -40,6 +40,22 @@ LinkedList* RemoveThis(LinkedList* currPtr)
 	return GetHead(prev);
 }
 
+/*!
+@brief Returns last linkedlist node
+@param ll - pointer of the head of the list
+@return LinkedList* node of the last
+*/
+LinkedList* GetLastNode(LinkedList* ll)
+{
+	if (LL_IsEmpty(ll))
+		return NULL;
+	LinkedList* ret = ll;
+
+	while (ret->next != NULL)
+		ret = ret->next;
+	return ret;
+}
+
 int LL_GetCount(LinkedList* ll)
 {
 	if (LL_IsEmpty(ll))
@@ -57,7 +73,7 @@ int LL_IsEmpty(LinkedList* ll)
 {
 	return ll == NULL;
 }
-LinkedList* LL_Get(LinkedList* ll, int index)
+void* LL_Get(LinkedList* ll, int index)
 {
 	if (LL_IsEmpty(ll))
 		return NULL;
@@ -66,25 +82,19 @@ LinkedList* LL_Get(LinkedList* ll, int index)
 	while (node != NULL)
 	{
 		if (count == index)
-			return node;
+			return node->curr;
 		node = node->next;
 		count++;
 	}
 	return NULL;
 }
-LinkedList* LL_GetLast(LinkedList* ll)
+void* LL_GetLast(LinkedList* ll)
 {
-	if (LL_IsEmpty(ll))
-		return NULL;
-	LinkedList* ret = ll;
-
-	while (ret->next != NULL)
-		ret = ret->next;
-	return ret;
+	return GetLastNode(ll)->curr;
 }
 void LL_Add(LinkedList** ll, void* ptr)
 {
-	LinkedList* lptr = LL_GetLast(*ll);
+	LinkedList* lptr = GetLastNode(*ll);
 	LinkedList* newPtr = malloc(sizeof(LinkedList));
 	if (lptr == NULL)
 	{
@@ -151,14 +161,19 @@ void LL_RemovePtr(LinkedList** ll, void* ptr)
 }
 void LL_RemoveIndex(LinkedList** ll, int index)
 {
-	LinkedList* rem = LL_Get(*ll, index);
-	if (!rem)
+	int count = 0;
+	LinkedList* node = *ll;
+	for (; node; node = node->next)
+	{
+		if (count == index)
+		{
+			*ll = RemoveThis(node);
+			return;
+		}
+		count++;
+	}
+	if (index >= count)
 		return;
-	*ll = RemoveThis(rem);
-	//if (LL_IsEmpty(*ll))
-	//	return NULL;
-	
-	//return ll;
 }
 
 int LL_GetIndexLL(LinkedList* ll, LinkedList* ptr)
