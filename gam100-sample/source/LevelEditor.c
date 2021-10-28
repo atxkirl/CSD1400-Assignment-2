@@ -337,6 +337,13 @@ void SaveGrid()
 
 void AutoGenerateGrid()
 {
+	int iCount;
+	printf("Insert Seed: ");
+	scanf_s("%d", &iCount);
+
+	srand(iCount);
+	// i referenced prims algorithm.
+
 	//for (int i = 1; i < NumGrids - 1; i++)
 	//{
 	//	for (int j = 1; j < NumGrids - 1; j++)
@@ -357,72 +364,74 @@ void AutoGenerateGrid()
 	//		gGrids.gGrid[j][i]->type = iObjType;
 	//	}
 	//}
-	for (int i = 1; i < NumGrids - 1; i++)
+
+	//Set everything to wall.
+	for (int i = 1; i < NumGrids; i++)
 	{
-		for (int j = 1; j < NumGrids - 1; j++)
+		for (int j = 1; j < NumGrids; j++)
 		{
 			gGrids.nGrid[j][i].Curr = NotVisited;
 			gGrids.gGrid[j][i]->type = WALL;
 		}
 	}
 
+	// select a random cell in the grid
 	int positionX = 1 + rand() % (NumGrids - 2), positionY = 1 + rand() % (NumGrids - 2);
 
-	LinkedList* l = NULL;
+	LinkedList* ll_WallList = NULL;
+	LL_Add(&ll_WallList, gGrids.gGrid[positionY][positionX]);
 
-	LL_Add(&l, gGrids.gGrid[positionY][positionX]);
-	if (positionY - 2 > 1)
-	{
-		if (gGrids.gGrid[positionY - 2][positionX]->type == WALL)
-			LL_Add(&l, gGrids.gGrid[positionY - 2][positionX]); // up
-	}
-
-	if (positionY < NumGrids - 3)
-	{
-		if (gGrids.gGrid[positionY + 2][positionX]->type == WALL)
-			LL_Add(&l, gGrids.gGrid[positionY + 2][positionX]); // down
-	}
-
-	if (positionX - 2 > 1)
-	{
-		if (gGrids.gGrid[positionY][positionX - 2]->type == WALL)
-			LL_Add(&l, gGrids.gGrid[positionY][positionX - 2]); // left
-	}
-
-	if (positionX < NumGrids - 3)
-	{
-		if (gGrids.gGrid[positionY][positionX + 2]->type == WALL)
-			LL_Add(&l, gGrids.gGrid[positionY][positionX + 2]); // right
-	}
+	// Select the surrounding walls and add to the list
+	AddFrontierCell(positionX, positionY, ll_WallList);
 
 	GameObject* tempGO;
-	tempGO = (GameObject*)l->curr;
+	tempGO = (GameObject*)ll_WallList->curr;
 
-	while (LL_GetCount(GetHead(l)) != 0)
+	while (1)
 	{
-		if (tempGO->type == WALL)
-		{
-			tempGO->type = EMPTY;
+		tempGO->type = EMPTY;
+		LL_RemovePtr(&ll_WallList, tempGO);
 
-			int iNext = rand() % LL_GetCount(GetHead(l));
+		if (LL_GetCount(GetHead(ll_WallList)) == 0)
+			break;
 
-			void* tempNode = LL_Get(l, iNext);
-			LL_RemovePtr(&l, tempNode);
-			l = GetHead(l);
-			l->curr = tempNode;
+		//Select the next cell from the list.
+		int iNext = rand() % LL_GetCount(GetHead(ll_WallList));
+		void* tempNode = LL_Get(ll_WallList, iNext);
+		LL_RemovePtr(&ll_WallList, tempNode);
 
-			tempGO = (GameObject*)l->curr;
-			int DifferenceX = positionX - (int)tempGO->position.x;
-			int DifferenceY = positionY - (int)tempGO->position.y;
+		if (!ll_WallList)
+			break;
 
-			gGrids.gGrid[positionY + DifferenceY][positionX + DifferenceX]->type = EMPTY;
+		ll_WallList->curr = tempNode;
+		tempGO = (GameObject*)tempNode;
 
-			positionX = (int)tempGO->position.x;
-			positionY = (int)tempGO->position.y;
-		}
+		//int DifferenceX = (int)tempGO->position.x - positionX;
+		//int DifferenceY = (int)tempGO->position.y - positionY;
+
+		//printf("Position: %d, %d\n", positionX, positionY);
+		//printf("TempGO: %d, %d\n", (int)tempGO->position.x, (int)tempGO->position.y);
+		//printf("DIFFERENCE: %d, %d\n\n", DifferenceX, DifferenceY);
+
+		//if (DifferenceX  > 0)
+		//	positionX += 1;
+		//else if (DifferenceX < 0)
+		//	positionX -= 1;
+
+		//if (DifferenceY > 0)
+		//	positionY += 1;
+		//else if (DifferenceY < 0)
+		//	positionY -= 1;
+
+		//gGrids.gGrid[positionY][positionX]->type = EMPTY;
+		//CheckSurrounding(positionX, positionY, (int)tempGO->position.x, (int)tempGO->position.y);
+
+		// set the new positions and add the new walls.
+		positionX = (int)tempGO->position.x;
+		positionY = (int)tempGO->position.y;
+		AddFrontierCell(positionX, positionY, ll_WallList);
 	}
 
-	free(tempGO);
 	/*while (1)
 	{
 		gGrids.nGrid[positionY][positionX].Up = gGrids.nGrid[positionY > 0 ? positionY - 1 : positionY][positionX].Curr;
@@ -473,3 +482,62 @@ void AutoGenerateGrid()
 
 	iAutoGenerate = 0;
 }
+
+void AddFrontierCell(int x, int y, LinkedList* List)
+{
+	int offset = 1;
+	int bounds = offset + 1;
+
+	if (gGrids.gGrid[y][x]->type != WALL)
+		return;
+
+	if (y > bounds)
+	{
+		if (gGrids.gGrid[y - offset][x]->type == WALL)
+			LL_Add(&List, gGrids.gGrid[y - offset][x]); // up
+	}
+
+	if (y < NumGrids - bounds)
+	{
+		if (gGrids.gGrid[y + offset][x]->type == WALL)
+			LL_Add(&List, gGrids.gGrid[y + offset][x]); // down
+	}
+
+	if (x > bounds)
+	{
+		if (gGrids.gGrid[y][x - offset]->type == WALL)
+			LL_Add(&List, gGrids.gGrid[y][x - offset]); // left
+	}
+
+	if (x < NumGrids - bounds)
+	{
+		if (gGrids.gGrid[y][x + offset]->type == WALL)
+			LL_Add(&List, gGrids.gGrid[y][x + offset]); // right
+	}
+}
+
+//void CheckSurrounding(int x, int y, int newX, int newY)
+//{
+//	int offset = 1;
+//	int bounds = offset + 1;
+//
+//	if (x < NumGrids - bounds && gGrids.gGrid[y][x + bounds]->type == EMPTY)
+//	{
+//		gGrids.gGrid[y][x + offset]->type = EMPTY; // left
+//	}
+//
+//	else if (x > bounds && gGrids.gGrid[y][x - bounds]->type == EMPTY)
+//	{
+//		gGrids.gGrid[y][x - offset]->type = EMPTY; // right
+//	}
+//
+//	else if (y < NumGrids - bounds && newY && gGrids.gGrid[y + bounds][x]->type == EMPTY)
+//	{
+//		gGrids.gGrid[y + offset][x]->type = EMPTY; // up
+//	}
+//
+//	else if (y > bounds && gGrids.gGrid[y - bounds][x]->type == EMPTY)
+//	{
+//		gGrids.gGrid[y - offset][x]->type = EMPTY; // down
+//	}
+//}

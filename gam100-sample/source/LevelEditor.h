@@ -3,6 +3,8 @@
 // For sizing
 #define NumGrids 30
 
+typedef struct LinkedList LinkedList;
+
 enum GridNodeState
 {
 	NotVisited = 0,
@@ -72,3 +74,7 @@ void RenderObjects();
 void SaveGrid();
 
 void AutoGenerateGrid();
+
+void AddFrontierCell(int x, int y, LinkedList* List);
+
+//void CheckSurrounding(int x, int y, int newX, int newY);
