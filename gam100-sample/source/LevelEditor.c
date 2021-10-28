@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "FileParser.h"
 #include "SystemManager.h"
+#include "LinkedList.h"
 
 int iSize;
 OBJECT_TYPE objType;
@@ -361,12 +362,68 @@ void AutoGenerateGrid()
 		for (int j = 1; j < NumGrids - 1; j++)
 		{
 			gGrids.nGrid[j][i].Curr = NotVisited;
+			gGrids.gGrid[j][i]->type = WALL;
 		}
 	}
 
-	int positionX = 1, positionY = 1;
+	int positionX = 1 + rand() % (NumGrids - 2), positionY = 1 + rand() % (NumGrids - 2);
 
-	while (1)
+	LinkedList* l = NULL;
+
+	LL_Add(&l, gGrids.gGrid[positionY][positionX]);
+	if (positionY - 2 > 1)
+	{
+		if (gGrids.gGrid[positionY - 2][positionX]->type == WALL)
+			LL_Add(&l, gGrids.gGrid[positionY - 2][positionX]); // up
+	}
+
+	if (positionY < NumGrids - 3)
+	{
+		if (gGrids.gGrid[positionY + 2][positionX]->type == WALL)
+			LL_Add(&l, gGrids.gGrid[positionY + 2][positionX]); // down
+	}
+
+	if (positionX - 2 > 1)
+	{
+		if (gGrids.gGrid[positionY][positionX - 2]->type == WALL)
+			LL_Add(&l, gGrids.gGrid[positionY][positionX - 2]); // left
+	}
+
+	if (positionX < NumGrids - 3)
+	{
+		if (gGrids.gGrid[positionY][positionX + 2]->type == WALL)
+			LL_Add(&l, gGrids.gGrid[positionY][positionX + 2]); // right
+	}
+
+	GameObject* tempGO;
+	tempGO = (GameObject*)l->curr;
+
+	while (LL_GetCount(GetHead(l)) != 0)
+	{
+		if (tempGO->type == WALL)
+		{
+			tempGO->type = EMPTY;
+
+			int iNext = rand() % LL_GetCount(GetHead(l));
+
+			void* tempNode = LL_Get(l, iNext);
+			LL_RemovePtr(&l, tempNode);
+			l = GetHead(l);
+			l->curr = tempNode;
+
+			tempGO = (GameObject*)l->curr;
+			int DifferenceX = positionX - (int)tempGO->position.x;
+			int DifferenceY = positionY - (int)tempGO->position.y;
+
+			gGrids.gGrid[positionY + DifferenceY][positionX + DifferenceX]->type = EMPTY;
+
+			positionX = (int)tempGO->position.x;
+			positionY = (int)tempGO->position.y;
+		}
+	}
+
+	free(tempGO);
+	/*while (1)
 	{
 		gGrids.nGrid[positionY][positionX].Up = gGrids.nGrid[positionY > 0 ? positionY - 1 : positionY][positionX].Curr;
 		gGrids.nGrid[positionY][positionX].Down = gGrids.nGrid[positionY < NumGrids ? positionY + 1 : positionY][positionX].Curr;
@@ -412,7 +469,7 @@ void AutoGenerateGrid()
 		{
 			positionX -= 1;
 		}
-	}
+	}*/
 
 	iAutoGenerate = 0;
 }

@@ -25,6 +25,7 @@ int LL_GetCount(LinkedList*);
 int LL_IsEmpty(LinkedList*);
 void* LL_Get(LinkedList* ,int);
 void* LL_GetLast(LinkedList*);
+LinkedList* GetHead(LinkedList* l);
 /*!
 @brief Adds a node to the linkedlist containing the void* as data.
 	This function creates and add a node to the end of the list.
