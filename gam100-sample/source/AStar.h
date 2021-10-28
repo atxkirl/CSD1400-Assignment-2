@@ -14,8 +14,10 @@
 typedef enum
 {
 	NODE_DEFAULT,
-	NODE_HIDINGSPOT,
-	NODE_WALL
+	NODE_START,
+	NODE_END,
+	NODE_WALL,
+	NODE_PATH
 }AStar_Type;
 
 typedef struct AStar_Node AStar_Node;
@@ -39,8 +41,8 @@ typedef struct
 }AStar_Map;
 
 static int directions = 8; // Number of directions to check around a node for it's neighbours.
-static int deltaRow[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
-static int deltaCol[] = { -1, -1, -1, 0, 0, 1, 1, 1 };
+static int deltaRow[] = { -1,  0,  1, -1, -1, 1, 1, 0 };
+static int deltaCol[] = { -1, -1, -1,  0,  1, 0, 1, 1 };
 static AStar_Node* neighbours[8];
 
 //static int directions = 4; // Number of directions to check around a node for it's neighbours.

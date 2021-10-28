@@ -7,7 +7,7 @@
 /// <param name="currCol">Node B's row.</param>
 /// <param name="destRow">Node A's column.</param>
 /// <param name="destCol">Node B's column</param>
-int Estimate(int currRow, int currCol, int destRow, int destCol)
+static int Estimate(int currRow, int currCol, int destRow, int destCol)
 {
 	double dRow = (double)abs(currRow - destRow);
 	double dCol = (double)abs(currCol - destCol);
@@ -78,11 +78,34 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 				while (lowestF != NULL)
 				{
 					printf("PNode Position = [%d,%d]\n", lowestF->row, lowestF->column);
+					lowestF->type = NODE_PATH;
+
 					LL_Add(&path, lowestF);
 					lowestF = lowestF->parent;
 				}
-				printf("Path size %d. [LinkedList* GetPath()]\n", LL_GetCount(path));
-				return path;
+
+				// Inverse the order of the path list.
+				LinkedList* flip = NULL;
+				for (int x = LL_GetCount(path) - 1; x >= 0 ; --x)
+				{
+					AStar_Node* temp = LL_Get(path, x);
+					LL_Add(&flip, temp);
+				}
+
+				if (flip)
+				{
+					// Reset the start and end nodes
+					AStar_Node* start = LL_Get(flip, 0);
+					AStar_Node* end = LL_Get(flip, LL_GetCount(path) - 1);
+					if (start && end)
+					{
+						start->type = NODE_START;
+						end->type = NODE_END;
+					}
+				}
+
+				printf("Path size %d. [LinkedList* GetPath()]\n", LL_GetCount(flip));
+				return flip;
 			}
 
 			int lowestRow = lowestF->row;
@@ -94,11 +117,11 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 				lowestRow = lowestF->row + deltaRow[i];
 				lowestCol = lowestF->column + deltaCol[i];
 
-				if (lowestRow > 0 && lowestRow < map->rows && 
-					lowestCol > 0 && lowestCol < map->columns)
+				if (lowestRow >= 0 && lowestRow < map->rows && 
+					lowestCol >= 0 && lowestCol < map->columns)
 				{
-					neighbour = &map->map[lowestRow + deltaRow[i]][lowestCol + deltaCol[i]];
-					if (neighbour != NULL && neighbour->type != NODE_WALL) // Only add if the node is not a wall.
+					neighbour = &map->map[lowestRow][lowestCol];
+					if (neighbour->type != NODE_WALL) // Only add if the node is not a wall.
 					{
 						neighbours[i] = malloc(sizeof(AStar_Node));
 						if (neighbours[i])
@@ -143,8 +166,11 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 					continue;
 
 				// Calculate costs for neighbouring node.
-				neighbours[i]->gCost = lowestF->gCost + 1;
-				neighbours[i]->hCost = Estimate(neighbours[i]->row, ending->row, neighbours[i]->column, ending->column);
+				if (i % 2 == 0)
+					neighbours[i]->gCost = lowestF->gCost + 14;
+				else
+					neighbours[i]->gCost = lowestF->gCost + 10;
+				neighbours[i]->hCost = Estimate(neighbours[i]->row, neighbours[i]->column, ending->row, ending->column);
 				neighbours[i]->fCost = neighbours[i]->gCost + neighbours[i]->hCost;
 
 				// Check if neighbouring node is in the open list.
