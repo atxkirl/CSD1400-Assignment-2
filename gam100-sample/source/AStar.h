@@ -1,9 +1,11 @@
 #pragma once
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <math.h>
-#include "LinkedList.h"
+#include <stdio.h>		// For printf() and NULL
+#include <stdbool.h>	// For booleans
+#include <stdlib.h>		// For malloc()
+#include <string.h>		// For memcpy()
+#include <math.h>		// For abs() and sqrt()
+#include "LinkedList.h"	// For LinkedLists
 
 /*-------------------*/
 /*	AStar Variables  */
@@ -31,7 +33,7 @@ struct AStar_Node
 
 typedef struct
 {
-	AStar_Node** map;
+	AStar_Node** map; // NOTE: Convert this to a 1D array, then use row/col values to simulate a 2D array.
 	int rows; // Number of rows in this map.
 	int columns; // Number of columns in this map.
 }AStar_Map;
@@ -52,6 +54,7 @@ static AStar_Node* neighbours[8];
 /*-------------------*/
 
 static int Estimate(int currRow, int currCol, int destRow, int destCol);
+
 /// <summary>
 /// Returns a path from the starting node, to the ending node.
 /// Path is a LinkedList of Node*.
@@ -59,4 +62,4 @@ static int Estimate(int currRow, int currCol, int destRow, int destCol);
 /// <param name="starting -">Starting node.</param>
 /// <param name="ending -">Ending node.</param>
 /// <param name="map -">The map of which the starting and ending nodes are a part of.</param>
-LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map);
+LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map);

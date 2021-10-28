@@ -21,7 +21,7 @@ int Estimate(int currRow, int currCol, int destRow, int destCol)
 /// <param name="starting -">Starting node.</param>
 /// <param name="ending -">Ending node.</param>
 /// <param name="map -">The map of which the starting and ending nodes are a part of.</param>
-LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
+LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 {
 	if (starting == NULL || ending == NULL)
 	{
@@ -31,7 +31,7 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 
 	LinkedList* openList = NULL; // List of nodes that we want to test.
 	LinkedList* closedList = NULL; // List of nodes that we've already tested.
-	//AStar_Node* neighbours[8];
+	LinkedList* path = NULL; // Return list if a valid path between the starting and ending nodes is found.
 
 	LL_Add(&openList, starting);
 
@@ -49,7 +49,8 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 	{
 		AStar_Node* lowestF = NULL;
 		int lowestFIndex = 0;
-		for (int i = 0; i < LL_GetCount(openList); ++i) // Loop through openList to find node with the lowest F cost.
+		// Loop through openList to find node with the lowest F cost.
+		for (int i = 0; i < LL_GetCount(openList); ++i)
 		{
 			void* temp = LL_Get(openList, i);
 			if (temp)
@@ -74,16 +75,20 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 			{
 				// Need to add code here to backtrack to get the full path.
 				printf("Found end node! Time to create path. [LinkedList* GetPath()]\n");
+				while (lowestF != NULL)
+				{
+					printf("PNode Position = [%d,%d]\n", lowestF->row, lowestF->column);
+					LL_Add(&path, lowestF);
+					lowestF = lowestF->parent;
+				}
+				printf("Path size %d. [LinkedList* GetPath()]\n", LL_GetCount(path));
+				return path;
 			}
 
-			// Now get neighbours of the lowestF node.
-			//[ ][ ][ ] r-1  c-1, c, c+1
-			//[ ] x [ ]  r   c-1, c+1
-			//[ ][ ][ ] r+1  c-1, c, c+1
 			int lowestRow = lowestF->row;
 			int lowestCol = lowestF->column;
 			AStar_Node* neighbour = NULL;
-			// Get all neighbouring nodes.
+			// Now get neighbours of the lowestF node.
 			for (int i = 0; i < directions; ++i)
 			{		
 				lowestRow = lowestF->row + deltaRow[i];
@@ -95,7 +100,14 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 					neighbour = &map->map[lowestRow + deltaRow[i]][lowestCol + deltaCol[i]];
 					if (neighbour != NULL && neighbour->type != NODE_WALL) // Only add if the node is not a wall.
 					{
-						neighbours[i] = neighbour;
+						neighbours[i] = malloc(sizeof(AStar_Node));
+						if (neighbours[i])
+						{
+							// Creating a copy here because nodes at the same position can have different gCosts.
+							// Depending on how they were calculated.
+							memcpy(neighbours[i], neighbour, sizeof(AStar_Node));
+							neighbours[i]->parent = lowestF;
+						}
 					}
 					else
 					{
@@ -109,9 +121,25 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 			{
 				if (neighbours[i] == NULL)
 					continue;
+				
+				AStar_Node* temp = NULL;
+				bool skipNode = false;
 
 				// Check if neighbouring node is in the closed list.
-				if (LL_ContainsPtr(closedList, neighbours[i]) == true)
+				for (int x = 0; x < LL_GetCount(closedList); ++x)
+				{
+					temp = (AStar_Node*)LL_Get(closedList, x);
+					if (temp->row == neighbours[i]->row &&
+						temp->column == neighbours[i]->column) // Neighbour node is already in closed list.
+					{
+						if (temp->gCost > neighbours[i]->gCost)
+						{
+							skipNode = true;
+							break;
+						}
+					}
+				}
+				if (skipNode)
 					continue;
 
 				// Calculate costs for neighbouring node.
@@ -120,8 +148,8 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 				neighbours[i]->fCost = neighbours[i]->gCost + neighbours[i]->hCost;
 
 				// Check if neighbouring node is in the open list.
-				AStar_Node* temp = NULL;
-				bool skipNode = false;
+				temp = NULL;
+				skipNode = false;
 				for (int x = 0; x < LL_GetCount(openList); ++x)
 				{
 					temp = (AStar_Node*)LL_Get(openList, x);
@@ -129,7 +157,10 @@ LinkedList* GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
 						temp->column == neighbours[i]->column) // Neighbour node is already in open list.
 					{
 						if (temp->gCost > neighbours[i]->gCost)
+						{
 							skipNode = true;
+							break;
+						}
 					}
 				}
 				if (skipNode)
