@@ -118,6 +118,19 @@ void LL_Add(LinkedList** ll, void* ptr)
 	lptr->next = newPtr;
 	//return ll;
 }
+//void LL_AddAt(LinkedList** ll, void* ptr, int index)
+//{
+//	if (LL_IsEmpty(*ll))
+//		return;
+//	LinkedList* node = *ll;
+//	int counter = 0;
+//	for (; counter < index && node; counter++, node = node->next)
+//	{
+//		
+//	}
+//	LinkedList* newPtr = malloc(sizeof(LinkedList));
+//	LinkedList* prev = 
+//}
 void LL_SetAdd(LinkedList** ll, void* ptr)//Add unique
 {
 	if (!LL_ContainsPtr(*ll, ptr))
@@ -133,6 +146,7 @@ void LL_RemoveLL(LinkedList** ll, LinkedList* node)
 		//if (LL_IsEmpty(ret))
 		//	return NULL;
 		*ll = RemoveThis(node);
+		*ll = GetHead(*ll);
 	}
 
 	//return ll;
@@ -152,6 +166,7 @@ void LL_RemovePtr(LinkedList** ll, void* ptr)
 			//	return NULL;
 			//return ll;
 			*ll = RemoveThis(node);
+			*ll = GetHead(*ll);
 			return;
 		}
 		node = node->next;
@@ -168,6 +183,7 @@ void LL_RemoveIndex(LinkedList** ll, int index)
 		if (count == index)
 		{
 			*ll = RemoveThis(node);
+			*ll = GetHead(*ll);
 			return;
 		}
 		count++;
