@@ -35,7 +35,7 @@ static CP_Color pathColor;
 
 static AStar_Node* startNode;
 static AStar_Node* endNode;
-
+#include <time.h>
 void Adrian_CallAStar(void)
 {
     // Clear the map of paths
@@ -45,11 +45,34 @@ void Adrian_CallAStar(void)
         {
             if (map.map[row][col].type == NODE_PATH)
                 map.map[row][col].type = NODE_DEFAULT;
+            map.map[row][col].gCost = 0;
+            map.map[row][col].hCost = 0;
+            map.map[row][col].fCost = 0;
+            map.map[row][col].parent = NULL;
         }
     }
 
+    clock_t t = clock();
     // Calculate A* path
     path = AStar_GetPath(startNode, endNode, &map);
+    t = clock() - t;
+    printf("ms: %d", t);
+
+    // render cells of path
+    if (path)
+    {
+        while (path != NULL)
+        {
+            AStar_Node* temp = (AStar_Node*)path->curr;
+            if (temp)
+            {
+                map.map[temp->row][temp->column].type = temp->type;
+                path = path->next;
+                printf("doing a thing\n");
+            }
+        }
+    }
+    LL_Clear(&path);
 }
 
 void Adrian_Render(void)
@@ -84,21 +107,6 @@ void Adrian_Render(void)
         CP_Graphics_DrawLine(0, y * gCellHeight, gWindowHeight, y * gCellHeight);
     }
 
-
-    // render cells of path
-    if (path)
-    {
-        while (path != NULL)
-        {
-            AStar_Node* temp = (AStar_Node*)path->curr;
-            if (temp)
-            {
-                map.map[temp->row][temp->column].type = temp->type;
-                path = path->next;
-                printf("doing a thing\n");
-            }
-        }
-    }
 
 
     // render cells of map.map

@@ -59,3 +59,4 @@ int LL_ContainsPtr(LinkedList*, void*);
 void LL_Clear(LinkedList**);
 void* LL_Find(LinkedList*, void*(void*, void*), void*);
 void** LL_ToArray(LinkedList*);
+void LL_Reverse(LinkedList**);

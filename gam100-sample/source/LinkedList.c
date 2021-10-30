@@ -268,6 +268,23 @@ void* LL_Find(LinkedList* ll, void* func(void*, void*), void* arg)
 	}
 	return NULL;
 }
+void LL_Reverse(LinkedList** ll)
+{
+	if (LL_IsEmpty(*ll))
+		return;
+	LinkedList* last = GetLastNode(*ll);
+	LinkedList* temp = GetHead(*ll);
+	last->next = last->prev;
+	last->prev = NULL;
+	while (temp != last)
+	{
+		LinkedList* p = temp->prev;
+		temp->prev = temp->next;
+		temp->next = p;
+		temp = temp->prev;
+	}
+	*ll = last;
+}
 void** LL_ToArray(LinkedList* ll)
 {
 	if (LL_IsEmpty(ll))
