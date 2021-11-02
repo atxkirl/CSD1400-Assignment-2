@@ -87,3 +87,11 @@ Renderer* RM_DeleteImage(Renderer*);
 @return void
 */
 void RM_GetRenderSize(float* width, float* height, RENDER_PRIORITY space);
+
+/*!
+@brief Returns mouse position on world space
+@param x - x pos of the mouse in screen pixel space
+@param y - y pos of the mouse in screen pixel space
+@return CP_Vector position of the mouse in worldspace
+*/
+CP_Vector RM_MousePositionToWorldSpace(float x, float y);

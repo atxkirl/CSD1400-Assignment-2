@@ -191,6 +191,7 @@ Collider* CLM_AddComponent(GameObject* g)
 		c->obj = g;
 		c->type = COL_POINT;
 		c->space = COLSPC_WORLD;
+		c->layer = COLLAY_NULL;
 		//c->velocity = CP_Vector_Set(0, 0);
 		c->isKinematic = 0;
 		c->isLockedPos = 0;
@@ -279,6 +280,9 @@ void CLM_Update()
 				continue;
 			if (right->space != left->space) //only same space collider w each other
 				continue;
+			if (left->layer != COLLAY_NULL && right->layer != COLLAY_NULL)
+				if (left->layer == right->layer)
+					continue;
 			
 			if (IsCollide(left, right))
 			{

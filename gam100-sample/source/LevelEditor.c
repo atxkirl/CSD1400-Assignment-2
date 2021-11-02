@@ -4,6 +4,12 @@
 #include "FileParser.h"
 #include "SystemManager.h"
 #include "LinkedList.h"
+#include "Colors.h"
+
+#define LCLICK "LCLICK"
+#define LCLICK_SHIFT "LCLICK_SHIFT"
+#define RCLICK "RCLICK"
+#define RCLICK_SHIFT "RCLICK_SHIFT"
 
 int iSize;
 OBJECT_TYPE objType;
@@ -21,6 +27,51 @@ int iAutoGenerate;
 extern GameObject *GameObjectList;
 Renderer* renderImage;
 
+void CheckGridInt(int iX, int iY, int iObjType)
+{
+	if (gGrids.gGrid[iY][iX]->type != iObjType)
+	{
+		gGrids.gGrid[iY][iX]->type = iObjType;
+	}
+}
+void AssignDirectionInt(int iX, int iY, int iDirection)
+{
+	if (gGrids.gGrid[iY][iX]->oDirection != iDirection)
+	{
+		gGrids.gGrid[iY][iX]->oDirection = iDirection;
+	}
+}
+void LevelEditor_OnClickGrid(Collider* l, Collider* r)
+{
+	if (strcmp(l->obj->tag, "grid") == 0)
+	{
+		GameObject* tempGO = (GameObject*)l->obj;
+		if (strcmp(r->obj->tag, LCLICK) == 0)
+		{
+			//CheckGrid(CP_Input_GetMouseX() / fScaleBy - fMoveX, CP_Input_GetMouseY() / fScaleBy - fMoveY, objType);
+			CheckGridInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, objType);
+			LoadTileImage();
+		}
+		else if (strcmp(r->obj->tag, LCLICK_SHIFT) == 0)
+		{
+			//AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, objDirection);
+			AssignDirectionInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, objDirection);
+			LoadTileImage();
+		}
+		else if (strcmp(r->obj->tag, RCLICK) == 0)
+		{
+			//CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
+			CheckGridInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, EMPTY);
+			LoadTileImage();
+		}
+		else if (strcmp(r->obj->tag, RCLICK_SHIFT) == 0)
+		{
+			//AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, RIGHT);
+			AssignDirectionInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, RIGHT);
+			LoadTileImage();
+		}
+	}
+}
 /*!
 @brief Initialises the variables
 @param void
@@ -38,6 +89,23 @@ void LevelEditorInit()
 	vScale = CP_Vector_Set(fScaleBy, fScaleBy);
 	mScale = CP_Matrix_Scale(vScale);
 
+	for (int i = 0; i <= NumGrids; i++)
+	{
+		GameObject* go = GOM_Create(LINE);
+		float size = WORLD_HEIGHT;
+		go->scale.x = size;
+		go->position.x = i * (size / (float)NumGrids);
+		go->rotation = -90.0f;
+		Renderer* r = RM_AddComponent(go);
+		r->color = COLOR_GREY;
+
+		go = GOM_Create(LINE);
+		go->scale.x = size;
+		go->position.y = i * (size / (float)NumGrids);
+		r = RM_AddComponent(go);
+		r->color = COLOR_GREY;
+	}
+
 	// set all to empty first
 	for (int i = 0; i < NumGrids; i++)
 	{
@@ -51,16 +119,26 @@ void LevelEditorInit()
 			go->oDirection = RIGHT * 90.0f;
 			r->color = CP_Color_Create(255, 255, 0, 255);
 			gGrids.gGrid[i][j] = go;
+			go->tag = "grid";
 
 			gGrids.nGrid[i][j].Curr = go->type == WALL ? Visited : NotVisited;
 			gGrids.nGrid[i][j].Up = go->type == WALL ? Visited : NotVisited;
 			gGrids.nGrid[i][j].Down = go->type == WALL ? Visited : NotVisited;
 			gGrids.nGrid[i][j].Left = go->type == WALL ? Visited : NotVisited;
 			gGrids.nGrid[i][j].Right = go->type == WALL ? Visited : NotVisited;
+
+			Collider* c = CLM_AddComponent(go);
+			CLM_Set(c, COL_BOX, LevelEditor_OnClickGrid);
+			c->isLockedPos = 1;
+			c->layer = COLLAY_WALL;
 		}
 	}
 
 	iAutoGenerate = 0;
+
+	RM_SetCameraPosition(CP_Vector_Set(WORLD_HEIGHT * 0.5f, WORLD_HEIGHT * 0.5f));
+
+	LoadTileImage();
 }
 
 /*!
@@ -152,13 +230,46 @@ void LevelEditorUpdate()
 
 	if (CP_Input_KeyTriggered(KEY_SPACE))
 	{
-		iAutoGenerate = !iAutoGenerate;
+		iAutoGenerate = !iAutoGenerate; 
+		
+		AutoGenerateGrid();
+		LoadTileImage();
 	}
 
-	PlaceObject();
+	if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
+	{
+		GameObject* clickPoint = GOM_CreateTemp(EMPTY);
+		clickPoint->position = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+		clickPoint->tag = LCLICK;
+		Collider* c = CLM_AddComponent(clickPoint);
+		CLM_Set(c, COL_POINT, NULL);
+		c->space = COLSPC_WORLD;
+
+		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
+		{
+			clickPoint->tag = LCLICK_SHIFT;
+		}
+	}
+	if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
+	{
+		GameObject* clickPoint = GOM_CreateTemp(EMPTY);
+		clickPoint->position = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+		clickPoint->tag = RCLICK;
+		Collider* c = CLM_AddComponent(clickPoint);
+		CLM_Set(c, COL_POINT, NULL);
+		c->space = COLSPC_WORLD;
+
+		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
+			clickPoint->tag = RCLICK_SHIFT;
+	}
+
+	//PlaceObject();
 	RenderObjects();
 
 	SM_SystemsUpdate();
+
+	RM_SetCameraPosition(CP_Vector_Set(fMoveX + WORLD_HEIGHT * 0.5f, -fMoveY + WORLD_HEIGHT * 0.5f));
+
 	SM_SystemsLateUpdate();
 	//RM_Render();
 }

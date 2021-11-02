@@ -20,6 +20,9 @@ All existing colliders are checked when CLM_CheckCollisions() is called in updat
 If player collide wall, "do something" will happen twice. To avoid this, pass in NULL for ColliderB
 */
 
+/*!
+@brief Type of collider
+*/
 typedef enum COLLIDER_TYPE
 {
 	COL_CIRCLE,
@@ -28,6 +31,9 @@ typedef enum COLLIDER_TYPE
 
 } COLLIDER_TYPE;
 
+/*!
+@brief Colliders of the same space will check against each other
+*/
 typedef enum COLLIDER_SPACE
 {
 	COLSPC_WORLD,
@@ -35,6 +41,16 @@ typedef enum COLLIDER_SPACE
 	//Can add more "space"
 
 } COLLIDER_SPACE;
+
+/*!
+@brief Colliders of the same layer will NOT check against each other,
+	Except NULL
+*/
+typedef enum COLLIDER_LAYER
+{
+	COLLAY_NULL,
+	COLLAY_WALL
+} COLLIDER_LAYER;
 
 /*
 GameObject* obj: reference to the gameobject. needs its positional information
@@ -47,6 +63,7 @@ typedef struct Collider
 	GameObject* obj;
 	COLLIDER_TYPE type;
 	COLLIDER_SPACE space;
+	COLLIDER_LAYER layer;
 	//CP_Vector velocity;
 	int isKinematic;//aka isStatic, does not move due to force
 	int isLockedPos;//aka unity's locked x,y

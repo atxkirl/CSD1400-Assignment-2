@@ -104,6 +104,15 @@ void HongYu_init(void)
     //c->isLockedPos = 1;
     c->isTrigger = 1;
 
+    wall = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(0, 200), 0.0f, CP_Vector_Set(50, 50));
+    r = RM_AddComponent(wall);
+    RM_LoadImage(r, "Assets/sand-tiles/sand-tile-0.png");
+    c = CLM_AddComponent(wall);
+    CLM_Set(c, COL_BOX, hy_OnCollision);
+    c->isLockedPos = 1;
+
+
     //GameObject* wad = GOM_CreateGameObject(CIRCLE, GAME_OBJECT);
     //wad->position = CP_Vector_Set(0.1f * width, 0.9f * height);
     //wad->scale = CP_Vector_Set(0.1f * width, 30);
@@ -144,11 +153,21 @@ void HongYu_update(void)
         //Creates a point obj to test collision against button
         clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-        clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
         Collider* c = CLM_AddComponent(clickPoint);
         CLM_Set(c, COL_POINT, NULL);
         c->space = COLSPC_SCREEN;
+
+        CP_Vector pos = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        clickPoint = GOM_Create(CIRCLE);//param doesnt matter
+        clickPoint->position = CP_Vector_Set(pos.x, pos.y);
+        clickPoint->scale = CP_Vector_Set(10.0f, 10.0f);
+        clickPoint->isEnabled = 1;
+        //clickPoint->tag = "Click";
+        //c = CLM_AddComponent(clickPoint);
+        //CLM_Set(c, COL_POINT, NULL);
+        //c->space = COLSPC_WORLD;
+        RM_AddComponent(clickPoint);
     }
 
 

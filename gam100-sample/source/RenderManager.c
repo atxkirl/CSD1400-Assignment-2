@@ -170,6 +170,20 @@ void RM_GetRenderSize(float* width, float* height, RENDER_PRIORITY space)
 	}
 }
 
+CP_Vector RM_MousePositionToWorldSpace(float x, float y)
+{
+	float mposx = CP_Input_GetMouseX();
+	float mposy = CP_Input_GetMouseY();
+	float w, h;
+	RM_GetRenderSize(&w, &h, PRI_UI);
+	float ww, wh;
+	RM_GetRenderSize(&ww, &wh, PRI_GAME_OBJECT);
+	CP_Vector campos = RM_GetCameraPosition();
+	CP_Vector ret = CP_Vector_Set(ww / w * mposx - ww * 0.5f + campos.x,
+		wh / h * mposy - wh * 0.5f + campos.y);
+	return ret;
+}
+
 void RenderAllOfType(RENDER_PRIORITY type)
 {
 	LinkedList* currNode = renderObjects;
@@ -218,7 +232,9 @@ void RenderAllOfType(RENDER_PRIORITY type)
 					go->scale.x, go->scale.y);
 				break;
 			case LINE:
+				CP_Settings_Stroke(r->color);
 				CP_Graphics_DrawLine(0, 0, go->scale.x, 0);
+				CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
 				break;
 			default:
 				break;
