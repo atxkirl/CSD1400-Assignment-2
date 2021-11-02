@@ -22,6 +22,7 @@ Map* new_Map()
 					goMap->fObjList[i]->iPosX = 0;
 					goMap->fObjList[i]->iPosY = 0;
 					goMap->fObjList[i]->iType = 0;
+					goMap->fObjList[i]->iDir = 0;
 				}
 			}
 		}
@@ -59,7 +60,8 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 				// int = char - 48
 				char cTempX[10] = { "" }, 
 					cTempY[10] = { "" },
-					cTempType[10] = { "" };
+					cTempType[10] = { "" },
+					cTempDir[10] = { "" };
 
 				int i = 0;
 				int j = 0;
@@ -81,13 +83,22 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 				strcat_s(cTempX, 10, "\0");
 				i += 1;
 				j = i;
+
+				while (cFileRead[i] != ',') // find xpos
+				{
+					i++;
+				}
+				strncpy_s(cTempY, 10, cFileRead + j, i - j);
+				strcat_s(cTempY, 10, "\0");
+				i += 1;
+				j = i;
 		
 				while (cFileRead[i] != '\n') // find y pos, which is before new line
 				{
 					i++;
 				}
-				strncpy_s(cTempY, 10, cFileRead+ j, i - j);
-				strcat_s(cTempY, 10, "\0");
+				strncpy_s(cTempDir, 10, cFileRead+ j, i - j);
+				strcat_s(cTempDir, 10, "\0");
 
 				if (mMap->fObjList[iObjNum])
 				{
@@ -95,6 +106,7 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 					mMap->fObjList[iObjNum]->iType = atoi(cTempType);
 					mMap->fObjList[iObjNum]->iPosX = atoi(cTempX);
 					mMap->fObjList[iObjNum]->iPosY = atoi(cTempY);
+					mMap->fObjList[iObjNum]->iDir = atoi(cTempDir);
 				}
 				iObjNum++;
 

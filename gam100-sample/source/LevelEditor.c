@@ -39,6 +39,7 @@ void AssignDirectionInt(int iX, int iY, int iDirection)
 	if (gGrids.gGrid[iY][iX]->oDirection != iDirection)
 	{
 		gGrids.gGrid[iY][iX]->oDirection = iDirection;
+		gGrids.gGrid[iY][iX]->rotation = gGrids.gGrid[iY][iX]->oDirection * 90.f;
 	}
 }
 void LevelEditor_OnClickGrid(Collider* l, Collider* r)
@@ -200,17 +201,14 @@ void LevelEditorUpdate()
 	{
 		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
 		{
-			objDirection--;
-			if (objDirection <= 0)
-				objDirection = 0;
+
+			objDirection = (--objDirection < 0) ? DIRECTION_END - 1 : objDirection;
 
 			PrintCurrentDirection(objDirection);
 		}
 		else
 		{
-			objType++;
-			if (objType >= TYPE_END)
-				objType = TYPE_END - 1;
+			objType = (++objType >= DIRECTION_END) ? 0 : objType;
 			PrintCurrentType(objType);
 		}
 	}
@@ -218,17 +216,13 @@ void LevelEditorUpdate()
 	{
 		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
 		{
-			objDirection++;
-			if (objDirection >= DIRECTION_END)
-				objDirection = DIRECTION_END - 1;
+			objDirection = (++objDirection >= DIRECTION_END) ? 0 : objDirection;
 
 			PrintCurrentDirection(objDirection);
 		}
 		else
 		{
-			objType--;
-			if (objType < 0)
-				objType = 0;
+			objType = (--objType < 0) ? TYPE_END - 1 : objType;
 			PrintCurrentType(objType);
 		}
 	}
@@ -422,7 +416,7 @@ void SaveGrid()
 	{
 		if (GridObj)
 		{
-			GridObj[i] = malloc(sizeof(char) * 30);
+			GridObj[i] = malloc(sizeof(char) * 40);
 
 			if (GridObj[i])
 			{
@@ -443,22 +437,27 @@ void SaveGrid()
 				char ObjType[10];
 				char ObjPosX[10];
 				char ObjPosY[10];
+				char ObjDirection[10];
 				if (GridObj)
 				{
 					if (GridObj[iObjNum])
 					{
 						sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]->type);
-						strcpy_s(GridObj[iObjNum], 30, ObjType); //type
-						strcat_s(GridObj[iObjNum], 30, ",");
+						strcpy_s(GridObj[iObjNum], 40, ObjType); //type
+						strcat_s(GridObj[iObjNum], 40, ",");
 
 						sprintf_s(ObjPosX, 10, "%d", j);
-						strcat_s(GridObj[iObjNum], 30, ObjPosX); // x
-						strcat_s(GridObj[iObjNum], 30, ",");
+						strcat_s(GridObj[iObjNum], 40, ObjPosX); // x
+						strcat_s(GridObj[iObjNum], 40, ",");
 
 						sprintf_s(ObjPosY, 10, "%d", i);
-						strcat_s(GridObj[iObjNum], 30, ObjPosY); // y
-						strcat_s(GridObj[iObjNum], 30, "\n");
+						strcat_s(GridObj[iObjNum], 40, ObjPosY); // y
+						strcat_s(GridObj[iObjNum], 40, "\n");
 						printf("%s\n", GridObj[iObjNum]);
+
+						sprintf_s(ObjDirection, 10, "%d", i);
+						strcat_s(GridObj[iObjNum], 40, ObjDirection); // y
+						strcat_s(GridObj[iObjNum], 40, "\n");
 
 						iObjNum++;
 					}
@@ -717,15 +716,15 @@ void PrintCurrentDirection(int iObjDirection)
 		break;
 
 	case(UP):
-		printf("Object Type: UP\n");
+		printf("Object Direction: UP\n");
 		break;
 
 	case(LEFT):
-		printf("Object Type: LEFT\n");
+		printf("Object Direction: LEFT\n");
 		break;
 
 	case(DOWN):
-		printf("Object Type: DOWN\n");
+		printf("Object Direction: DOWN\n");
 		break;
 
 	default:

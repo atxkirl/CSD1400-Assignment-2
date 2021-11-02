@@ -79,8 +79,11 @@ void LoadGrid(char* cInput, int iLoad)
 			int iY = objList->fObjList[i]->iPosY;
 			int iX = objList->fObjList[i]->iPosX;
 			gLoadedGrids->gGrid[iY][iX]->type = objList->fObjList[i]->iType;
+			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
 			gLoadedGrids->gGrid[iY][iX]->position = CP_Vector_Set(iX * fScale - fScale, iY * fScale - fScale);
 			gLoadedGrids->gGrid[iY][iX]->scale = CP_Vector_Set(fScale, fScale);
+			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
+			gLoadedGrids->gGrid[iY][iX]->rotation = gLoadedGrids->gGrid[iY][iX]->oDirection * 90.f;
 			Renderer* r = RM_GetComponent(gLoadedGrids->gGrid[iY][iX]);
 			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 			r->color = CP_Color_Create(255, 255, 255, 255);

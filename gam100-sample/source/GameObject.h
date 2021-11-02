@@ -18,10 +18,10 @@ typedef enum OBJECT_TYPE
 typedef enum OBJECT_DIRECTION
 {
 	// rotation counterclockwise from X-axis
-	RIGHT = 0,
-	UP,
-	LEFT,
+	UP = 0,
 	DOWN,
+	RIGHT,
+	LEFT,
 	DIRECTION_END // LAST
 } OBJECT_DIRECTION;
 
