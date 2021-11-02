@@ -86,3 +86,5 @@ void PrintCurrentDirection(int iObjDirection);
 void AssignDirection(float fMouseX, float fMouseY, int iDirection);
 
 void LoadTileImage();
+
+void LoadSavedMap();

@@ -273,6 +273,11 @@ void LevelEditorUpdate()
 		//RM_AddComponent(t);
 	}
 
+	if (CP_Input_KeyTriggered(KEY_3))
+	{
+		LoadSavedMap();
+	}
+
 	//PlaceObject();
 	RenderObjects();
 
@@ -820,7 +825,6 @@ void LoadTileImage()
 				break;
 
 			case(CORNER):
-				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
 				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-5.png");
 				//CP_Settings_Fill(CP_Color_Create(255, 128, 0, 225)); // r, g, b, a
 				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
@@ -836,6 +840,63 @@ void LoadTileImage()
 			}
 		}
 	}
+}
+
+void LoadSavedMap()
+{
+	char cFileLocation[100] = { "Levels/" };
+	char* cInput = malloc(sizeof(char) * 50);
+	printf("Open File: ");
+	scanf_s("%s", cInput, 50);
+
+	if (cInput)
+	{
+		strcat_s(cFileLocation, 100, cInput);
+		strcat_s(cFileLocation, 100, ".txt");
+	}
+
+	Map* objList = new_Map();
+	ReadLevelFromFile(cFileLocation, objList);
+	Renderer* r;
+	for (int i = 0; i < objList->iSize; i++)
+	{
+		if (objList->fObjList[i])
+		{
+			int iY = objList->fObjList[i]->iPosY;
+			int iX = objList->fObjList[i]->iPosX;
+			gGrids.gGrid[iY][iX]->type = objList->fObjList[i]->iType;
+			gGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * vScale.x * iSize, iY * vScale.y * iSize);
+			gGrids.gGrid[iY][iX]->scale = CP_Vector_Set(vScale.x, vScale.y);
+			gGrids.gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
+			gGrids.gGrid[iY][iX]->rotation = gGrids.gGrid[iY][iX]->oDirection * 90.f;
+			r = RM_GetComponent(gGrids.gGrid[iY][iX]);
+			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
+			r->color = CP_Color_Create(255, 255, 255, 255);
+
+			switch (gGrids.gGrid[iY][iX]->type)
+			{
+			case(WALL):
+				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-1.png");
+				CLM_AddComponent(gGrids.gGrid[iY][iX]);
+				break;
+			case(CORNER):
+				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-5.png");
+				CLM_AddComponent(gGrids.gGrid[iY][iX]);
+				break;
+			case(FLOOR):
+				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-0.png");
+				break;
+			case(WATER):
+			case(EMPTY):
+				RM_LoadImage(r, "Assets/tempWater.png");
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	LoadTileImage();
+	free(cInput);
 }
 
 //void CheckSurrounding(int x, int y, int newX, int newY)

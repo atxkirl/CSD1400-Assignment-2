@@ -99,7 +99,7 @@ void LevelOne_init(void)
         }*/
     }
 
-    gLOne = GOM_Create2(RECTANGLE, CP_Vector_Set(50, 20), 0.0f, CP_Vector_Set(50, 50));
+    gLOne = GOM_Create2(RECTANGLE, CP_Vector_Set(500, 500), 0.0f, CP_Vector_Set(50, 50));
     gLOne->tag = "player";
     r = RM_AddComponent(gLOne);
     RM_LoadImage(r, "Assets/bananaboi.png");
@@ -182,7 +182,7 @@ void LevelOneGridColliderInit()
     {
         for (int j = 0; j < NumGrids; j++)
         {
-            if (gLoadedGrids->gGrid[i][j]->type != EMPTY && gLoadedGrids->gGrid[i][j]->type != FLOOR && gLoadedGrids->gGrid[i][j]->type != WATER)
+            if (gLoadedGrids->gGrid[i][j]->type == WATER || gLoadedGrids->gGrid[i][j]->type == EMPTY)
             {
                 CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOne_OnCollision);
                 CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;

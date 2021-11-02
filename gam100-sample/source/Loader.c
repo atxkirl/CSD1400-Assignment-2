@@ -79,7 +79,6 @@ void LoadGrid(char* cInput, int iLoad)
 			int iY = objList->fObjList[i]->iPosY;
 			int iX = objList->fObjList[i]->iPosX;
 			gLoadedGrids->gGrid[iY][iX]->type = objList->fObjList[i]->iType;
-			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
 			gLoadedGrids->gGrid[iY][iX]->position = CP_Vector_Set(iX * fScale - fScale, iY * fScale - fScale);
 			gLoadedGrids->gGrid[iY][iX]->scale = CP_Vector_Set(fScale, fScale);
 			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
@@ -91,11 +90,18 @@ void LoadGrid(char* cInput, int iLoad)
 			switch (gLoadedGrids->gGrid[iY][iX]->type)
 			{
 			case(WALL):
-				CLM_AddComponent(gLoadedGrids->gGrid[iY][iX]);
-				RM_LoadImage(r, "Assets/bananaboi.png");
+				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-1.png");
+				break;
+			case(CORNER):
+				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-5.png");
 				break;
 			case(FLOOR):
 				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-0.png");
+				break;
+			case(WATER):
+			case(EMPTY):
+				CLM_AddComponent(gLoadedGrids->gGrid[iY][iX]);
+				RM_LoadImage(r, "Assets/tempWater.png");
 				break;
 			default:
 				break;
