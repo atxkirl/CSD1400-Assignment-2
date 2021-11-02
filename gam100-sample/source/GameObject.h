@@ -11,9 +11,19 @@ typedef enum OBJECT_TYPE
 	WALL,
 	PLAYER,
 	LINE,
-	END // LAST 
+	TYPE_END // LAST 
 
 }OBJECT_TYPE;
+
+typedef enum OBJECT_DIRECTION
+{
+	// rotation counterclockwise from X-axis
+	RIGHT = 0,
+	UP,
+	LEFT,
+	DOWN,
+	DIRECTION_END // LAST
+} OBJECT_DIRECTION;
 
 /*!
 @brief struct GameObject that contains transformation and render information
@@ -31,5 +41,6 @@ typedef struct
 
 	//think as unity go's tag
 	enum OBJECT_TYPE type;
+	enum OBJECT_DIRECTION oDirection;
 
 } GameObject;

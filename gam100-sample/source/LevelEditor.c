@@ -7,6 +7,7 @@
 
 int iSize;
 OBJECT_TYPE objType;
+OBJECT_DIRECTION objDirection;
 
 float fMoveX;
 float fMoveY;
@@ -18,6 +19,7 @@ Grid gGrids;
 int iAutoGenerate;
 
 extern GameObject *GameObjectList;
+Renderer* renderImage;
 
 /*!
 @brief Initialises the variables
@@ -27,6 +29,7 @@ extern GameObject *GameObjectList;
 void LevelEditorInit()
 {
 	objType = WALL; // initialize to 0;
+	objDirection = RIGHT; // init to right
 	iSize = CP_System_GetWindowHeight() / NumGrids;
 
 	fMoveX = 0.f;
@@ -45,6 +48,7 @@ void LevelEditorInit()
 			Renderer* r = RM_AddComponent(go);
 			go->position = CP_Vector_Set(j * vScale.x, i * vScale.y);
 			go->scale = CP_Vector_Set(vScale.x, vScale.y);
+			go->oDirection = RIGHT * 90.0f;
 			r->color = CP_Color_Create(255, 255, 0, 255);
 			gGrids.gGrid[i][j] = go;
 
@@ -66,6 +70,8 @@ void LevelEditorInit()
 */
 void LevelEditorUpdate()
 {
+	SM_SystemsPreUpdate();
+
 	if (CP_Input_KeyTriggered(KEY_ENTER))
 	{
 		SaveGrid();
@@ -94,34 +100,53 @@ void LevelEditorUpdate()
 
 	if (CP_Input_KeyDown(KEY_1))
 	{
-		fScaleBy += 1 * CP_System_GetDt();
-		vScale = CP_Vector_Set(fScaleBy, fScaleBy);
-		mScale = CP_Matrix_Scale(vScale);
+		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
+		{
+			objDirection--;
+			if (objDirection <= 0)
+				objDirection = 0;
+
+			PrintCurrentDirection(objDirection);
+		}
+		else
+		{
+			fScaleBy += 1 * CP_System_GetDt();
+			vScale = CP_Vector_Set(fScaleBy, fScaleBy);
+			mScale = CP_Matrix_Scale(vScale);
+		}
 	}
 
 	else if (CP_Input_KeyDown(KEY_2))
 	{
-		fScaleBy -= 1 * CP_System_GetDt();
-		vScale = CP_Vector_Set(fScaleBy, fScaleBy);
-		mScale = CP_Matrix_Scale(vScale);
+		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
+		{
+			objDirection++;
+			if (objDirection >= DIRECTION_END)
+				objDirection = DIRECTION_END - 1;
+
+			PrintCurrentDirection(objDirection);
+		}
+		else
+		{
+			fScaleBy -= 1 * CP_System_GetDt();
+			vScale = CP_Vector_Set(fScaleBy, fScaleBy);
+			mScale = CP_Matrix_Scale(vScale);
+		}
 	}
 
 	if (CP_Input_KeyTriggered(KEY_Q))
 	{
 		objType++;
-		if (objType >= END)
-			objType = END - 1;
-
-		printf("Object Type: %d\n", objType);
+		if (objType >= TYPE_END)
+			objType = TYPE_END - 1;
+		PrintCurrentType(objType);
 	}
 	else if (CP_Input_KeyTriggered(KEY_E))
 	{
 		objType--;
-
 		if (objType < 0)
 			objType = 0;
-
-		printf("Object Type: %d\n", objType);
+		PrintCurrentType(objType);
 	}
 
 	if (CP_Input_KeyTriggered(KEY_SPACE))
@@ -132,6 +157,8 @@ void LevelEditorUpdate()
 	PlaceObject();
 	RenderObjects();
 
+	SM_SystemsUpdate();
+	SM_SystemsLateUpdate();
 	//RM_Render();
 }
 
@@ -188,8 +215,14 @@ void RenderObjects()
 			switch (gGrids.gGrid[i][j]->type)
 			{
 			case(WALL):
-				CP_Settings_Fill(CP_Color_Create(255, 255, 0, 225)); // r, g, b, a
-				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
+				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
+				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-1.png");
+				printf("RENDERER WIDTH: %d\n", renderImage->width);
+				break;
+			case(EMPTY):
+				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
+				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-0.png");
+				printf("RENDERER WIDTH: %d\n", renderImage->width);
 				break;
 			case(RECTANGLE):
 				CP_Settings_Fill(CP_Color_Create(255, 128, 128, 225)); // r, g, b, a
@@ -220,16 +253,35 @@ void PlaceObject()
 
 	if (!iAutoGenerate)
 	{
-		if (CP_Input_GetMouseX() < NumGrids * iSize && CP_Input_GetMouseY() < NumGrids * iSize)
+		if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
 		{
-			if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
+			if (CP_Input_GetMouseX() < NumGrids * iSize && CP_Input_GetMouseY() < NumGrids * iSize)
 			{
-				CheckGrid(CP_Input_GetMouseX() / fScaleBy - fMoveX, CP_Input_GetMouseY() / fScaleBy - fMoveY, objType);
+				if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
+				{
+					AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, objDirection);
+				}
+				else
+				{
+					CheckGrid(CP_Input_GetMouseX() / fScaleBy - fMoveX, CP_Input_GetMouseY() / fScaleBy - fMoveY, objType);
+				}
 			}
-			if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
+		}
+
+		if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
+		{
+			if (CP_Input_GetMouseX() < NumGrids * iSize && CP_Input_GetMouseY() < NumGrids * iSize)
 			{
-				CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
+				if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
+				{
+					AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, RIGHT);
+				}
+				else
+				{
+					CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
+				}
 			}
+
 		}
 	}
 	else
@@ -337,13 +389,15 @@ void SaveGrid()
 
 void AutoGenerateGrid()
 {
-	int iCount;
-	printf("Insert Seed: ");
-	scanf_s("%d", &iCount);
+	////code here is for seed if i need it
+	//int iCount;
+	//printf("Insert Seed: ");
+	//scanf_s("%d", &iCount);
+	//srand(iSeed);
 
-	srand(iCount);
 	// i referenced prims algorithm.
 
+	/*
 	//for (int i = 1; i < NumGrids - 1; i++)
 	//{
 	//	for (int j = 1; j < NumGrids - 1; j++)
@@ -364,6 +418,7 @@ void AutoGenerateGrid()
 	//		gGrids.gGrid[j][i]->type = iObjType;
 	//	}
 	//}
+	*/
 
 	//Set everything to wall.
 	for (int i = 1; i < NumGrids; i++)
@@ -406,6 +461,7 @@ void AutoGenerateGrid()
 		ll_WallList->curr = tempNode;
 		tempGO = (GameObject*)tempNode;
 
+		/*
 		//int DifferenceX = (int)tempGO->position.x - positionX;
 		//int DifferenceY = (int)tempGO->position.y - positionY;
 
@@ -425,7 +481,7 @@ void AutoGenerateGrid()
 
 		//gGrids.gGrid[positionY][positionX]->type = EMPTY;
 		//CheckSurrounding(positionX, positionY, (int)tempGO->position.x, (int)tempGO->position.y);
-
+		*/
 		// set the new positions and add the new walls.
 		positionX = (int)tempGO->position.x;
 		positionY = (int)tempGO->position.y;
@@ -513,6 +569,86 @@ void AddFrontierCell(int x, int y, LinkedList* List)
 	{
 		if (gGrids.gGrid[y][x + offset]->type == WALL)
 			LL_Add(&List, gGrids.gGrid[y][x + offset]); // right
+	}
+}
+
+void PrintCurrentType(int iObjType)
+{
+	/*
+	EMPTY = 0,
+	CIRCLE,
+	RECTANGLE,
+	WALL,
+	PLAYER,
+	LINE,
+	*/
+
+	switch (iObjType)
+	{
+	case(EMPTY):
+		printf("Object Type: EMPTY\n");
+		break;
+
+	case(CIRCLE):
+		printf("Object Type: CIRCLE\n");
+		break;
+
+	case(RECTANGLE):
+		printf("Object Type: RECTANGLE\n");
+		break;
+
+	case(WALL):
+		printf("Object Type: WALL\n");
+		break;
+
+	case(PLAYER):
+		printf("Object Type: PLAYER\n");
+		break;
+
+	case(LINE):
+		printf("Object Type: LINE\n");
+		break;
+	default:
+		break;
+	}
+}
+
+void PrintCurrentDirection(int iObjDirection)
+{
+	switch (iObjDirection)
+	{
+	case(RIGHT):
+		printf("Object Direction: RIGHT\n");
+		break;
+
+	case(UP):
+		printf("Object Type: UP\n");
+		break;
+
+	case(LEFT):
+		printf("Object Type: LEFT\n");
+		break;
+
+	case(DOWN):
+		printf("Object Type: DOWN\n");
+		break;
+
+	default:
+		break;
+	}
+}
+
+void AssignDirection(float fMouseX, float fMouseY, int iDirection)
+{
+	int iModPosX = (int)fMouseX % (int)iSize;
+	int iModPosY = (int)fMouseY % (int)iSize;
+
+	int iCurrentX = (int)(fMouseX - iModPosX) / iSize;
+	int iCurrentY = (int)(fMouseY - iModPosY) / iSize;
+
+	if (gGrids.gGrid[iCurrentY][iCurrentX]->oDirection != iDirection)
+	{
+		gGrids.gGrid[iCurrentY][iCurrentX]->oDirection = iDirection;
 	}
 }
 
