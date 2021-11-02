@@ -452,7 +452,7 @@ void SaveGrid()
 
 						sprintf_s(ObjPosY, 10, "%d", i);
 						strcat_s(GridObj[iObjNum], 40, ObjPosY); // y
-						strcat_s(GridObj[iObjNum], 40, "\n");
+						strcat_s(GridObj[iObjNum], 40, ",");
 						printf("%s\n", GridObj[iObjNum]);
 
 						sprintf_s(ObjDirection, 10, "%d", i);
