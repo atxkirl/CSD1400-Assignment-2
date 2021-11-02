@@ -71,9 +71,6 @@
     <ClCompile Include="source\SystemManager.c">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="source\Mainmenu.c">
-      <Filter>Scenes</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

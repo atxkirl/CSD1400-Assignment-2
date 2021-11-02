@@ -32,7 +32,8 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 	LinkedList* openList = NULL; // List of nodes that we want to test.
 	LinkedList* closedList = NULL; // List of nodes that we've already tested.
 	LinkedList* path = NULL; // Return list if a valid path between the starting and ending nodes is found.
-	LinkedList* isacopy = NULL;
+	starting->hCost = Estimate(starting->row, starting->column, ending->row, ending->column);
+	starting->fCost = starting->hCost;
 
 	LL_Add(&openList, starting);
 
@@ -49,173 +50,80 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 	while (LL_IsEmpty(openList) == 0)
 	{
 		AStar_Node* lowestF = NULL;
-		//int lowestFIndex = 0;
-		// Loop through openList to find node with the lowest F cost.
 		for (LinkedList* it = openList; it != NULL; it = it->next)
 		{
 			if (lowestF == NULL || lowestF->fCost > ((AStar_Node*)it->curr)->fCost)
-			{
 				lowestF = (AStar_Node*)it->curr;
-			}
 		}
 
-		if (lowestF) // We found it!!
+		// Skip this iteration if a valid lowestF node is not found.
+		if (lowestF == NULL)
+			continue;
+
+		LL_RemovePtr(&openList, lowestF);
+		LL_Add(&closedList, lowestF);
+
+		// Found end node, so now create path.
+		if (lowestF == ending)
 		{
-			int sizeOl = LL_GetCount(openList);
-			sizeOl = LL_GetCount(closedList);
+			printf("Found end node! Time to create path. [LinkedList* GetPath()]\n");
+
+			// Add nodes to path list, in reverse order.
+			for (; lowestF; lowestF = lowestF->parent)
+			{
+				if (lowestF->type != NODE_START && lowestF->type != NODE_END)
+					lowestF->type = NODE_PATH;
+				LL_Add(&path, lowestF);
+			}
+			LL_Clear(&openList);
+			LL_Clear(&closedList);
+			return path;
+		}
+
+		// Get neighbouring nodes.
+		int lowestRow = lowestF->row;
+		int lowestCol = lowestF->column;
+		for (int i = 0; i < directions; ++i)
+		{
+			lowestRow = lowestF->row + deltaRow[i];
+			lowestCol = lowestF->column + deltaCol[i];
 			
-			LL_RemovePtr(&openList, lowestF);
-			LL_Add(&closedList, lowestF);
+			// Do not look for neighbours if out of bounds.
+			if (lowestRow < 0 || lowestRow >= map->rows ||
+				lowestCol < 0 || lowestCol >= map->columns)
+				continue;
 
-			if (lowestF->row == ending->row && lowestF->column == ending->column) // Found ending node!
+			AStar_Node* neighbour = &map->map[lowestRow][lowestCol];
+			
+			// Skip walls and nodes in the closed list.
+			if (neighbour->type == NODE_WALL)
+				continue;
+			if (LL_ContainsPtr(closedList, neighbour))
+				continue;
+
+			int gCost, hCost, fCost;
+			if (i % 2 == 0)
+				gCost = lowestF->gCost + 14;
+			else
+				gCost = lowestF->gCost + 10;
+			hCost = Estimate(neighbour->row, neighbour->column, ending->row, ending->column);
+			fCost = gCost + hCost;
+
+			if (LL_ContainsPtr(openList, neighbour) == 0 || fCost < neighbour->fCost)
 			{
-				// Need to add code here to backtrack to get the full path.
-				printf("Found end node! Time to create path. [LinkedList* GetPath()]\n");
-				printf("Found end node! OpenList size = %d [LinkedList* GetPath()]\n", LL_GetCount(openList));
-				printf("Found end node! ClosedList size = %d [LinkedList* GetPath()]\n", LL_GetCount(closedList));
+				neighbour->gCost = gCost;
+				neighbour->hCost = hCost;
+				neighbour->fCost = fCost;
+				neighbour->parent = lowestF;
 
-				while (lowestF != NULL)
-				{
-					printf("PNode Position = [%d,%d]\n", lowestF->row, lowestF->column);
-
-					AStar_Node* mapNode = &map->map[lowestF->row][lowestF->column];
-					mapNode->fCost = lowestF->fCost;
-					mapNode->gCost = lowestF->gCost;
-					mapNode->hCost = lowestF->hCost;
-					mapNode->parent = lowestF->parent;
-					if (mapNode->type != NODE_START && mapNode->type != NODE_END)
-						mapNode->type = NODE_PATH;
-
-					LL_Add(&path, mapNode);
-					lowestF = lowestF->parent;
-				}
-				LL_Reverse(&path);
-
-				if (isacopy)
-				{
-					for (; isacopy->next != NULL; isacopy = isacopy->next)
-						free(isacopy->curr);
-					free(isacopy->curr);
-					isacopy = GetHead(isacopy);
-					LL_Clear(&isacopy);
-				}
-				LL_Clear(&openList);
-				LL_Clear(&closedList);
-
-				for (int i = 0; i < 8; ++i)
-					neighbours[i] = NULL;
-
-				return path;
-			}
-
-			int lowestRow = lowestF->row;
-			int lowestCol = lowestF->column;
-			AStar_Node* neighbour = NULL;
-			for (int i = 0; i < 8; ++i)
-				neighbours[i] = NULL;
-			// Now get neighbours of the lowestF node.
-			for (int i = 0; i < directions; ++i)
-			{		
-				lowestRow = lowestF->row + deltaRow[i];
-				lowestCol = lowestF->column + deltaCol[i];
-
-				if (lowestRow >= 0 && lowestRow < map->rows && 
-					lowestCol >= 0 && lowestCol < map->columns)
-				{
-					neighbour = &map->map[lowestRow][lowestCol];
-					if (neighbour->type != NODE_WALL) // Only add if the node is not a wall.
-					{
-						neighbours[i] = malloc(sizeof(AStar_Node));
-						if (neighbours[i])
-						{
-							// Creating a copy here because nodes at the same position can have different gCosts.
-							// Depending on how they were calculated.
-							//memcpy(neighbours[i], neighbour, sizeof(AStar_Node));
-							neighbours[i]->column = neighbour->column;
-							neighbours[i]->row = neighbour->row;
-							neighbours[i]->type = neighbour->type;
-							neighbours[i]->fCost = neighbour->fCost;
-							neighbours[i]->gCost = neighbour->gCost;
-							neighbours[i]->hCost = neighbour->hCost;
-							neighbours[i]->parent = lowestF;
-							LL_Add(&isacopy, neighbours[i]);
-						}
-					}
-					else
-					{
-						neighbours[i] = NULL;
-					}
-				}
-			}
-
-			// Loop through neighbouring nodes.
-			for (int i = 0; i < directions; ++i)
-			{
-				if (neighbours[i] == NULL)
-					continue;
-				
-				AStar_Node* temp = NULL;
-				bool skipNode = false;
-
-				// Check if neighbouring node is in the closed list.
-				for (LinkedList* it = closedList; it; it = it->next)
-				{
-					temp = (AStar_Node*)it->curr;
-					if (temp->row == neighbours[i]->row &&
-						temp->column == neighbours[i]->column) // Neighbour node is already in closed list.
-					{
-						skipNode = true;
-						break;
-					}
-				}
-				if (skipNode)
-					continue;
-
-				// Calculate costs for neighbouring node.
-				if (i % 2 == 0)
-					neighbours[i]->gCost = lowestF->gCost + 14;
-				else
-					neighbours[i]->gCost = lowestF->gCost + 10;
-				neighbours[i]->hCost = Estimate(neighbours[i]->row, neighbours[i]->column, ending->row, ending->column);
-				neighbours[i]->fCost = neighbours[i]->gCost + neighbours[i]->hCost;
-
-				// Check if neighbouring node is in the open list.
-				temp = NULL;
-				skipNode = false;
-				for (LinkedList* it = openList; it; it = it->next)
-				{
-					temp = (AStar_Node*)it->curr;
-					if (temp->row == neighbours[i]->row &&
-						temp->column == neighbours[i]->column) // Neighbour node is already in open list.
-					{
-						if (temp->gCost > neighbours[i]->gCost)
-						{
-							skipNode = true;
-							break;
-						}
-					}
-				}
-				if (skipNode)
-					continue;
-
-				LL_Add(&openList, neighbours[i]);
+				LL_SetAdd(&openList, neighbour);
 			}
 		}
 	}
 
 	printf("Warning! There is no valid path between the Starting and Ending nodes. [LinkedList* GetPath]\n");
-	if (isacopy)
-	{
-		for (; isacopy->next != NULL; isacopy = isacopy->next)
-			free(isacopy->curr);
-		free(isacopy->curr);
-		isacopy = GetHead(isacopy);
-		LL_Clear(&isacopy);
-	}
 	LL_Clear(&openList);
 	LL_Clear(&closedList);
-	for (int i = 0; i < 8; ++i)
-		neighbours[i] = NULL;
-
+	LL_Clear(&path);
 	return NULL;
 }

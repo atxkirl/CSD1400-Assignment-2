@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "cprocessing.h"
 #include "Helpers.h"
 #include "../DetectMemoryLeak.h"
@@ -36,7 +37,6 @@ static CP_Color pathColor;
 static AStar_Node* startNode;
 static AStar_Node* endNode;
 
-#include <time.h>
 void Adrian_CallAStar(void)
 {
     // Clear the map of paths
