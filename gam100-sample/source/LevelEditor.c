@@ -46,7 +46,7 @@ void LevelEditorInit()
 			//gGrids.gGrid[i][j] = isEmpty;
 			GameObject* go = GOM_Create((i == 0 || i == NumGrids - 1 || j == 0 || j == NumGrids -1)? WALL : EMPTY);
 			Renderer* r = RM_AddComponent(go);
-			go->position = CP_Vector_Set(j * vScale.x, i * vScale.y);
+			go->position = CP_Vector_Set(j * vScale.x * iSize, i * vScale.y * iSize);
 			go->scale = CP_Vector_Set(vScale.x, vScale.y);
 			go->oDirection = RIGHT * 90.0f;
 			r->color = CP_Color_Create(255, 255, 0, 255);
@@ -100,6 +100,21 @@ void LevelEditorUpdate()
 
 	if (CP_Input_KeyDown(KEY_1))
 	{
+		fScaleBy += 1 * CP_System_GetDt();
+		vScale = CP_Vector_Set(fScaleBy, fScaleBy);
+		mScale = CP_Matrix_Scale(vScale);
+	}
+
+	else if (CP_Input_KeyDown(KEY_2))
+	{
+		fScaleBy -= 1 * CP_System_GetDt();
+		vScale = CP_Vector_Set(fScaleBy, fScaleBy);
+		mScale = CP_Matrix_Scale(vScale);
+	}
+
+
+	if (CP_Input_KeyTriggered(KEY_Q))
+	{
 		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
 		{
 			objDirection--;
@@ -110,13 +125,13 @@ void LevelEditorUpdate()
 		}
 		else
 		{
-			fScaleBy += 1 * CP_System_GetDt();
-			vScale = CP_Vector_Set(fScaleBy, fScaleBy);
-			mScale = CP_Matrix_Scale(vScale);
+			objType++;
+			if (objType >= TYPE_END)
+				objType = TYPE_END - 1;
+			PrintCurrentType(objType);
 		}
 	}
-
-	else if (CP_Input_KeyDown(KEY_2))
+	else if (CP_Input_KeyTriggered(KEY_E))
 	{
 		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
 		{
@@ -128,25 +143,11 @@ void LevelEditorUpdate()
 		}
 		else
 		{
-			fScaleBy -= 1 * CP_System_GetDt();
-			vScale = CP_Vector_Set(fScaleBy, fScaleBy);
-			mScale = CP_Matrix_Scale(vScale);
+			objType--;
+			if (objType < 0)
+				objType = 0;
+			PrintCurrentType(objType);
 		}
-	}
-
-	if (CP_Input_KeyTriggered(KEY_Q))
-	{
-		objType++;
-		if (objType >= TYPE_END)
-			objType = TYPE_END - 1;
-		PrintCurrentType(objType);
-	}
-	else if (CP_Input_KeyTriggered(KEY_E))
-	{
-		objType--;
-		if (objType < 0)
-			objType = 0;
-		PrintCurrentType(objType);
 	}
 
 	if (CP_Input_KeyTriggered(KEY_SPACE))
@@ -203,39 +204,6 @@ void RenderObjects()
 			0 + fMoveY,
 			(float)i * iSize + fMoveX,
 			(float)NumGrids * iSize + fMoveY); // Draw Vertical line
-
-
-	}
-
-	//render obj
-	for (int i = 0; i < NumGrids; i++)
-	{
-		for (int j = 0; j < NumGrids; j++)
-		{
-			switch (gGrids.gGrid[i][j]->type)
-			{
-			case(WALL):
-				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
-				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-1.png");
-				printf("RENDERER WIDTH: %d\n", renderImage->width);
-				break;
-			case(EMPTY):
-				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
-				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-0.png");
-				printf("RENDERER WIDTH: %d\n", renderImage->width);
-				break;
-			case(RECTANGLE):
-				CP_Settings_Fill(CP_Color_Create(255, 128, 128, 225)); // r, g, b, a
-				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
-				break;
-			case(CIRCLE):
-				CP_Settings_Fill(CP_Color_Create(128, 128, 255, 225)); // r, g, b, a
-				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
-				break;
-			default:
-				break;
-			}
-		}
 	}
 }
 
@@ -265,6 +233,8 @@ void PlaceObject()
 				{
 					CheckGrid(CP_Input_GetMouseX() / fScaleBy - fMoveX, CP_Input_GetMouseY() / fScaleBy - fMoveY, objType);
 				}
+
+				LoadTileImage();
 			}
 		}
 
@@ -280,13 +250,14 @@ void PlaceObject()
 				{
 					CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
 				}
+				LoadTileImage();
 			}
-
 		}
 	}
 	else
 	{
 		AutoGenerateGrid();
+		LoadTileImage();
 	}
 }
 
@@ -483,8 +454,8 @@ void AutoGenerateGrid()
 		//CheckSurrounding(positionX, positionY, (int)tempGO->position.x, (int)tempGO->position.y);
 		*/
 		// set the new positions and add the new walls.
-		positionX = (int)tempGO->position.x;
-		positionY = (int)tempGO->position.y;
+ 		positionX = (int)tempGO->position.x / iSize;
+		positionY = (int)tempGO->position.y / iSize;
 		AddFrontierCell(positionX, positionY, ll_WallList);
 	}
 
@@ -649,6 +620,48 @@ void AssignDirection(float fMouseX, float fMouseY, int iDirection)
 	if (gGrids.gGrid[iCurrentY][iCurrentX]->oDirection != iDirection)
 	{
 		gGrids.gGrid[iCurrentY][iCurrentX]->oDirection = iDirection;
+	}
+}
+
+void LoadTileImage()
+{
+	//render obj
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			switch (gGrids.gGrid[i][j]->type)
+			{
+			case(WALL):
+				gGrids.gGrid[i][j]->scale.x = 16.f;
+				gGrids.gGrid[i][j]->scale.y = 16.f;
+				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
+				//RM_DeleteImage(renderImage);
+				RM_LoadImage(renderImage, "Assets/bananaboi.png");
+				//CP_Settings_Fill(CP_Color_Create(255, 0, 128, 225)); // r, g, b, a
+				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
+				break;
+			case(EMPTY):
+				gGrids.gGrid[i][j]->scale.x = 16.f;
+				gGrids.gGrid[i][j]->scale.y = 16.f;
+				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
+				//RM_DeleteImage(renderImage);
+				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-0.png");
+				//CP_Settings_Fill(CP_Color_Create(255, 128, 0, 225)); // r, g, b, a
+				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
+				break;
+			case(RECTANGLE):
+				CP_Settings_Fill(CP_Color_Create(255, 128, 128, 225)); // r, g, b, a
+				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
+				break;
+			case(CIRCLE):
+				CP_Settings_Fill(CP_Color_Create(128, 128, 255, 225)); // r, g, b, a
+				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }
 
