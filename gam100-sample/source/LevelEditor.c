@@ -82,6 +82,7 @@ void LevelEditorInit()
 	objType = WALL; // initialize to 0;
 	objDirection = RIGHT; // init to right
 	iSize = CP_System_GetWindowHeight() / NumGrids;
+	//iSize = (int)(WORLD_HEIGHT / NumGrids);
 
 	fMoveX = 0.f;
 	fMoveY = 0.f;
@@ -91,17 +92,19 @@ void LevelEditorInit()
 
 	for (int i = 0; i <= NumGrids; i++)
 	{
+		float fSize = (float)iSize;
 		GameObject* go = GOM_Create(LINE);
-		float size = WORLD_HEIGHT;
-		go->scale.x = size;
-		go->position.x = i * (size / (float)NumGrids);
+		go->scale.x = fSize * NumGrids;
+		go->position.x = i * fSize - fSize * 0.5f;
+		go->position.y = -fSize * 0.5f;
 		go->rotation = -90.0f;
 		Renderer* r = RM_AddComponent(go);
 		r->color = COLOR_GREY;
 
 		go = GOM_Create(LINE);
-		go->scale.x = size;
-		go->position.y = i * (size / (float)NumGrids);
+		go->scale.x = fSize * NumGrids;
+		go->position.x = -fSize * 0.5f;
+		go->position.y = i * fSize - fSize * 0.5f;
 		r = RM_AddComponent(go);
 		r->color = COLOR_GREY;
 	}
@@ -180,14 +183,16 @@ void LevelEditorUpdate()
 	{
 		fScaleBy += 1 * CP_System_GetDt();
 		vScale = CP_Vector_Set(fScaleBy, fScaleBy);
-		mScale = CP_Matrix_Scale(vScale);
+		//mScale = CP_Matrix_Scale(vScale);
+		RM_SetCameraZoom(fScaleBy);
 	}
 
 	else if (CP_Input_KeyDown(KEY_2))
 	{
 		fScaleBy -= 1 * CP_System_GetDt();
 		vScale = CP_Vector_Set(fScaleBy, fScaleBy);
-		mScale = CP_Matrix_Scale(vScale);
+		//mScale = CP_Matrix_Scale(vScale);
+		RM_SetCameraZoom(fScaleBy);
 	}
 
 
@@ -249,6 +254,9 @@ void LevelEditorUpdate()
 		{
 			clickPoint->tag = LCLICK_SHIFT;
 		}
+
+		clickPoint->scale = CP_Vector_Set(10.0f, 10.0f);
+		RM_AddComponent(clickPoint);
 	}
 	if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
 	{
@@ -261,6 +269,11 @@ void LevelEditorUpdate()
 
 		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
 			clickPoint->tag = RCLICK_SHIFT;
+
+		//GameObject* t = GOM_Create(CIRCLE);
+		//t->position = CP_Vector_Set(clickPoint->position.x, clickPoint->position.y);
+		//t->scale = CP_Vector_Set(10.0f, 10.0f);
+		//RM_AddComponent(t);
 	}
 
 	//PlaceObject();
@@ -293,7 +306,7 @@ void LevelEditorExit()
 */
 void RenderObjects()
 {
-	CP_Settings_ApplyMatrix(mScale);
+	//CP_Settings_ApplyMatrix(mScale);
 
 	/* This will fill the background with grey color */
 	CP_Graphics_ClearBackground(CP_Color_Create(128, 128, 128, 255));

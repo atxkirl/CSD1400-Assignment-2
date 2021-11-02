@@ -95,3 +95,10 @@ void RM_GetRenderSize(float* width, float* height, RENDER_PRIORITY space);
 @return CP_Vector position of the mouse in worldspace
 */
 CP_Vector RM_MousePositionToWorldSpace(float x, float y);
+
+/*!
+@brief Zooms in the camera. Renders objects larger
+@param z - zoom by value. 2.0 zoom means can see half of original screen
+@return void
+*/
+void RM_SetCameraZoom(float);

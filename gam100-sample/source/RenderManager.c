@@ -10,6 +10,7 @@ LinkedList* matrixStack = NULL;
 
 CP_Vector cameraPos;
 CP_Vector cameraScale;
+float zoom = 1.0f;
 
 //private functions
 void RenderAllOfType(RENDER_PRIORITY type);
@@ -21,6 +22,7 @@ void RM_Init()
 	//MS_Print(matrixStack->curr);
 	cameraPos = CP_Vector_Set(0.0f, 0.0f);
 	cameraScale = CP_Vector_Set(1.0f, 1.0f);
+	zoom = 1.0f;
 }
 Renderer* RM_AddComponent(GameObject* g)
 {
@@ -82,7 +84,7 @@ void RM_Render()
 	float w = (float)CP_System_GetWindowWidth();
 	float h = (float)CP_System_GetWindowHeight();
 	//printf("%.0f %.0f\n", w, h);
-	float hworld = WORLD_HEIGHT; //fit 500 grid in window height
+	float hworld = WORLD_HEIGHT * zoom; //fit 500 grid in window height
 	float hratio = h / hworld;
 	RM_SetCameraScale(CP_Vector_Set(hratio, hratio));
 	//CP_Vector sc = RM_GetCameraScale();
@@ -160,7 +162,7 @@ void RM_GetRenderSize(float* width, float* height, RENDER_PRIORITY space)
 	switch (space)
 	{
 	case PRI_GAME_OBJECT:
-		*height = WORLD_HEIGHT;
+		*height = WORLD_HEIGHT * zoom;
 		*width = w / h * *height;
 		break;
 	default:
@@ -182,6 +184,11 @@ CP_Vector RM_MousePositionToWorldSpace(float x, float y)
 	CP_Vector ret = CP_Vector_Set(ww / w * mposx - ww * 0.5f + campos.x,
 		wh / h * mposy - wh * 0.5f + campos.y);
 	return ret;
+}
+
+void RM_SetCameraZoom(float z)
+{
+	zoom = z;
 }
 
 void RenderAllOfType(RENDER_PRIORITY type)
