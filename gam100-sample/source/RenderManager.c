@@ -84,10 +84,7 @@ void RM_Render()
 	//printf("%.0f %.0f\n", w, h);
 	float hworld = WORLD_HEIGHT; //fit 500 grid in window height
 	float hratio = h / hworld;
-	float whratio = w / (float)h;
-	float wscale = whratio * hworld; //how many pixels to be rendered
-	//printf("%f %f\n", wscale, hworld);
-	RM_SetCameraScale(CP_Vector_Set(w / wscale, hratio));
+	RM_SetCameraScale(CP_Vector_Set(hratio, hratio));
 	//CP_Vector sc = RM_GetCameraScale();
 	//printf("%f %f\n", sc.x, sc.y);
 	
@@ -99,6 +96,15 @@ void RM_Render()
 
 	RenderAllOfType(PRI_GAME_OBJECT);
 	CP_Settings_ResetMatrix();
+
+	//CP_Vector screenScale = CP_Vector_Set(1,1);
+	//hworld = SCREEN_HEIGHT;
+	//hratio = h / hworld;
+	//whratio = w / (float)h;
+	//wscale = whratio * hworld;
+	//screenScale = CP_Vector_Set(w / wscale, hratio);
+	//CP_Settings_ApplyMatrix(CP_Matrix_Scale(screenScale));
+
 	RenderAllOfType(PRI_UI);
 	//CP_Settings_ResetMatrix();
 }
@@ -144,6 +150,24 @@ Renderer* RM_DeleteImage(Renderer* r)
 	if (r->sprite)
 		CP_Image_Free(&r->sprite);
 	return r;
+}
+
+void RM_GetRenderSize(float* width, float* height, RENDER_PRIORITY space)
+{
+	float w = (float)CP_System_GetWindowWidth();
+	float h = (float)CP_System_GetWindowHeight();
+
+	switch (space)
+	{
+	case PRI_GAME_OBJECT:
+		*height = WORLD_HEIGHT;
+		*width = w / h * *height;
+		break;
+	default:
+		*height = h;
+		*width = w;
+		break;
+	}
 }
 
 void RenderAllOfType(RENDER_PRIORITY type)

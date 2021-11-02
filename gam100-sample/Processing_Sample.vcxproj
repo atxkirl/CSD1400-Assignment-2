@@ -209,6 +209,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\LevelOne.c" />
     <ClCompile Include="source\LinkedList.c" />
     <ClCompile Include="source\Loader.c" />
+    <ClCompile Include="source\Mainmenu.c" />
     <ClCompile Include="source\Marcus.c" />
     <ClCompile Include="source\MatrixStack.c" />
     <ClCompile Include="source\Player.c" />

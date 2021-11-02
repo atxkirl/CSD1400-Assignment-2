@@ -12,21 +12,25 @@
 #include "cprocessing.h"
 #include "Helpers.h"
 #include "SystemManager.h"
+#include "Player.h"
 
 void game2_init(void)
 {
     SM_SystemsInit();
 
-    GameObject* g = GOM_Create(CIRCLE);
-    g->scale = CP_Vector_Set(20, 20);
-    g->position = CP_Vector_Set(50, 20);
-    RM_AddComponent(g);
+    //GameObject* g = GOM_Create(CIRCLE);
+    //g->scale = CP_Vector_Set(20, 20);
+    //g->position = CP_Vector_Set(50, 20);
+    //RM_AddComponent(g);
+
+    PLY_CreatePlayer();
 }
 
 void game2_update(void)
 {
     SM_SystemsPreUpdate();
 
+    PLY_Update();
     SM_SystemsUpdate();
 
     CP_Settings_Fill(CP_Color_Create(255, 128, 128, 255));

@@ -8,25 +8,13 @@
     <ClCompile Include="source\Scene.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\RenderManager.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GameObjectManager.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="source\LevelEditor.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CollisionManager.c">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="source\LinkedList.c">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="source\FileParser.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\SceneManager.c">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="source\game2.c">
@@ -59,17 +47,32 @@
     <ClCompile Include="source\Loader.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\SystemManager.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\AnimationManager.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Player.c">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="source\AStar.c">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CollisionManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AnimationManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameObjectManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SceneManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SystemManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Mainmenu.c">
+      <Filter>Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,33 +85,21 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{45e0f046-1696-4933-9ab8-83f2d30c31e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{99fbe406-b99e-4999-b04c-ee1cd13eb770}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Scene.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="source\GameObject.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\RenderManager.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\GameObjectManager.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="source\LevelEditor.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\CollisionManager.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\LinkedList.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\FileParser.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\SceneManager.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\Helpers.h">
@@ -123,17 +114,32 @@
     <ClInclude Include="source\Loader.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="source\SystemManager.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\AnimationManager.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="source\Player.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\AStar.h">
       <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AnimationManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CollisionManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameObjectManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SceneManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SystemManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameObject.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

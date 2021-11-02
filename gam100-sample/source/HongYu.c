@@ -157,6 +157,7 @@ void HongYu_update(void)
     //g->text = str;
     Renderer* r = (Renderer*)SM_GetComponent(g, COM_RENDERER);
     r->textColor = CP_Color_Create(255, 255, 255, 255);
+    r->text = str;
 
     SM_SystemsUpdate();
     RM_SetCameraPosition(g->position);

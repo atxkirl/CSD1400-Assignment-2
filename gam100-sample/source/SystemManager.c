@@ -1,7 +1,7 @@
 #include "SystemManager.h"
 #include "LinkedList.h"
 
-LinkedList* delList;
+LinkedList* delList = NULL;
 
 /*!
 @brief Delete gameobject from all systems

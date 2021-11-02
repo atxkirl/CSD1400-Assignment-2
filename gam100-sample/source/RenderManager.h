@@ -13,6 +13,7 @@ this is the worldspace size vertically. rendering is based on this size.
 	At the same time, aspect ratio of the obj rendered is not affected. a square will still look like a square
 */
 #define WORLD_HEIGHT 500.0f
+//#define SCREEN_HEIGHT 500.0f;
 
 typedef enum RENDER_PRIORITY //lowest to highest
 {
@@ -77,3 +78,12 @@ Renderer* RM_AddImage(Renderer*, CP_Image);
 @return ptr of the renderer
 */
 Renderer* RM_DeleteImage(Renderer*);
+
+/*!
+@brief assigns the width and height of screen/world size
+@param width - ptr for width value to be assigned
+@param height - ptr for height value to be assigned
+@param space - which space of the width and height
+@return void
+*/
+void RM_GetRenderSize(float* width, float* height, RENDER_PRIORITY space);

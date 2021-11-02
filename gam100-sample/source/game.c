@@ -40,6 +40,8 @@ void game_OnCollision(Collider* left, Collider* right)
             SceneManager_ChangeSceneByName("weiyi");
         else if (strcmp(((GameObject*)left->obj)->tag, "xinyun") == 0)
             SceneManager_ChangeSceneByName("xinyun");
+        else if (strcmp(((GameObject*)left->obj)->tag, "game") == 0)
+            SceneManager_ChangeSceneByName("game2");
     }
     printf("INSIDE!");
 }
@@ -51,6 +53,15 @@ void game_init(void)
     //GameObject* g = 
     GOM_Create2(CIRCLE,
         CP_Vector_Set(20, 20), 0.0f, CP_Vector_Set(20, 20));
+
+    float screenWidth, screenHeight;
+    RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
+    GameObject* bg = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(0.5f * screenWidth, 0.5f* screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
+    Renderer* bgr = RM_AddComponent(bg);
+    bgr->renderPriority = PRI_UI;
+    RM_LoadImage(bgr, "Assets/BananaBoi_Title.jpg");
+
 
     GameObject* button = GOM_Create2(RECTANGLE,
         CP_Vector_Set(80.0f, 25.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -91,16 +102,25 @@ void game_init(void)
     r->renderPriority = PRI_UI;
     r->text = "xinyun";
     CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
+
+    //START BUTTON ==========
+    button = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(0.5f*screenWidth, 450), 0.0f, CP_Vector_Set(100.0f, 40.0f));
+    r = RM_AddComponent(button);
+    button->tag = "game"; //For collision
+    r->renderPriority = PRI_UI;
+    r->text = "Start";
+    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
 }
 
 void game_update(void)
 {
     SM_SystemsPreUpdate();
-    if (CP_Input_KeyTriggered(KEY_1))
-    {
-        // Change to game2 scene.
-        SceneManager_ChangeSceneByName("game2");
-    }
+    //if (CP_Input_KeyTriggered(KEY_1))
+    //{
+    //    // Change to game2 scene.
+    //    SceneManager_ChangeSceneByName("game2");
+    //}
     GameObject* clickPoint = NULL;
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
@@ -111,20 +131,6 @@ void game_update(void)
         clickPoint->tag = "Click";
         CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
 
-        //if (is_btn_colliding(CP_Input_GetMouseX(), CP_Input_GetMouseY(), 50.f, 10.f))
-        //{
-        //    SceneManager_ChangeSceneByName("marcus");
-        //}
-
-        //else if (is_btn_colliding(CP_Input_GetMouseX(), CP_Input_GetMouseY(), 50.f, 60.f))
-        //{
-        //    SceneManager_ChangeSceneByName("hongyu");
-        //}
-
-        //else if (is_btn_colliding(CP_Input_GetMouseX(), CP_Input_GetMouseY(), 50.f, 110.f))
-        //{
-        //    SceneManager_ChangeSceneByName("adrian");
-        //}
     }
     SM_SystemsUpdate();
 

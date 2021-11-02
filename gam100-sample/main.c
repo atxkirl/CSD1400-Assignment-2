@@ -19,7 +19,8 @@
 /* Entry point */
 int main(void)
 {
-    CP_System_SetWindowSize(800, 600);
+    //16:9 dimensions only
+    CP_System_SetWindowSize(960, 540);
 
     SceneManager_Initialize();
     SceneManager_ChangeScene(currentScene);
