@@ -182,7 +182,7 @@ void LevelOneGridColliderInit()
     {
         for (int j = 0; j < NumGrids; j++)
         {
-            if (gLoadedGrids->gGrid[i][j]->type != EMPTY)
+            if (gLoadedGrids->gGrid[i][j]->type != EMPTY && gLoadedGrids->gGrid[i][j]->type != FLOOR && gLoadedGrids->gGrid[i][j]->type != WATER)
             {
                 CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOne_OnCollision);
                 CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;

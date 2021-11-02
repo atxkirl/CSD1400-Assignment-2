@@ -78,7 +78,7 @@ void LoadGrid(char* cInput, int iLoad)
 		{
 			int iY = objList->fObjList[i]->iPosY;
 			int iX = objList->fObjList[i]->iPosX;
-			gLoadedGrids->gGrid[iY][iX]->type = objList->fObjList[i]->iType;
+			gLoadedGrids->gGrid[iY][iX]->type = (objList->fObjList[i]->iType > 0) ? objList->fObjList[i]->iType : FLOOR;
 			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
 			gLoadedGrids->gGrid[iY][iX]->position = CP_Vector_Set(iX * fScale - fScale, iY * fScale - fScale);
 			gLoadedGrids->gGrid[iY][iX]->scale = CP_Vector_Set(fScale, fScale);
@@ -88,9 +88,17 @@ void LoadGrid(char* cInput, int iLoad)
 			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 			r->color = CP_Color_Create(255, 255, 255, 255);
 
-			if (gLoadedGrids->gGrid[iY][iX]->type == WALL)
+			switch (gLoadedGrids->gGrid[iY][iX]->type)
 			{
+			case(WALL):
 				CLM_AddComponent(gLoadedGrids->gGrid[iY][iX]);
+				RM_LoadImage(r, "Assets/bananaboi.png");
+				break;
+			case(FLOOR):
+				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-0.png");
+				break;
+			default:
+				break;
 			}
 		}
 	}

@@ -34,6 +34,7 @@ void CheckGridInt(int iX, int iY, int iObjType)
 		gGrids.gGrid[iY][iX]->type = iObjType;
 	}
 }
+
 void AssignDirectionInt(int iX, int iY, int iDirection)
 {
 	if (gGrids.gGrid[iY][iX]->oDirection != iDirection)
@@ -42,6 +43,7 @@ void AssignDirectionInt(int iX, int iY, int iDirection)
 		gGrids.gGrid[iY][iX]->rotation = gGrids.gGrid[iY][iX]->oDirection * 90.f;
 	}
 }
+
 void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 {
 	if (strcmp(l->obj->tag, "grid") == 0)
@@ -61,8 +63,8 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 		}
 		else if (strcmp(r->obj->tag, RCLICK) == 0)
 		{
-			//CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
-			CheckGridInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, EMPTY);
+			//CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, FLOOR);
+			CheckGridInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, FLOOR);
 			LoadTileImage();
 		}
 		else if (strcmp(r->obj->tag, RCLICK_SHIFT) == 0)
@@ -73,6 +75,7 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 		}
 	}
 }
+
 /*!
 @brief Initialises the variables
 @param void
@@ -110,26 +113,26 @@ void LevelEditorInit()
 		r->color = COLOR_GREY;
 	}
 
-	// set all to empty first
+	// set all to FLOOR first
 	for (int i = 0; i < NumGrids; i++)
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			//gGrids.gGrid[i][j] = isEmpty;
-			GameObject* go = GOM_Create((i == 0 || i == NumGrids - 1 || j == 0 || j == NumGrids -1)? WALL : EMPTY);
+			//gGrids.gGrid[i][j] = isFLOOR;
+			GameObject* go = GOM_Create((i == 0 || i == NumGrids - 1 || j == 0 || j == NumGrids -1)? WALL : FLOOR);
 			Renderer* r = RM_AddComponent(go);
 			go->position = CP_Vector_Set(j * vScale.x * iSize, i * vScale.y * iSize);
 			go->scale = CP_Vector_Set(vScale.x, vScale.y);
-			go->oDirection = RIGHT * 90.0f;
+			go->oDirection = UP * 90.0f;
 			r->color = CP_Color_Create(255, 255, 0, 255);
 			gGrids.gGrid[i][j] = go;
 			go->tag = "grid";
 
-			gGrids.nGrid[i][j].Curr = go->type == WALL ? Visited : NotVisited;
-			gGrids.nGrid[i][j].Up = go->type == WALL ? Visited : NotVisited;
-			gGrids.nGrid[i][j].Down = go->type == WALL ? Visited : NotVisited;
-			gGrids.nGrid[i][j].Left = go->type == WALL ? Visited : NotVisited;
-			gGrids.nGrid[i][j].Right = go->type == WALL ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Curr = (go->type == WALL) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Up = (go->type == WALL) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Down = (go->type == WALL) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Left = (go->type == WALL) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Right = (go->type == WALL) ? Visited : NotVisited;
 
 			Collider* c = CLM_AddComponent(go);
 			CLM_Set(c, COL_BOX, LevelEditor_OnClickGrid);
@@ -237,7 +240,7 @@ void LevelEditorUpdate()
 
 	if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
 	{
-		GameObject* clickPoint = GOM_CreateTemp(EMPTY);
+		GameObject* clickPoint = GOM_CreateTemp(FLOOR);
 		clickPoint->position = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 		clickPoint->tag = LCLICK;
 		Collider* c = CLM_AddComponent(clickPoint);
@@ -254,7 +257,7 @@ void LevelEditorUpdate()
 	}
 	if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
 	{
-		GameObject* clickPoint = GOM_CreateTemp(EMPTY);
+		GameObject* clickPoint = GOM_CreateTemp(FLOOR);
 		clickPoint->position = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 		clickPoint->tag = RCLICK;
 		Collider* c = CLM_AddComponent(clickPoint);
@@ -305,24 +308,24 @@ void RenderObjects()
 	/* This will fill the background with grey color */
 	CP_Graphics_ClearBackground(CP_Color_Create(128, 128, 128, 255));
 
-	// grids
-	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
-	for (int i = 0; i <= NumGrids; i++)
-	{
-		CP_Graphics_DrawLine(0 + fMoveX,
-			(float)i * iSize + fMoveY,
-			(float)NumGrids * iSize + fMoveX,
-			(float)i * iSize + fMoveY); // Draw horizontal line
+	//// grids
+	//CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+	//for (int i = 0; i <= NumGrids; i++)
+	//{
+	//	CP_Graphics_DrawLine(0 + fMoveX,
+	//		(float)i * iSize + fMoveY,
+	//		(float)NumGrids * iSize + fMoveX,
+	//		(float)i * iSize + fMoveY); // Draw horizontal line
 
-	}
+	//}
 
-	for (int i = 0; i <= NumGrids; i++)
-	{
-		CP_Graphics_DrawLine((float)i * iSize + fMoveX,
-			0 + fMoveY,
-			(float)i * iSize + fMoveX,
-			(float)NumGrids * iSize + fMoveY); // Draw Vertical line
-	}
+	//for (int i = 0; i <= NumGrids; i++)
+	//{
+	//	CP_Graphics_DrawLine((float)i * iSize + fMoveX,
+	//		0 + fMoveY,
+	//		(float)i * iSize + fMoveX,
+	//		(float)NumGrids * iSize + fMoveY); // Draw Vertical line
+	//}
 }
 
 /*!
@@ -366,7 +369,7 @@ void PlaceObject()
 				}
 				else
 				{
-					CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, EMPTY);
+					CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, FLOOR);
 				}
 				LoadTileImage();
 			}
@@ -432,12 +435,12 @@ void SaveGrid()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gGrids.gGrid[i][j]->type !=  EMPTY && iObjNum < 450)
+			if (gGrids.gGrid[i][j]->type !=  FLOOR && iObjNum < 450)
 			{
 				char ObjType[10];
 				char ObjPosX[10];
 				char ObjPosY[10];
-				char ObjDirection[10];
+				char cObjDirection[10];
 				if (GridObj)
 				{
 					if (GridObj[iObjNum])
@@ -455,8 +458,8 @@ void SaveGrid()
 						strcat_s(GridObj[iObjNum], 40, ",");
 						printf("%s\n", GridObj[iObjNum]);
 
-						sprintf_s(ObjDirection, 10, "%d", i);
-						strcat_s(GridObj[iObjNum], 40, ObjDirection); // y
+						sprintf_s(cObjDirection, 10, "%d", (int)gGrids.gGrid[i][j]->oDirection);
+						strcat_s(GridObj[iObjNum], 40, cObjDirection); // dir
 						strcat_s(GridObj[iObjNum], 40, "\n");
 
 						iObjNum++;
@@ -496,7 +499,7 @@ void AutoGenerateGrid()
 	//{
 	//	for (int j = 1; j < NumGrids - 1; j++)
 	//	{
-	//		int iObjType = EMPTY;
+	//		int iObjType = FLOOR;
 	//		int iPercentage = rand() % 10;
 
 	//		if (iPercentage > 6 && iPercentage < 9)
@@ -538,7 +541,7 @@ void AutoGenerateGrid()
 
 	while (1)
 	{
-		tempGO->type = EMPTY;
+		tempGO->type = FLOOR;
 		LL_RemovePtr(&ll_WallList, tempGO);
 
 		if (LL_GetCount(GetHead(ll_WallList)) == 0)
@@ -573,7 +576,7 @@ void AutoGenerateGrid()
 		//else if (DifferenceY < 0)
 		//	positionY -= 1;
 
-		//gGrids.gGrid[positionY][positionX]->type = EMPTY;
+		//gGrids.gGrid[positionY][positionX]->type = FLOOR;
 		//CheckSurrounding(positionX, positionY, (int)tempGO->position.x, (int)tempGO->position.y);
 		*/
 		// set the new positions and add the new walls.
@@ -599,7 +602,7 @@ void AutoGenerateGrid()
 
 		if (gGrids.nGrid[positionY][positionX].Curr == NotVisited)
 		{
-			int iObjType = EMPTY;
+			int iObjType = FLOOR;
 			int iPercentage = rand() % 10;
 
 			if (iPercentage > 6)
@@ -669,7 +672,7 @@ void AddFrontierCell(int x, int y, LinkedList* List)
 void PrintCurrentType(int iObjType)
 {
 	/*
-	EMPTY = 0,
+	FLOOR = 0,
 	CIRCLE,
 	RECTANGLE,
 	WALL,
@@ -679,8 +682,8 @@ void PrintCurrentType(int iObjType)
 
 	switch (iObjType)
 	{
-	case(EMPTY):
-		printf("Object Type: EMPTY\n");
+	case(FLOOR):
+		printf("Object Type: FLOOR\n");
 		break;
 
 	case(CIRCLE):
@@ -764,7 +767,7 @@ void LoadTileImage()
 				//CP_Settings_Fill(CP_Color_Create(255, 0, 128, 225)); // r, g, b, a
 				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
-			case(EMPTY):
+			case(FLOOR):
 				gGrids.gGrid[i][j]->scale.x = 16.f;
 				gGrids.gGrid[i][j]->scale.y = 16.f;
 				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
@@ -793,23 +796,23 @@ void LoadTileImage()
 //	int offset = 1;
 //	int bounds = offset + 1;
 //
-//	if (x < NumGrids - bounds && gGrids.gGrid[y][x + bounds]->type == EMPTY)
+//	if (x < NumGrids - bounds && gGrids.gGrid[y][x + bounds]->type == FLOOR)
 //	{
-//		gGrids.gGrid[y][x + offset]->type = EMPTY; // left
+//		gGrids.gGrid[y][x + offset]->type = FLOOR; // left
 //	}
 //
-//	else if (x > bounds && gGrids.gGrid[y][x - bounds]->type == EMPTY)
+//	else if (x > bounds && gGrids.gGrid[y][x - bounds]->type == FLOOR)
 //	{
-//		gGrids.gGrid[y][x - offset]->type = EMPTY; // right
+//		gGrids.gGrid[y][x - offset]->type = FLOOR; // right
 //	}
 //
-//	else if (y < NumGrids - bounds && newY && gGrids.gGrid[y + bounds][x]->type == EMPTY)
+//	else if (y < NumGrids - bounds && newY && gGrids.gGrid[y + bounds][x]->type == FLOOR)
 //	{
-//		gGrids.gGrid[y + offset][x]->type = EMPTY; // up
+//		gGrids.gGrid[y + offset][x]->type = FLOOR; // up
 //	}
 //
-//	else if (y > bounds && gGrids.gGrid[y - bounds][x]->type == EMPTY)
+//	else if (y > bounds && gGrids.gGrid[y - bounds][x]->type == FLOOR)
 //	{
-//		gGrids.gGrid[y - offset][x]->type = EMPTY; // down
+//		gGrids.gGrid[y - offset][x]->type = FLOOR; // down
 //	}
 //}

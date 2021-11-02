@@ -8,6 +8,8 @@ typedef enum OBJECT_TYPE
 	EMPTY = 0,
 	CIRCLE,
 	RECTANGLE,
+	WATER,
+	FLOOR,
 	WALL,
 	PLAYER,
 	LINE,
@@ -19,9 +21,9 @@ typedef enum OBJECT_DIRECTION
 {
 	// rotation counterclockwise from X-axis
 	UP = 0,
+	LEFT,
 	DOWN,
 	RIGHT,
-	LEFT,
 	DIRECTION_END // LAST
 } OBJECT_DIRECTION;
 

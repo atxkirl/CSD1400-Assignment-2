@@ -234,6 +234,8 @@ void RenderAllOfType(RENDER_PRIORITY type)
 				CP_Graphics_DrawRect(-go->scale.x * 0.5f, -go->scale.y * 0.5f,
 					go->scale.x, go->scale.y);
 				break;
+			case FLOOR:
+			case WATER:
 			case WALL:
 				CP_Graphics_DrawRect(-go->scale.x * 0.5f, -go->scale.y * 0.5f,
 					go->scale.x, go->scale.y);
