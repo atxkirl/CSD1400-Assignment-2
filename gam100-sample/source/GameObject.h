@@ -11,6 +11,7 @@ typedef enum OBJECT_TYPE
 	WATER,
 	FLOOR,
 	WALL,
+	CORNER,
 	PLAYER,
 	LINE,
 	TYPE_END // LAST 

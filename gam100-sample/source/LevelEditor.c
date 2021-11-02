@@ -64,7 +64,7 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 		else if (strcmp(r->obj->tag, RCLICK) == 0)
 		{
 			//CheckGrid((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, FLOOR);
-			CheckGridInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, FLOOR);
+			CheckGridInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, EMPTY);
 			LoadTileImage();
 		}
 		else if (strcmp(r->obj->tag, RCLICK_SHIFT) == 0)
@@ -119,7 +119,7 @@ void LevelEditorInit()
 		for (int j = 0; j < NumGrids; j++)
 		{
 			//gGrids.gGrid[i][j] = isFLOOR;
-			GameObject* go = GOM_Create((i == 0 || i == NumGrids - 1 || j == 0 || j == NumGrids -1)? WALL : FLOOR);
+			GameObject* go = GOM_Create((i == 0 || i == NumGrids - 1 || j == 0 || j == NumGrids -1)? WATER : FLOOR);
 			Renderer* r = RM_AddComponent(go);
 			go->position = CP_Vector_Set(j * vScale.x * iSize, i * vScale.y * iSize);
 			go->scale = CP_Vector_Set(vScale.x, vScale.y);
@@ -128,11 +128,11 @@ void LevelEditorInit()
 			gGrids.gGrid[i][j] = go;
 			go->tag = "grid";
 
-			gGrids.nGrid[i][j].Curr = (go->type == WALL) ? Visited : NotVisited;
-			gGrids.nGrid[i][j].Up = (go->type == WALL) ? Visited : NotVisited;
-			gGrids.nGrid[i][j].Down = (go->type == WALL) ? Visited : NotVisited;
-			gGrids.nGrid[i][j].Left = (go->type == WALL) ? Visited : NotVisited;
-			gGrids.nGrid[i][j].Right = (go->type == WALL) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Curr = (go->type == WATER) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Up = (go->type == WATER) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Down = (go->type == WATER) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Left = (go->type == WATER) ? Visited : NotVisited;
+			gGrids.nGrid[i][j].Right = (go->type == WATER) ? Visited : NotVisited;
 
 			Collider* c = CLM_AddComponent(go);
 			CLM_Set(c, COL_BOX, LevelEditor_OnClickGrid);
@@ -211,7 +211,7 @@ void LevelEditorUpdate()
 		}
 		else
 		{
-			objType = (++objType >= DIRECTION_END) ? 0 : objType;
+			objType = (++objType >= TYPE_END) ? 0 : objType;
 			PrintCurrentType(objType);
 		}
 	}
@@ -238,7 +238,7 @@ void LevelEditorUpdate()
 		LoadTileImage();
 	}
 
-	if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
+	if (CP_Input_MouseDown(MOUSE_BUTTON_1))
 	{
 		GameObject* clickPoint = GOM_CreateTemp(FLOOR);
 		clickPoint->position = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
@@ -255,7 +255,7 @@ void LevelEditorUpdate()
 		clickPoint->scale = CP_Vector_Set(10.0f, 10.0f);
 		RM_AddComponent(clickPoint);
 	}
-	if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
+	if (CP_Input_MouseDown(MOUSE_BUTTON_2))
 	{
 		GameObject* clickPoint = GOM_CreateTemp(FLOOR);
 		clickPoint->position = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
@@ -413,9 +413,9 @@ void CheckGrid(float fMouseX, float fMouseY, int iObjType)
 void SaveGrid()
 {
 	//450, 30
-	char **GridObj = malloc(sizeof(char*) * 450);
+	char **GridObj = malloc(sizeof(char*) * 900);
 
-	for (int i = 0; i < 450; i++)
+	for (int i = 0; i < 900; i++)
 	{
 		if (GridObj)
 		{
@@ -435,7 +435,7 @@ void SaveGrid()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gGrids.gGrid[i][j]->type !=  FLOOR && iObjNum < 450)
+			if (gGrids.gGrid[i][j]->type !=  EMPTY && iObjNum < 900)
 			{
 				char ObjType[10];
 				char ObjPosX[10];
@@ -523,7 +523,7 @@ void AutoGenerateGrid()
 		for (int j = 1; j < NumGrids; j++)
 		{
 			gGrids.nGrid[j][i].Curr = NotVisited;
-			gGrids.gGrid[j][i]->type = WALL;
+			gGrids.gGrid[j][i]->type = WATER;
 		}
 	}
 
@@ -585,6 +585,42 @@ void AutoGenerateGrid()
 		AddFrontierCell(positionX, positionY, ll_WallList);
 	}
 
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			int iTestCase = 0;
+			if (i == 0 || i == NumGrids - 1 || j == 0 || j == NumGrids - 1)
+			{
+				continue;
+			}
+			else
+			{
+				if (gGrids.gGrid[++i][j]->type == FLOOR)
+				{
+					iTestCase++;
+				}
+				if (gGrids.gGrid[--i][j]->type == FLOOR)
+				{
+					iTestCase++;
+				}
+				if (gGrids.gGrid[i][++j]->type == FLOOR)
+				{
+					iTestCase++;
+				}
+				if (gGrids.gGrid[i][--j]->type == FLOOR)
+				{
+					iTestCase++;
+				}
+
+				if (iTestCase == 1)
+				{
+					gGrids.gGrid[i][++j]->type = WALL;
+				}
+			}
+		}
+	}
+
 	/*while (1)
 	{
 		gGrids.nGrid[positionY][positionX].Up = gGrids.nGrid[positionY > 0 ? positionY - 1 : positionY][positionX].Curr;
@@ -641,30 +677,30 @@ void AddFrontierCell(int x, int y, LinkedList* List)
 	int offset = 1;
 	int bounds = offset + 1;
 
-	if (gGrids.gGrid[y][x]->type != WALL)
+	if (gGrids.gGrid[y][x]->type != WATER)
 		return;
 
 	if (y > bounds)
 	{
-		if (gGrids.gGrid[y - offset][x]->type == WALL)
+		if (gGrids.gGrid[y - offset][x]->type == WATER)
 			LL_Add(&List, gGrids.gGrid[y - offset][x]); // up
 	}
 
 	if (y < NumGrids - bounds)
 	{
-		if (gGrids.gGrid[y + offset][x]->type == WALL)
+		if (gGrids.gGrid[y + offset][x]->type == WATER)
 			LL_Add(&List, gGrids.gGrid[y + offset][x]); // down
 	}
 
 	if (x > bounds)
 	{
-		if (gGrids.gGrid[y][x - offset]->type == WALL)
+		if (gGrids.gGrid[y][x - offset]->type == WATER)
 			LL_Add(&List, gGrids.gGrid[y][x - offset]); // left
 	}
 
 	if (x < NumGrids - bounds)
 	{
-		if (gGrids.gGrid[y][x + offset]->type == WALL)
+		if (gGrids.gGrid[y][x + offset]->type == WATER)
 			LL_Add(&List, gGrids.gGrid[y][x + offset]); // right
 	}
 }
@@ -682,8 +718,8 @@ void PrintCurrentType(int iObjType)
 
 	switch (iObjType)
 	{
-	case(FLOOR):
-		printf("Object Type: FLOOR\n");
+	case(EMPTY):
+		printf("Object Type: EMPTY\n");
 		break;
 
 	case(CIRCLE):
@@ -694,8 +730,20 @@ void PrintCurrentType(int iObjType)
 		printf("Object Type: RECTANGLE\n");
 		break;
 
+	case(WATER):
+		printf("Object Type: WATER\n");
+		break;
+
+	case(FLOOR):
+		printf("Object Type: FLOOR\n");
+		break;
+
 	case(WALL):
 		printf("Object Type: WALL\n");
+		break;
+
+	case(CORNER):
+		printf("Object Type: CORNER\n");
 		break;
 
 	case(PLAYER):
@@ -756,34 +804,33 @@ void LoadTileImage()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
+			gGrids.gGrid[i][j]->scale.x = 16.f;
+			gGrids.gGrid[i][j]->scale.y = 16.f;
+			renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
 			switch (gGrids.gGrid[i][j]->type)
 			{
 			case(WALL):
-				gGrids.gGrid[i][j]->scale.x = 16.f;
-				gGrids.gGrid[i][j]->scale.y = 16.f;
-				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
-				//RM_DeleteImage(renderImage);
-				RM_LoadImage(renderImage, "Assets/bananaboi.png");
+				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-1.png");
 				//CP_Settings_Fill(CP_Color_Create(255, 0, 128, 225)); // r, g, b, a
 				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
+
 			case(FLOOR):
-				gGrids.gGrid[i][j]->scale.x = 16.f;
-				gGrids.gGrid[i][j]->scale.y = 16.f;
+				RM_LoadImage(renderImage, "Assets/bananaboi.png");
+				break;
+
+			case(CORNER):
 				renderImage = RM_GetComponent(gGrids.gGrid[i][j]);
-				//RM_DeleteImage(renderImage);
-				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-0.png");
+				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-5.png");
 				//CP_Settings_Fill(CP_Color_Create(255, 128, 0, 225)); // r, g, b, a
 				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
-			case(RECTANGLE):
-				CP_Settings_Fill(CP_Color_Create(255, 128, 128, 225)); // r, g, b, a
-				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
+
+			case(WATER):
+			case(EMPTY):
+				RM_LoadImage(renderImage, "Assets/tempWater.png");
 				break;
-			case(CIRCLE):
-				CP_Settings_Fill(CP_Color_Create(128, 128, 255, 225)); // r, g, b, a
-				CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
-				break;
+
 			default:
 				break;
 			}

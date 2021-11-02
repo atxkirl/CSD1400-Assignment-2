@@ -198,7 +198,7 @@ void WriteToFile(char* cFileName, char** cToAdd)
 
 	if (eError == 0 && fFile != NULL)
 	{
-		for (int i = 0; i < 450; i++)
+		for (int i = 0; i < 900; i++)
 		{
 			fputs(cToAdd[i], fFile);
 		}

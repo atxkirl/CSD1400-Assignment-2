@@ -71,20 +71,20 @@ void LoadGrid(char* cInput, int iLoad)
 
 	float fWorldHeight = WORLD_HEIGHT;
 	float fScale = fWorldHeight / NumGrids * 4.f; //fit 30 grids vertically in the screen
-
+	Renderer* r;
 	for (int i = 0; i < objList->iSize; i++)
 	{
 		if (objList->fObjList[i])
 		{
 			int iY = objList->fObjList[i]->iPosY;
 			int iX = objList->fObjList[i]->iPosX;
-			gLoadedGrids->gGrid[iY][iX]->type = (objList->fObjList[i]->iType > 0) ? objList->fObjList[i]->iType : FLOOR;
+			gLoadedGrids->gGrid[iY][iX]->type = objList->fObjList[i]->iType;
 			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
 			gLoadedGrids->gGrid[iY][iX]->position = CP_Vector_Set(iX * fScale - fScale, iY * fScale - fScale);
 			gLoadedGrids->gGrid[iY][iX]->scale = CP_Vector_Set(fScale, fScale);
 			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
 			gLoadedGrids->gGrid[iY][iX]->rotation = gLoadedGrids->gGrid[iY][iX]->oDirection * 90.f;
-			Renderer* r = RM_GetComponent(gLoadedGrids->gGrid[iY][iX]);
+			r = RM_GetComponent(gLoadedGrids->gGrid[iY][iX]);
 			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 			r->color = CP_Color_Create(255, 255, 255, 255);
 
