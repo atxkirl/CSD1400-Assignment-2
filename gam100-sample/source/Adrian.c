@@ -35,6 +35,7 @@ static CP_Color pathColor;
 
 static AStar_Node* startNode;
 static AStar_Node* endNode;
+
 #include <time.h>
 void Adrian_CallAStar(void)
 {

@@ -71,15 +71,18 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 			{
 				// Need to add code here to backtrack to get the full path.
 				printf("Found end node! Time to create path. [LinkedList* GetPath()]\n");
+				printf("Found end node! OpenList size = %d [LinkedList* GetPath()]\n", LL_GetCount(openList));
+				printf("Found end node! ClosedList size = %d [LinkedList* GetPath()]\n", LL_GetCount(closedList));
+
 				while (lowestF != NULL)
 				{
+					printf("PNode Position = [%d,%d]\n", lowestF->row, lowestF->column);
+
 					AStar_Node* mapNode = &map->map[lowestF->row][lowestF->column];
 					mapNode->fCost = lowestF->fCost;
 					mapNode->gCost = lowestF->gCost;
 					mapNode->hCost = lowestF->hCost;
 					mapNode->parent = lowestF->parent;
-					printf("PNode Position = [%d,%d]\n", lowestF->row, lowestF->column);
-					//lowestF->type = NODE_PATH;
 					if (mapNode->type != NODE_START && mapNode->type != NODE_END)
 						mapNode->type = NODE_PATH;
 
@@ -98,7 +101,7 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 				}
 				LL_Clear(&openList);
 				LL_Clear(&closedList);
-				//LL_Clear(path);
+
 				for (int i = 0; i < 8; ++i)
 					neighbours[i] = NULL;
 
