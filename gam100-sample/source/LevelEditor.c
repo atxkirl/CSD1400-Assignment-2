@@ -173,12 +173,12 @@ void LevelEditorUpdate()
 		fMoveY -= 50 * CP_System_GetDt();
 	}
 
-	if (CP_Input_KeyDown(KEY_A))
+	if (CP_Input_KeyDown(KEY_D))
 	{
 		fMoveX += 50 * CP_System_GetDt();
 	}
 
-	else if (CP_Input_KeyDown(KEY_D))
+	else if (CP_Input_KeyDown(KEY_A))
 	{
 		fMoveX -= 50 * CP_System_GetDt();
 	}
@@ -590,38 +590,117 @@ void AutoGenerateGrid()
 		AddFrontierCell(positionX, positionY, ll_WallList);
 	}
 
-	for (int i = 0; i < NumGrids; i++)
+	for (int i = 1; i < NumGrids - 1; i++)
 	{
-		for (int j = 0; j < NumGrids; j++)
+		for (int j = 1; j < NumGrids - 1; j++)
 		{
-			int iTestCase = 0;
-			if (i == 0 || i == NumGrids - 1 || j == 0 || j == NumGrids - 1)
-			{
+			int goUp = i - 1;
+			int goDown = i + 1;
+			int goRight = j + 1;
+			int goLeft = j - 1;
+
+			if (gGrids.gGrid[i][j]->type != FLOOR)
 				continue;
-			}
-			else
+
+			if (gGrids.gGrid[goUp][j]->type == WATER)
 			{
-				if (gGrids.gGrid[++i][j]->type == FLOOR)
+				if (gGrids.gGrid[i][goLeft]->type == WATER)
 				{
-					iTestCase++;
-				}
-				if (gGrids.gGrid[--i][j]->type == FLOOR)
-				{
-					iTestCase++;
-				}
-				if (gGrids.gGrid[i][++j]->type == FLOOR)
-				{
-					iTestCase++;
-				}
-				if (gGrids.gGrid[i][--j]->type == FLOOR)
-				{
-					iTestCase++;
+					gGrids.gGrid[i][j]->type = CORNER;
+					continue;
 				}
 
-				if (iTestCase == 1)
+				else if (gGrids.gGrid[i][goRight]->type == WATER)
 				{
-					gGrids.gGrid[i][++j]->type = WALL;
+					gGrids.gGrid[i][j]->type = CORNER;
+					gGrids.gGrid[i][j]->oDirection = RIGHT;
+					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+					continue;
 				}
+
+				else if (gGrids.gGrid[i][goRight]->type == WATER)
+				{
+					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
+					continue;
+				}
+
+				else if (gGrids.gGrid[goDown][j]->type == WATER)
+				{
+					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
+					gGrids.gGrid[i][j]->oDirection = LEFT;
+					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+					continue;
+				}
+
+				else
+				{
+					gGrids.gGrid[i][j]->type = WALL;
+					continue;
+				}
+			}
+
+			else if (gGrids.gGrid[goDown][j]->type == WATER)
+			{
+				if (gGrids.gGrid[i][goLeft]->type == WATER)
+				{
+
+					gGrids.gGrid[i][j]->type = CORNER;
+					gGrids.gGrid[i][j]->oDirection = LEFT;
+					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+					continue;
+				}
+
+				else if (gGrids.gGrid[i][goRight]->type == WATER)
+				{
+					gGrids.gGrid[i][j]->type = CORNER;
+					gGrids.gGrid[i][j]->oDirection = DOWN;
+					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+					continue;
+				}
+
+				else if (gGrids.gGrid[goUp][j]->type == WATER)
+				{
+					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
+					gGrids.gGrid[i][j]->oDirection = LEFT;
+					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+					continue;
+				}
+
+				else
+				{
+					gGrids.gGrid[i][j]->type = WALL;
+					gGrids.gGrid[i][j]->oDirection = DOWN;
+					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+					continue;
+				}
+			}
+
+			else if (gGrids.gGrid[i][goLeft]->type == WATER)
+			{
+				if (gGrids.gGrid[i][goRight]->type == WATER)
+				{
+					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
+					continue;
+				}
+
+				gGrids.gGrid[i][j]->type = WALL;
+				gGrids.gGrid[i][j]->oDirection = LEFT;
+				gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+				continue;
+			}
+
+			else if (gGrids.gGrid[i][goRight]->type == WATER)
+			{
+				if (gGrids.gGrid[i][goLeft]->type == WATER)
+				{
+					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
+					continue;
+				}
+
+				gGrids.gGrid[i][j]->type = WALL;
+				gGrids.gGrid[i][j]->oDirection = RIGHT;
+				gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+				continue;
 			}
 		}
 	}
@@ -674,6 +753,7 @@ void AutoGenerateGrid()
 		}
 	}*/
 
+	LoadTileImage();
 	iAutoGenerate = 0;
 }
 
@@ -815,17 +895,21 @@ void LoadTileImage()
 			switch (gGrids.gGrid[i][j]->type)
 			{
 			case(WALL):
-				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-1.png");
+				RM_LoadImage(renderImage, "Assets/W.png");
 				//CP_Settings_Fill(CP_Color_Create(255, 0, 128, 225)); // r, g, b, a
 				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
 
+			case(FLOOR_MIDDLE):
+				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-13.png");
+				break;
+
 			case(FLOOR):
-				RM_LoadImage(renderImage, "Assets/bananaboi.png");
+				RM_LoadImage(renderImage, "Assets/F.png");
 				break;
 
 			case(CORNER):
-				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-5.png");
+				RM_LoadImage(renderImage, "Assets/C.png");
 				//CP_Settings_Fill(CP_Color_Create(255, 128, 0, 225)); // r, g, b, a
 				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
@@ -876,19 +960,8 @@ void LoadSavedMap()
 			switch (gGrids.gGrid[iY][iX]->type)
 			{
 			case(WALL):
-				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-1.png");
-				CLM_AddComponent(gGrids.gGrid[iY][iX]);
-				break;
 			case(CORNER):
-				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-5.png");
 				CLM_AddComponent(gGrids.gGrid[iY][iX]);
-				break;
-			case(FLOOR):
-				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-0.png");
-				break;
-			case(WATER):
-			case(EMPTY):
-				RM_LoadImage(r, "Assets/tempWater.png");
 				break;
 			default:
 				break;
