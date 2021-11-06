@@ -44,3 +44,5 @@ void LoadGrid(char* cInput, int iLoad);
 void LoadObjectives(char* cInput);
 
 void SetObjectiveComplete(int iIndex, int iSetter);
+
+void SetPlayerPosition(float fPlayerPosX, float fPlayerPosY);

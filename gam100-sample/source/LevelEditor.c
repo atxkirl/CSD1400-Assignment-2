@@ -8,6 +8,7 @@
 
 #define LCLICK "LCLICK"
 #define LCLICK_SHIFT "LCLICK_SHIFT"
+#define LCLICK_CTRL "LCLICK_CTRL"
 #define RCLICK "RCLICK"
 #define RCLICK_SHIFT "RCLICK_SHIFT"
 
@@ -60,6 +61,12 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 			//AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, objDirection);
 			AssignDirectionInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, objDirection);
 			LoadTileImage();
+		}
+		else if (strcmp(r->obj->tag, LCLICK_CTRL) == 0)
+		{
+			//AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, objDirection);
+			gGrids.gGrid[(int)tempGO->position.y / iSize][(int)tempGO->position.x / iSize]->tag = "PlayerSpawn";
+			printf("Player Spawn set");
 		}
 		else if (strcmp(r->obj->tag, RCLICK) == 0)
 		{
@@ -252,6 +259,11 @@ void LevelEditorUpdate()
 			clickPoint->tag = LCLICK_SHIFT;
 		}
 
+		if (CP_Input_KeyDown(KEY_LEFT_CONTROL))
+		{
+			clickPoint->tag = LCLICK_CTRL;
+		}
+
 		clickPoint->scale = CP_Vector_Set(10.0f, 10.0f);
 		RM_AddComponent(clickPoint);
 	}
@@ -424,7 +436,7 @@ void SaveGrid()
 	{
 		if (GridObj)
 		{
-			GridObj[i] = malloc(sizeof(char) * 40);
+			GridObj[i] = malloc(sizeof(char) * 70);
 
 			if (GridObj[i])
 			{
@@ -445,27 +457,31 @@ void SaveGrid()
 				char ObjType[10];
 				char ObjPosX[10];
 				char ObjPosY[10];
-				char cObjDirection[10];
+				char cObjDirection[30];
 				if (GridObj)
 				{
 					if (GridObj[iObjNum])
 					{
 						sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]->type);
-						strcpy_s(GridObj[iObjNum], 40, ObjType); //type
-						strcat_s(GridObj[iObjNum], 40, ",");
+						strcpy_s(GridObj[iObjNum], 70, ObjType); //type
+						strcat_s(GridObj[iObjNum], 70, ",");
 
 						sprintf_s(ObjPosX, 10, "%d", j);
-						strcat_s(GridObj[iObjNum], 40, ObjPosX); // x
-						strcat_s(GridObj[iObjNum], 40, ",");
+						strcat_s(GridObj[iObjNum], 70, ObjPosX); // x
+						strcat_s(GridObj[iObjNum], 70, ",");
 
 						sprintf_s(ObjPosY, 10, "%d", i);
-						strcat_s(GridObj[iObjNum], 40, ObjPosY); // y
-						strcat_s(GridObj[iObjNum], 40, ",");
+						strcat_s(GridObj[iObjNum], 70, ObjPosY); // y
+						strcat_s(GridObj[iObjNum], 70, ",");
 						printf("%s\n", GridObj[iObjNum]);
 
 						sprintf_s(cObjDirection, 10, "%d", (int)gGrids.gGrid[i][j]->oDirection);
-						strcat_s(GridObj[iObjNum], 40, cObjDirection); // dir
-						strcat_s(GridObj[iObjNum], 40, "\n");
+						strcat_s(GridObj[iObjNum], 70, cObjDirection); // dir
+						strcat_s(GridObj[iObjNum], 70, ",");
+
+						sprintf_s(cObjDirection, 30, "%s", gGrids.gGrid[i][j]->tag);
+						strcat_s(GridObj[iObjNum], 70, cObjDirection); // tag
+						strcat_s(GridObj[iObjNum], 70, "\n");
 
 						iObjNum++;
 					}

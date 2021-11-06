@@ -54,7 +54,7 @@ void LevelOne_init(void)
     //RM_AddComponent(g);
     LoaderInit();
 
-    LoadGrid("test", 0);
+    LoadGrid("level01", 0);
     //here is where ill load objectives
     LoadObjectives("Obj1");
 
@@ -101,6 +101,7 @@ void LevelOne_init(void)
 
     gLOne = GOM_Create2(RECTANGLE, CP_Vector_Set(500, 500), 0.0f, CP_Vector_Set(50, 50));
     gLOne->tag = "player";
+    SetPlayerPosition(gLOne->position.x, gLOne->position.y);
     r = RM_AddComponent(gLOne);
     RM_LoadImage(r, "Assets/bananaboi.png");
     CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);

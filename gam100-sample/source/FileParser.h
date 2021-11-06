@@ -7,6 +7,7 @@ typedef struct FileObj
 	int iPosY;
 	int iType;
 	int iDir;
+	char* cTag;
 } FileObj;
 
 typedef struct StoreMap

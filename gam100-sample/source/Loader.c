@@ -12,6 +12,8 @@
 #define UIWIDTH 300.f
 
 int iSize;
+float fPlayerPositionX;
+float fPlayerPositionY;
 
 void LoaderInit()
 {
@@ -41,6 +43,9 @@ void LoaderInit()
 			}
 		}
 	}
+
+	fPlayerPositionX = 0.f;
+	fPlayerPositionY = 0.f;
 }
 
 void LoaderUpdate()
@@ -83,6 +88,14 @@ void LoadGrid(char* cInput, int iLoad)
 			gLoadedGrids->gGrid[iY][iX]->scale = CP_Vector_Set(fScale, fScale);
 			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
 			gLoadedGrids->gGrid[iY][iX]->rotation = gLoadedGrids->gGrid[iY][iX]->oDirection * 90.f;
+			gLoadedGrids->gGrid[iY][iX]->tag = objList->fObjList[i]->cTag;
+
+			if (strcmp(gLoadedGrids->gGrid[iY][iX]->tag, "PlayerSpawn") == 0)
+			{
+				fPlayerPositionX = gLoadedGrids->gGrid[iY][iX]->position.x;
+				fPlayerPositionY = gLoadedGrids->gGrid[iY][iX]->position.y;
+			}
+
 			r = RM_GetComponent(gLoadedGrids->gGrid[iY][iX]);
 			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 			r->color = CP_Color_Create(255, 255, 255, 255);
@@ -97,6 +110,9 @@ void LoadGrid(char* cInput, int iLoad)
 				break;
 			case(FLOOR):
 				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-0.png");
+				break;
+			case(FLOOR_MIDDLE):
+				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-13.png");
 				break;
 			case(WATER):
 			case(EMPTY):
@@ -151,4 +167,10 @@ void LoadObjectives(char* cInput)
 void SetObjectiveComplete(int iIndex, int iSetter)
 {
 	oObjectiveList[iIndex - 1].isComplete = iSetter;
+}
+
+void SetPlayerPosition(float fPlayerPosX, float fPlayerPosY)
+{
+	fPlayerPosX = fPlayerPositionX;
+	fPlayerPosY = fPlayerPositionY;
 }
