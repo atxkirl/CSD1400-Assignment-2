@@ -114,10 +114,13 @@ void LoadGrid(char* cInput, int iLoad)
 			case(FLOOR_MIDDLE):
 				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-13.png");
 				break;
+			case(THREE_CORNER):
+				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-3c.png");
+				break;
 			case(WATER):
 			case(EMPTY):
 				CLM_AddComponent(gLoadedGrids->gGrid[iY][iX]);
-				RM_LoadImage(r, "Assets/tempWater.png");
+				RM_LoadImage(r, "Assets/sand-tiles/sea-tile-1.png");
 				break;
 			default:
 				break;

@@ -206,7 +206,6 @@ void LevelEditorUpdate()
 		RM_SetCameraZoom(fScaleBy);
 	}
 
-
 	if (CP_Input_KeyTriggered(KEY_Q))
 	{
 		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
@@ -622,12 +621,39 @@ void AutoGenerateGrid()
 			{
 				if (gGrids.gGrid[i][goLeft]->type == WATER)
 				{
+					if (gGrids.gGrid[i][goRight]->type == WATER)
+					{
+						// UP LEFT RIGHT
+						gGrids.gGrid[i][j]->type = THREE_CORNER;
+						gGrids.gGrid[i][j]->oDirection = RIGHT;
+						gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+						continue;
+					}
+
+					else if(gGrids.gGrid[goDown][j]->type == WATER)
+					{
+						// UP LEFT DOWN
+						gGrids.gGrid[i][j]->type = THREE_CORNER;
+						continue;
+					}
+
+					// UP LEFT
 					gGrids.gGrid[i][j]->type = CORNER;
 					continue;
 				}
 
 				else if (gGrids.gGrid[i][goRight]->type == WATER)
 				{
+					if (gGrids.gGrid[goDown][j]->type == WATER)
+					{
+						// UP RIGHT DOWN
+						gGrids.gGrid[i][j]->type = THREE_CORNER;
+						gGrids.gGrid[i][j]->oDirection = DOWN;
+						gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+						continue;
+					}
+
+					// UP RIGHT
 					gGrids.gGrid[i][j]->type = CORNER;
 					gGrids.gGrid[i][j]->oDirection = RIGHT;
 					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
@@ -636,12 +662,14 @@ void AutoGenerateGrid()
 
 				else if (gGrids.gGrid[i][goRight]->type == WATER)
 				{
+					// UP RIGHT
 					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
 					continue;
 				}
 
 				else if (gGrids.gGrid[goDown][j]->type == WATER)
 				{
+					// UP DOWN
 					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
 					gGrids.gGrid[i][j]->oDirection = LEFT;
 					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
@@ -650,6 +678,7 @@ void AutoGenerateGrid()
 
 				else
 				{
+					// UP
 					gGrids.gGrid[i][j]->type = WALL;
 					continue;
 				}
@@ -659,7 +688,15 @@ void AutoGenerateGrid()
 			{
 				if (gGrids.gGrid[i][goLeft]->type == WATER)
 				{
+					if (gGrids.gGrid[i][goRight]->type == WATER) // DOWN LEFT RIGHT
+					{
+						gGrids.gGrid[i][j]->type = THREE_CORNER;
+						gGrids.gGrid[i][j]->oDirection = LEFT;
+						gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
+						continue;
+					}
 
+					// DOWN LEFT
 					gGrids.gGrid[i][j]->type = CORNER;
 					gGrids.gGrid[i][j]->oDirection = LEFT;
 					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
@@ -668,22 +705,16 @@ void AutoGenerateGrid()
 
 				else if (gGrids.gGrid[i][goRight]->type == WATER)
 				{
+					// DOWN RIGHT
 					gGrids.gGrid[i][j]->type = CORNER;
 					gGrids.gGrid[i][j]->oDirection = DOWN;
 					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
 					continue;
 				}
 
-				else if (gGrids.gGrid[goUp][j]->type == WATER)
-				{
-					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
-					gGrids.gGrid[i][j]->oDirection = LEFT;
-					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
-					continue;
-				}
-
 				else
-				{
+				{ 
+					// DOWN
 					gGrids.gGrid[i][j]->type = WALL;
 					gGrids.gGrid[i][j]->oDirection = DOWN;
 					gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
@@ -920,6 +951,10 @@ void LoadTileImage()
 				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-13.png");
 				break;
 
+			case(THREE_CORNER):
+				RM_LoadImage(renderImage, "Assets/sand-tiles/sand-tile-3c.png");
+				break;
+
 			case(FLOOR):
 				RM_LoadImage(renderImage, "Assets/F.png");
 				break;
@@ -932,7 +967,7 @@ void LoadTileImage()
 
 			case(WATER):
 			case(EMPTY):
-				RM_LoadImage(renderImage, "Assets/tempWater.png");
+				RM_LoadImage(renderImage, "Assets/sand-tiles/sea-tile-1.png");
 				break;
 
 			default:
