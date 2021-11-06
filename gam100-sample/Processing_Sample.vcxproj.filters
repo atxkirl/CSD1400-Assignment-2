@@ -71,6 +71,9 @@
     <ClCompile Include="source\SystemManager.c">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="source\FSM.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -84,6 +87,9 @@
     </Filter>
     <Filter Include="Systems">
       <UniqueIdentifier>{99fbe406-b99e-4999-b04c-ee1cd13eb770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minigames">
+      <UniqueIdentifier>{3114354f-467c-4fd2-9ac9-c4818d5ee526}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,9 +120,6 @@
     <ClInclude Include="source\Player.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="source\AStar.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="source\AnimationManager.h">
       <Filter>Systems</Filter>
     </ClInclude>
@@ -137,6 +140,12 @@
     </ClInclude>
     <ClInclude Include="source\GameObject.h">
       <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FSM.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AStar.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

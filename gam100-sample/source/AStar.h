@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdio.h>		// For printf() and NULL
-#include <stdbool.h>	// For booleans
+#include <stdbool.h>		// For booleans
 #include <stdlib.h>		// For malloc()
 #include <string.h>		// For memcpy()
 #include <math.h>		// For abs() and sqrt()
