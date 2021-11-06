@@ -20,11 +20,17 @@
 #include <stdlib.h>
 
 GameObject* e = NULL;
+GameObject* e2 = NULL;
+GameObject* e3 = NULL;
+GameObject* e4 = NULL;
+Collider* k;
 Renderer* r;
 
 void wy_OnCollision(Collider* left, Collider* right) {
 
+    if (strcmp(left->obj->tag, "obj1") == 0 && strcmp(right->obj->tag, "player") == 0) SM_DeleteGameObject(e3);
     return;
+
 }
 void Weiyi_init(void)
 {
@@ -34,10 +40,26 @@ void Weiyi_init(void)
 
     e = GOM_Create2(CIRCLE, CP_Vector_Set(20, 20), 0.0f, CP_Vector_Set(50, 50));
     e->tag = "enemy";
-    CLM_Set(CLM_AddComponent(e),COL_CIRCLE, wy_OnCollision);
+    k = CLM_AddComponent(e);
+    CLM_Set(k,COL_CIRCLE, NULL);
+
+    
+    e2 = GOM_Create2(RECTANGLE, CP_Vector_Set(10, 10), 0.0f, CP_Vector_Set(15, 15));
+    e2->tag = "mud";
+    k = CLM_AddComponent(e2);
+    CLM_Set(k, COL_BOX, wy_OnCollision);
+    k->isTrigger = 1;
+    
+
+    e3 = GOM_Create2(CIRCLE, CP_Vector_Set(50, 50), 0.0f, CP_Vector_Set(15, 15));
+    e3->tag = "obj1";
+    k = CLM_AddComponent(e3);
+    CLM_Set(k, COL_CIRCLE, wy_OnCollision);
+    k->isTrigger = 1;
 
     r = RM_AddComponent(e);
-
+    r = RM_AddComponent(e2);
+    r = RM_AddComponent(e3);
 }
 
 void Weiyi_update(void)
