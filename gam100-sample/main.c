@@ -20,7 +20,7 @@
 int main(void)
 {
     //16:9 dimensions only
-    CP_System_SetWindowSize(960, 540);
+    CP_System_SetWindowSize(1280, 720);
 
     SceneManager_Initialize();
     SceneManager_ChangeScene(currentScene);

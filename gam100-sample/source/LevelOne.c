@@ -139,7 +139,6 @@ void LevelOne_update(void)
         //Creates a point obj to test collision against button
         clickPoint = GOM_CreateTemp(EMPTY);
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-        clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
         Collider* c = CLM_AddComponent(clickPoint);
         c->space = COLSPC_SCREEN;

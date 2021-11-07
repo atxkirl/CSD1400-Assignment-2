@@ -23,6 +23,8 @@ void RM_Init()
 	cameraPos = CP_Vector_Set(0.0f, 0.0f);
 	cameraScale = CP_Vector_Set(1.0f, 1.0f);
 	zoom = 1.0f;
+
+	CP_Settings_ImageFilterMode(CP_IMAGE_FILTER_NEAREST);
 }
 Renderer* RM_AddComponent(GameObject* g)
 {
@@ -80,7 +82,7 @@ void RM_Clear()
 void RM_Render()
 {
 	CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 255, 255));
-	
+
 	float w = (float)CP_System_GetWindowWidth();
 	float h = (float)CP_System_GetWindowHeight();
 	//printf("%.0f %.0f\n", w, h);

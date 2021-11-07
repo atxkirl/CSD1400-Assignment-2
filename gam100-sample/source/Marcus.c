@@ -70,7 +70,6 @@ void Marcus_update(void)
         //Creates a point obj to test collision against button
         clickPoint = GOM_CreateTemp(EMPTY);
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-        clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
         CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
     }

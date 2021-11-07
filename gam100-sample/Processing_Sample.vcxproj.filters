@@ -74,6 +74,9 @@
     <ClCompile Include="source\FSM.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Objective_Fixboat.c">
+      <Filter>Minigames</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="source\AStar.h">
       <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Objective_Fixboat.h">
+      <Filter>Minigames</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

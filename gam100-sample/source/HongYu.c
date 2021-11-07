@@ -12,9 +12,13 @@
 #include "cprocessing.h"
 #include "Helpers.h"
 #include "SystemManager.h"
+#include "Objective_Fixboat.h"
 
 GameObject* g = NULL;
 int tempSize = 0;
+GameObject* grass = NULL;
+
+int itempickedup = 0;
 
 void hy_OnCollision(Collider* left, Collider* right)
 {
@@ -26,6 +30,9 @@ void hy_OnCollision(Collider* left, Collider* right)
 
         SM_DeleteGameObject(right->obj);
         //deletes the trigger when collided
+        itempickedup = 1;
+        printf("PICKEDUP\n");
+
         return;
     }
     else if (strcmp(left->obj->tag, "test") == 0 && strcmp(right->obj->tag, "Click") == 0)
@@ -43,7 +50,27 @@ void hy_OnCollision(Collider* left, Collider* right)
             CP_System_SetWindowSize(1280, 720);
             break;
         }
+        return;
+    }
 
+    if (strcmp(left->obj->tag, "player") == 0
+        && strcmp(right->obj->tag, "grass") == 0)
+    {
+        Renderer* r = RM_GetComponent(right->obj);
+        r->color.a = 180;
+        return;
+    }
+
+    if (strcmp(left->obj->tag, "player") == 0
+        && strcmp(right->obj->tag, "objective") == 0)
+    {
+
+        if (CP_Input_KeyTriggered(KEY_E))
+        {
+            OB_FixBoatTrigger();
+        }
+
+        return;
     }
 }
 
@@ -112,21 +139,32 @@ void HongYu_init(void)
     CLM_Set(c, COL_BOX, hy_OnCollision);
     c->isLockedPos = 1;
 
+    grass = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(200, 200), 0.0f, CP_Vector_Set(50, 50));
+    grass->tag = "grass";
+    r = RM_AddComponent(grass);
+    RM_LoadImage(r, "Assets/redcoral.png");
+    c = CLM_AddComponent(grass);
+    CLM_Set(c, COL_BOX, hy_OnCollision);
+    c->isLockedPos = 1;
+    c->isTrigger = 1;
 
-    //GameObject* wad = GOM_CreateGameObject(CIRCLE, GAME_OBJECT);
-    //wad->position = CP_Vector_Set(0.1f * width, 0.9f * height);
-    //wad->scale = CP_Vector_Set(0.1f * width, 30);
-    //wad->color = CP_Color_Create(255, 255, 255, 255);
-    //LinkedList* l = NULL;
-    //int ab = 69;
-    //LL_DeepAdd(&l, &ab);
-    //if (l)
-    //    printf("%d", *((int*)l->curr));
+    wall = GOM_Create2(RECTANGLE, CP_Vector_Set(-100, 0), 0, CP_Vector_Set(50, 50));
+    wall->tag = "objective";
+    r = RM_AddComponent(wall);
+    r->color = CP_Color_Create(255, 128, 128, 128);
+    c = CLM_AddComponent(wall);
+    CLM_Set(c, COL_BOX, hy_OnCollision);
+    c->isTrigger = 1;
+
+    OB_FixBoatInit();
 }
 
 void HongYu_update(void)
 {
     SM_SystemsPreUpdate();
+    RM_GetComponent(grass)->color.a = 255;
+
     float dt = CP_System_GetDt();
     float spd = 200.0f;
     //Collider* gc = CLM_GetComponent(g);
@@ -170,7 +208,6 @@ void HongYu_update(void)
         RM_AddComponent(clickPoint);
     }
 
-
     char str[20];
     sprintf_s(str, 20,"%.1f,%.1f", g->position.x, g->position.y);
     //g->text = str;
@@ -180,7 +217,7 @@ void HongYu_update(void)
 
     SM_SystemsUpdate();
     RM_SetCameraPosition(g->position);
-
+    OB_FixBoatUpdate();
     SM_SystemsLateUpdate();
 }
 
