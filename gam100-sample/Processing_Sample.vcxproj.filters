@@ -74,6 +74,9 @@
     <ClCompile Include="source\FSM.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\Dialogue.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -145,6 +148,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\AStar.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Dialogue.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

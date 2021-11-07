@@ -37,6 +37,7 @@ void SM_SystemsInit()
 	RM_Init();
 	CLM_Init();
 	AM_Init();
+	DM_Init();
 }
 
 void SM_SystemsPreUpdate()
@@ -46,6 +47,7 @@ void SM_SystemsPreUpdate()
 
 void SM_SystemsUpdate()
 {
+	DM_Update();
 	CLM_Update();
 	AM_Update();
 }
@@ -60,6 +62,7 @@ void SM_SystemsLateUpdate()
 	LL_Clear(&delList);
 	//GOM_ClearTempObjects();
 	RM_Render();
+	DM_LateUpdate();
 }
 
 void SM_SystemsExit()
@@ -68,6 +71,7 @@ void SM_SystemsExit()
 	CLM_Clear();
 	RM_Clear();
 	GOM_Clear();
+	DM_Clear();
 }
 
 void* SM_GetComponent(GameObject* g, COMPONENT c)

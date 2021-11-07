@@ -15,6 +15,7 @@
 #include "RenderManager.h"
 #include "CollisionManager.h"
 #include "AnimationManager.h"
+#include "Dialogue.h"
 
 //Prefix: SM
 

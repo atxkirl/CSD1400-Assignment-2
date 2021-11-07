@@ -35,7 +35,7 @@ struct AStar_Node
 
 typedef struct
 {
-	AStar_Node** map; // NOTE: Convert this to a 1D array, then use row/col values to simulate a 2D array.
+	AStar_Node** map; // 2D array containing all the grid cells in a single level. Needs to span the entire area where pathfinding is required.
 	int rows; // Number of rows in this map.
 	int columns; // Number of columns in this map.
 }AStar_Map;

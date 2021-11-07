@@ -198,6 +198,16 @@ void Adrian_Input(void)
 
         Adrian_CallAStar();
     }
+
+    // Toggle Dialogue box.
+    if (CP_Input_KeyDown(KEY_E))
+    {
+        DM_PrintDialogue("Woah look, a box!", DIALOGUE_CLOSEBUTTON);
+    }
+    else if (CP_Input_KeyDown(KEY_F))
+    {
+        DM_PrintDialogue("Woah look, a temporary box!", DIALOGUE_LOOKINGAT);
+    }
 }
 
 void Adrian_init(void)
@@ -255,8 +265,8 @@ void Adrian_update(void)
 
     SM_SystemsUpdate();
     CP_Settings_Fill(CP_Color_Create(255, 255, 128, 255));
+
     SM_SystemsLateUpdate();
-    //RM_Render();
     CP_Settings_Fill(CP_Color_Create(128, 128, 128, 255));
 }
 
