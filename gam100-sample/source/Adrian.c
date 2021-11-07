@@ -57,7 +57,7 @@ void Adrian_CallAStar(void)
     // Calculate A* path
     path = AStar_GetPath(startNode, endNode, &map);
     t = clock() - t;
-    printf("ms: %d", t);
+    printf("Time taken for A* (ms): %d\n", t);
 
     // render cells of path
     if (path)

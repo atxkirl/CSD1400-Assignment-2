@@ -7,8 +7,9 @@ void DM_Handle_CloseButton(Collider* left, Collider* right)
 	{
 		if (strcmp(((GameObject*)left->obj)->tag, "close") == 0)
 		{
-			closeButton->isEnabled = 0;
 			dialogueBox->isEnabled = 0;
+			closeButton->isEnabled = 0;
+			closeButtonCollider->isEnabled = 0;
 		}
 	}
 }
@@ -32,6 +33,7 @@ void DM_PrintDialogue(char* text, DialogueType type)
 	if (type == DIALOGUE_CLOSEBUTTON)
 	{
 		closeButton->isEnabled = 1;
+		closeButtonCollider->isEnabled = 1;
 	}
 
 	dialogueType = type;
@@ -93,7 +95,6 @@ void DM_Update()
 		//Creates a point obj to test collision against button
 		clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
 		clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-		clickPoint->isEnabled = 0;
 		clickPoint->tag = "Click";
 		CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
 	}

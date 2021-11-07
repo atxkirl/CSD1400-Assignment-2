@@ -25,7 +25,7 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 {
 	if (starting == NULL || ending == NULL)
 	{
-		printf("Warning! Starting or Ending node is NULL. [LinkedList* GetPath]\n");
+		//printf("Warning! Starting or Ending node is NULL. [LinkedList* GetPath]\n");
 		return NULL;
 	}
 
@@ -66,8 +66,6 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 		// Found end node, so now create path.
 		if (lowestF == ending)
 		{
-			printf("Found end node! Time to create path. [LinkedList* GetPath()]\n");
-
 			// Add nodes to path list, in reverse order.
 			for (; lowestF; lowestF = lowestF->parent)
 			{
@@ -121,7 +119,7 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 		}
 	}
 
-	printf("Warning! There is no valid path between the Starting and Ending nodes. [LinkedList* GetPath]\n");
+	//printf("Warning! There is no valid path between the Starting and Ending nodes. [LinkedList* GetPath]\n");
 	LL_Clear(&openList);
 	LL_Clear(&closedList);
 	LL_Clear(&path);
