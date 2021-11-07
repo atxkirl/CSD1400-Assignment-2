@@ -41,7 +41,7 @@ void game_OnCollision(Collider* left, Collider* right)
         else if (strcmp(((GameObject*)left->obj)->tag, "xinyun") == 0)
             SceneManager_ChangeSceneByName("xinyun");
         else if (strcmp(((GameObject*)left->obj)->tag, "game") == 0)
-            SceneManager_ChangeSceneByName("game2");
+            SceneManager_ChangeSceneByName("levelone");
     }
     printf("INSIDE!");
 }
@@ -127,7 +127,6 @@ void game_update(void)
         //Creates a point obj to test collision against button
         clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
         clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-        clickPoint->isEnabled = 0;
         clickPoint->tag = "Click";
         CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
 

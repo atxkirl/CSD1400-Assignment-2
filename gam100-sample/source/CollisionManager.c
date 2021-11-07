@@ -265,7 +265,7 @@ void CLM_Update()
 			left->width = left->obj->scale.x;
 			left->height = left->obj->scale.y;
 		}
-		if (!left->isEnabled)
+		if (!left->isEnabled || !left->obj->isEnabled)
 			continue;
 		for (int j = i + 1; j < size; ++j)
 		{
@@ -276,7 +276,7 @@ void CLM_Update()
 				right->width = right->obj->scale.x;
 				right->height = right->obj->scale.y;
 			}
-			if (!right->isEnabled)
+			if (!right->isEnabled || !right->obj->isEnabled)
 				continue;
 			if (right->space != left->space) //only same space collider w each other
 				continue;
