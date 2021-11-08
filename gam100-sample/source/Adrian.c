@@ -202,11 +202,15 @@ void Adrian_Input(void)
     // Toggle Dialogue box.
     if (CP_Input_KeyDown(KEY_E))
     {
-        DM_PrintDialogue("Woah look, a box!", DIALOGUE_CLOSEBUTTON);
+        DM_PrintDialogue("!", DIALOGUE_CLOSEBUTTON);
     }
     else if (CP_Input_KeyDown(KEY_F))
     {
         DM_PrintDialogue("Woah look, a temporary box!", DIALOGUE_LOOKINGAT);
+    }
+    else if (CP_Input_KeyDown(KEY_G))
+    {
+        DM_PrintDialogue("Woah look, a temporary box, and the text is so freaking long wow!", DIALOGUE_LOOKINGAT);
     }
 }
 

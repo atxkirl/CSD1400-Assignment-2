@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <string.h>
 #include "RenderManager.h"
 #include "GameObjectManager.h"
 #include "CollisionManager.h"
@@ -12,9 +13,14 @@ typedef enum
 	DIALOGUE_PRESSFORNEXT // For dialogue that requires a keypress or mouseclick to close, or move to next line. (ie, NPC talking)
 }DialogueType;
 
-static const float dialogueTextScale = 1.25f;
-static const float dialogueBoxWidth = 200.f;
-static const float dialogueBoxHeight = 100.f;
+// Text
+static const float dialogueTextScale = 1.f;
+static const float dialogueTextWidth = 10.f; // Hardcoded value for the width of a single text character at 1.f scale... :(
+// Box current size.
+static float dialogueBoxHeight = 100.f;
+static float dialogueBoxWidth = 200.f;
+static const float dialogueBoxMinWidth = 200.f;
+// Close Button
 static const float closeButtonDiameter = 20.f;
 
 DialogueType dialogueType;

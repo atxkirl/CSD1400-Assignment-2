@@ -36,6 +36,15 @@ void DM_PrintDialogue(char* text, DialogueType type)
 		closeButtonCollider->isEnabled = 1;
 	}
 
+	// Scale the width of the dialogue box by the length of text
+	dialogueBoxWidth = (strlen(text) * dialogueTextWidth);
+	if (dialogueBoxWidth < dialogueBoxMinWidth)
+		dialogueBoxWidth = dialogueBoxMinWidth;
+
+	dialogueBoxRenderer->width = (int)dialogueBoxWidth;
+	dialogueBoxRenderer->height = (int)dialogueBoxHeight;
+	dialogueBox->scale = CP_Vector_Set(dialogueBoxWidth, dialogueBoxHeight);
+
 	dialogueType = type;
 	dialogueBoxRenderer->text = text;
 	dialogueBox->isEnabled = 1;
@@ -62,7 +71,7 @@ void DM_Init()
 	dialogueBoxRenderer->textColor = CP_Color_Create(255, 255, 255, 255);
 	dialogueBoxRenderer->renderPriority = PRI_UI;
 	dialogueBoxRenderer->textScale = CP_Vector_Set(dialogueTextScale, dialogueTextScale);
-	//RM_LoadImage(dialogueBoxRenderer, "Assets/BananaBoi_Title.jpg");
+	//RM_LoadImage(dialogueBoxRenderer, "Assets/testbuttonbackground.jpg");
 
 	// Create and register the close button's GameObject, Renderer and Collider.
 	closeButton = GOM_Create2(CIRCLE, dialogueBox->position, 0.f, CP_Vector_Set(closeButtonDiameter, closeButtonDiameter));
