@@ -29,6 +29,7 @@ Renderer* r;
 void wy_OnCollision(Collider* left, Collider* right) {
 
     if (strcmp(left->obj->tag, "obj1") == 0 && strcmp(right->obj->tag, "player") == 0) SM_DeleteGameObject(e3);
+
     return;
 
 }
@@ -36,7 +37,7 @@ void Weiyi_init(void)
 {
     SM_SystemsInit();
 
-    PLY_CreatePlayer();
+    PLY_CreatePlayer(90,90);
 
     e = GOM_Create2(CIRCLE, CP_Vector_Set(20, 20), 0.0f, CP_Vector_Set(50, 50));
     e->tag = "enemy";
@@ -47,7 +48,7 @@ void Weiyi_init(void)
     e2 = GOM_Create2(RECTANGLE, CP_Vector_Set(10, 10), 0.0f, CP_Vector_Set(15, 15));
     e2->tag = "mud";
     k = CLM_AddComponent(e2);
-    CLM_Set(k, COL_BOX, wy_OnCollision);
+    CLM_Set(k, COL_BOX, NULL);
     k->isTrigger = 1;
     
 
@@ -57,9 +58,17 @@ void Weiyi_init(void)
     CLM_Set(k, COL_CIRCLE, wy_OnCollision);
     k->isTrigger = 1;
 
+    e4 = GOM_Create2(RECTANGLE, CP_Vector_Set(130, 130), 0.0f, CP_Vector_Set(30, 30));
+    e4->tag = "box";
+    k = CLM_AddComponent(e4);
+    CLM_Set(k,COL_BOX, NULL);
+    k->isLockedPos = 1;
+
     r = RM_AddComponent(e);
     r = RM_AddComponent(e2);
     r = RM_AddComponent(e3);
+    r = RM_AddComponent(e4);
+    r->text = "hide";
 }
 
 void Weiyi_update(void)
