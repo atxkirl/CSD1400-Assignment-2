@@ -198,8 +198,10 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Adrian.c" />
     <ClCompile Include="source\AnimationManager.c" />
     <ClCompile Include="source\AStar.c" />
+    <ClCompile Include="source\BBEM_States.c" />
     <ClCompile Include="source\CollisionManager.c" />
     <ClCompile Include="source\Dialogue.c" />
+    <ClCompile Include="source\EnemyManager.c" />
     <ClCompile Include="source\FileParser.c" />
     <ClCompile Include="source\FSM.c" />
     <ClCompile Include="source\game.c" />
@@ -209,15 +211,18 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\LevelEditor.c" />
     <ClCompile Include="source\LevelEditorScene.c" />
     <ClCompile Include="source\LevelOne.c" />
+    <ClCompile Include="source\LevelOne_AStar.c" />
     <ClCompile Include="source\LinkedList.c" />
     <ClCompile Include="source\Loader.c" />
     <ClCompile Include="source\Marcus.c" />
     <ClCompile Include="source\MatrixStack.c" />
+    <ClCompile Include="source\MiniMonke_States.c" />
     <ClCompile Include="source\Objective_Fixboat.c" />
     <ClCompile Include="source\Player.c" />
     <ClCompile Include="source\RenderManager.c" />
     <ClCompile Include="source\Scene.c" />
     <ClCompile Include="source\SceneManager.c" />
+    <ClCompile Include="source\Shared_States.c" />
     <ClCompile Include="source\SystemManager.c" />
     <ClCompile Include="source\Weiyi.c" />
     <ClCompile Include="source\Xinyun.c" />
@@ -225,9 +230,11 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
   <ItemGroup>
     <ClInclude Include="source\AnimationManager.h" />
     <ClInclude Include="source\AStar.h" />
+    <ClInclude Include="source\BBEM_States.h" />
     <ClInclude Include="source\CollisionManager.h" />
     <ClInclude Include="source\Colors.h" />
     <ClInclude Include="source\Dialogue.h" />
+    <ClInclude Include="source\EnemyManager.h" />
     <ClInclude Include="source\FSM.h" />
     <ClInclude Include="source\FileParser.h" />
     <ClInclude Include="source\GameObject.h" />
@@ -237,11 +244,13 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\LinkedList.h" />
     <ClInclude Include="source\Loader.h" />
     <ClInclude Include="source\MatrixStack.h" />
+    <ClInclude Include="source\MiniMonke_States.h" />
     <ClInclude Include="source\Objective_Fixboat.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\RenderManager.h" />
     <ClInclude Include="source\Scene.h" />
     <ClInclude Include="source\SceneManager.h" />
+    <ClInclude Include="source\Shared_States.h" />
     <ClInclude Include="source\SystemManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

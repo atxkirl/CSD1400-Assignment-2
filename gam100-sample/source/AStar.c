@@ -49,6 +49,7 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 	// - If openList is empty, and we've not added ending node to the closed list, means there is no path.
 	while (LL_IsEmpty(openList) == 0)
 	{
+		printf("calculating A*\n");
 		AStar_Node* lowestF = NULL;
 		for (LinkedList* it = openList; it != NULL; it = it->next)
 		{
@@ -69,10 +70,11 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 			// Add nodes to path list, in reverse order.
 			for (; lowestF; lowestF = lowestF->parent)
 			{
-				if (lowestF->type != NODE_START && lowestF->type != NODE_END)
-					lowestF->type = NODE_PATH;
 				LL_Add(&path, lowestF);
+				printf("adding paths! pos [%6.2f,%6.2f]\n", lowestF->position.x, lowestF->position.y);
 			}
+			//LL_Reverse(&path); // Reverse the list to get the start node as the head.
+
 			LL_Clear(&openList);
 			LL_Clear(&closedList);
 			return path;
@@ -124,4 +126,93 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 	LL_Clear(&closedList);
 	LL_Clear(&path);
 	return NULL;
+}
+
+LinkedList* AStar_GetPathWorldPosition(float startX, float startY, float endX, float endY, AStar_Map* map)
+{
+	AStar_Node* start = NULL;
+	AStar_Node* end = NULL;
+
+	printf("Getting Path! Start=[%6.2f, %6.2f]  End=[%6.2f, %6.2f]\n", startX, startY, endX, endY);
+
+	for (int row = 0; row < map->rows; ++row)
+	{
+		for (int col = 0; col < map->columns; ++col)
+		{
+			// Found both start and end.
+			if (start != NULL && end != NULL)
+			{
+				printf("Found both start and end!\n");
+				return AStar_GetPath(start, end, map);
+			}
+
+			// Found starting node.
+			float deltaX = (float)fabs((double)map->map[row][col].position.x - (double)startX);
+			float deltaY = (float)fabs((double)map->map[row][col].position.y - (double)startY);
+			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
+			{
+				printf("Found a start node!\n");
+				start = &map->map[row][col];
+			}
+			// Found end node.
+			deltaX = (float)fabs((double)map->map[row][col].position.x - (double)endX);
+			deltaY = (float)fabs((double)map->map[row][col].position.y - (double)endY);
+			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
+			{
+				printf("Found a end node!\n");
+				end = &map->map[row][col];
+			}
+		}
+	}
+
+	return NULL;
+}
+
+void AStar_InitializeNode(AStar_Node** node, int row, int col, float posX, float posY, AStar_Type type)
+{
+	(*node)->row = row;
+	(*node)->column = col;
+	(*node)->position = CP_Vector_Set(posX, posY);
+	
+	(*node)->parent = NULL;
+	(*node)->gCost = 0;
+	(*node)->hCost = 0;
+	(*node)->fCost = 0;
+
+	(*node)->type = type;
+
+	printf("Node Row=%2d, Col=%2d, PosX=%7.2f, PosY=%7.2f\n", row, col, posX, posY);
+}
+
+void AStar_InitializeMap(AStar_Map* map, int row, int col)
+{
+	// Don't bother if row/col is smaller than 1, if not malloc will explode.
+	if (row < 1 || col < 1)
+		return;
+
+	map->map = malloc(sizeof(AStar_Node*) * row);
+	if (map->map)
+	{
+		for (int r = 0; r < row; ++r)
+		{
+			map->map[r] = malloc(sizeof(AStar_Node) * col);
+		}
+	}
+
+	map->rows = row;
+	map->columns = col;
+}
+
+void AStar_ClearMap(AStar_Map* map)
+{
+	if (map->map != NULL)
+	{
+		for (int row = 0; row < map->rows; ++row)
+		{
+			free(map->map[row]);
+			map->map[row] = NULL;
+		}
+		free(map->map);
+		map->map = NULL;
+	}
 }

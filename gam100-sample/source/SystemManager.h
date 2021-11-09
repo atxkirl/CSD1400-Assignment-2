@@ -16,6 +16,8 @@
 #include "CollisionManager.h"
 #include "AnimationManager.h"
 #include "Dialogue.h"
+#include "EnemyManager.h"
+#include "FSM.h"
 
 //Prefix: SM
 

@@ -38,6 +38,8 @@ void SM_SystemsInit()
 	CLM_Init();
 	AM_Init();
 	DM_Init();
+	FSM_Init();
+	EM_Init();
 }
 
 void SM_SystemsPreUpdate()
@@ -47,6 +49,7 @@ void SM_SystemsPreUpdate()
 
 void SM_SystemsUpdate()
 {
+	EM_Update();
 	DM_Update();
 	CLM_Update();
 	AM_Update();
@@ -72,6 +75,8 @@ void SM_SystemsExit()
 	RM_Clear();
 	GOM_Clear();
 	DM_Clear();
+	EM_Clear();
+	FSM_Clear();
 }
 
 void* SM_GetComponent(GameObject* g, COMPONENT c)
