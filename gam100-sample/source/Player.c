@@ -19,6 +19,8 @@ time_t startTime;
 
 float spd;
 int playerhealth;
+float n_weight = 0;
+float weight = 50.0f;
 
 // Insert all flags that are needed below
 
@@ -27,6 +29,7 @@ bool p_Hideable = false;
 bool p_Hidden = false;
 bool p_Invincible = false;
 bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_objective4 = false, g_objective5 = false;
+bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
 
 
 /*
@@ -58,16 +61,26 @@ void Player_OnCollision(Collider* left, Collider* right)
                 break;
             }
 
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "obj1") == 0) { // placeholders for completing objectives
-                g_objective1 = true;
-                printf("objective 1 complete!");
+            // Pick-up minigame
+            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "wood") == 0) {
+                //g_objective1 = true;
+                n_weight += 1;
+                g_object1collect = true;
                 break;
             }
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "obj2") == 0) {
-                g_objective2 = true;
+
+            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "wooddrop") == 0) {
+                if (g_object1comp == true) {
+                    DM_PrintDialogue("You have completed the objective.", DIALOGUE_CLOSEBUTTON);
+                }
+                else {
+                    DM_PrintDialogue("Press E to drop wood.", DIALOGUE_CLOSEBUTTON);
+                    g_object1drop = true;
+                }
                 break;
             }
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "obj3") == 0) {
+
+            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "obj3") == 0) { // placeholders for completing objectives
                 g_objective3 = true;
                 break;
             }
@@ -81,7 +94,7 @@ void Player_OnCollision(Collider* left, Collider* right)
             }
 
             if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "mud") == 0) { // testing collisions currently not working to slow player down
-                spd = 100.0f;
+                n_weight = 1;
                 printf("SLOWED!");
                 break;
             }
@@ -102,7 +115,7 @@ void Player_OnCollision(Collider* left, Collider* right)
     }
     else {
         while (1) {
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "obj1") == 0) { // placeholders for completing objectives
+            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "obj1") == 0) {  // placeholders for completing objectives
                 g_objective1 = true;
                 printf("objective 1 complete!");
                 break;
@@ -162,15 +175,17 @@ void PLY_Update() { // handles input from player and checking for flags
 
     float dt = CP_System_GetDt();
 
+    float currentSpd = 200.0f - (n_weight * weight);
+
     if (p_Hidden == false) {
         //  player controls
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_W)) player->position.y -= spd * dt;
+        if (CP_Input_KeyDown((enum CP_KEY)KEY_W)) player->position.y -= currentSpd * dt;
 
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_S)) player->position.y += spd * dt;
+        if (CP_Input_KeyDown((enum CP_KEY)KEY_S)) player->position.y += currentSpd * dt;
 
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_A)) player->position.x -= spd * dt;
+        if (CP_Input_KeyDown((enum CP_KEY)KEY_A)) player->position.x -= currentSpd * dt;
 
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_D)) player->position.x += spd * dt;
+        if (CP_Input_KeyDown((enum CP_KEY)KEY_D)) player->position.x += currentSpd * dt;
     }
      
     // update and checks for invincibility
@@ -197,6 +212,26 @@ void PLY_Update() { // handles input from player and checking for flags
         }
     }
 
+    //check if player reach drop off
+    if (g_object1drop == true) {
+        if (CP_Input_KeyTriggered((enum CP_KEY)KEY_E)) {
+            if (g_object1collect == true) {
+                g_object1collect = false;
+                g_object1comp = true;
+                n_weight -= 1;
+                DM_PrintDialogue("You dropped off the wood.", DIALOGUE_CLOSEBUTTON);
+                printf("objective 1 complete!");
+            }
+            else if (g_object1comp == true) {
+                DM_PrintDialogue("You have completed the objective.", DIALOGUE_CLOSEBUTTON);
+            }
+            else {
+                DM_PrintDialogue("Boi where your wood, go get it", DIALOGUE_CLOSEBUTTON);
+            }
+        }
+    }
+
+
     switch (playerhealth) {
     case 3: {
 
@@ -214,7 +249,7 @@ void PLY_Update() { // handles input from player and checking for flags
     }
 
     // returns player back to normal speed when 
-    spd = 200.0f;
+    //spd = 200.0f;
 
     RM_SetCameraPosition(player->position);
 }
