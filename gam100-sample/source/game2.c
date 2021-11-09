@@ -23,7 +23,7 @@ void game2_init(void)
     //g->position = CP_Vector_Set(50, 20);
     //RM_AddComponent(g);
 
-    PLY_CreatePlayer();
+    PLY_CreatePlayer(50, 20);
 }
 
 void game2_update(void)

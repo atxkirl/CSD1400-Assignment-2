@@ -16,6 +16,7 @@
 #include "Loader.h"
 #include "Colors.h"
 #include "SystemManager.h"
+#include "Objective_Connect.h"
 
 GameObject* gLOne = NULL;
 GameObject* ObjectiveUI = NULL;
@@ -106,6 +107,8 @@ void LevelOne_init(void)
     RM_LoadImage(r, "Assets/bananaboi.png");
     CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
     LevelOneGridColliderInit();
+
+    OB_ConnectInit();
 }
 
 void LevelOne_update(void)
@@ -144,6 +147,8 @@ void LevelOne_update(void)
         c->space = COLSPC_SCREEN;
         CLM_Set(c, COL_POINT, NULL);
     }
+
+    OB_ConnectUpdate();
 
     SM_SystemsUpdate();
 

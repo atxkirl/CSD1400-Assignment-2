@@ -217,6 +217,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Marcus.c" />
     <ClCompile Include="source\MatrixStack.c" />
     <ClCompile Include="source\MiniMonke_States.c" />
+    <ClCompile Include="source\Objective_Connect.cpp" />
     <ClCompile Include="source\Objective_Fixboat.c" />
     <ClCompile Include="source\Player.c" />
     <ClCompile Include="source\RenderManager.c" />
@@ -245,6 +246,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\Loader.h" />
     <ClInclude Include="source\MatrixStack.h" />
     <ClInclude Include="source\MiniMonke_States.h" />
+    <ClInclude Include="source\Objective_Connect.h" />
     <ClInclude Include="source\Objective_Fixboat.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\RenderManager.h" />

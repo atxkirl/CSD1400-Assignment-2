@@ -71,14 +71,17 @@
     <ClCompile Include="source\SystemManager.c">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="source\EnemyManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
     <ClCompile Include="source\Dialogue.c">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="source\Objective_Fixboat.c">
       <Filter>Minigames</Filter>
     </ClCompile>
-    <ClCompile Include="source\EnemyManager.c">
-      <Filter>Systems</Filter>
+    <ClCompile Include="source\Objective_Connect.cpp">
+      <Filter>Minigames</Filter>
     </ClCompile>
     <ClCompile Include="source\LevelOne_AStar.c">
       <Filter>Scenes</Filter>
@@ -144,6 +147,12 @@
     <ClInclude Include="source\Player.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="source\AStar.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Dialogue.h">
+      <Filter>Header</Filter>
+    </ClInclude>
     <ClInclude Include="source\AnimationManager.h">
       <Filter>Systems</Filter>
     </ClInclude>
@@ -165,17 +174,14 @@
     <ClInclude Include="source\GameObject.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="source\AStar.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Dialogue.h">
-      <Filter>Header</Filter>
+    <ClInclude Include="source\EnemyManager.h">
+      <Filter>Systems</Filter>
     </ClInclude>
     <ClInclude Include="source\Objective_Fixboat.h">
       <Filter>Minigames</Filter>
     </ClInclude>
-    <ClInclude Include="source\EnemyManager.h">
-      <Filter>Systems</Filter>
+    <ClInclude Include="source\Objective_Connect.h">
+      <Filter>Minigames</Filter>
     </ClInclude>
     <ClInclude Include="source\FSM.h">
       <Filter>FSM</Filter>
