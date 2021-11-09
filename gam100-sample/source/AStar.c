@@ -73,7 +73,6 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 				LL_Add(&path, lowestF);
 				printf("adding paths! pos [%6.2f,%6.2f]\n", lowestF->position.x, lowestF->position.y);
 			}
-			//LL_Reverse(&path); // Reverse the list to get the start node as the head.
 
 			LL_Clear(&openList);
 			LL_Clear(&closedList);
