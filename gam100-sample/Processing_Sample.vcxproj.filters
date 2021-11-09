@@ -80,6 +80,9 @@
     <ClCompile Include="source\Objective_Fixboat.c">
       <Filter>Minigames</Filter>
     </ClCompile>
+    <ClCompile Include="source\Objective_Connect.cpp">
+      <Filter>Minigames</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -157,6 +160,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="source\Objective_Fixboat.h">
+      <Filter>Minigames</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Objective_Connect.h">
       <Filter>Minigames</Filter>
     </ClInclude>
   </ItemGroup>
