@@ -53,18 +53,46 @@ void OB_ConnectOnCollision(Collider* left, Collider* right)
 			StartingScaleY = WireConnector_Y->scale.y;
 			hold_Wire = WireConnector_Y;
 		}
-		return;
 	}
 
-	if (CP_Input_MouseReleased(MOUSE_BUTTON_1))
+	if (strcmp(((GameObject*)right->obj)->tag, "Down") == 0)
 	{
-		if (strcmp(((GameObject*)left->obj)->tag, "WireConnector_R") == 0 && strcmp(((GameObject*)left->obj)->tag, "RedRight") == 0)
+		if (hold_Wire)
 		{
-			iRedConnected = 1;
-		}
+			if (strcmp(hold_Wire->tag, "WireConnector_R") == 0)
+			{
+				if(strcmp(((GameObject*)left->obj)->tag, "RedRight") == 0)
+					iRedConnected = 1;
+			}
 
-		return;
+			else if (strcmp(hold_Wire->tag, "WireConnector_B") == 0)
+			{
+				if (strcmp(((GameObject*)left->obj)->tag, "BlueRight") == 0)
+				{
+					iBlueConnected = 1;
+				}
+			}
+
+			else if (strcmp(hold_Wire->tag, "WireConnector_G") == 0)
+			{
+				if (strcmp(((GameObject*)left->obj)->tag, "GreenRight") == 0)
+				{
+					iGreenConnected = 1;
+				}
+			}
+
+			else if (strcmp(hold_Wire->tag, "WireConnector_Y") == 0)
+			{
+				if (strcmp(((GameObject*)left->obj)->tag, "YellowRight") == 0)
+				{
+					iYellowConnected = 1;
+				}
+			}
+		}
 	}
+
+	return;
+
 }
 
 void OB_ConnectInit()
@@ -105,6 +133,16 @@ void OB_ConnectUpdate()
 		holdPoint = GOM_CreateTemp(EMPTY);
 		holdPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 		holdPoint->tag = "Drag";
+		Collider* c = CLM_AddComponent(holdPoint);
+		c->space = COLSPC_SCREEN;
+		CLM_Set(c, COL_POINT, NULL);
+	}
+
+	if (CP_Input_MouseDown(MOUSE_BUTTON_1))
+	{
+		holdPoint = GOM_CreateTemp(EMPTY);
+		holdPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+		holdPoint->tag = "Down";
 		Collider* c = CLM_AddComponent(holdPoint);
 		c->space = COLSPC_SCREEN;
 		CLM_Set(c, COL_POINT, NULL);
@@ -152,6 +190,12 @@ void OB_ConnectUpdate()
 
 			initialPos = CP_Vector_Set(0, 0);
 		}
+	}
+
+	if (iRedConnected && iBlueConnected && iGreenConnected && iYellowConnected)
+	{
+		Renderer* r = RM_GetComponent(OBJ_Title);
+		r->text = "Complete!";
 	}
 }
 
