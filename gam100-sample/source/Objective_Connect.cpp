@@ -9,7 +9,7 @@ GameObject* RedConnector_L, * GreenConnector_L, * BlueConnector_L, * YellowConne
 GameObject* RedConnector_R, * GreenConnector_R, * BlueConnector_R, * YellowConnector_R;
 GameObject* WireConnector_R , * WireConnector_G , * WireConnector_B , * WireConnector_Y;
 GameObject* WireCollider_R, * WireCollider_G , * WireCollider_B , * WireCollider_Y;
-GameObject* OBJ_Title, *UI_Background;
+GameObject* OBJ_Title, *UI_Background, *cross;
 GameObject* hold_Wire = NULL;
 int iRedConnected, iBlueConnected, iGreenConnected, iYellowConnected;
 float StartingPosX, StartingPosY;
@@ -52,6 +52,29 @@ void OB_ConnectOnCollision(Collider* left, Collider* right)
 			StartingScaleX = WireConnector_Y->scale.x;
 			StartingScaleY = WireConnector_Y->scale.y;
 			hold_Wire = WireConnector_Y;
+		}
+		else if (strcmp(left->obj->tag, "cross") == 0)
+		{
+			RedConnector_L->isEnabled = 0;
+			GreenConnector_L->isEnabled = 0;
+			BlueConnector_L->isEnabled = 0;
+			YellowConnector_L->isEnabled = 0;
+			RedConnector_R->isEnabled = 0;
+			GreenConnector_R->isEnabled = 0;
+			BlueConnector_R->isEnabled = 0;
+			YellowConnector_R->isEnabled = 0;
+			WireConnector_R->isEnabled = 0;
+			WireConnector_G->isEnabled = 0;
+			WireConnector_B->isEnabled = 0;
+			WireConnector_Y->isEnabled = 0;
+			WireCollider_R->isEnabled = 0;
+			WireCollider_G->isEnabled = 0;
+			WireCollider_B->isEnabled = 0;
+			WireCollider_Y->isEnabled = 0;
+			OBJ_Title->isEnabled = 0;
+			UI_Background->isEnabled = 0;
+			cross->isEnabled = 0;
+			iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
 		}
 	}
 
@@ -115,6 +138,19 @@ void OB_ConnectInit()
 	r->renderPriority = PRI_UI;
 	UI_Background->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
 	UI_Background->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
+
+	//cross
+	cross = GOM_Create(RECTANGLE);
+	cross->position = CP_Vector_Set(screenWidth * 0.775f, screenHeight * 0.2f);
+	cross->scale = CP_Vector_Set(50, 50);
+	cross->tag = "cross";
+	r = RM_AddComponent(cross);
+	RM_LoadImage(r, "Assets/cross.png");
+	r->renderPriority = PRI_UI;
+	Collider *c = CLM_AddComponent(cross);
+	CLM_Set(c, COL_BOX, OB_ConnectOnCollision);
+	c->space = COLSPC_SCREEN;
+	c->isTrigger = 1;
 
 	CreateConnectors();
 	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
@@ -210,14 +246,14 @@ void OB_ConnectUnTrigger()
 void CreateConnectors()
 {
 	CP_Vector ConnectorScale = CP_Vector_Set(screenWidth * 0.125f, screenHeight * 0.06125f);
-	CP_Vector ConnectorPosition_One_Left = CP_Vector_Set(screenWidth * 0.275f, screenHeight * 0.225f);
-	CP_Vector ConnectorPositio_Two_Left = CP_Vector_Set(screenWidth * 0.275f, screenHeight * 0.4f);
-	CP_Vector ConnectorPosition_Three_Left = CP_Vector_Set(screenWidth * 0.275f, screenHeight * 0.575f);
+	CP_Vector ConnectorPosition_One_Left = CP_Vector_Set(screenWidth * 0.275f, screenHeight * 0.3f);
+	CP_Vector ConnectorPositio_Two_Left = CP_Vector_Set(screenWidth * 0.275f, screenHeight * 0.45f);
+	CP_Vector ConnectorPosition_Three_Left = CP_Vector_Set(screenWidth * 0.275f, screenHeight * 0.6f);
 	CP_Vector ConnectorPosition_Four_Left = CP_Vector_Set(screenWidth * 0.275f, screenHeight * 0.75f);
 
-	CP_Vector ConnectorPosition_One_Right = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.225f);
-	CP_Vector ConnectorPositio_Two_Right = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.4f);
-	CP_Vector ConnectorPosition_Three_Right = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.575f);
+	CP_Vector ConnectorPosition_One_Right = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.3f);
+	CP_Vector ConnectorPositio_Two_Right = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.45f);
+	CP_Vector ConnectorPosition_Three_Right = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.6f);
 	CP_Vector ConnectorPosition_Four_Right = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.75f);
 
 	CP_Vector ConnectorPosition_Left[4];
