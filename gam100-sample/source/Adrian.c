@@ -59,7 +59,7 @@ void Adrian_CallAStar(void)
 
     clock_t t = clock();
     // Calculate A* path
-    path = AStar_GetPath(startNode, endNode, &map);
+    AStar_GetPath(startNode, endNode, &path, &map);
     t = clock() - t;
     printf("Time taken for A* (ms): %d\n", t);
 
@@ -228,12 +228,12 @@ void Adrian_init(void)
         for (int cols = 0; cols < map.columns; ++cols)
         {
             AStar_Node* temp = &map.map[rows][cols];
-            AStar_InitializeNode(&temp, rows, cols, cols * gCellWidth, rows * gCellHeight, NODE_DEFAULT);
+            AStar_InitializeNode(&temp, rows, cols, CP_Vector_Set(cols * gCellWidth, rows * gCellHeight), NODE_DEFAULT);
         }
     }
 
     // Create some enemies
-    EM_CreateEnemy("Enemy1", "BBEM_Idle", CP_Vector_Set(30.f, 15.f), &map);
+    //EM_CreateEnemy("Enemy1", "BBEM_Idle", CP_Vector_Set(30.f, 15.f), &map);
 }
 
 void Adrian_update(void)

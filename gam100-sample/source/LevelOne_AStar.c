@@ -235,7 +235,7 @@ void LevelOneAStar_AStarInit(void)
         for (int c = 0; c < map.columns; ++c)
         {
             AStar_Node* temp = &map.map[r][c];
-            AStar_InitializeNode(&temp, r, c, gLoadedGrids->gGrid[r][c]->position.x, gLoadedGrids->gGrid[r][c]->position.y, NODE_DEFAULT);
+            AStar_InitializeNode(&temp, r, c, gLoadedGrids->gGrid[r][c]->position, NODE_DEFAULT);
 
             if (gLoadedGrids->gGrid[r][c]->type == WATER || gLoadedGrids->gGrid[r][c]->type == EMPTY)
             {

@@ -14,10 +14,12 @@
 typedef struct
 {
 	GameObject* go; // The Enemy's GameObject
+
 	Renderer* renderer;
 	FSM* stateMachine;
 
-	CP_Vector prevTargetPosition;
+	int targetRow, targetCol;
+	int targetPrevRow, targetPrevCol;
 
 	int movementPathIndex; // The index of the current node in the path.
 	LinkedList* movementPath; // LinkedList of path nodes from this Enemy to it's target position.

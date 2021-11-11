@@ -21,6 +21,11 @@ Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector positi
 		enemy->movementPath = NULL;
 		enemy->movementPathIndex = 0;
 
+		enemy->targetRow = 0;
+		enemy->targetCol = 0;
+		enemy->targetPrevRow = 0;
+		enemy->targetPrevCol = 0;
+
 		LL_Add(&enemyList, enemy);
 	}
 
@@ -56,6 +61,15 @@ void EM_Update()
 		EM_Update_Pathing();
 		pathingTimeElapsed -= pathingTimeElapsed;
 	}
+
+	//for (int i = 0; i < LL_GetCount(enemyList); ++i)
+	//{
+	//	Enemy* temp = (Enemy*)enemyList->curr;
+	//	if (temp == NULL)
+	//		continue;
+
+
+	//}
 }
 
 void EM_Clear()
@@ -140,13 +154,15 @@ void EM_Update_Pathing()
 			GameObject* targetGo = temp->stateMachine->target;
 
 			// Don't repath if positions are the same.
-			if (targetGo->position.x == temp->prevTargetPosition.x && targetGo->position.y == temp->prevTargetPosition.y)
+			AStar_GetRowCol(targetGo->position, temp->currentMap, &temp->targetRow, &temp->targetCol);
+			if (temp->targetRow == temp->targetPrevRow && temp->targetCol == temp->targetPrevCol)
 				continue;
 
 			// Calculate new path
-			temp->movementPath = AStar_GetPathWorldPosition(enemyGo->position.x, enemyGo->position.y, targetGo->position.x, targetGo->position.y, temp->currentMap);
+			AStar_GetPathWorldPosition(enemyGo->position, targetGo->position, &temp->movementPath, temp->currentMap);
 			temp->movementPathIndex = LL_GetCount(temp->movementPath) - 1;
-			temp->prevTargetPosition = targetGo->position;
+			// Save row/col position
+			AStar_GetRowCol(targetGo->position, temp->currentMap, &temp->targetPrevRow, &temp->targetPrevCol);
 		}
 	}
 }

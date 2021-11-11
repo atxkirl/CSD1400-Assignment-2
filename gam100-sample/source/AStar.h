@@ -62,16 +62,14 @@ static int Estimate(int currRow, int currCol, int destRow, int destCol);
 
 /// <summary>
 /// Returns a path from the starting node, to the ending node.
-/// Path is a LinkedList of Node*.
 /// </summary>
-/// <param name="starting -">Starting node.</param>
-/// <param name="ending -">Ending node.</param>
-/// <param name="map -">The map of which the starting and ending nodes are a part of.</param>
-LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map);
+void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, AStar_Map* map);
 
-LinkedList* AStar_GetPathWorldPosition(float startX, float startY, float endX, float endY, AStar_Map* map);
+void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList** path, AStar_Map* map);
 
-void AStar_InitializeNode(AStar_Node** node, int row, int col, float posX, float posY, AStar_Type type);
+void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col);
+
+void AStar_InitializeNode(AStar_Node** node, int row, int col, CP_Vector position, AStar_Type type);
 
 void AStar_InitializeMap(AStar_Map* map, int row, int col);
 
