@@ -21,21 +21,21 @@ static int Estimate(int currRow, int currCol, int destRow, int destCol)
 /// <param name="starting -">Starting node.</param>
 /// <param name="ending -">Ending node.</param>
 /// <param name="map -">The map of which the starting and ending nodes are a part of.</param>
-LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* map)
+void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, AStar_Map* map)
 {
 	if (starting == NULL || ending == NULL)
 	{
-		//printf("Warning! Starting or Ending node is NULL. [LinkedList* GetPath]\n");
-		return NULL;
+		printf("Warning! Starting or Ending node is NULL. [LinkedList* GetPath]\n");
+		return;
 	}
 
 	LinkedList* openList = NULL; // List of nodes that we want to test.
 	LinkedList* closedList = NULL; // List of nodes that we've already tested.
-	LinkedList* path = NULL; // Return list if a valid path between the starting and ending nodes is found.
 	starting->hCost = Estimate(starting->row, starting->column, ending->row, ending->column);
 	starting->fCost = starting->hCost;
 
 	LL_Add(&openList, starting);
+	LL_Clear(&(*path));
 
 	// Loop while openList still contains nodes. (Means there's still nodes to test)
 	// - Get the node with the lowest F cost. This is our "current" node.
@@ -69,13 +69,21 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 			// Add nodes to path list, in reverse order.
 			for (; lowestF; lowestF = lowestF->parent)
 			{
-				if (lowestF->type != NODE_START && lowestF->type != NODE_END)
-					lowestF->type = NODE_PATH;
-				LL_Add(&path, lowestF);
+				LL_Add(&(*path), lowestF);
+				printf("adding paths! pos [%6.2f,%6.2f]\n", lowestF->position.x, lowestF->position.y);
 			}
+
+			// Clean path nodes.
+			for (int i = 0; i < LL_GetCount(*path); ++i)
+			{
+				AStar_Node* temp = LL_Get(*path, i);
+				if (temp)
+					temp->parent = NULL;
+			}
+
 			LL_Clear(&openList);
 			LL_Clear(&closedList);
-			return path;
+			return;
 		}
 
 		// Get neighbouring nodes.
@@ -119,9 +127,114 @@ LinkedList* AStar_GetPath(AStar_Node* starting, AStar_Node* ending, AStar_Map* m
 		}
 	}
 
-	//printf("Warning! There is no valid path between the Starting and Ending nodes. [LinkedList* GetPath]\n");
+	printf("Warning! There is no valid path between the Starting and Ending nodes. [LinkedList* GetPath]\n");
 	LL_Clear(&openList);
 	LL_Clear(&closedList);
-	LL_Clear(&path);
-	return NULL;
+	LL_Clear(&(*path));
+}
+
+void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList** path, AStar_Map* map)
+{
+	AStar_Node* start = NULL;
+	AStar_Node* end = NULL;
+
+	for (int row = 0; row < map->rows; ++row)
+	{
+		if (start != NULL && end != NULL)
+			break;
+
+		for (int col = 0; col < map->columns; ++col)
+		{
+			// Found both start and end.
+			if (start != NULL && end != NULL)
+				break;
+
+			// Found starting node.
+			float deltaX = (float)fabs((double)map->map[row][col].position.x - (double)startPos.x);
+			float deltaY = (float)fabs((double)map->map[row][col].position.y - (double)startPos.y);
+			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
+			{
+				printf("Found a start node!\n");
+				start = &map->map[row][col];
+			}
+			// Found end node.
+			deltaX = (float)fabs((double)map->map[row][col].position.x - (double)endPos.x);
+			deltaY = (float)fabs((double)map->map[row][col].position.y - (double)endPos.y);
+			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
+			{
+				printf("Found a end node!\n");
+				end = &map->map[row][col];
+			}
+		}
+	}
+
+	AStar_GetPath(start, end, path, map);
+}
+
+void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col)
+{
+	for (int r = 0; r < map->rows; ++r)
+	{
+		for (int c = 0; c < map->columns; ++c)
+		{
+			// Found starting node.
+			float deltaX = (float)fabs((double)map->map[r][c].position.x - (double)position.x);
+			float deltaY = (float)fabs((double)map->map[r][c].position.y - (double)position.y);
+			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
+			{
+				printf("Found a node!\n");
+				*row = r;
+				*col = c;
+			}
+		}
+	}
+}
+
+void AStar_InitializeNode(AStar_Node** node, int row, int col, CP_Vector position, AStar_Type type)
+{
+	(*node)->row = row;
+	(*node)->column = col;
+	(*node)->position = position;
+	
+	(*node)->parent = NULL;
+	(*node)->gCost = 0;
+	(*node)->hCost = 0;
+	(*node)->fCost = 0;
+
+	(*node)->type = type;
+
+	printf("Node Row=%2d, Col=%2d, PosX=%7.2f, PosY=%7.2f\n", row, col, position.x, position.y);
+}
+
+void AStar_InitializeMap(AStar_Map* map, int row, int col)
+{
+	// Don't bother if row/col is smaller than 1, if not malloc will explode.
+	if (row < 1 || col < 1)
+		return;
+
+	map->map = malloc(sizeof(AStar_Node*) * row);
+	if (map->map)
+	{
+		for (int r = 0; r < row; ++r)
+		{
+			map->map[r] = malloc(sizeof(AStar_Node) * col);
+		}
+	}
+
+	map->rows = row;
+	map->columns = col;
+}
+
+void AStar_ClearMap(AStar_Map* map)
+{
+	if (map->map != NULL)
+	{
+		for (int row = 0; row < map->rows; ++row)
+		{
+			free(map->map[row]);
+			map->map[row] = NULL;
+		}
+		free(map->map);
+		map->map = NULL;
+	}
 }

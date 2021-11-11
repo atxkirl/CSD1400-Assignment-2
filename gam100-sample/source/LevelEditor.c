@@ -65,7 +65,9 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 		else if (strcmp(r->obj->tag, LCLICK_CTRL) == 0)
 		{
 			//AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, objDirection);
-			gGrids.gGrid[(int)tempGO->position.y / iSize][(int)tempGO->position.x / iSize]->tag = "PlayerSpawn";
+			int iX = (int)tempGO->position.x / iSize;
+			int iY = (int)tempGO->position.y / iSize;
+			gGrids.gGrid[iY][iX]->tag = "PlayerSpawn";
 			printf("Player Spawn set");
 		}
 		else if (strcmp(r->obj->tag, RCLICK) == 0)

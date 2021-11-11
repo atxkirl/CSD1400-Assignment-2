@@ -16,11 +16,15 @@
 #include "../DetectMemoryLeak.h"
 #include "SystemManager.h"
 #include "AStar.h"
+#include "EnemyManager.h"
 
 #define NODE_SIZE 30
 
 static AStar_Map map;
 static LinkedList* path;
+
+static float gWindowWidth;
+static float gWindowHeight;
 
 static float gCellHeight;
 static float gCellWidth;
@@ -40,9 +44,9 @@ static AStar_Node* endNode;
 void Adrian_CallAStar(void)
 {
     // Clear the map of paths
-    for (int row = 0; row < NODE_SIZE; ++row)
+    for (int row = 0; row < map.rows; ++row)
     {
-        for (int col = 0; col < NODE_SIZE; ++col)
+        for (int col = 0; col < map.columns; ++col)
         {
             if (map.map[row][col].type == NODE_PATH)
                 map.map[row][col].type = NODE_DEFAULT;
@@ -55,7 +59,7 @@ void Adrian_CallAStar(void)
 
     clock_t t = clock();
     // Calculate A* path
-    path = AStar_GetPath(startNode, endNode, &map);
+    AStar_GetPath(startNode, endNode, &path, &map);
     t = clock() - t;
     printf("Time taken for A* (ms): %d\n", t);
 
@@ -78,9 +82,6 @@ void Adrian_CallAStar(void)
 
 void Adrian_Render(void)
 {
-    float gWindowWidth = (float)CP_System_GetWindowWidth();
-    float gWindowHeight = (float)CP_System_GetWindowHeight();
-
     gBackgroundColor = CP_Color_Create(128, 128, 128, 255);
     gGridColor = CP_Color_Create(0, 0, 0, 255);
 
@@ -93,9 +94,6 @@ void Adrian_Render(void)
     // Clear the window.
     CP_Graphics_ClearBackground(gBackgroundColor);
 
-    gCellHeight = gWindowHeight / NODE_SIZE;
-    gCellWidth = gWindowWidth / NODE_SIZE;
-
     CP_Settings_Stroke(gGridColor);
     // Draw vertical grid lines
     for (int x = 0; x < NODE_SIZE; ++x)
@@ -107,8 +105,6 @@ void Adrian_Render(void)
     {
         CP_Graphics_DrawLine(0, y * gCellHeight, gWindowHeight, y * gCellHeight);
     }
-
-
 
     // render cells of map.map
     for (int row = 0; row < NODE_SIZE; ++row)
@@ -133,7 +129,7 @@ void Adrian_Render(void)
                 CP_Settings_Fill(pathColor);
                 break;
             }
-            CP_Graphics_DrawRect(col * gCellWidth, row * gCellHeight, gCellWidth, gCellHeight);
+            CP_Graphics_DrawRect(map.map[row][col].position.x, map.map[row][col].position.y, gCellWidth, gCellHeight);
         }
     }
 }
@@ -218,39 +214,26 @@ void Adrian_init(void)
 {
     SM_SystemsInit();
 
-    GameObject* g = GOM_Create(CIRCLE);
-    g->scale = CP_Vector_Set(20, 20);
-    g->position = CP_Vector_Set(50, 20);
-    RM_AddComponent(g);
-    
-    map.rows = NODE_SIZE;
-    map.columns = NODE_SIZE;
+    gWindowWidth = (float)CP_System_GetWindowWidth();
+    gWindowHeight = (float)CP_System_GetWindowHeight();
+    gCellHeight = gWindowHeight / NODE_SIZE;
+    gCellWidth = gWindowWidth / NODE_SIZE;
 
     // Allocate Memory for map.
-    map.map = malloc(sizeof(AStar_Node*) * map.rows);
-    if (map.map)
-    {
-        for (int r = 0; r < map.rows; ++r)
-        {
-            map.map[r] = malloc(sizeof(AStar_Node) * map.columns);
-        }
-    }
+    AStar_InitializeMap(&map, 30, 30);
 
     // Fill map with stuff
     for (int rows = 0; rows < map.rows; ++rows)
     {
         for (int cols = 0; cols < map.columns; ++cols)
         {
-            map.map[rows][cols].row = rows;
-            map.map[rows][cols].column = cols;
-            map.map[rows][cols].type = NODE_DEFAULT;
-
-            map.map[rows][cols].fCost = 0;
-            map.map[rows][cols].gCost = 0;
-            map.map[rows][cols].hCost = 0;
-            map.map[rows][cols].parent = NULL;
+            AStar_Node* temp = &map.map[rows][cols];
+            AStar_InitializeNode(&temp, rows, cols, CP_Vector_Set(cols * gCellWidth, rows * gCellHeight), NODE_DEFAULT);
         }
     }
+
+    // Create some enemies
+    //EM_CreateEnemy("Enemy1", "BBEM_Idle", CP_Vector_Set(30.f, 15.f), &map);
 }
 
 void Adrian_update(void)
@@ -277,13 +260,7 @@ void Adrian_update(void)
 void Adrian_exit(void)
 {
     // Release memory for map.map
-    for (int r = 0; r < map.rows; ++r)
-    {
-        free(map.map[r]);
-        map.map[r] = NULL;
-    }
-    free(map.map);
-    map.map = NULL;
+    AStar_ClearMap(&map);
 
     SM_SystemsExit();
     _CrtDumpMemoryLeaks();

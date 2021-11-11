@@ -31,7 +31,7 @@ void game_OnCollision(Collider* left, Collider* right)
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
         if (strcmp(((GameObject*)left->obj)->tag,"adrian") == 0)
-            SceneManager_ChangeSceneByName("adrian");
+            SceneManager_ChangeSceneByName("leveloneastar");
         else if (strcmp(((GameObject*)left->obj)->tag, "marcus") == 0)
             SceneManager_ChangeSceneByName("marcus");
         else if (strcmp(((GameObject*)left->obj)->tag, "hongyu") == 0)
