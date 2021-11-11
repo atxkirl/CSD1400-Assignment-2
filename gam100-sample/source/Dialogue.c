@@ -105,7 +105,9 @@ void DM_Update()
 		clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
 		clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 		clickPoint->tag = "Click";
-		CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
+		Collider* c = CLM_AddComponent(clickPoint);
+		CLM_Set(c, COL_POINT, NULL);
+		c->space = COLSPC_SCREEN;
 	}
 }
 

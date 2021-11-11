@@ -46,6 +46,7 @@ Renderer* RM_AddComponent(GameObject* g)
 		r->textLocalPosition = CP_Vector_Set(0.0f, 0.0f);
 		r->textScale = CP_Vector_Set(1.0f, 1.0f);
 		r->textRotation = 0.0f;
+		r->isEnabled = 1;
 	}
 
 	LL_Add(&renderObjects, r);
@@ -200,7 +201,7 @@ void RenderAllOfType(RENDER_PRIORITY type)
 	{
 		Renderer* r = (Renderer*)currNode->curr;
 		GameObject* go = (GameObject*)r->go;
-		if (!go->isEnabled)
+		if (!go->isEnabled || !r->isEnabled)
 			continue;
 		if (r->renderPriority != type)
 			continue;

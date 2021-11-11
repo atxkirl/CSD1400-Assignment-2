@@ -13,6 +13,7 @@
 #include "Helpers.h"
 #include "SystemManager.h"
 #include "Objective_Fixboat.h"
+#include "Objective_BreakCoconut.h"
 
 GameObject* g = NULL;
 int tempSize = 0;
@@ -72,6 +73,13 @@ void hy_OnCollision(Collider* left, Collider* right)
 
         return;
     }
+    //else if (strcmp(left->obj->tag, "player") == 0
+    //    && strcmp(right->obj->tag, "objective2") == 0)
+    //{
+    //    if (CP_Input_KeyTriggered(KEY_E))
+    //        OB_BreakCoconutTrigger();
+    //    return;
+    //}
 }
 
 void HongYu_init(void)
@@ -153,11 +161,22 @@ void HongYu_init(void)
     wall->tag = "objective";
     r = RM_AddComponent(wall);
     r->color = CP_Color_Create(255, 128, 128, 128);
+    r->text = "Fix Boat";
+    c = CLM_AddComponent(wall);
+    CLM_Set(c, COL_BOX, hy_OnCollision);
+    c->isTrigger = 1;
+
+    wall = GOM_Create2(RECTANGLE, CP_Vector_Set(-100, -100), 0, CP_Vector_Set(50, 50));
+    wall->tag = "objective2";
+    r = RM_AddComponent(wall);
+    r->color = CP_Color_Create(128, 255, 128, 128);
+    r->text = "Break Coconut";
     c = CLM_AddComponent(wall);
     CLM_Set(c, COL_BOX, hy_OnCollision);
     c->isTrigger = 1;
 
     OB_FixBoatInit();
+    OB_BreakCoconutInit();
 }
 
 void HongYu_update(void)
@@ -188,13 +207,13 @@ void HongYu_update(void)
     GameObject* clickPoint = NULL;
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
-        //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
-        clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-        clickPoint->tag = "Click";
-        Collider* c = CLM_AddComponent(clickPoint);
-        CLM_Set(c, COL_POINT, NULL);
-        c->space = COLSPC_SCREEN;
+        ////Creates a point obj to test collision against button
+        //clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
+        //clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        //clickPoint->tag = "Click";
+        //Collider* c = CLM_AddComponent(clickPoint);
+        //CLM_Set(c, COL_POINT, NULL);
+        //c->space = COLSPC_SCREEN;
 
         CP_Vector pos = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
         clickPoint = GOM_Create(CIRCLE);//param doesnt matter

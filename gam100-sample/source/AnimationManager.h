@@ -4,15 +4,31 @@
 #include "../CProcessing/inc/cprocessing.h"
 #include "GameObject.h"
 
+typedef enum ANIM_TYPE
+{
+	ANIM_SPRITE,
+	ANIM_SHAKE
+} ANIM_TYPE;
 //think as a big struct that holds all the values for any animation sad
 typedef struct Animation
 {
 	GameObject* go;
+	ANIM_TYPE type;
+	int isEnabled;
+
 	int splitX, splitY;
 	float elapsedTime;
 	int index;
 	int frameCount;
 	float fps;
+
+	//for shake shake. should union heh
+	float rotateAngle;
+	float defaultRotate;
+	float loopTime;
+	int loopCount;
+	int loopCounter;
+	int isContinuous;
 
 }Animation;
 
@@ -48,7 +64,7 @@ Animation* AM_GetComponent(GameObject* go);
 void AM_Remove(Animation*);
 
 /*!
-@brief Removes and delete animation from list
+@brief Set Sprite animation for component
 @param a - animation to be set
 @param x - size of x split
 @param y - size of y split
@@ -57,3 +73,15 @@ void AM_Remove(Animation*);
 @return void
 */
 void AM_SetSprite(Animation* ,int, int, int, float);
+
+
+/*!
+@brief Set shake animation for component
+@param a - animation to be set
+@param rotateAngle - max angle to rotate
+@param loopTime - how long for one sin curve
+@param loopCount - how many loops
+@param isContinuous - if the shake continues nonstop
+@return void
+*/
+void AM_SetShake(Animation*, float, float, int, int);

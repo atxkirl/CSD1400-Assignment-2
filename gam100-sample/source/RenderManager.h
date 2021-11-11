@@ -40,6 +40,7 @@ typedef struct Renderer
 	CP_Vector textScale;//defaulted 1,1
 	float textRotation;
 
+	int isEnabled;
 } Renderer;
 
 void RM_Init();

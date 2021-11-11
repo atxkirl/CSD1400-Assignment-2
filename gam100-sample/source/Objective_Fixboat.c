@@ -19,6 +19,7 @@ GameObject* hold = NULL;
 
 void OB_FixBoatOnCollision(Collider* left, Collider* right)
 {
+	printf("left %s,  right %s", left->obj->tag, right->obj->tag);
 	if (strcmp(right->obj->tag, "Click") == 0)
 	{
 		if (strcmp(left->obj->tag, "part1") == 0)
@@ -249,4 +250,10 @@ void OB_FixBoatUnTrigger()
 	if (fix1Col) fix1Col->isEnabled = 0;
 	if (fix2Col) fix2Col->isEnabled = 0;
 	if (fix3Col) fix3Col->isEnabled = 0;
+	hold = NULL;
+}
+
+int OB_IsFixBoatComplete()
+{
+	return isFixed1 && isFixed2 && isFixed3;
 }
