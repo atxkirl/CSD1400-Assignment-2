@@ -73,13 +73,13 @@ void hy_OnCollision(Collider* left, Collider* right)
 
         return;
     }
-    //else if (strcmp(left->obj->tag, "player") == 0
-    //    && strcmp(right->obj->tag, "objective2") == 0)
-    //{
-    //    if (CP_Input_KeyTriggered(KEY_E))
-    //        OB_BreakCoconutTrigger();
-    //    return;
-    //}
+    else if (strcmp(left->obj->tag, "player") == 0
+        && strcmp(right->obj->tag, "objective2") == 0)
+    {
+        if (CP_Input_KeyTriggered(KEY_E))
+            OB_BreakCoconutTrigger();
+        return;
+    }
 }
 
 void HongYu_init(void)
