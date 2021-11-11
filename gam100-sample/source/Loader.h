@@ -1,5 +1,5 @@
 #pragma once
-#define MAX_OBJECTIVES 10
+#define MAX_OBJECTIVES 2
 
 typedef struct Grid Grid;
 Grid *gLoadedGrids;

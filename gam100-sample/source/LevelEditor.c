@@ -11,6 +11,7 @@
 #define LCLICK_CTRL "LCLICK_CTRL"
 #define RCLICK "RCLICK"
 #define RCLICK_SHIFT "RCLICK_SHIFT"
+#define RCLICK_CTRL "RCLICK_CTRL"
 
 int iSize;
 OBJECT_TYPE objType;
@@ -68,7 +69,7 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 			int iX = (int)tempGO->position.x / iSize;
 			int iY = (int)tempGO->position.y / iSize;
 			gGrids.gGrid[iY][iX]->tag = "PlayerSpawn";
-			printf("Player Spawn set");
+			printf("Player Spawn set\n");
 		}
 		else if (strcmp(r->obj->tag, RCLICK) == 0)
 		{
@@ -81,6 +82,14 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 			//AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, RIGHT);
 			AssignDirectionInt((int)tempGO->position.x / iSize, (int)tempGO->position.y / iSize, RIGHT);
 			LoadTileImage();
+		}
+		else if (strcmp(r->obj->tag, RCLICK_CTRL) == 0)
+		{
+			//AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, objDirection);
+			int iX = (int)tempGO->position.x / iSize;
+			int iY = (int)tempGO->position.y / iSize;
+			gGrids.gGrid[iY][iX]->tag = "Objective";
+			printf("Objective set\n");
 		}
 	}
 }
@@ -280,6 +289,10 @@ void LevelEditorUpdate()
 		if (CP_Input_KeyDown(KEY_LEFT_SHIFT))
 			clickPoint->tag = RCLICK_SHIFT;
 
+		if (CP_Input_KeyDown(KEY_LEFT_CONTROL))
+		{
+			clickPoint->tag = RCLICK_CTRL;
+		}
 		//GameObject* t = GOM_Create(CIRCLE);
 		//t->position = CP_Vector_Set(clickPoint->position.x, clickPoint->position.y);
 		//t->scale = CP_Vector_Set(10.0f, 10.0f);
