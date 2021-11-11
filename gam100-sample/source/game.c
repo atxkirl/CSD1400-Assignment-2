@@ -49,10 +49,10 @@ void game_OnCollision(Collider* left, Collider* right)
 void game_init(void)
 {
     SM_SystemsInit();
-
     //GameObject* g = 
     GOM_Create2(CIRCLE,
         CP_Vector_Set(20, 20), 0.0f, CP_Vector_Set(20, 20));
+    Collider* c = NULL;
 
     float screenWidth, screenHeight;
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
@@ -69,7 +69,9 @@ void game_init(void)
     button->tag = "marcus"; //For collision
     r->renderPriority = PRI_UI;
     r->text = "marcus";
-    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
 
     button = GOM_Create2(RECTANGLE,
         CP_Vector_Set(80.0f, 75.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -77,7 +79,9 @@ void game_init(void)
     button->tag = "hongyu";
     r->renderPriority = PRI_UI;
     r->text = "hongyu";
-    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
 
     button = GOM_Create2(RECTANGLE,
         CP_Vector_Set(80.0f, 125.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -85,7 +89,9 @@ void game_init(void)
     button->tag = "adrian";
     r->renderPriority = PRI_UI;
     r->text = "adrian";
-    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
 
     button = GOM_Create2(RECTANGLE,
         CP_Vector_Set(80.0f, 175.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -93,7 +99,9 @@ void game_init(void)
     button->tag = "weiyi";
     r->renderPriority = PRI_UI;
     r->text = "weiyi";
-    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
 
     button = GOM_Create2(RECTANGLE,
         CP_Vector_Set(80.0f, 225.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -101,7 +109,9 @@ void game_init(void)
     button->tag = "xinyun";
     r->renderPriority = PRI_UI;
     r->text = "xinyun";
-    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
 
     //START BUTTON ==========
     button = GOM_Create2(RECTANGLE,
@@ -110,7 +120,9 @@ void game_init(void)
     button->tag = "game"; //For collision
     r->renderPriority = PRI_UI;
     r->text = "Start";
-    CLM_Set(CLM_AddComponent(button), COL_BOX, game_OnCollision);
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
 }
 
 void game_update(void)
@@ -121,16 +133,6 @@ void game_update(void)
     //    // Change to game2 scene.
     //    SceneManager_ChangeSceneByName("game2");
     //}
-    GameObject* clickPoint = NULL;
-    if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
-    {
-        //Creates a point obj to test collision against button
-        clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
-        clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-        clickPoint->tag = "Click";
-        CLM_Set(CLM_AddComponent(clickPoint), COL_POINT, NULL);
-
-    }
     SM_SystemsUpdate();
 
     //gameUI_render();

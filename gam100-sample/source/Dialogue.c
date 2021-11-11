@@ -98,17 +98,7 @@ void DM_Clear()
 
 void DM_Update()
 {
-	GameObject* clickPoint = NULL;
-	if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
-	{
-		//Creates a point obj to test collision against button
-		clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
-		clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-		clickPoint->tag = "Click";
-		Collider* c = CLM_AddComponent(clickPoint);
-		CLM_Set(c, COL_POINT, NULL);
-		c->space = COLSPC_SCREEN;
-	}
+
 }
 
 void DM_LateUpdate()

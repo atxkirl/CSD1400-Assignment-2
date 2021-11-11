@@ -155,20 +155,6 @@ void LevelOneAStar_update(void)
         }
     }
 
-    // Mouse Click
-    {
-        GameObject* clickPoint = NULL;
-        if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
-        {
-            //Creates a point obj to test collision against button
-            clickPoint = GOM_CreateTemp(EMPTY);
-            clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            clickPoint->tag = "Click";
-            Collider* c = CLM_AddComponent(clickPoint);
-            c->space = COLSPC_SCREEN;
-            CLM_Set(c, COL_POINT, NULL);
-        }
-    }
 
     // Miscellaneous Keyboard Inputs
     {
