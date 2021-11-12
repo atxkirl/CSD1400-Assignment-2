@@ -14,6 +14,22 @@ static int Estimate(int currRow, int currCol, int destRow, int destCol)
 	return (int)(10.0 * sqrt(dRow * dRow + dCol * dCol));
 }
 
+void OrphaniseList(LinkedList* list)
+{
+	if (list)
+	{
+		LinkedList* ll = list;
+		while (ll)
+		{
+			AStar_Node* temp = (AStar_Node*)ll->curr;
+			if (temp)
+				temp->parent = NULL;
+
+			ll = ll->next;
+		}
+	}
+}
+
 /// <summary>
 /// Returns a path from the starting node, to the ending node.
 /// Path is a LinkedList of Node*.
@@ -35,7 +51,7 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 	starting->fCost = starting->hCost;
 
 	LL_Add(&openList, starting);
-	LL_Clear(&(*path));
+	LL_Clear(path);
 
 	// Loop while openList still contains nodes. (Means there's still nodes to test)
 	// - Get the node with the lowest F cost. This is our "current" node.
@@ -66,20 +82,24 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 		// Found end node, so now create path.
 		if (lowestF == ending)
 		{
+			// Prev node to check for circular parenting.
+			AStar_Node* prevNode = lowestF;
 			// Add nodes to path list, in reverse order.
 			for (; lowestF; lowestF = lowestF->parent)
 			{
-				LL_Add(&(*path), lowestF);
-				printf("adding paths! pos [%6.2f,%6.2f]\n", lowestF->position.x, lowestF->position.y);
+				if (prevNode == lowestF->parent)
+				{
+					printf("Circular parenting!\n");
+					break;
+				}
+
+				LL_Add(path, lowestF);
+				prevNode = lowestF;
 			}
 
-			// Clean path nodes.
-			for (int i = 0; i < LL_GetCount(*path); ++i)
-			{
-				AStar_Node* temp = LL_Get(*path, i);
-				if (temp)
-					temp->parent = NULL;
-			}
+			OrphaniseList(*path);
+			OrphaniseList(openList);
+			OrphaniseList(closedList);
 
 			LL_Clear(&openList);
 			LL_Clear(&closedList);
@@ -128,15 +148,20 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 	}
 
 	printf("Warning! There is no valid path between the Starting and Ending nodes. [LinkedList* GetPath]\n");
+
+	OrphaniseList(openList);
+	OrphaniseList(closedList);
+
 	LL_Clear(&openList);
 	LL_Clear(&closedList);
-	LL_Clear(&(*path));
+	LL_Clear(path);
 }
 
 void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList** path, AStar_Map* map)
 {
 	AStar_Node* start = NULL;
 	AStar_Node* end = NULL;
+	float deltaX, deltaY;
 
 	for (int row = 0; row < map->rows; ++row)
 	{
@@ -150,11 +175,10 @@ void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList
 				break;
 
 			// Found starting node.
-			float deltaX = (float)fabs((double)map->map[row][col].position.x - (double)startPos.x);
-			float deltaY = (float)fabs((double)map->map[row][col].position.y - (double)startPos.y);
+			deltaX = (float)fabs((double)map->map[row][col].position.x - (double)startPos.x);
+			deltaY = (float)fabs((double)map->map[row][col].position.y - (double)startPos.y);
 			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
 			{
-				printf("Found a start node!\n");
 				start = &map->map[row][col];
 			}
 			// Found end node.
@@ -162,7 +186,6 @@ void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList
 			deltaY = (float)fabs((double)map->map[row][col].position.y - (double)endPos.y);
 			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
 			{
-				printf("Found a end node!\n");
 				end = &map->map[row][col];
 			}
 		}
@@ -182,7 +205,6 @@ void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col)
 			float deltaY = (float)fabs((double)map->map[r][c].position.y - (double)position.y);
 			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
 			{
-				printf("Found a node!\n");
 				*row = r;
 				*col = c;
 			}
@@ -202,8 +224,6 @@ void AStar_InitializeNode(AStar_Node** node, int row, int col, CP_Vector positio
 	(*node)->fCost = 0;
 
 	(*node)->type = type;
-
-	printf("Node Row=%2d, Col=%2d, PosX=%7.2f, PosY=%7.2f\n", row, col, position.x, position.y);
 }
 
 void AStar_InitializeMap(AStar_Map* map, int row, int col)

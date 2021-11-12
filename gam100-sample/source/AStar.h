@@ -59,6 +59,7 @@ static float const positionToNodeSnap = 33.f; // How close must a world position
 /*-------------------*/
 
 static int Estimate(int currRow, int currCol, int destRow, int destCol);
+static void OrphaniseList(LinkedList* list);
 
 /// <summary>
 /// Returns a path from the starting node, to the ending node.

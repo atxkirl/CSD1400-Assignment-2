@@ -151,7 +151,7 @@ FSM* FindStateMachine(GameObject* controller)
 
 	for (int i = 0; i < LL_GetCount(stateMachines); ++i)
 	{
-		FSM* temp = (FSM*)stateMachines->curr;
+		FSM* temp = (FSM*)LL_Get(stateMachines, i);
 		if (temp == NULL)
 			continue;
 
