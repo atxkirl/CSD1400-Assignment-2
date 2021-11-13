@@ -4,6 +4,8 @@
 
 int obc_stage = 0;
 const int obc_MAX_STAGE = 3;
+int obc_canHit = 1;
+const float obc_delayHit = 0.5f;
 
 GameObject* obc_cross;
 GameObject* obc_coconut;
@@ -22,12 +24,13 @@ void OB_BreakCoconutOnCollision(Collider* left, Collider* right)
 	{
 		if (strcmp(left->obj->tag, "obc_coconut") == 0)
 		{
-			if (obc_stage < obc_MAX_STAGE)
+			if (obc_stage < obc_MAX_STAGE && obc_canHit)
 			{
 				obc_stage++;
 				EnableImage(obc_stage);
 				Animation* a = AM_GetComponent(obc_coconut);
 				a->isEnabled = 1;
+				obc_canHit = 0;
 			}
 		}
 		else if (strcmp(left->obj->tag, "cross") == 0)
@@ -82,9 +85,20 @@ void OB_BreakCoconutInit()
 	obc_coconut->isEnabled = 0;
 	obc_cross->isEnabled = 0;
 	obc_stage = 0;
+	obc_canHit = 1;
 }
 void OB_BreakCoconutUpdate()
 {
+	static float et = 0.0f;
+	if (!obc_canHit)
+	{
+		et += CP_System_GetDt();
+		if (et > obc_delayHit)
+		{
+			obc_canHit = 1;
+			et = 0.0f;
+		}
+	}
 
 }
 void OB_BreakCoconutTrigger()
