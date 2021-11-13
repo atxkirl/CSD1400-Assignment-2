@@ -101,6 +101,9 @@
     <ClCompile Include="source\Shared_States.c">
       <Filter>FSM</Filter>
     </ClCompile>
+    <ClCompile Include="source\Objective_Pickup.c">
+      <Filter>Minigames</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -199,6 +202,9 @@
       <Filter>Minigames</Filter>
     </ClInclude>
     <ClInclude Include="source\Objective_Connect.h">
+      <Filter>Minigames</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Objective_Pickup.h">
       <Filter>Minigames</Filter>
     </ClInclude>
   </ItemGroup>
