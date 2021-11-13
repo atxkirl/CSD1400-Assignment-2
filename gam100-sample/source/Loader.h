@@ -2,6 +2,8 @@
 #define MAX_OBJECTIVES 3
 
 typedef struct Grid Grid;
+typedef union CP_Vector CP_Vector;
+
 Grid *gLoadedGrids;
 
 typedef struct Objectives
@@ -45,4 +47,4 @@ void LoadObjectives(char* cInput);
 
 void SetObjectiveComplete(int iIndex, int iSetter);
 
-void SetPlayerPosition(float fPlayerPosX, float fPlayerPosY);
+CP_Vector SetPlayerPosition();

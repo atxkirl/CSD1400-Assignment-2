@@ -90,10 +90,11 @@ void LoadGrid(char* cInput, int iLoad)
 			gLoadedGrids->gGrid[iY][iX]->rotation = gLoadedGrids->gGrid[iY][iX]->oDirection * 90.f;
 			gLoadedGrids->gGrid[iY][iX]->tag = objList->fObjList[i]->cTag;
 
-			if (strcmp(gLoadedGrids->gGrid[iY][iX]->tag, "PlayerSpawn") == 0)
+			if (strcmp(objList->fObjList[i]->cTag, "PlayerSpawn") == 0)
 			{
 				fPlayerPositionX = gLoadedGrids->gGrid[iY][iX]->position.x;
 				fPlayerPositionY = gLoadedGrids->gGrid[iY][iX]->position.y;
+				printf("Spawned\n");
 			}
 
 			r = RM_GetComponent(gLoadedGrids->gGrid[iY][iX]);
@@ -184,8 +185,7 @@ void SetObjectiveComplete(int iIndex, int iSetter)
 	oObjectiveList[iIndex - 1].isComplete = iSetter;
 }
 
-void SetPlayerPosition(float fPlayerPosX, float fPlayerPosY)
+CP_Vector SetPlayerPosition()
 {
-	fPlayerPosX = fPlayerPositionX;
-	fPlayerPosY = fPlayerPositionY;
+	return CP_Vector_Set(fPlayerPositionX, fPlayerPositionY);
 }

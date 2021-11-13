@@ -23,7 +23,7 @@ Map* new_Map()
 					goMap->fObjList[i]->iPosY = 0;
 					goMap->fObjList[i]->iType = 0;
 					goMap->fObjList[i]->iDir = 0;
-					goMap->fObjList[i]->cTag = malloc(sizeof(char) * 10);
+					goMap->fObjList[i]->cTag = malloc(sizeof(char) * 30);
 				}
 			}
 		}
@@ -118,7 +118,7 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 					mMap->fObjList[iObjNum]->iPosX = atoi(cTempX);
 					mMap->fObjList[iObjNum]->iPosY = atoi(cTempY);
 					mMap->fObjList[iObjNum]->iDir = atoi(cTempDir);
-					memcpy(mMap->fObjList[iObjNum]->cTag, cTempTag, 10);
+					strcpy_s(mMap->fObjList[iObjNum]->cTag, 30, cTempTag);
 				}
 				iObjNum++;
 

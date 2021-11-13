@@ -20,6 +20,7 @@
 
 GameObject* gLOne = NULL;
 GameObject* ObjectiveUI = NULL;
+CP_Vector vObjectiveOnePos, vObjectiveTwoPos, vObjectiveThreePos;
 
 float screenWidth, screenHeight;
 void LevelOneUI_render();
@@ -28,24 +29,12 @@ void LevelOneGridColliderInit();
 void LevelOne_OnCollision(Collider* left, Collider* right)
 {
     //me, other
-    if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
+    if (strcmp(((GameObject*)right->obj)->tag, "player") == 0)
     {
-        if (strcmp(((GameObject*)left->obj)->tag, "objone") == 0)
+        if (strcmp(((GameObject*)left->obj)->tag, "Objective1Read") == 0)
         {
-            SetObjectiveComplete(1, 1);
-            for (int i = 0; i < MAX_OBJECTIVES; i++)
-            {
-                if (oObjectiveList[i].isComplete && !oObjectiveList[i].isSet)
-                {
-                    ObjectiveUI->position = CP_Vector_Set(180.0f, 50.0f + i * 50.f);
-
-                    Renderer* rObjUI = RM_AddComponent(ObjectiveUI);
-                    rObjUI->color = CP_Color_Create(255, 255, 255, 255);
-                    rObjUI->text = "Done.";
-                    rObjUI->renderPriority = PRI_UI;
-                    oObjectiveList[i].isSet = 1;
-                }
-            }
+            if (CP_Input_KeyTriggered(KEY_E))
+                OB_ToggleActive();
         }
     }
 }
@@ -61,25 +50,11 @@ void LevelOne_init(void)
     //here is where ill load objectives
     LoadObjectives("Obj1");
 
-    GameObject* button = GOM_Create(RECTANGLE);
-    button->scale = CP_Vector_Set(75.f, 50.f);
-    button->position = CP_Vector_Set(80.0f, 200.0f);
-    button->tag = "objone";
-    button->type = RECTANGLE;
-    Renderer* r = RM_AddComponent(button);
-    r->color = CP_Color_Create(255, 255, 255, 255);
-    r->text = "Objective";
-    r->renderPriority = PRI_UI;
-    Collider* c = CLM_AddComponent(button);
-    c->space = COLSPC_SCREEN;
-    CLM_Set(c, COL_BOX, LevelOne_OnCollision);
-    
-
     GameObject* ObjectiveUIBox = GOM_Create(WALL);
-    ObjectiveUIBox->scale = CP_Vector_Set(200.f, 70.f);
-    ObjectiveUIBox->position = CP_Vector_Set(screenWidth * 0.1f, screenHeight * 0.1f);
+    ObjectiveUIBox->scale = CP_Vector_Set(screenWidth * 0.175f, screenHeight * 0.15f);
+    ObjectiveUIBox->position = CP_Vector_Set(screenWidth * 0.12f, screenHeight * 0.1f);
     ObjectiveUIBox->tag = "ObjectiveUI";
-    r = RM_AddComponent(ObjectiveUIBox);
+    Renderer* r = RM_AddComponent(ObjectiveUIBox);
     r->color = CP_Color_Create(255, 255, 255, 255);
     r->renderPriority = PRI_UI;
 
@@ -90,7 +65,6 @@ void LevelOne_init(void)
         ObjectiveUI = GOM_Create(EMPTY);
         ObjectiveUI->scale = CP_Vector_Set(175.f, 50.f);
         ObjectiveUI->tag = "ObjectiveUI";
-        ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.1f, screenHeight * 0.075f + i * screenHeight * 0.025f);
         r= RM_AddComponent(ObjectiveUI);
         r->color = CP_Color_Create(255, 255, 255, 255);
         r->text = "";
@@ -101,18 +75,42 @@ void LevelOne_init(void)
             {
                 if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective1") == 0)
                 {
+                    ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.08f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    vObjectiveOnePos = ObjectiveUI->position;
                     r->text = oObjectiveList[0].cObjective;
                     gLoadedGrids->gGrid[j][k]->tag = "Objective1Read";
+                    Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
+                    CLM_Set(c, COL_BOX, LevelOne_OnCollision);
+                    c->isTrigger = 1;
+                    Renderer* rObj = RM_AddComponent(c->obj);
+                    rObj->color = COLOR_RED;
+                    rObj->color.a = 120;
                 }
                 else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective2") == 0)
                 {
+                    ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.07f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    vObjectiveTwoPos = ObjectiveUI->position;
                     r->text = oObjectiveList[1].cObjective;
                     gLoadedGrids->gGrid[j][k]->tag = "Objective2Read";
+                    Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
+                    CLM_Set(c, COL_BOX, LevelOne_OnCollision);
+                    c->isTrigger = 1;
+                    Renderer* rObj = RM_AddComponent(c->obj);
+                    rObj->color = COLOR_RED;
+                    rObj->color.a = 120;
                 }
                 else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective3") == 0)
                 {
+                    ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.11f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    vObjectiveThreePos = ObjectiveUI->position;
                     r->text = oObjectiveList[2].cObjective;
                     gLoadedGrids->gGrid[j][k]->tag = "Objective3Read";
+                    Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
+                    CLM_Set(c, COL_BOX, LevelOne_OnCollision);
+                    c->isTrigger = 1;
+                    Renderer* rObj = RM_AddComponent(c->obj);
+                    rObj->color = COLOR_RED;
+                    rObj->color.a = 120;
                 }
             }
         }
@@ -126,13 +124,14 @@ void LevelOne_init(void)
         r->renderPriority = PRI_UI;
     }
 
-    gLOne = GOM_Create2(RECTANGLE, CP_Vector_Set(500, 500), 0.0f, CP_Vector_Set(50, 50));
+    gLOne = GOM_Create2(RECTANGLE, SetPlayerPosition(), 0.0f, CP_Vector_Set(50, 50));
     gLOne->tag = "player";
-    SetPlayerPosition(gLOne->position.x, gLOne->position.y);
     r = RM_AddComponent(gLOne);
     RM_LoadImage(r, "Assets/bananaboi.png");
     CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
     LevelOneGridColliderInit();
+
+    printf("player pos : %f, %f", gLOne->position.x, gLOne->position.y);
 
     OB_ConnectInit();
 }
@@ -162,6 +161,39 @@ void LevelOne_update(void)
         gLOne->position.x += spd * dt;
     }
 
+    for (int i = 0; i < MAX_OBJECTIVES; i++)
+    {
+        Renderer* rObjUI = RM_AddComponent(ObjectiveUI);
+        rObjUI->color = CP_Color_Create(255, 255, 255, 255);
+        for (int j = 0; j < NumGrids; j++)
+        {
+            for (int k = 0; k < NumGrids; k++)
+            {
+                if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective1Done") == 0)
+                {
+                    ObjectiveUI->position = vObjectiveOnePos;
+                    ObjectiveUI->position.x = screenWidth * 0.18f;
+                    rObjUI->text = "Complete!";
+                    gLoadedGrids->gGrid[j][k]->tag = "Objective1Complete";
+                }
+                else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective2Done") == 0)
+                {
+                    ObjectiveUI->position = vObjectiveOnePos;
+                    ObjectiveUI->position.x = screenWidth * 0.18f;
+                    rObjUI->text = "Complete!";
+                    gLoadedGrids->gGrid[j][k]->tag = "Objective2Complete";
+                }
+                else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective3Done") == 0)
+                {
+                    ObjectiveUI->position = vObjectiveThreePos;
+                    ObjectiveUI->position.x = screenWidth * 0.18f;
+                    rObjUI->text = "Complete!";
+                    gLoadedGrids->gGrid[j][k]->tag = "Objective3Complete";
+                }
+            }
+        }
+        rObjUI->renderPriority = PRI_UI;
+    }
 
     OB_ConnectUpdate();
 

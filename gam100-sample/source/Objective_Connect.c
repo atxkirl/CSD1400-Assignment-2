@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "Loader.h"
+#include "LevelEditor.h"
 
 GameObject* RedConnector_L, * GreenConnector_L, * BlueConnector_L, * YellowConnector_L;
 GameObject* RedConnector_R, * GreenConnector_R, * BlueConnector_R, * YellowConnector_R;
@@ -154,6 +156,8 @@ void OB_ConnectInit()
 
 	CreateConnectors();
 	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
+
+	OB_ToggleActive();
 }
 
 void OB_ConnectUpdate()
@@ -232,15 +236,41 @@ void OB_ConnectUpdate()
 	{
 		Renderer* r = RM_GetComponent(OBJ_Title);
 		r->text = "Complete!";
+
+		for (int j = 0; j < NumGrids; j++)
+		{
+			for (int k = 0; k < NumGrids; k++)
+			{
+				if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective1Read") == 0)
+				{
+					gLoadedGrids->gGrid[j][k]->tag = "Objective1Done";
+				}
+			}
+		}
 	}
 }
-
-void OB_ConnectTrigger()
+void OB_ToggleActive()
 {
-}
-
-void OB_ConnectUnTrigger()
-{
+	RedConnector_L->isEnabled = !RedConnector_L->isEnabled;
+	GreenConnector_L->isEnabled = !GreenConnector_L->isEnabled;
+	BlueConnector_L->isEnabled = !BlueConnector_L->isEnabled;
+	YellowConnector_L->isEnabled = !YellowConnector_L->isEnabled;
+	RedConnector_R->isEnabled = !RedConnector_R->isEnabled;
+	GreenConnector_R->isEnabled = !GreenConnector_R->isEnabled;
+	BlueConnector_R->isEnabled = !BlueConnector_R->isEnabled;
+	YellowConnector_R->isEnabled = !YellowConnector_R->isEnabled;
+	WireConnector_R->isEnabled = !WireConnector_R->isEnabled;
+	WireConnector_G->isEnabled = !WireConnector_G->isEnabled;
+	WireConnector_B->isEnabled = !WireConnector_B->isEnabled;
+	WireConnector_Y->isEnabled = !WireConnector_Y->isEnabled;
+	WireCollider_R->isEnabled = !WireCollider_R->isEnabled;
+	WireCollider_G->isEnabled = !WireCollider_G->isEnabled;
+	WireCollider_B->isEnabled = !WireCollider_B->isEnabled;
+	WireCollider_Y->isEnabled = !WireCollider_Y->isEnabled;
+	OBJ_Title->isEnabled = !OBJ_Title->isEnabled;
+	UI_Background->isEnabled = !UI_Background->isEnabled;
+	cross->isEnabled = !cross->isEnabled;
+	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
 }
 
 void CreateConnectors()
