@@ -40,9 +40,9 @@ void OB_PickupOnCollision(Collider* left, Collider* right)
 
 void OB_PickupInit()
 {
-	SM_SystemsInit();
+	//SM_SystemsInit();
 
-	PLY_CreatePlayer(90, 90);
+	//PLY_CreatePlayer(90, 90);
 
 	pickup1 = GOM_Create2(RECTANGLE, CP_Vector_Set(130, 130), 0.0f, CP_Vector_Set(30, 30));
 	pickup1->tag = "wood";
@@ -82,11 +82,11 @@ void OB_PickupInit()
 
 void OB_PickupUpdate()
 {
-	SM_SystemsPreUpdate();
+	//SM_SystemsPreUpdate();
 
-	PLY_Update();
+	//PLY_Update();
 
-	SM_SystemsUpdate();
+	//SM_SystemsUpdate();
 
-	SM_SystemsLateUpdate();
+	//SM_SystemsLateUpdate();
 }

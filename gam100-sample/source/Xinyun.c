@@ -26,6 +26,10 @@ void xy_OnCollision(Collider* left, Collider* right)
 
 void Xinyun_init(void)
 {
+    SM_SystemsInit();
+
+    PLY_CreatePlayer(90, 90);
+
     OB_PickupInit();
 }
 
@@ -37,9 +41,10 @@ void Xinyun_update(void)
 
     SM_SystemsUpdate();
 
+    OB_PickupUpdate();
+
     SM_SystemsLateUpdate();
 
-    OB_PickupUpdate();
 }
 
 void Xinyun_exit(void)

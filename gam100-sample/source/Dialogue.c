@@ -85,6 +85,7 @@ void DM_Init()
 	
 	closeButtonCollider = CLM_AddComponent(closeButton);
 	CLM_Set(closeButtonCollider, COL_CIRCLE, DM_Handle_CloseButton);
+	closeButtonCollider->space = COLSPC_SCREEN;
 	
 	// Disable all dialogue elements first.
 	dialogueBox->isEnabled = 0;
