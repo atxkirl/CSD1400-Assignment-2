@@ -28,7 +28,7 @@ void SceneManager_Initialize()
 	Scene* temp;
 
 	game_sceneInit(&init, &update, &exit);
-	temp = CreateScene("game", init, update, exit);
+	temp = CreateScene("mainmenu", init, update, exit);
 	LL_Add(&sceneList, temp);
 	currentScene = temp;
 
@@ -89,11 +89,6 @@ void* findScene(void* curr, void* arg)
 }
 void SceneManager_ChangeSceneByName(char* sceneName)
 {
-	// TODO: 
-	// - Loop through the list of Scene* to find the one with the same name
-	//   then call SceneManager_ChangeScene to change to that scene.
-	// - This will allow for change scene calls to be called in other scenes by changing scenes by name.
-
 	Scene* nextScene = LL_Find(sceneList, findScene, (void*)sceneName);
 	SceneManager_ChangeScene(nextScene);
 }

@@ -32,6 +32,8 @@ void game_OnCollision(Collider* left, Collider* right)
     {
         if (strcmp(((GameObject*)left->obj)->tag,"adrian") == 0)
             SceneManager_ChangeSceneByName("leveloneastar");
+        else if (strcmp(((GameObject*)left->obj)->tag, "astartest") == 0)
+            SceneManager_ChangeSceneByName("adrian");
         else if (strcmp(((GameObject*)left->obj)->tag, "marcus") == 0)
             SceneManager_ChangeSceneByName("marcus");
         else if (strcmp(((GameObject*)left->obj)->tag, "hongyu") == 0)
@@ -96,6 +98,16 @@ void game_init(void)
     button = GOM_Create2(RECTANGLE,
         CP_Vector_Set(80.0f, 175.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
     r = RM_AddComponent(button);
+    button->tag = "astartest";
+    r->renderPriority = PRI_UI;
+    r->text = "A* Test";
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
+
+    button = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(80.0f, 225.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
+    r = RM_AddComponent(button);
     button->tag = "weiyi";
     r->renderPriority = PRI_UI;
     r->text = "weiyi";
@@ -104,7 +116,7 @@ void game_init(void)
     c->space = COLSPC_SCREEN;
 
     button = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(80.0f, 225.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
+        CP_Vector_Set(80.0f, 275.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
     r = RM_AddComponent(button);
     button->tag = "xinyun";
     r->renderPriority = PRI_UI;

@@ -121,10 +121,14 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 
 			AStar_Node* neighbour = &map->map[lowestRow][lowestCol];
 			
-			// Skip walls and nodes in the closed list.
+			// Skip walls.
 			if (neighbour->type == NODE_WALL)
 				continue;
+			// Skip nodes in the closed list, aka "already checked".
 			if (LL_ContainsPtr(closedList, neighbour))
+				continue;
+			// Make sure diagonal walls aren't crossed.
+			if ((&map->map[lowestRow][lowestCol + deltaHori[i]])->type == NODE_WALL || (&map->map[lowestRow + deltaVert[i]][lowestCol])->type == NODE_WALL)
 				continue;
 
 			int gCost, hCost, fCost;
@@ -135,6 +139,7 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 			hCost = Estimate(neighbour->row, neighbour->column, ending->row, ending->column);
 			fCost = gCost + hCost;
 
+			// Add neighbour node
 			if (LL_ContainsPtr(openList, neighbour) == 0 || fCost < neighbour->fCost)
 			{
 				neighbour->gCost = gCost;
