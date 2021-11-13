@@ -170,10 +170,10 @@ void LoadObjectives(char* cInput)
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (strcmp(gLoadedGrids->gGrid[j][i]->tag, "Objective") == 0)
+			if (strcmp(gLoadedGrids->gGrid[i][j]->tag, "Objective") == 0)
 			{
-				int iRandom = rand() % MAX_OBJECTIVES + 1;
-				snprintf(gLoadedGrids->gGrid[j][i]->tag, 30, "Objective%d", iRandom);
+				int iRandom = rand() % MAX_OBJECTIVES;
+				snprintf(gLoadedGrids->gGrid[i][j]->tag, 30, "Objective%d", iRandom + 1);
 			}
 		}
 	}

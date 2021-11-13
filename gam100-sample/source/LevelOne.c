@@ -90,16 +90,40 @@ void LevelOne_init(void)
         ObjectiveUI = GOM_Create(EMPTY);
         ObjectiveUI->scale = CP_Vector_Set(175.f, 50.f);
         ObjectiveUI->tag = "ObjectiveUI";
-        ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.08f, screenHeight * 0.075f + i * screenHeight * 0.025f);
+        ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.1f, screenHeight * 0.075f + i * screenHeight * 0.025f);
         r= RM_AddComponent(ObjectiveUI);
         r->color = CP_Color_Create(255, 255, 255, 255);
-        r->text = oObjectiveList[i].cObjective;
-        r->renderPriority = PRI_UI;
+        r->text = "";
+
+        for (int j = 0; j < NumGrids; j++)
+        {
+            for (int k = 0; k < NumGrids; k++)
+            {
+                if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective1") == 0)
+                {
+                    r->text = oObjectiveList[0].cObjective;
+                    gLoadedGrids->gGrid[j][k]->tag = "Objective1Read";
+                }
+                else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective2") == 0)
+                {
+                    r->text = oObjectiveList[1].cObjective;
+                    gLoadedGrids->gGrid[j][k]->tag = "Objective2Read";
+                }
+                else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective3") == 0)
+                {
+                    r->text = oObjectiveList[2].cObjective;
+                    gLoadedGrids->gGrid[j][k]->tag = "Objective3Read";
+                }
+            }
+        }
+
         /*}
         else
         {
             rObjUI->text = "DONE";
         }*/
+
+        r->renderPriority = PRI_UI;
     }
 
     gLOne = GOM_Create2(RECTANGLE, CP_Vector_Set(500, 500), 0.0f, CP_Vector_Set(50, 50));
