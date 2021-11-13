@@ -165,6 +165,18 @@ void LoadObjectives(char* cInput)
 			}
 		}
 	}
+
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			if (strcmp(gLoadedGrids->gGrid[j][i]->tag, "Objective") == 0)
+			{
+				int iRandom = rand() % MAX_OBJECTIVES + 1;
+				snprintf(gLoadedGrids->gGrid[j][i]->tag, 30, "Objective%d", iRandom);
+			}
+		}
+	}
 }
 
 void SetObjectiveComplete(int iIndex, int iSetter)

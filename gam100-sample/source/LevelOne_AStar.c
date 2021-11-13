@@ -125,6 +125,12 @@ void LevelOneAStar_init(void)
     {
         enemy1 = EM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(66.f, 66.f), &map);
         enemy1->stateMachine->target = gLOne;
+
+        enemy2 = EM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(594.f, 66.f), &map);
+        enemy2->stateMachine->target = gLOne;
+
+        enemy3 = EM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(594.f, 264.f), &map);
+        enemy3->stateMachine->target = gLOne;
     }
 }
 
@@ -170,9 +176,6 @@ void LevelOneAStar_update(void)
     SM_SystemsLateUpdate();
 
     LevelOneAStar_UI_render();
-
-    // Update the enemy of the Player's position.
-    enemy1->stateMachine->target = gLOne;
 }
 
 void LevelOneAStar_exit(void)

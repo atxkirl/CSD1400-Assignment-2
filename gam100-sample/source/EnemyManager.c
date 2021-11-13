@@ -28,7 +28,6 @@ Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector positi
 
 		LL_Add(&enemyList, enemy);
 	}
-
 	return enemy;
 }
 
@@ -41,9 +40,6 @@ void EM_Init()
 	pathingTimeElapsed = 0.f;
 
 	enemyList = NULL;
-
-	movementSpeed = 0.f;
-	deltaX = deltaY = 0.f;
 }
 
 void EM_Update()
@@ -61,15 +57,6 @@ void EM_Update()
 		EM_Update_Pathing();
 		pathingTimeElapsed -= pathingTimeElapsed;
 	}
-
-	//for (int i = 0; i < LL_GetCount(enemyList); ++i)
-	//{
-	//	Enemy* temp = (Enemy*)enemyList->curr;
-	//	if (temp == NULL)
-	//		continue;
-
-
-	//}
 }
 
 void EM_Clear()
@@ -83,52 +70,53 @@ void EM_Clear()
 /// </summary>
 void EM_Update_FSMAndMovement()
 {
+	Enemy* currentEnemy = NULL;
+	float deltaX = 0.f;
+	float deltaY = 0.f;
+	float moveSpeed = 0.f;
+
 	// Loops through all Enemies and updates the position, based on their current movement path and speed.
 	for (int i = 0; i < LL_GetCount(enemyList); ++i)
 	{
-		Enemy* temp = (Enemy*)enemyList->curr;
-		if (temp == NULL)
+		currentEnemy = (Enemy*)LL_Get(enemyList, i);
+		if (currentEnemy == NULL)
 			continue;
 
 		// Update FSM
-		if (temp->stateMachine != NULL)
+		if (currentEnemy->stateMachine != NULL)
 		{
-			movementSpeed = temp->stateMachine->currentStateSpeed;
-			temp->stateMachine->onUpdate(temp->go, temp->stateMachine->target);
+			moveSpeed = currentEnemy->stateMachine->currentStateSpeed;
+			currentEnemy->stateMachine->onUpdate(currentEnemy->go, currentEnemy->stateMachine->target);
 		}
 
 		// Update Movement
-		if (temp->movementPath != NULL)
+		if (currentEnemy->movementPath != NULL)
 		{
-			AStar_Node* currentNode = (AStar_Node*)LL_Get(temp->movementPath, temp->movementPathIndex);
+			AStar_Node* currentNode = (AStar_Node*)LL_Get(currentEnemy->movementPath, currentEnemy->movementPathIndex);
 			if (currentNode != NULL)
 			{
-				deltaX = (float)fabs((double)temp->go->position.x - (double)currentNode->position.x);
-				deltaY = (float)fabs((double)temp->go->position.y - (double)currentNode->position.y);
+				deltaX = (float)fabs((double)currentEnemy->go->position.x - (double)currentNode->position.x);
+				deltaY = (float)fabs((double)currentEnemy->go->position.y - (double)currentNode->position.y);
 
 				// Close enough to count as "reaching" the node.
 				if (deltaX < distanceForReached && deltaY < distanceForReached)
 				{
-					if (temp->movementPathIndex > 0)
+					if (currentEnemy->movementPathIndex > 0)
 					{
-						printf("Reached a node!\n");
-						--temp->movementPathIndex;
+						--currentEnemy->movementPathIndex;
 					}
 					else
 					{
-						printf("Reached the end!\n");
-						LL_Clear(&temp->movementPath);
+						LL_Clear(&currentEnemy->movementPath);
 					}
 				}
 				// Move to position of the current head of the linked list.
 				else
 				{
-					CP_Vector direction = CP_Vector_Subtract(currentNode->position, temp->go->position);
+					CP_Vector direction = CP_Vector_Subtract(currentNode->position, currentEnemy->go->position);
 					direction = CP_Vector_Normalize(direction);
 
-					temp->go->position = CP_Vector_Add(temp->go->position, CP_Vector_Scale(direction, movementSpeed * CP_System_GetDt()));
-
-					printf("Moving! Pos [%6.2f, %6.2f]\n", temp->go->position.x, temp->go->position.y);
+					currentEnemy->go->position = CP_Vector_Add(currentEnemy->go->position, CP_Vector_Scale(direction, moveSpeed * CP_System_GetDt()));
 				}
 			}
 		}
@@ -140,29 +128,39 @@ void EM_Update_FSMAndMovement()
 /// </summary>
 void EM_Update_Pathing()
 {
+	Enemy* currentEnemy = NULL;
+	GameObject* targetGo = NULL;
+	int currEnemyPathSize = 0;
+
 	// Loops through all Enemies, then recalculates their A* pathing for movement if enough time has passed.
 	// Useful for making Enemies follow moving targets, such as the Player.
 	for (int i = 0; i < LL_GetCount(enemyList); ++i)
 	{
-		Enemy* temp = (Enemy*)enemyList->curr;
-		if (temp == NULL)
+		currentEnemy = (Enemy*)LL_Get(enemyList, i);
+		if (currentEnemy == NULL)
 			continue;
 
-		if (temp->stateMachine != NULL && temp->stateMachine->target != NULL)
+		if (currentEnemy->stateMachine != NULL && currentEnemy->stateMachine->target != NULL)
 		{
-			GameObject* enemyGo = temp->go;
-			GameObject* targetGo = temp->stateMachine->target;
+			targetGo = currentEnemy->stateMachine->target;
 
-			// Don't repath if positions are the same.
-			AStar_GetRowCol(targetGo->position, temp->currentMap, &temp->targetRow, &temp->targetCol);
-			if (temp->targetRow == temp->targetPrevRow && temp->targetCol == temp->targetPrevCol)
+			// Don't repath if target's row/col are the same as previous update.
+			AStar_GetRowCol(targetGo->position, currentEnemy->currentMap, &currentEnemy->targetRow, &currentEnemy->targetCol);
+			if (currentEnemy->targetRow == currentEnemy->targetPrevRow && currentEnemy->targetCol == currentEnemy->targetPrevCol)
 				continue;
 
 			// Calculate new path
-			AStar_GetPathWorldPosition(enemyGo->position, targetGo->position, &temp->movementPath, temp->currentMap);
-			temp->movementPathIndex = LL_GetCount(temp->movementPath) - 1;
+			AStar_GetPathWorldPosition(currentEnemy->go->position, targetGo->position, &currentEnemy->movementPath, currentEnemy->currentMap);
+			
+			// Adjust new startpoint, to prevent AI from moving back to where it started from, looks weird.
+			currEnemyPathSize = LL_GetCount(currentEnemy->movementPath);
+			if(currEnemyPathSize > 1)
+				currentEnemy->movementPathIndex = currEnemyPathSize - 2;
+			else
+				currentEnemy->movementPathIndex = currEnemyPathSize - 1;
+
 			// Save row/col position
-			AStar_GetRowCol(targetGo->position, temp->currentMap, &temp->targetPrevRow, &temp->targetPrevCol);
+			AStar_GetRowCol(targetGo->position, currentEnemy->currentMap, &currentEnemy->targetPrevRow, &currentEnemy->targetPrevCol);
 		}
 	}
 }

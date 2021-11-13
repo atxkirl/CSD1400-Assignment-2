@@ -21,6 +21,7 @@
 GameObject* gLOne = NULL;
 GameObject* ObjectiveUI = NULL;
 
+float screenWidth, screenHeight;
 void LevelOneUI_render();
 void LevelOneGridColliderInit();
 
@@ -53,6 +54,7 @@ void LevelOne_init(void)
 {
     SM_SystemsInit();
     //RM_AddComponent(g);
+    RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
     LoaderInit();
 
     LoadGrid("level01", 0);
@@ -75,7 +77,7 @@ void LevelOne_init(void)
 
     GameObject* ObjectiveUIBox = GOM_Create(WALL);
     ObjectiveUIBox->scale = CP_Vector_Set(200.f, 70.f);
-    ObjectiveUIBox->position = CP_Vector_Set(120.0f, 50.0f);
+    ObjectiveUIBox->position = CP_Vector_Set(screenWidth * 0.1f, screenHeight * 0.1f);
     ObjectiveUIBox->tag = "ObjectiveUI";
     r = RM_AddComponent(ObjectiveUIBox);
     r->color = CP_Color_Create(255, 255, 255, 255);
@@ -88,7 +90,7 @@ void LevelOne_init(void)
         ObjectiveUI = GOM_Create(EMPTY);
         ObjectiveUI->scale = CP_Vector_Set(175.f, 50.f);
         ObjectiveUI->tag = "ObjectiveUI";
-        ObjectiveUI->position = CP_Vector_Set(100.0f, 50.0f + i * 50.f);
+        ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.08f, screenHeight * 0.075f + i * screenHeight * 0.025f);
         r= RM_AddComponent(ObjectiveUI);
         r->color = CP_Color_Create(255, 255, 255, 255);
         r->text = oObjectiveList[i].cObjective;

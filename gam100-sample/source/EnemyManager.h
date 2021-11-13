@@ -30,15 +30,13 @@ typedef struct
 //	Enemy Manager	//
 //------------------//
 
-static const float movementUpdateFreq = 10;
-static const float pathingUpdateFreq = 1;
+static const float movementUpdateFreq = 30;
+static const float pathingUpdateFreq = 3;
 
 static float movementTimeElapsed, movementUpdateTime;
 static float pathingTimeElapsed, pathingUpdateTime;
 
 static const float distanceForReached = 5.f; // The minimum distance required to a node's position to count as "reached".
-static float deltaX, deltaY;
-static float movementSpeed;
 
 LinkedList* enemyList;
 
