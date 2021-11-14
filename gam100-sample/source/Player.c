@@ -32,6 +32,7 @@ bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_object
 bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
 
 
+
 /*
 @brief Handles invincibility counter to ensure that player will not take damage when invincible.
 */

@@ -14,6 +14,7 @@ void Xinyun_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 void LevelEditorScene_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 void LevelOne_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 void LevelOneAStar_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
+void gameEnd_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 
 /* Scene Struct */
 typedef struct

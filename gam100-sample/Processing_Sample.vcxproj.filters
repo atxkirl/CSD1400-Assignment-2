@@ -104,6 +104,9 @@
     <ClCompile Include="source\Objective_Pickup.c">
       <Filter>Minigames</Filter>
     </ClCompile>
+    <ClCompile Include="source\gameEndScene.c">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
