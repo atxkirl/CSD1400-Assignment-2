@@ -176,6 +176,19 @@ void LevelOneAStar_update(void)
     SM_SystemsLateUpdate();
 
     LevelOneAStar_UI_render();
+
+    CP_Settings_TextSize(20);
+    CP_Settings_BlendMode(CP_BLEND_ALPHA);
+    CP_Settings_Fill(CP_Color_Create(0, 0, 0, 128));
+    CP_Settings_NoStroke();
+    CP_Graphics_DrawRect(0, 0, 150, 30);
+    CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+    char buffer[100];
+    sprintf_s(buffer, 100, "FPS: %f", CP_System_GetFrameRate());
+    CP_Font_DrawText(buffer, 20, 20);
+
+    CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+    CP_Settings_StrokeWeight(1.f);
 }
 
 void LevelOneAStar_exit(void)

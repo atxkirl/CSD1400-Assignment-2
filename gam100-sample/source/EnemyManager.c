@@ -150,14 +150,19 @@ void EM_Update_Pathing()
 				continue;
 
 			// Calculate new path
-			AStar_GetPathWorldPosition(currentEnemy->go->position, targetGo->position, &currentEnemy->movementPath, currentEnemy->currentMap);
+			if (LL_GetCount(currentEnemy->movementPath) > 0) // Set starting position to the enemy's current target position, to remove rebounding behavior.
+			{
+				AStar_Node* currMovePos = (AStar_Node*)LL_Get(currentEnemy->movementPath, currentEnemy->movementPathIndex);
+				AStar_GetPathWorldPosition(currMovePos->position, targetGo->position, &currentEnemy->movementPath, currentEnemy->currentMap);
+			}
+			else // Set starting position to the enemy's position if they don't have a previous path.
+			{
+				AStar_GetPathWorldPosition(currentEnemy->go->position, targetGo->position, &currentEnemy->movementPath, currentEnemy->currentMap);
+			}
 			
 			// Adjust new startpoint, to prevent AI from moving back to where it started from, looks weird.
 			currEnemyPathSize = LL_GetCount(currentEnemy->movementPath);
-			if(currEnemyPathSize > 1)
-				currentEnemy->movementPathIndex = currEnemyPathSize - 2;
-			else
-				currentEnemy->movementPathIndex = currEnemyPathSize - 1;
+			currentEnemy->movementPathIndex = currEnemyPathSize - 1;
 
 			// Save row/col position
 			AStar_GetRowCol(targetGo->position, currentEnemy->currentMap, &currentEnemy->targetPrevRow, &currentEnemy->targetPrevCol);

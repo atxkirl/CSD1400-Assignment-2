@@ -206,6 +206,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\FSM.c" />
     <ClCompile Include="source\game.c" />
     <ClCompile Include="source\game2.c" />
+    <ClCompile Include="source\gameEndScene.c" />
     <ClCompile Include="source\GameObjectManager.c" />
     <ClCompile Include="source\HongYu.c" />
     <ClCompile Include="source\LevelEditor.c" />
@@ -225,6 +226,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\RenderManager.c" />
     <ClCompile Include="source\Scene.c" />
     <ClCompile Include="source\SceneManager.c" />
+    <ClCompile Include="source\Scene_Options.c" />
     <ClCompile Include="source\Shared_States.c" />
     <ClCompile Include="source\SystemManager.c" />
     <ClCompile Include="source\Weiyi.c" />
@@ -256,6 +258,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\RenderManager.h" />
     <ClInclude Include="source\Scene.h" />
     <ClInclude Include="source\SceneManager.h" />
+    <ClInclude Include="source\Scene_Options.h" />
     <ClInclude Include="source\Shared_States.h" />
     <ClInclude Include="source\SystemManager.h" />
   </ItemGroup>

@@ -15,6 +15,7 @@
 #include "SystemManager.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "SceneManager.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -23,6 +24,7 @@ GameObject* e = NULL;
 GameObject* e2 = NULL;
 GameObject* e3 = NULL;
 GameObject* e4 = NULL;
+GameObject* e5 = NULL;
 Collider* k;
 Renderer* r;
 
@@ -30,12 +32,21 @@ void wy_OnCollision(Collider* left, Collider* right) {
 
     if (strcmp(left->obj->tag, "obj1") == 0 && strcmp(right->obj->tag, "player") == 0) SM_DeleteGameObject(e3);
 
+    if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
+    {
+        if (strcmp(((GameObject*)left->obj)->tag, "test") == 0)
+            SceneManager_ChangeSceneByName("gameEnd");
+
+    }
+
     return;
 
 }
 void Weiyi_init(void)
 {
     SM_SystemsInit();
+    float xScale = CP_System_GetWindowWidth() / 100.0f, yScale = CP_System_GetWindowHeight() / 100.0f;
+
 
     PLY_CreatePlayer(90,90);
 
@@ -63,6 +74,17 @@ void Weiyi_init(void)
     k = CLM_AddComponent(e4);
     CLM_Set(k,COL_BOX, NULL);
     k->isLockedPos = 1;
+
+    e5 = GOM_Create2(RECTANGLE, CP_Vector_Set(50*xScale, 90*yScale), 0.0f, CP_Vector_Set(30, 30));
+    e5->tag = "test";
+    k = CLM_AddComponent(e5);
+    CLM_Set(k, COL_BOX, wy_OnCollision);
+    k->space = COLSPC_SCREEN;
+    k->isLockedPos = 1;
+    r = RM_AddComponent(e5);
+    r->text = "test";
+    r->renderPriority = PRI_UI;
+
 
     r = RM_AddComponent(e);
     r = RM_AddComponent(e2);

@@ -17,6 +17,7 @@
 #include "SystemManager.h"
 #include "AStar.h"
 #include "EnemyManager.h"
+#include "SceneManager.h"
 
 #define NODE_SIZE 30
 
@@ -59,25 +60,10 @@ void Adrian_CallAStar(void)
 
     clock_t t = clock();
     // Calculate A* path
+    LL_Clear(&path);
     AStar_GetPath(startNode, endNode, &path, &map);
     t = clock() - t;
     printf("Time taken for A* (ms): %d\n", t);
-
-    // render cells of path
-    if (path)
-    {
-        while (path != NULL)
-        {
-            AStar_Node* temp = (AStar_Node*)path->curr;
-            if (temp)
-            {
-                map.map[temp->row][temp->column].type = temp->type;
-                path = path->next;
-                printf("doing a thing\n");
-            }
-        }
-    }
-    LL_Clear(&path);
 }
 
 void Adrian_Render(void)
@@ -131,6 +117,26 @@ void Adrian_Render(void)
             }
             CP_Graphics_DrawRect(map.map[row][col].position.x, map.map[row][col].position.y, gCellWidth, gCellHeight);
         }
+    }
+
+    // Set map nodes to be colored.
+    if (path)
+    {
+        CP_Settings_Fill(pathColor);
+        for (int i = 0; i < LL_GetCount(path); ++i)
+        {
+            AStar_Node* temp = (AStar_Node*)LL_Get(path, i);
+            if (temp)
+            {
+                
+                CP_Graphics_DrawRect(temp->position.x, temp->position.y, gCellWidth, gCellHeight);
+            }
+        }
+        CP_Settings_Fill(startColor);
+        CP_Graphics_DrawRect(startNode->position.x, startNode->position.y, gCellWidth, gCellHeight);
+
+        CP_Settings_Fill(endColor);
+        CP_Graphics_DrawRect(endNode->position.x, endNode->position.y, gCellWidth, gCellHeight);
     }
 }
 
@@ -198,7 +204,7 @@ void Adrian_Input(void)
     // Toggle Dialogue box.
     if (CP_Input_KeyDown(KEY_E))
     {
-        DM_PrintDialogue("!", DIALOGUE_CLOSEBUTTON);
+        DM_PrintDialogue("Woah!", DIALOGUE_CLOSEBUTTON);
     }
     else if (CP_Input_KeyDown(KEY_F))
     {
@@ -207,6 +213,13 @@ void Adrian_Input(void)
     else if (CP_Input_KeyDown(KEY_G))
     {
         DM_PrintDialogue("Woah look, a temporary box, and the text is so freaking long wow!", DIALOGUE_LOOKINGAT);
+    }
+
+    // Exit Game
+    if (CP_Input_KeyTriggered(KEY_ESCAPE))
+    {
+        //CP_Engine_Terminate();
+        SceneManager_ChangeSceneByName("mainmenu");
     }
 }
 
@@ -231,9 +244,6 @@ void Adrian_init(void)
             AStar_InitializeNode(&temp, rows, cols, CP_Vector_Set(cols * gCellWidth, rows * gCellHeight), NODE_DEFAULT);
         }
     }
-
-    // Create some enemies
-    //EM_CreateEnemy("Enemy1", "BBEM_Idle", CP_Vector_Set(30.f, 15.f), &map);
 }
 
 void Adrian_update(void)
@@ -243,12 +253,6 @@ void Adrian_update(void)
     //Do stuff here...
     Adrian_Input();
     Adrian_Render();
-
-    // Exit Game
-    if (CP_Input_KeyTriggered(KEY_ESCAPE))
-    {
-        CP_Engine_Terminate();
-    }
 
     SM_SystemsUpdate();
     CP_Settings_Fill(CP_Color_Create(255, 255, 128, 255));
@@ -261,6 +265,10 @@ void Adrian_exit(void)
 {
     // Release memory for map.map
     AStar_ClearMap(&map);
+    if (path)
+        LL_Clear(&path);
+    startNode = NULL;
+    endNode = NULL;
 
     SM_SystemsExit();
     _CrtDumpMemoryLeaks();

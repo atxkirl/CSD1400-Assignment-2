@@ -21,9 +21,12 @@ int main(void)
 {
     //16:9 dimensions only
     CP_System_SetWindowSize(1280, 720);
+    // Set default framerate to 60
+    CP_System_SetFrameRate(60.f);
 
     SceneManager_Initialize();
-    SceneManager_ChangeScene(currentScene);
+    //SceneManager_ChangeScene(currentScene);
+    SceneManager_ChangeSceneByName("mainmenu");
 
     CP_System_ShowConsole();
     CP_Engine_Run();

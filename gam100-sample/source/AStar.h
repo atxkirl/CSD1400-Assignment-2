@@ -42,15 +42,20 @@ typedef struct
 	int columns; // Number of columns in this map.
 }AStar_Map;
 
-static int directions = 8; // Number of directions to check around a node for it's neighbours.
-static int deltaRow[] = { -1,  0,  1, -1, -1, 1, 1, 0 };
-static int deltaCol[] = { -1, -1, -1,  0,  1, 0, 1, 1 };
-static AStar_Node* neighbours[8];
 static float const positionToNodeSnap = 33.f; // How close must a world position be to a node's position to count as "inside the node".
+
+static int directions = 8; // Number of directions to check around a node for it's neighbours.
+static int deltaRow[] = {-1, 0, 1, 1, 1, 0,-1,-1};
+static int deltaCol[] = {-1,-1,-1, 0, 1, 1, 1, 0};
+static int deltaVert[] = {-1, 0,-1, 0, 1, 0, 1, 0 };
+static int deltaHori[] = { 1, 0,-1, 0,-1, 0, 1, 0 };
+static AStar_Node* neighbours[8];
 
 //static int directions = 4; // Number of directions to check around a node for it's neighbours.
 //static int deltaRow[] = { -1, 0, 0, 1 };
 //static int deltaCol[] = { 0, -1, 1, 0 };
+//static int deltaVert[] = { 0, 0, 0, 0};
+//static int deltaHori[] = { 0, 0, 0, 0};
 //static AStar_Node* neighbours[4];
 
 
