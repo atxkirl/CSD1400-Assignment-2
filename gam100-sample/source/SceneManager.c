@@ -27,10 +27,14 @@ void SceneManager_Initialize()
 	FunctionPtr init, update, exit;
 	Scene* temp;
 
+	splashscreen_sceneInit(&init, &update, &exit);
+	temp = CreateScene("splashscreen", init, update, exit);
+	LL_Add(&sceneList, temp);
+	//currentScene = temp;
+
 	game_sceneInit(&init, &update, &exit);
 	temp = CreateScene("mainmenu", init, update, exit);
 	LL_Add(&sceneList, temp);
-	currentScene = temp;
 
 	game2_sceneInit(&init, &update, &exit);
 	temp = CreateScene("game2", init, update, exit);

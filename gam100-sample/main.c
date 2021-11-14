@@ -25,8 +25,7 @@ int main(void)
     CP_System_SetFrameRate(60.f);
 
     SceneManager_Initialize();
-    //SceneManager_ChangeScene(currentScene);
-    SceneManager_ChangeSceneByName("mainmenu");
+    SceneManager_ChangeSceneByName("splashscreen");
 
     CP_System_ShowConsole();
     CP_Engine_Run();
