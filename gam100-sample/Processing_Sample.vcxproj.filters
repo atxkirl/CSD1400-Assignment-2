@@ -113,6 +113,9 @@
     <ClCompile Include="source\Scene_Splashscreen.c">
       <Filter>UI Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="source\Scene_Credits.c">
+      <Filter>UI Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

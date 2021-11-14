@@ -79,6 +79,10 @@ void SceneManager_Initialize()
 	SceneOptions_sceneInit(&init, &update, &exit);
 	temp = CreateScene("options", init, update, exit);
 	LL_Add(&sceneList, temp);
+
+	SceneCredits_sceneInit(&init, &update, &exit);
+	temp = CreateScene("credits", init, update, exit);
+	LL_Add(&sceneList, temp);
 }
 
 void SceneManager_ChangeScene(Scene* nextScene)

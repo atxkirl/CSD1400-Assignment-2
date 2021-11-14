@@ -17,6 +17,7 @@ void LevelOneAStar_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr
 void SceneOptions_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 void gameEnd_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 void splashscreen_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
+void SceneCredits_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit);
 
 /* Scene Struct */
 typedef struct
