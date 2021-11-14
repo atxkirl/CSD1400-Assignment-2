@@ -236,10 +236,10 @@ void game_update(void)
         }
         else
         {
-            button->scale.x += MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
-            button->scale.y += MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
-            button->scale.x = min(button->scale.x, MainMenuOptsCredsDefaultScale.x);
-            button->scale.y = min(button->scale.y, MainMenuOptsCredsDefaultScale.y);
+            button->scale.x -= MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
+            button->scale.y -= MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
+            button->scale.x = max(button->scale.x, MainMenuOptsCredsDefaultScale.x);
+            button->scale.y = max(button->scale.y, MainMenuOptsCredsDefaultScale.y);
         }
 
         button = (GameObject*)MainMenuCreditsCollider->obj;
@@ -252,10 +252,10 @@ void game_update(void)
         }
         else
         {
-            button->scale.x += MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
-            button->scale.y += MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
-            button->scale.x = min(button->scale.x, MainMenuOptsCredsDefaultScale.x);
-            button->scale.y = min(button->scale.y, MainMenuOptsCredsDefaultScale.y);
+            button->scale.x -= MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
+            button->scale.y -= MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
+            button->scale.x = max(button->scale.x, MainMenuOptsCredsDefaultScale.x);
+            button->scale.y = max(button->scale.y, MainMenuOptsCredsDefaultScale.y);
         }
     }
 
