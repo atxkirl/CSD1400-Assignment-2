@@ -29,6 +29,8 @@ void Marcus_OnCollision(Collider* left, Collider* right)
             SceneManager_ChangeSceneByName("editor");
         else if (strcmp(((GameObject*)left->obj)->tag, "levelone") == 0)
             SceneManager_ChangeSceneByName("levelone");
+        else if (strcmp(((GameObject*)left->obj)->tag, "options") == 0)
+            SceneManager_ChangeSceneByName("options");
     }
     return;
 }
@@ -61,6 +63,19 @@ void Marcus_init(void)
     //r->color = CP_Color_Create(255, 0, 0, 50);
     r->renderPriority = PRI_UI;
     r->text = "One";
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, Marcus_OnCollision);
+    c->space = COLSPC_SCREEN;
+
+    button = GOM_Create(RECTANGLE);
+    r = RM_AddComponent(button);
+    button->scale = CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT);
+    button->position = CP_Vector_Set(80.0f, 125.0f);
+    button->tag = "options";
+    button->type = RECTANGLE;
+    //r->color = CP_Color_Create(255, 0, 0, 50);
+    r->renderPriority = PRI_UI;
+    r->text = "Options";
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, Marcus_OnCollision);
     c->space = COLSPC_SCREEN;

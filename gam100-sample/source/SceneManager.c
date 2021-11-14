@@ -71,6 +71,10 @@ void SceneManager_Initialize()
 	gameEnd_sceneInit(&init, &update, &exit);
 	temp = CreateScene("gameEnd", init, update, exit);
 	LL_Add(&sceneList, temp);
+
+	SceneOptions_sceneInit(&init, &update, &exit);
+	temp = CreateScene("options", init, update, exit);
+	LL_Add(&sceneList, temp);
 }
 
 void SceneManager_ChangeScene(Scene* nextScene)

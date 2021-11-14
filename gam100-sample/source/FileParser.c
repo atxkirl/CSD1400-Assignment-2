@@ -194,6 +194,42 @@ void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
 	}
 }
 
+void ReadControlsFromFile(char* cFileName, char** cText)
+{
+	FILE* fFile = malloc(sizeof(FILE));
+	char cFileRead[10];
+
+	errno_t eError;
+	eError = fopen_s(&fFile, cFileName, "r"); // "r" opens the file for reading
+
+	int iTextNum = 0;
+	if (eError == 0 && fFile != NULL)
+	{
+		while (fgets(cFileRead, 10, fFile))
+		{
+			printf("%s", cFileRead);
+
+			if (cFileRead != NULL)
+			{
+				strcpy_s(cText[iTextNum], 10, cFileRead);
+				iTextNum++;
+			}
+
+		}
+		fclose(fFile);
+	}
+	else if (eError != 0)
+	{
+		printf("Error opening file! %s\n", cFileName);
+		return;
+	}
+	else
+	{
+		printf("File does not exist!\n");
+		return;
+	}
+}
+
 /*!
 @brief Write stuff to file based on the given file name.
 
