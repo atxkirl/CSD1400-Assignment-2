@@ -7,7 +7,8 @@
 typedef enum ANIM_TYPE
 {
 	ANIM_SPRITE,
-	ANIM_SHAKE
+	ANIM_SHAKE,
+	ANIM_ZOOM
 } ANIM_TYPE;
 //think as a big struct that holds all the values for any animation sad
 typedef struct Animation
@@ -29,6 +30,11 @@ typedef struct Animation
 	int loopCount;
 	int loopCounter;
 	int isContinuous;
+
+	CP_Vector defaultScale;
+	CP_Vector targetScale;
+	float scaleToTime;
+	int isFlipped;
 
 }Animation;
 
@@ -85,3 +91,14 @@ void AM_SetSprite(Animation* ,int, int, int, float);
 @return void
 */
 void AM_SetShake(Animation*, float, float, int, int);
+
+/*!
+@brief Set zoom animation for component
+@param a - animation to be set
+@param defaultScale - defaultscale of obj
+@param targetScale - target scale value
+@param scaleToTime - time from default to scale to target
+@param isFlipped - is scale from default to target or flipped = target to default
+@return void
+*/
+void AM_SetZoom(Animation*, CP_Vector, CP_Vector, float, int);

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "RenderManager.h"
 #include <math.h>
+#include "Helpers.h"
 
 LinkedList* animationList;
 
@@ -50,6 +51,34 @@ void Update_ShakeAnimation(Animation* a, float dt)
 		a->loopCounter = 0;
 	}
 }
+void Update_ZoomAnimation(Animation* a, float dt)
+{
+	a->elapsedTime += CP_System_GetDt();
+
+	float r = a->elapsedTime / a->scaleToTime;
+	if (r > 1.0f)
+	{
+		if (!a->isFlipped)
+			a->go->scale = a->targetScale;
+		else
+			a->go->scale = a->defaultScale;
+
+		a->elapsedTime = 0.0f;
+		a->isEnabled = 0;
+		return;
+	}
+	CP_Vector v = CP_Vector_Subtract(a->targetScale, a->defaultScale);
+	v.x = v.x * r;
+	v.y = v.y * r;
+
+	if (!a->isFlipped) v = CP_Vector_Add(v, a->defaultScale);
+	else v = CP_Vector_Add(CP_Vector_Negate(v), a->targetScale);
+
+	a->go->scale = v;
+
+	
+}
+
 
 
 void AM_Init()
@@ -69,6 +98,9 @@ void AM_Update()
 		{
 		case ANIM_SHAKE:
 			Update_ShakeAnimation(a, CP_System_GetDt());
+			break;
+		case ANIM_ZOOM:
+			Update_ZoomAnimation(a, CP_System_GetDt());
 			break;
 		default:
 			Update_SpriteAnimation(a, CP_System_GetDt());
@@ -168,4 +200,13 @@ void AM_SetShake(Animation* a, float rotateAngle, float loopTime, int loopCount,
 	a->type = ANIM_SHAKE;
 
 	a->defaultRotate = a->go->rotation;
+}
+
+void AM_SetZoom(Animation* a, CP_Vector defaultScale, CP_Vector targetScale, float scaleToTime, int isFlipped)
+{
+	a->defaultScale = defaultScale;
+	a->targetScale = targetScale;
+	a->scaleToTime = scaleToTime;
+	a->isFlipped = isFlipped;
+	a->type = ANIM_ZOOM;
 }
