@@ -14,7 +14,11 @@ static int Estimate(int currRow, int currCol, int destRow, int destCol)
 	return (int)(10.0 * sqrt(dRow * dRow + dCol * dCol));
 }
 
-void OrphaniseList(LinkedList* list)
+/// <summary>
+/// Clears the parents of all nodes within a list.
+/// </summary>
+/// <param name="list -">The list to clear.</param>
+static void OrphaniseList(LinkedList* list)
 {
 	if (list)
 	{
@@ -31,12 +35,12 @@ void OrphaniseList(LinkedList* list)
 }
 
 /// <summary>
-/// Returns a path from the starting node, to the ending node.
-/// Path is a LinkedList of Node*.
+/// Calculates a path from the starting node to the ending node, both of which must be part of the map grid.
 /// </summary>
-/// <param name="starting -">Starting node.</param>
-/// <param name="ending -">Ending node.</param>
-/// <param name="map -">The map of which the starting and ending nodes are a part of.</param>
+/// <param name="starting -">Pointer to the starting node.</param>
+/// <param name="ending -">Pointer to the end node.</param>
+/// <param name="path -">Pointer to the path list that we want to populate.</param>
+/// <param name="map -">The overall map that contains all the nodes that we can traverse.</param>
 void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, AStar_Map* map)
 {
 	if (starting == NULL || ending == NULL)
@@ -97,6 +101,7 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 				prevNode = lowestF;
 			}
 
+			// Remove parents from all the nodes in these lists, to prevent any future parenting errors when calling for pathfinding.
 			OrphaniseList(*path);
 			OrphaniseList(openList);
 			OrphaniseList(closedList);
@@ -131,12 +136,13 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 			if ((&map->map[lowestRow][lowestCol + deltaHori[i]])->type == NODE_WALL || (&map->map[lowestRow + deltaVert[i]][lowestCol])->type == NODE_WALL)
 				continue;
 
+			// Calculate costs for neighbouring nodes.
 			int gCost, hCost, fCost;
-			if (i % 2 == 0)
-				gCost = lowestF->gCost + 14;
+			if (i % 2 == 0) 
+				gCost = lowestF->gCost + 14; // Diagonal nodes cost more than cardinal nodes.
 			else
 				gCost = lowestF->gCost + 10;
-			hCost = Estimate(neighbour->row, neighbour->column, ending->row, ending->column);
+			hCost = Estimate(neighbour->row, neighbour->column, ending->row, ending->column); // Estimate remaining distance to the ending node.
 			fCost = gCost + hCost;
 
 			// Add neighbour node
@@ -154,6 +160,7 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 
 	printf("Warning! There is no valid path between the Starting and Ending nodes. [LinkedList* GetPath]\n");
 
+	// Remove parents from all the nodes in these lists, to prevent any future parenting errors when calling for pathfinding.
 	OrphaniseList(openList);
 	OrphaniseList(closedList);
 
@@ -162,6 +169,13 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 	LL_Clear(path);
 }
 
+/// <summary>
+/// Calculates a path from the starting node to the ending node, using world coordinates to approximate the start and end nodes.
+/// </summary>
+/// <param name="startPo -">World position to start pathing from.</param>
+/// <param name="endPos -">World position to path towards.</param>
+/// <param name="path -">Pointer to the path list that we want to populate.</param>
+/// <param name="map -">The overall map that contains all the nodes that we can traverse.</param>
 void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList** path, AStar_Map* map)
 {
 	AStar_Node* start = NULL;
@@ -199,6 +213,13 @@ void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList
 	AStar_GetPath(start, end, path, map);
 }
 
+/// <summary>
+/// Function to estimate the row and column of a world position.
+/// </summary>
+/// <param name="position -">World position that we want to estimate the grid position of.</param>
+/// <param name="map -">The overall map that contains all nodes.</param>
+/// <param name="row -">Reference to the row of the estimated node. This function will assign the value of the estimated row to this.</param>
+/// <param name="col -">Reference to the column of the estimated node. This function will assign the value of the estimated column to this.</param>
 void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col)
 {
 	for (int r = 0; r < map->rows; ++r)
@@ -217,6 +238,14 @@ void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col)
 	}
 }
 
+/// <summary>
+/// Initializes the value of a Node.
+/// </summary>
+/// <param name="node -">Reference to a node pointer, so we can modify the values of it.</param>
+/// <param name="row -">New value of this node's row.</param>
+/// <param name="col -">New value of this node's column.</param>
+/// <param name="position -">World position of this node.</param>
+/// <param name="type -">Type of this node. Used in pathfinding for walkable/unwalkable tiles.</param>
 void AStar_InitializeNode(AStar_Node** node, int row, int col, CP_Vector position, AStar_Type type)
 {
 	(*node)->row = row;
@@ -231,6 +260,12 @@ void AStar_InitializeNode(AStar_Node** node, int row, int col, CP_Vector positio
 	(*node)->type = type;
 }
 
+/// <summary>
+/// Allocates memory for a 2D array of nodes, used to represent all the pathable tiles in a level.
+/// </summary>
+/// <param name="map -">Pointer to the map struct to populate.</param>
+/// <param name="row -">Number of rows for the 2D array.</param>
+/// <param name="col -">Number of columns for the 2D array.</param>
 void AStar_InitializeMap(AStar_Map* map, int row, int col)
 {
 	// Don't bother if row/col is smaller than 1, if not malloc will explode.
@@ -250,6 +285,10 @@ void AStar_InitializeMap(AStar_Map* map, int row, int col)
 	map->columns = col;
 }
 
+/// <summary>
+/// Frees the memory allocated to the provided map. Call this at the exit of any scene that has pathfinding.
+/// </summary>
+/// <param name="map">Pointer to the map to clear.</param>
 void AStar_ClearMap(AStar_Map* map)
 {
 	if (map->map != NULL)

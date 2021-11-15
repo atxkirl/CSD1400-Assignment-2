@@ -7,10 +7,6 @@
 #include "GameObjectManager.h"
 #include "RenderManager.h"
 
-//----------//
-//	Enemy	//
-//----------//
-
 typedef struct
 {
 	GameObject* go; // The Enemy's GameObject
@@ -26,20 +22,25 @@ typedef struct
 	AStar_Map* currentMap; // This is the map of the level that this Enemy is currently in.
 }Enemy;
 
-//------------------//
-//	Enemy Manager	//
-//------------------//
 
-static const float movementUpdateFreq = 30;
-static const float pathingUpdateFreq = 3;
+static const float movementUpdateFreq = 30; // Frequency (per second) for how often all Enemy movement should be updated.
+static const float pathingUpdateFreq = 3; // Frequency (per second) for how often all Enemy pathfinding should be recalculated.
 
 static float movementTimeElapsed, movementUpdateTime;
 static float pathingTimeElapsed, pathingUpdateTime;
 
-static const float distanceForReached = 5.f; // The minimum distance required to a node's position to count as "reached".
+static const float distanceForReached = 5.f; // The minimum distance an Enemy must be from a Node's position to count as having "reached" that node.
 
-LinkedList* enemyList;
+static const LinkedList* enemyList; // List of all created Enemy instances.
 
+/// <summary>
+/// Allocates memory for an Enemy and returns a pointer to it.
+/// </summary>
+/// <param name="enemyName -">Name of this enemy instance.</param>
+/// <param name="startingStateName -">Name of this enemy's starting state.</param>
+/// <param name="position -">Spawn position of this enemy.</param>
+/// <param name="map -">Pointer to the overall grid that this enemy will be spawned on. Used for pathfinding.</param>
+/// <returns>Pointer to a newly allocated Enemy instance.</returns>
 Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector position, AStar_Map* map);
 
 void EM_Init();

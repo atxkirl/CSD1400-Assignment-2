@@ -1,5 +1,13 @@
 #include "EnemyManager.h"
 
+/// <summary>
+/// Allocates memory for an Enemy and returns a pointer to it.
+/// </summary>
+/// <param name="enemyName -">Name of this enemy instance.</param>
+/// <param name="startingStateName -">Name of this enemy's starting state.</param>
+/// <param name="position -">Spawn position of this enemy.</param>
+/// <param name="map -">Pointer to the overall grid that this enemy will be spawned on. Used for pathfinding.</param>
+/// <returns>Pointer to a newly allocated Enemy instance.</returns>
 Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector position, AStar_Map* map)
 {
 	Enemy* enemy = malloc(sizeof(Enemy));
