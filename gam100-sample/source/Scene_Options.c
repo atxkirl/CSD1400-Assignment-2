@@ -10,13 +10,14 @@
 #define BUTTON_HEIGHT 30.f
 
 GameObject* Options_Title, * Options_Background, * Options_Cross;
-GameObject* ButtonL, *ButtonRUp, * ButtonRDown, * ButtonRLeft, * ButtonRRight, * ButtonRInteract/*,* ButtonSave*/;
+GameObject* ButtonL, * ButtonRUp, * ButtonRDown, * ButtonRLeft, * ButtonRRight, * ButtonRInteract, * ButtonSave;
 float screenWidth, screenHeight;
-char* cRightText[5];
+char cRightText[5];
 char* SaveFile;
 int iEditUp, iEditDown, iEditLeft, iEditRight,iEditInteract;
 
 void SceneOptionsUI_Buttons();
+void SceneOptions_AssignKeyPress();
 
 void SceneOptions_OnCollision(Collider* left, Collider* right)
 {
@@ -26,8 +27,54 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
         if (strcmp(((GameObject*)left->obj)->tag, "cross") == 0)
             SceneManager_ChangeSceneByName("marcus");
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonSave") == 0)
-            WriteToFile(SaveFile, cRightText);
-        
+        {
+            WriteControlsToFile(SaveFile, cRightText, 5);
+        }
+
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonUp") == 0)
+        {
+            iEditUp = 1;
+            iEditDown = 0;
+            iEditLeft = 0;
+            iEditRight = 0;
+            iEditInteract = 0;
+        }
+
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonDown") == 0)
+        {
+            iEditDown = 1;
+            iEditUp = 0;
+            iEditLeft = 0;
+            iEditRight = 0;
+            iEditInteract = 0;
+        }
+
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonLeft") == 0)
+        {
+            iEditLeft = 1;
+            iEditUp = 0;
+            iEditDown = 0;
+            iEditRight = 0;
+            iEditInteract = 0;
+        }
+
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonRight") == 0)
+        {
+            iEditRight = 1;
+            iEditUp = 0;
+            iEditDown = 0;
+            iEditLeft = 0;
+            iEditInteract = 0;
+        }
+
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonInteract") == 0)
+        {
+            iEditInteract = 1;
+            iEditUp = 0;
+            iEditDown = 0;
+            iEditLeft = 0;
+            iEditRight = 0;
+        }
 
     }
     return;
@@ -39,11 +86,6 @@ void SceneOptions_init(void)
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
 
     SaveFile = "Controls/controls.txt";
-
-    for (int i = 0; i < 5; i++)
-    {
-        cRightText[i] = malloc(sizeof(char) * 10);
-    }
 
     Collider* c = NULL;
     //title
@@ -89,17 +131,7 @@ void SceneOptions_update(void)
 {
     SM_SystemsPreUpdate();
 
-    /*for (int i = 0; i < 5; i++)
-    {*/
-        if (CP_Input_KeyTriggered(KEY_ANY))
-        {
-            printf("hais: %c\n", (char)KEY_ANY);
-            /*if (iEditUp)
-            {
-                cRightText[i] = KEY_ANY;
-            }*/
-        }
-    //}
+    SceneOptions_AssignKeyPress();
 
     SM_SystemsUpdate();
 
@@ -150,8 +182,6 @@ void SceneOptionsUI_Buttons()
     Button_Right[4] = Button_Five_Right;
 
     char* cTextLeft[5] = { "UP", "DOWN", "LEFT", "RIGHT", "INTERACT" };
-    char textRight[2];
-    textRight[1] = '\0';
     Renderer* r;
     for (int i = 0; i < 5; i++)
     {
@@ -172,9 +202,12 @@ void SceneOptionsUI_Buttons()
     ButtonRUp->tag = "ButtonUp";
     ButtonRUp->scale = ButtonScale;
     ButtonRUp->position = Button_Right[0];
-    //r->text = cRightText[0];
-    //char tempStr[2] = { cRightText[0], '\0' };
-    RM_SetText(r, cRightText[0]);
+    char temp[2] = { cRightText[0] , '\0' };
+    RM_SetText(r, temp);
+    Collider * c = CLM_AddComponent(ButtonRUp);
+    CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
 
     ButtonRDown = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRDown);
@@ -183,9 +216,12 @@ void SceneOptionsUI_Buttons()
     ButtonRDown->tag = "ButtonDown";
     ButtonRDown->scale = ButtonScale;
     ButtonRDown->position = Button_Right[1];
-    //char tempStr1[2] = { cRightText[1], '\0' };
-    //RM_SetText(r, tempStr1);
-    RM_SetText(r, cRightText[1]);
+    temp[0] = cRightText[1];
+    RM_SetText(r, temp);
+    c = CLM_AddComponent(ButtonRDown);
+    CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
 
     ButtonRLeft = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRLeft);
@@ -194,9 +230,12 @@ void SceneOptionsUI_Buttons()
     ButtonRLeft->tag = "ButtonLeft";
     ButtonRLeft->scale = ButtonScale;
     ButtonRLeft->position = Button_Right[2];
-    //char tempStr2[2] = { cRightText[2], '\0' };
-    //RM_SetText(r, tempStr2);
-    RM_SetText(r, cRightText[2]);
+    temp[0] = cRightText[2];
+    RM_SetText(r, temp);
+    c = CLM_AddComponent(ButtonRLeft);
+    CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
 
     ButtonRRight = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRRight);
@@ -205,9 +244,12 @@ void SceneOptionsUI_Buttons()
     ButtonRRight->tag = "ButtonRight";
     ButtonRRight->scale = ButtonScale;
     ButtonRRight->position = Button_Right[3];
-    //char tempStr3[2] = { cRightText[3], '\0' };
-    //RM_SetText(r, tempStr3);
-    RM_SetText(r, cRightText[3]);
+    temp[0] = cRightText[3];
+    RM_SetText(r, temp);
+    c = CLM_AddComponent(ButtonRRight);
+    CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
 
     ButtonRInteract = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRInteract);
@@ -216,16 +258,84 @@ void SceneOptionsUI_Buttons()
     ButtonRInteract->tag = "ButtonInteract";
     ButtonRInteract->scale = ButtonScale;
     ButtonRInteract->position = Button_Right[4];
-    //char tempStr4[2] = { cRightText[4], '\0' };
-    //RM_SetText(r, tempStr4);
-    RM_SetText(r, cRightText[4]);
+    temp[0] = cRightText[4];
+    RM_SetText(r, temp);
+    c = CLM_AddComponent(ButtonRInteract);
+    CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
 
-   /* ButtonSave = GOM_Create(RECTANGLE);
+    ButtonSave = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonSave);
     r->color = COLOR_WHITE;
     r->renderPriority = PRI_UI;
     ButtonSave->tag = "ButtonSave";
     ButtonSave->scale = ButtonScale;
     ButtonSave->position = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.8f);
-    r->text = "Save";*/
+    r->text = "Save";
+    c = CLM_AddComponent(ButtonSave);
+    CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
+}
+
+void SceneOptions_AssignKeyPress()
+{
+    if (!iEditUp && !iEditDown && !iEditLeft && !iEditRight && !iEditInteract)
+        return;
+
+    char cKeyToAssign;
+
+    for (int i = KEY_A; i < KEY_Z + 1; i++)
+    {
+        if(CP_Input_KeyTriggered((CP_KEY)i))
+        {
+            printf("Key: %c\n", (char)i);
+
+            cKeyToAssign = (char)i;
+
+            if (iEditUp)
+            {
+                cRightText[0] = cKeyToAssign;
+                Renderer* r = RM_GetComponent(ButtonRUp);
+                char temp[2] = { cRightText[0], '\0' };
+                RM_SetText(r, temp);
+            }
+            else if (iEditDown)
+            {
+                cRightText[1] = cKeyToAssign;
+                Renderer* r = RM_GetComponent(ButtonRDown);
+                char temp[2] = { cRightText[1], '\0' };
+                RM_SetText(r, temp);
+            }
+            else if (iEditLeft)
+            {
+                cRightText[2] = cKeyToAssign;
+                Renderer* r = RM_GetComponent(ButtonRLeft);
+                char temp[2] = { cRightText[2], '\0' };
+                RM_SetText(r, temp);
+            }
+            else if (iEditRight)
+            {
+                cRightText[3] = cKeyToAssign;
+                Renderer* r = RM_GetComponent(ButtonRRight);
+                char temp[2] = { cRightText[3], '\0' };
+                RM_SetText(r, temp);
+            }
+            else if (iEditInteract)
+            {
+                cRightText[4] = cKeyToAssign;
+                Renderer* r = RM_GetComponent(ButtonRInteract);
+                char temp[2] = { cRightText[4], '\0' };
+                RM_SetText(r, temp);
+            }
+
+            iEditUp = 0;
+            iEditDown = 0;
+            iEditLeft = 0;
+            iEditRight = 0;
+            iEditInteract = 0;
+            return;
+        }
+    }
 }

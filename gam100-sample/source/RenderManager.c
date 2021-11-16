@@ -78,7 +78,10 @@ void RM_Clear()
 			RM_DeleteImage((Renderer*)node->curr);
 		//If break around here, make sure the text you set is using RM_SetText and not r->text = ""
 		if (((Renderer*)node->curr)->text)
+		{
 			free(((Renderer*)node->curr)->text);
+			((Renderer*)node->curr)->text = NULL;
+		}
 		free(node->curr);
 	}
 	LL_Clear(&renderObjects);

@@ -515,7 +515,7 @@ void SaveGrid()
 
 		strcat_s(cFileLocation, 100, cFileName);
 		printf("%s \n", cFileLocation);
-		WriteToFile(cFileLocation, GridObj);
+		WriteToFile(cFileLocation, GridObj, 900);
 	}
 }
 

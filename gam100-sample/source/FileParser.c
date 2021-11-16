@@ -43,7 +43,7 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 {
 	// type,xpos,ypos\n
 
-	FILE* fFile = malloc(sizeof(FILE));
+	FILE* fFile;
 	char cFileRead[900];
 
 	errno_t eError;
@@ -142,7 +142,7 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 
 void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
 {
-	FILE* fFile = malloc(sizeof(FILE));
+	FILE* fFile;
 	char cFileRead[900];
 
 	errno_t eError;
@@ -194,10 +194,9 @@ void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
 	}
 }
 
-void ReadControlsFromFile(char* cFileName, char** cText)
+void ReadControlsFromFile(char* cFileName, char* cText)
 {
-	FILE* fFile = malloc(sizeof(FILE));
-	char cFileRead[10];
+	FILE* fFile;
 
 	errno_t eError;
 	eError = fopen_s(&fFile, cFileName, "r"); // "r" opens the file for reading
@@ -205,16 +204,16 @@ void ReadControlsFromFile(char* cFileName, char** cText)
 	int iTextNum = 0;
 	if (eError == 0 && fFile != NULL)
 	{
-		while (fgets(cFileRead, 10, fFile))
+		int iLetterRead;
+		while ((iLetterRead = fgetc(fFile)) != '\0')
 		{
-			printf("%s", cFileRead);
+			if (feof(fFile))
+				break;
 
-			if (cFileRead != NULL)
-			{
-				strcpy_s(cText[iTextNum], 10, cFileRead);
-				iTextNum++;
-			}
+			printf("%c\n", iLetterRead);
 
+			cText[iTextNum] = (char)iLetterRead;
+			iTextNum++;
 		}
 		fclose(fFile);
 	}
@@ -237,7 +236,7 @@ void ReadControlsFromFile(char* cFileName, char** cText)
 @param char* - Stuff to add to the file
 @return void
 */
-void WriteToFile(char* cFileName, char** cToAdd)
+void WriteToFile(char* cFileName, char** cToAdd, int iSize)
 {
 	FILE* fFile;
 	errno_t eError;
@@ -246,9 +245,35 @@ void WriteToFile(char* cFileName, char** cToAdd)
 
 	if (eError == 0 && fFile != NULL)
 	{
-		for (int i = 0; i < 900; i++)
+		for (int i = 0; i < iSize; i++)
 		{
 			fputs(cToAdd[i], fFile);
+		}
+		printf("Saved!! \n");
+		fclose(fFile);
+	}
+	else if (eError != 0)
+	{
+		printf("Error opening file! %s\n", cFileName);
+	}
+	else
+	{
+		printf("File does not exist!\n");
+	}
+}
+
+void WriteControlsToFile(char* cFileName, char* cToAdd, int iSize)
+{
+	FILE* fFile;
+	errno_t eError;
+
+	eError = fopen_s(&fFile, cFileName, "w"); // "w" will overwrite the file if it exists.
+
+	if (eError == 0 && fFile != NULL)
+	{
+		for (int i = 0; i < iSize; i++)
+		{
+			fputc(cToAdd[i], fFile);
 		}
 		printf("Saved!! \n");
 		fclose(fFile);
