@@ -24,7 +24,7 @@ Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector positi
 
 		enemy->renderer = RM_AddComponent(enemy->go);
 
-		enemy->stateMachine = FSM_CreateFSM(startingStateName, enemy->go);
+		enemy->stateMachine = AIM_CreateFSM(startingStateName, enemy->go);
 		
 		enemy->movementPath = NULL;
 		enemy->movementPathIndex = 0;
@@ -94,7 +94,7 @@ void EM_Update_FSMAndMovement()
 		if (currentEnemy->stateMachine != NULL)
 		{
 			moveSpeed = currentEnemy->stateMachine->currentStateSpeed;
-			currentEnemy->stateMachine->onUpdate(currentEnemy->go, currentEnemy->stateMachine->target);
+			currentEnemy->stateMachine->onUpdate(currentEnemy->stateMachine, currentEnemy->stateMachine->target);
 		}
 
 		// Update Movement

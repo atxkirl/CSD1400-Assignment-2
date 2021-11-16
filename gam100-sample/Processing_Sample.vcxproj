@@ -203,7 +203,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Dialogue.c" />
     <ClCompile Include="source\EnemyManager.c" />
     <ClCompile Include="source\FileParser.c" />
-    <ClCompile Include="source\FSM.c" />
+    <ClCompile Include="source\AIManager.c" />
     <ClCompile Include="source\game.c" />
     <ClCompile Include="source\game2.c" />
     <ClCompile Include="source\gameEndScene.c" />
@@ -229,7 +229,6 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Scene_Credits.c" />
     <ClCompile Include="source\Scene_Options.c" />
     <ClCompile Include="source\Scene_Splashscreen.c" />
-    <ClCompile Include="source\Shared_States.c" />
     <ClCompile Include="source\SystemManager.c" />
     <ClCompile Include="source\Weiyi.c" />
     <ClCompile Include="source\Xinyun.c" />
@@ -244,6 +243,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\EnemyManager.h" />
     <ClInclude Include="source\FSM.h" />
     <ClInclude Include="source\FileParser.h" />
+    <ClInclude Include="source\AIManager.h" />
     <ClInclude Include="source\GameObject.h" />
     <ClInclude Include="source\GameObjectManager.h" />
     <ClInclude Include="source\Helpers.h" />
@@ -261,7 +261,6 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\Scene.h" />
     <ClInclude Include="source\SceneManager.h" />
     <ClInclude Include="source\Scene_Options.h" />
-    <ClInclude Include="source\Shared_States.h" />
     <ClInclude Include="source\SystemManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

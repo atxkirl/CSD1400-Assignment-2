@@ -3,23 +3,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "LinkedList.h"
 #include "GameObject.h"
 
-// States
-#include "BBEM_States.h"
-#include "MiniMonke_States.h"
-#include "Shared_States.h"
-
-typedef void (*StateFunctionPtr)(GameObject*, GameObject*);
+typedef struct FSM FSM;
+typedef void (*StateFunctionPtr)(FSM*, GameObject*);
 
 /// <summary>
 /// Each FSM will hold references to state functions, which will be changed when changing states.
 /// </summary>
-typedef struct
+struct FSM
 {
-	GameObject* go;		 // The GameObject that this FSM is supposed to control. Usually is the Enemy's GameObject.
-	GameObject* target;  // The target GameObject that this FSM is supposed to chase/attack. Usually is the Player, but can be used to set movement waypoints.
+	GameObject* go;				// The GameObject that this FSM is supposed to control. Usually is the Enemy's GameObject.
+	GameObject* target;			// The target GameObject that this FSM is supposed to chase/attack.
+	CP_Vector* targetPosition;	// The position that the controlled GameObject should move towards. Usually would be set to the Player's position, but can be used to goto positions NEAR the player.
 
 	// Use function pointers to point to state functions, 
 	// so this way changing states should be alot easier.
@@ -29,8 +25,11 @@ typedef struct
 
 	char* currentState;
 	float currentStateSpeed;
-}FSM;
+};
 
+/// <summary>
+/// Struct to hold data for an individual State. Helps to consolidate State data in one place.
+/// </summary>
 typedef struct
 {
 	char* name;
@@ -39,31 +38,3 @@ typedef struct
 	StateFunctionPtr onExit;
 	StateFunctionPtr onUpdate;
 }State;
-
-//------------------//
-//	State Machine	//
-//------------------//
-
-LinkedList* stateMachines;
-LinkedList* states;
-
-State BBEM_Idle;
-State BBEM_Roam;
-State BBEM_Chase;
-State BBEM_Search;
-
-State MM_Idle;
-State MM_Roam;
-State MM_Chase;
-
-FSM* FSM_CreateFSM(char* startingStateName, GameObject* controller);
-
-void FSM_ChangeState(char* stateName, GameObject* controller, GameObject* target);
-
-void FSM_Init(void);
-
-void FSM_Clear(void);
-
-static State* FindState(char* stateName);
-
-static FSM* FindStateMachine(GameObject* controller);

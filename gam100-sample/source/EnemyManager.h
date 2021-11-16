@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include "LinkedList.h"
-#include "FSM.h"
+#include "AIManager.h"
 #include "AStar.h"
 #include "GameObjectManager.h"
 #include "RenderManager.h"

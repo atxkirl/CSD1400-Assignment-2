@@ -200,6 +200,9 @@ void RM_SetCameraZoom(float z)
 
 void RM_SetText(Renderer* r, const char* text)
 {
+	if (r == NULL)
+		return;
+
 	if (r->text)
 	{
 		free(r->text);

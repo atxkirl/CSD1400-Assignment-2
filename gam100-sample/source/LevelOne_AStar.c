@@ -16,6 +16,7 @@
 #include "Loader.h"
 #include "Colors.h"
 #include "SystemManager.h"
+#include "SceneManager.h"
 
 static GameObject* gLOne = NULL;
 static GameObject* ObjectiveUI = NULL;
@@ -126,7 +127,7 @@ void LevelOneAStar_init(void)
 
     // Enemies
     {
-        enemy1 = EM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(66.f, 66.f), &map);
+        enemy1 = EM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), &map);
         enemy1->stateMachine->target = gLOne;
 
         enemy2 = EM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(594.f, 66.f), &map);
@@ -169,7 +170,8 @@ void LevelOneAStar_update(void)
     {
         if (CP_Input_KeyTriggered(KEY_ESCAPE))
         {
-            CP_Engine_Terminate();
+            //CP_Engine_Terminate();
+            SceneManager_ChangeSceneByName("mainmenu");
         }
     }
 
