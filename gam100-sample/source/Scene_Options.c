@@ -272,7 +272,7 @@ void SceneOptionsUI_Buttons()
     ButtonSave->tag = "ButtonSave";
     ButtonSave->scale = ButtonScale;
     ButtonSave->position = CP_Vector_Set(screenWidth * 0.725f, screenHeight * 0.8f);
-    r->text = "Save";
+    RM_SetText(r, "Save");
     c = CLM_AddComponent(ButtonSave);
     CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
     c->space = COLSPC_SCREEN;
