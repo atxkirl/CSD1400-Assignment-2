@@ -170,6 +170,13 @@ void PLY_CreatePlayer(float x, float y) {
     CLM_Set(CLM_AddComponent(player),COL_BOX,Player_OnCollision);
 
     playerhealth = 3;
+
+    float screenWidth, screenHeight;
+    RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
+    GameObject* temp = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f), 0, CP_Vector_Set(screenWidth, screenHeight));
+    Renderer* r = RM_AddComponent(temp);
+    RM_LoadImage(r, "Assets/fow.png");
+    r->renderPriority = PRI_UI;
 } 
     
 void PLY_Update() { // handles input from player and checking for flags

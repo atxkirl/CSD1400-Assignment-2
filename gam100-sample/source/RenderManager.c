@@ -89,7 +89,7 @@ void RM_Clear()
 }
 void RM_Render()
 {
-	CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 255, 255));
+	CP_Graphics_ClearBackground(CP_Color_Create(37, 150, 190, 255));
 
 	float w = (float)CP_System_GetWindowWidth();
 	float h = (float)CP_System_GetWindowHeight();
