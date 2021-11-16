@@ -5,6 +5,7 @@
 #include "../DetectMemoryLeak.h"
 #include "SystemManager.h"
 #include "Player.h"
+#include "FileParser.h"
 
 #include <time.h>
 #include <stdbool.h>
@@ -30,7 +31,7 @@ bool p_Hidden = false;
 bool p_Invincible = false;
 bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_objective4 = false, g_objective5 = false;
 bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
-
+char cControls[5];
 
 
 /*
@@ -169,7 +170,6 @@ void PLY_CreatePlayer(float x, float y) {
     CLM_Set(CLM_AddComponent(player),COL_BOX,Player_OnCollision);
 
     playerhealth = 3;
-
 } 
     
 void PLY_Update() { // handles input from player and checking for flags
@@ -180,13 +180,13 @@ void PLY_Update() { // handles input from player and checking for flags
 
     if (p_Hidden == false) {
         //  player controls
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_W)) player->position.y -= currentSpd * dt;
+        if (CP_Input_KeyDown(cControls[0])) player->position.y -= currentSpd * dt; // up
 
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_S)) player->position.y += currentSpd * dt;
+        if (CP_Input_KeyDown(cControls[1])) player->position.y += currentSpd * dt; // down
 
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_A)) player->position.x -= currentSpd * dt;
+        if (CP_Input_KeyDown(cControls[2])) player->position.x -= currentSpd * dt; // left
 
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_D)) player->position.x += currentSpd * dt;
+        if (CP_Input_KeyDown(cControls[3])) player->position.x += currentSpd * dt; // right
     }
      
     // update and checks for invincibility
@@ -215,7 +215,7 @@ void PLY_Update() { // handles input from player and checking for flags
 
     //check if player reach drop off
     if (g_object1drop == true) {
-        if (CP_Input_KeyTriggered((enum CP_KEY)KEY_E)) {
+        if (CP_Input_KeyTriggered(cControls[4])) {
             if (g_object1collect == true) {
                 g_object1collect = false;
                 g_object1comp = true;

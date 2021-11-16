@@ -20,5 +20,6 @@ Map* new_Map();
 
 void ReadLevelFromFile(char* cFileName, Map* mMap);
 void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives);
-void ReadControlsFromFile(char* cFileName, char** cText);
-void WriteToFile(char* cFileName, char** cToAdd);
+void ReadControlsFromFile(char* cFileName, char* cText);
+void WriteToFile(char* cFileName, char** cToAdd, int iSize); 
+void WriteControlsToFile(char* cFileName, char* cToAdd, int iSize);
