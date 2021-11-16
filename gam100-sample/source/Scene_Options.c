@@ -25,7 +25,7 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
         if (strcmp(((GameObject*)left->obj)->tag, "cross") == 0)
-            SceneManager_ChangeSceneByName("marcus");
+            SceneManager_ChangeSceneByName("mainmenu");
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonSave") == 0)
         {
             WriteControlsToFile(SaveFile, cRightText, 5);
