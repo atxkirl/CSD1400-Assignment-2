@@ -56,9 +56,9 @@ void game_OnCollision(Collider* left, Collider* right)
         else if (strcmp(((GameObject*)left->obj)->tag, "game") == 0)
             SceneManager_ChangeSceneByName("levelone");
         else if (strcmp(((GameObject*)left->obj)->tag, "options") == 0) //TODO
-            SceneManager_ChangeSceneByName("levelone");
+            SceneManager_ChangeSceneByName("options");
         else if (strcmp(((GameObject*)left->obj)->tag, "credits") == 0) //TODO
-            SceneManager_ChangeSceneByName("levelone");
+            SceneManager_ChangeSceneByName("credits");
     }
 
 }
@@ -199,8 +199,7 @@ void game_update(void)
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
     float mouseX = CP_Input_GetMouseX();
     float mouseY = CP_Input_GetMouseY();
-    if (mouseX >= 0.0f && mouseX <= screenWidth && mouseY >= 0.0f && mouseY <= screenHeight)
-    {
+
         GameObject* tempMouse = GOM_CreateTemp(EMPTY);
         tempMouse->position = CP_Vector_Set(mouseX, mouseY);
         //tempMouse->scale = CP_Vector_Set(10, 10);
@@ -258,7 +257,7 @@ void game_update(void)
             button->scale.x = max(button->scale.x, MainMenuOptsCredsDefaultScale.x);
             button->scale.y = max(button->scale.y, MainMenuOptsCredsDefaultScale.y);
         }
-    }
+    
 
     SM_SystemsUpdate();
 

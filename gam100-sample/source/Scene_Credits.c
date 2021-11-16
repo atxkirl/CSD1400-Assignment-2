@@ -13,7 +13,7 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
         if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
-            SceneManager_ChangeSceneByName("xinyun");
+            SceneManager_ChangeSceneByName("mainmenu");
 
     }
 }
