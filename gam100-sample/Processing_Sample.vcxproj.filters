@@ -113,6 +113,9 @@
     <ClCompile Include="source\AIManager.c">
       <Filter>FSM</Filter>
     </ClCompile>
+    <ClCompile Include="source\Helpers.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

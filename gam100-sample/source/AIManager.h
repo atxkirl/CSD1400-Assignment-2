@@ -2,9 +2,9 @@
 
 #include "LinkedList.h"
 #include "FSM.h"
+#include "Helpers.h"
 #include "BBEM_States.h"
 #include "MiniMonke_States.h"
-
 
 LinkedList* allStates;
 
@@ -24,6 +24,6 @@ void AIM_Clear(void);
 
 void AIM_ChangeStates(char* stateName, FSM* controller, GameObject* target, CP_Vector targetPosition);
 
-FSM* AIM_CreateFSM(char* startingStateName, GameObject* controller);
+FSM* AIM_CreateFSM(char* startingStateName, GameObject* controller, GameObject* target);
 
 static State* AIM_FindState(char* stateName);

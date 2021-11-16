@@ -8,7 +8,7 @@
 /// <param name="position -">Spawn position of this enemy.</param>
 /// <param name="map -">Pointer to the overall grid that this enemy will be spawned on. Used for pathfinding.</param>
 /// <returns>Pointer to a newly allocated Enemy instance.</returns>
-Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector position, AStar_Map* map)
+Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector position, AStar_Map* map, GameObject* target)
 {
 	Enemy* enemy = malloc(sizeof(Enemy));
 	if (enemy)
@@ -19,12 +19,13 @@ Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector positi
 		enemy->currentMap = map;
 		
 		enemy->go->position = position;
-		enemy->go->scale.x = 20.f; // TEST
-		enemy->go->scale.y = 20.f; // TEST
+		enemy->go->scale.x = 50.f; // TEST
+		enemy->go->scale.y = 50.f; // TEST
 
 		enemy->renderer = RM_AddComponent(enemy->go);
+		RM_LoadImage(enemy->renderer, "Assets/bananaboi.png"); //TEST
 
-		enemy->stateMachine = AIM_CreateFSM(startingStateName, enemy->go);
+		enemy->stateMachine = AIM_CreateFSM(startingStateName, enemy->go, target);
 		
 		enemy->movementPath = NULL;
 		enemy->movementPathIndex = 0;
@@ -41,9 +42,6 @@ Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector positi
 
 void EM_Init()
 {
-	movementUpdateTime = 1.f / movementUpdateFreq;
-	movementTimeElapsed = 0.f;
-
 	pathingUpdateTime = 1.f / pathingUpdateFreq;
 	pathingTimeElapsed = 0.f;
 
@@ -52,14 +50,12 @@ void EM_Init()
 
 void EM_Update()
 {
-	movementTimeElapsed += CP_System_GetDt();
 	pathingTimeElapsed += CP_System_GetDt();
 
-	if (movementTimeElapsed > movementUpdateTime)
-	{
-		EM_Update_FSMAndMovement();
-		movementTimeElapsed -= movementTimeElapsed;
-	}
+	// Update all Enemy FSM and Movement.
+	EM_Update_FSMAndMovement();
+
+	// Update all Enemy pathfinding.
 	if (pathingTimeElapsed > pathingUpdateTime)
 	{
 		EM_Update_Pathing();
@@ -82,7 +78,7 @@ void EM_Update_FSMAndMovement()
 	float deltaX = 0.f;
 	float deltaY = 0.f;
 	float moveSpeed = 0.f;
-
+	
 	// Loops through all Enemies and updates the position, based on their current movement path and speed.
 	for (int i = 0; i < LL_GetCount(enemyList); ++i)
 	{
@@ -91,17 +87,25 @@ void EM_Update_FSMAndMovement()
 			continue;
 
 		// Update FSM
-		if (currentEnemy->stateMachine != NULL)
+		FSM* fsm = currentEnemy->stateMachine;
+		if (fsm)
 		{
-			moveSpeed = currentEnemy->stateMachine->currentStateSpeed;
-			currentEnemy->stateMachine->onUpdate(currentEnemy->stateMachine, currentEnemy->stateMachine->target);
+			moveSpeed = fsm->currentStateSpeed;
+			fsm->onUpdate(fsm, fsm->target);
+
+			// If the current and next states are different, then change states.
+			if (strcmp(fsm->currentState, fsm->nextState) != 0)
+			{
+				printf("Changing State to: %s\n", fsm->nextState);
+				AIM_ChangeStates(fsm->nextState, fsm, fsm->target, fsm->targetPosition);
+			}
 		}
 
 		// Update Movement
-		if (currentEnemy->movementPath != NULL)
+		if (currentEnemy->movementPath)
 		{
-			AStar_Node* currentNode = (AStar_Node*)LL_Get(currentEnemy->movementPath, currentEnemy->movementPathIndex);
-			if (currentNode != NULL)
+			AStar_Node* currentNode = (AStar_Node*)currentEnemy->movementPath->curr;
+			if (currentNode)
 			{
 				deltaX = (float)fabs((double)currentEnemy->go->position.x - (double)currentNode->position.x);
 				deltaY = (float)fabs((double)currentEnemy->go->position.y - (double)currentNode->position.y);
@@ -111,6 +115,7 @@ void EM_Update_FSMAndMovement()
 				{
 					if (currentEnemy->movementPathIndex > 0)
 					{
+						currentEnemy->movementPath = currentEnemy->movementPath->prev;
 						--currentEnemy->movementPathIndex;
 					}
 					else
@@ -124,7 +129,11 @@ void EM_Update_FSMAndMovement()
 					CP_Vector direction = CP_Vector_Subtract(currentNode->position, currentEnemy->go->position);
 					direction = CP_Vector_Normalize(direction);
 
+					// Move enemy in direction of next node.
 					currentEnemy->go->position = CP_Vector_Add(currentEnemy->go->position, CP_Vector_Scale(direction, moveSpeed * CP_System_GetDt()));
+					// Set enemy to face in direction of movement.
+					if (currentEnemy->stateMachine != NULL)
+						currentEnemy->stateMachine->goFacingDir = CP_Vector_Set(direction.x, direction.y);
 				}
 			}
 		}
@@ -137,7 +146,6 @@ void EM_Update_FSMAndMovement()
 void EM_Update_Pathing()
 {
 	Enemy* currentEnemy = NULL;
-	GameObject* targetGo = NULL;
 	int currEnemyPathSize = 0;
 
 	// Loops through all Enemies, then recalculates their A* pathing for movement if enough time has passed.
@@ -148,12 +156,12 @@ void EM_Update_Pathing()
 		if (currentEnemy == NULL)
 			continue;
 
-		if (currentEnemy->stateMachine != NULL && currentEnemy->stateMachine->target != NULL)
+		if	(currentEnemy->stateMachine != NULL)
 		{
-			targetGo = currentEnemy->stateMachine->target;
+			CP_Vector target = currentEnemy->stateMachine->targetPosition;
 
 			// Don't repath if target's row/col are the same as previous update.
-			AStar_GetRowCol(targetGo->position, currentEnemy->currentMap, &currentEnemy->targetRow, &currentEnemy->targetCol);
+			AStar_GetRowCol(target, currentEnemy->currentMap, &currentEnemy->targetRow, &currentEnemy->targetCol);
 			if (currentEnemy->targetRow == currentEnemy->targetPrevRow && currentEnemy->targetCol == currentEnemy->targetPrevCol)
 				continue;
 
@@ -161,11 +169,11 @@ void EM_Update_Pathing()
 			if (LL_GetCount(currentEnemy->movementPath) > 0) // Set starting position to the enemy's current target position, to remove rebounding behavior.
 			{
 				AStar_Node* currMovePos = (AStar_Node*)LL_Get(currentEnemy->movementPath, currentEnemy->movementPathIndex);
-				AStar_GetPathWorldPosition(currMovePos->position, targetGo->position, &currentEnemy->movementPath, currentEnemy->currentMap);
+				AStar_GetPathWorldPosition(currMovePos->position, target, &currentEnemy->movementPath, currentEnemy->currentMap);
 			}
 			else // Set starting position to the enemy's position if they don't have a previous path.
 			{
-				AStar_GetPathWorldPosition(currentEnemy->go->position, targetGo->position, &currentEnemy->movementPath, currentEnemy->currentMap);
+				AStar_GetPathWorldPosition(currentEnemy->go->position, target, &currentEnemy->movementPath, currentEnemy->currentMap);
 			}
 			
 			// Adjust new startpoint, to prevent AI from moving back to where it started from, looks weird.
@@ -173,7 +181,7 @@ void EM_Update_Pathing()
 			currentEnemy->movementPathIndex = currEnemyPathSize - 1;
 
 			// Save row/col position
-			AStar_GetRowCol(targetGo->position, currentEnemy->currentMap, &currentEnemy->targetPrevRow, &currentEnemy->targetPrevCol);
+			AStar_GetRowCol(target, currentEnemy->currentMap, &currentEnemy->targetPrevRow, &currentEnemy->targetPrevCol);
 		}
 	}
 }

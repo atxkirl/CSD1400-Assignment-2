@@ -23,10 +23,7 @@ typedef struct
 }Enemy;
 
 
-static const float movementUpdateFreq = 30; // Frequency (per second) for how often all Enemy movement should be updated.
 static const float pathingUpdateFreq = 3; // Frequency (per second) for how often all Enemy pathfinding should be recalculated.
-
-static float movementTimeElapsed, movementUpdateTime;
 static float pathingTimeElapsed, pathingUpdateTime;
 
 static const float distanceForReached = 5.f; // The minimum distance an Enemy must be from a Node's position to count as having "reached" that node.
@@ -41,7 +38,7 @@ static const LinkedList* enemyList; // List of all created Enemy instances.
 /// <param name="position -">Spawn position of this enemy.</param>
 /// <param name="map -">Pointer to the overall grid that this enemy will be spawned on. Used for pathfinding.</param>
 /// <returns>Pointer to a newly allocated Enemy instance.</returns>
-Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector position, AStar_Map* map);
+Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector position, AStar_Map* map, GameObject* target);
 
 void EM_Init();
 void EM_Update();

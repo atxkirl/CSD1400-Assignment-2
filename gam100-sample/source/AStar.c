@@ -49,6 +49,8 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 		return;
 	}
 
+	printf("Calculating new path... Start [%.4f, %.4f]  End [%.4f, %.4f]\n", starting->position.x, starting->position.y, ending->position.x, ending->position.y);
+
 	LinkedList* openList = NULL; // List of nodes that we want to test.
 	LinkedList* closedList = NULL; // List of nodes that we've already tested.
 	starting->hCost = Estimate(starting->row, starting->column, ending->row, ending->column);

@@ -5,7 +5,7 @@ void AIM_Init(void)
 	// Big Bad Evil Monkey States
 
 	BBEM_Idle.name = "BBEM_Idle";
-	BBEM_Idle.stateSpeed = 100.f;
+	BBEM_Idle.stateSpeed = 0.f;
 	BBEM_Idle.onEnter = FSMState_BBEM_Idle_OnEnter;
 	BBEM_Idle.onExit = FSMState_BBEM_Idle_OnExit;
 	BBEM_Idle.onUpdate = FSMState_BBEM_Idle_OnUpdate;
@@ -19,7 +19,7 @@ void AIM_Init(void)
 	LL_Add(&allStates, &BBEM_Roam);
 
 	BBEM_Chase.name = "BBEM_Chase";
-	BBEM_Chase.stateSpeed = 200.f;
+	BBEM_Chase.stateSpeed = 300.f;
 	BBEM_Chase.onEnter = FSMState_BBEM_Chase_OnEnter;
 	BBEM_Chase.onExit = FSMState_BBEM_Chase_OnExit;
 	BBEM_Chase.onUpdate = FSMState_BBEM_Chase_OnUpdate;
@@ -66,7 +66,8 @@ void AIM_Clear(void)
 void AIM_ChangeStates(char* stateName, FSM* controller, GameObject* target, CP_Vector targetPosition)
 {
 	// Exit the current state first.
-	controller->onExit(controller, controller->target);
+	if(controller->onExit)
+		controller->onExit(controller, controller->target);
 
 	// Look for new state with matching name.
 	State* state = AIM_FindState(stateName);
@@ -78,36 +79,34 @@ void AIM_ChangeStates(char* stateName, FSM* controller, GameObject* target, CP_V
 		controller->onUpdate = state->onUpdate;
 
 		controller->currentState = state->name;
+		controller->nextState = state->name;
 		controller->currentStateSpeed = state->stateSpeed;
 
-		// Invoke new state's update.
-		controller->onEnter(controller, target);
+		controller->timeElapsed = 0.f;
+
+		controller->target = target;
+		controller->targetPosition = targetPosition;
+
+		controller->tileSize = GetTileScale();
 	}
+
+	// Invoke new state's update.
+	if(controller->onEnter)
+		controller->onEnter(controller, controller->target);
 }
 
-FSM* AIM_CreateFSM(char* startingStateName, GameObject* controller)
+FSM* AIM_CreateFSM(char* startingStateName, GameObject* controller, GameObject* target)
 {
 	FSM* value = malloc(sizeof(FSM));
 	if (value)
 	{
-		State* state = AIM_FindState(startingStateName);
-		if (state)
-		{
-			printf("Found state! Name=%s\n", state->name);
-			value->onEnter = state->onEnter;
-			value->onExit = state->onExit;
-			value->onUpdate = state->onUpdate;
-			value->currentState = state->name;
-			value->currentStateSpeed = state->stateSpeed;
-		}
-		else
-		{
-			printf("Didn't find state! Name=%s\n", startingStateName);
-		}
+		value->onEnter = NULL;
+		value->onExit = NULL;
+		value->onUpdate = NULL;
 
 		value->go = controller;
-		value->target = NULL;
-		value->targetPosition = NULL;
+
+		AIM_ChangeStates(startingStateName, value, target, controller->position);
 
 		return value;
 	}
@@ -119,7 +118,7 @@ State* AIM_FindState(char* stateName)
 	for (int i = 0; i < LL_GetCount(allStates); ++i)
 	{
 		State* state = (State*)LL_Get(allStates, i);
-		if (state && strcmp(state->name, stateName) == 1)
+		if (state && strcmp(state->name, stateName) == 0)
 				return state;
 	}
 

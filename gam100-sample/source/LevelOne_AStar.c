@@ -127,14 +127,9 @@ void LevelOneAStar_init(void)
 
     // Enemies
     {
-        enemy1 = EM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), &map);
-        enemy1->stateMachine->target = gLOne;
-
-        enemy2 = EM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(594.f, 66.f), &map);
-        enemy2->stateMachine->target = gLOne;
-
-        enemy3 = EM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(594.f, 264.f), &map);
-        enemy3->stateMachine->target = gLOne;
+        enemy1 = EM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), &map, gLOne);
+        enemy2 = EM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(594.f, 66.f), &map, gLOne);
+        enemy3 = EM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(594.f, 264.f), &map, gLOne);
     }
 }
 
@@ -170,8 +165,8 @@ void LevelOneAStar_update(void)
     {
         if (CP_Input_KeyTriggered(KEY_ESCAPE))
         {
-            //CP_Engine_Terminate();
-            SceneManager_ChangeSceneByName("mainmenu");
+            CP_Engine_Terminate();
+            //SceneManager_ChangeSceneByName("mainmenu");
         }
     }
 
@@ -249,12 +244,12 @@ void LevelOneAStar_AStarInit(void)
                 temp->type = NODE_WALL;
             }
 
-            GameObject* g = GOM_Create2(CIRCLE, temp->position, 0.f, CP_Vector_Set(20.f, 20.f));
+            /*GameObject* g = GOM_Create2(CIRCLE, temp->position, 0.f, CP_Vector_Set(20.f, 20.f));
             Renderer* rend = RM_AddComponent(g);
             if (temp->type == NODE_WALL)
                 rend->color = CP_Color_Create(255, 0, 0, 255);
             else
-                rend->color = CP_Color_Create(0, 255, 0, 255);
+                rend->color = CP_Color_Create(0, 255, 0, 255);*/
         }
     }
 }
