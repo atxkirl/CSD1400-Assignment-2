@@ -49,7 +49,8 @@ void OB_PickupInit()
 	k = CLM_AddComponent(pickup1);
 	CLM_Set(k, COL_BOX, OB_PickupOnCollision);
 	rd = RM_AddComponent(pickup1);
-	rd->text = "item1";
+	//rd->text = "item1";
+	RM_SetText(rd, "item1");
 	//RM_LoadImage(rd, "Assets/bananaboi.png");
 
 	pickup2 = GOM_Create2(RECTANGLE, CP_Vector_Set(0, 0), 0.0f, CP_Vector_Set(30, 30));
@@ -57,7 +58,8 @@ void OB_PickupInit()
 	k = CLM_AddComponent(pickup2);
 	CLM_Set(k, COL_BOX, OB_PickupOnCollision);
 	rd = RM_AddComponent(pickup2);
-	rd->text = "item2";
+	//rd->text = "item2";
+	RM_SetText(rd, "item2");
 	//RM_LoadImage(rd, "Assets/bananaboi.png");
 
 	drop1 = GOM_Create2(RECTANGLE, CP_Vector_Set(500, 500), 0.0f, CP_Vector_Set(50, 50));
@@ -66,7 +68,8 @@ void OB_PickupInit()
 	CLM_Set(k, COL_BOX, OB_PickupOnCollision);
 	k->isLockedPos = 1;
 	rd = RM_AddComponent(drop1);
-	rd->text = "drop1";
+	//rd->text = "drop1";
+	RM_SetText(rd, "drop1");
 	RM_LoadImage(rd, "Assets/sand-tiles/test-sea-sprite.png");
 	Animation* a = AM_AddComponent(drop1);
 	AM_SetSprite(a, 2, 1, 2, 2);
@@ -76,7 +79,8 @@ void OB_PickupInit()
 	k = CLM_AddComponent(drop2);
 	CLM_Set(k, COL_BOX, OB_PickupOnCollision);
 	rd = RM_AddComponent(drop2);
-	rd->text = "drop2";
+	//rd->text = "drop2";
+	RM_SetText(rd, "drop2");
 	//RM_LoadImage(rd, "Assets/bananaboi.png");
 }
 

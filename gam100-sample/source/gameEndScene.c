@@ -35,7 +35,7 @@ void gameEnd_init(void)
     gEnd->space = COLSPC_SCREEN;
     rEnd = RM_AddComponent(eButton);
     rEnd->renderPriority = PRI_UI;
-    rEnd->text = "Main Menu";
+    RM_SetText(rEnd, "Main Menu");
 
     GameObject* rButton = GOM_Create2(RECTANGLE, CP_Vector_Set(50 * xScale, 80 * yScale), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
     rButton->tag = "restart";
@@ -44,7 +44,7 @@ void gameEnd_init(void)
     gEnd->space = COLSPC_SCREEN;
     rEnd = RM_AddComponent(rButton);
     rEnd->renderPriority = PRI_UI;
-    rEnd->text = "Restart";
+    RM_SetText(rEnd, "Restart");
 
 
 

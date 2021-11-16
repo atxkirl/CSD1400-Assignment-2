@@ -71,11 +71,15 @@ void RM_RemoveRenderObject(Renderer* r)
 }
 void RM_Clear()
 {
-	for (; renderObjects; renderObjects = renderObjects->next)
+	LinkedList* node = renderObjects;
+	for (; node; node = node->next)
 	{
-		if (((Renderer*)renderObjects->curr)->sprite)
-			RM_DeleteImage((Renderer*)renderObjects->curr);
-		free(renderObjects->curr);
+		if (((Renderer*)node->curr)->sprite)
+			RM_DeleteImage((Renderer*)node->curr);
+		//If break around here, make sure the text you set is using RM_SetText and not r->text = ""
+		if (((Renderer*)node->curr)->text)
+			free(((Renderer*)node->curr)->text);
+		free(node->curr);
 	}
 	LL_Clear(&renderObjects);
 	matrixStack = MS_Clear(matrixStack);
@@ -192,6 +196,23 @@ CP_Vector RM_MousePositionToWorldSpace(float x, float y)
 void RM_SetCameraZoom(float z)
 {
 	zoom = z;
+}
+
+void RM_SetText(Renderer* r, const char* text)
+{
+	if (r->text)
+	{
+		free(r->text);
+		r->text = NULL;
+	}
+
+	size_t count = 0;
+	for (char* c = text; (*c) != '\0'; c++, count++);
+
+
+	r->text = calloc(count + 1, sizeof(char));
+	if (r->text)
+		strcpy_s(r->text, count + 1, text);
 }
 
 void RenderAllOfType(RENDER_PRIORITY type)

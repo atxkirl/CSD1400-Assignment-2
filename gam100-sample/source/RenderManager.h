@@ -103,3 +103,11 @@ CP_Vector RM_MousePositionToWorldSpace(float x, float y);
 @return void
 */
 void RM_SetCameraZoom(float);
+
+/*!
+@brief Set text to r->text
+@param r - renderer for text to be set
+@param text - null terminated text to be set
+@return void
+*/
+void RM_SetText(Renderer*, const char* );

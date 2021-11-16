@@ -77,7 +77,8 @@ void LevelOne_init(void)
                 {
                     ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.08f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveOnePos = ObjectiveUI->position;
-                    r->text = oObjectiveList[0].cObjective;
+                    //r->text = oObjectiveList[0].cObjective;
+                    RM_SetText(r, oObjectiveList[0].cObjective);
                     gLoadedGrids->gGrid[j][k]->tag = "Objective1Read";
                     Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
                     CLM_Set(c, COL_BOX, LevelOne_OnCollision);
@@ -90,7 +91,8 @@ void LevelOne_init(void)
                 {
                     ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.07f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveTwoPos = ObjectiveUI->position;
-                    r->text = oObjectiveList[1].cObjective;
+                    //r->text = oObjectiveList[1].cObjective;
+                    RM_SetText(r, oObjectiveList[1].cObjective);
                     gLoadedGrids->gGrid[j][k]->tag = "Objective2Read";
                     Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
                     CLM_Set(c, COL_BOX, LevelOne_OnCollision);
@@ -103,7 +105,8 @@ void LevelOne_init(void)
                 {
                     ObjectiveUI->position = CP_Vector_Set(screenWidth * 0.11f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveThreePos = ObjectiveUI->position;
-                    r->text = oObjectiveList[2].cObjective;
+                    //r->text = oObjectiveList[2].cObjective;
+                    RM_SetText(r, oObjectiveList[2].cObjective);
                     gLoadedGrids->gGrid[j][k]->tag = "Objective3Read";
                     Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
                     CLM_Set(c, COL_BOX, LevelOne_OnCollision);
@@ -173,21 +176,24 @@ void LevelOne_update(void)
                 {
                     ObjectiveUI->position = vObjectiveOnePos;
                     ObjectiveUI->position.x = screenWidth * 0.18f;
-                    rObjUI->text = "Complete!";
+                    //rObjUI->text = "Complete!";
+                    RM_SetText(rObjUI, "Complete!");
                     gLoadedGrids->gGrid[j][k]->tag = "Objective1Complete";
                 }
                 else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective2Done") == 0)
                 {
                     ObjectiveUI->position = vObjectiveOnePos;
                     ObjectiveUI->position.x = screenWidth * 0.18f;
-                    rObjUI->text = "Complete!";
+                    //rObjUI->text = "Complete!";
+                    RM_SetText(rObjUI, "Complete!");
                     gLoadedGrids->gGrid[j][k]->tag = "Objective2Complete";
                 }
                 else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective3Done") == 0)
                 {
                     ObjectiveUI->position = vObjectiveThreePos;
                     ObjectiveUI->position.x = screenWidth * 0.18f;
-                    rObjUI->text = "Complete!";
+                    //rObjUI->text = "Complete!";
+                    RM_SetText(rObjUI, "Complete!");
                     gLoadedGrids->gGrid[j][k]->tag = "Objective3Complete";
                 }
             }

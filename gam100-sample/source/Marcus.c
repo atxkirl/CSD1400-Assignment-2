@@ -49,7 +49,8 @@ void Marcus_init(void)
     button->type = RECTANGLE;
     //r->color = CP_Color_Create(255, 0, 0, 50);
     r->renderPriority = PRI_UI;
-    r->text = "Editor";
+    //r->text = "Editor";
+    RM_SetText(r, "Editor");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, Marcus_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -62,7 +63,7 @@ void Marcus_init(void)
     button->type = RECTANGLE;
     //r->color = CP_Color_Create(255, 0, 0, 50);
     r->renderPriority = PRI_UI;
-    r->text = "One";
+    RM_SetText(r, "One");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, Marcus_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -75,7 +76,7 @@ void Marcus_init(void)
     button->type = RECTANGLE;
     //r->color = CP_Color_Create(255, 0, 0, 50);
     r->renderPriority = PRI_UI;
-    r->text = "Options";
+    RM_SetText(r, "Options");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, Marcus_OnCollision);
     c->space = COLSPC_SCREEN;

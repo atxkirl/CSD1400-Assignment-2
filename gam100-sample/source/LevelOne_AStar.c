@@ -45,7 +45,8 @@ void LevelOneAStar_OnCollision(Collider* left, Collider* right)
 
                     Renderer* rObjUI = RM_AddComponent(ObjectiveUI);
                     rObjUI->color = CP_Color_Create(255, 255, 255, 255);
-                    rObjUI->text = "Done.";
+                    //rObjUI->text = "Done.";
+                    RM_SetText(rObjUI, "Done.");
                     rObjUI->renderPriority = PRI_UI;
                     oObjectiveList[i].isSet = 1;
                 }
@@ -76,7 +77,8 @@ void LevelOneAStar_init(void)
         button->type = RECTANGLE;
         Renderer* r = RM_AddComponent(button);
         r->color = CP_Color_Create(255, 255, 255, 255);
-        r->text = "Objective";
+        //r->text = "Objective";
+        RM_SetText(r, "Objective!");
         r->renderPriority = PRI_UI;
         Collider* c = CLM_AddComponent(button);
         c->space = COLSPC_SCREEN;
@@ -99,7 +101,8 @@ void LevelOneAStar_init(void)
             ObjectiveUI->position = CP_Vector_Set(100.0f, 50.0f + i * 50.f);
             r = RM_AddComponent(ObjectiveUI);
             r->color = CP_Color_Create(255, 255, 255, 255);
-            r->text = oObjectiveList[i].cObjective;
+            //r->text = oObjectiveList[i].cObjective;
+            RM_SetText(r, oObjectiveList[i].cObjective);
             r->renderPriority = PRI_UI;
         }
 

@@ -98,7 +98,7 @@ void HongYu_init(void)
     GameObject* button = GOM_Create2(RECTANGLE, 
         CP_Vector_Set(80, 20), 0.0f, CP_Vector_Set(30, 20));
     r = RM_AddComponent(button);
-    r->text = "test";
+    RM_SetText(r, "test");
     r->renderPriority = PRI_UI;
     button->tag = "test";
     Collider* c = CLM_AddComponent(button);
@@ -123,7 +123,7 @@ void HongYu_init(void)
         CP_Vector_Set(30, 80), 0.0f, CP_Vector_Set(30, 30));
     r = RM_AddComponent(wall);
     r->color = CP_Color_Create(200, 180, 180, 255);
-    r->text = "lock";
+    RM_SetText(r, "lock");
     c = CLM_AddComponent(wall);
     CLM_Set(c, COL_CIRCLE, NULL);
     c->isLockedPos = 1;
@@ -132,7 +132,7 @@ void HongYu_init(void)
         CP_Vector_Set(80, 80), 0.0f, CP_Vector_Set(30, 30));
     r = RM_AddComponent(wall);
     r->color = CP_Color_Create(200, 100, 100, 200);
-    r->text = "TRIGGER";
+    RM_SetText(r, "TRIGGER");
     wall->tag = "Trigger";
     c = CLM_AddComponent(wall);
     CLM_Set(c, COL_CIRCLE, NULL);
@@ -161,7 +161,7 @@ void HongYu_init(void)
     wall->tag = "objective";
     r = RM_AddComponent(wall);
     r->color = CP_Color_Create(255, 128, 128, 128);
-    r->text = "Fix Boat";
+    RM_SetText(r, "Fix Boat");
     c = CLM_AddComponent(wall);
     CLM_Set(c, COL_BOX, hy_OnCollision);
     c->isTrigger = 1;
@@ -170,7 +170,7 @@ void HongYu_init(void)
     wall->tag = "objective2";
     r = RM_AddComponent(wall);
     r->color = CP_Color_Create(128, 255, 128, 128);
-    r->text = "Break Coconut";
+    RM_SetText(r, "Break Coconut");
     c = CLM_AddComponent(wall);
     CLM_Set(c, COL_BOX, hy_OnCollision);
     c->isTrigger = 1;
@@ -227,12 +227,13 @@ void HongYu_update(void)
         RM_AddComponent(clickPoint);
     }
 
-    char str[20];
+    char str[20] = {'\0'};
     sprintf_s(str, 20,"%.1f,%.1f", g->position.x, g->position.y);
     //g->text = str;
     Renderer* r = (Renderer*)SM_GetComponent(g, COM_RENDERER);
     r->textColor = CP_Color_Create(255, 255, 255, 255);
-    r->text = str;
+    RM_SetText(r, str);
+    //r->text = str;
 
     SM_SystemsUpdate();
     RM_SetCameraPosition(g->position);

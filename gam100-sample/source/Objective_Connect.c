@@ -129,7 +129,8 @@ void OB_ConnectInit()
 	OBJ_Title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(800, 100));
 	Renderer* r = RM_AddComponent(OBJ_Title);
 	r->color.a = 0;
-	r->text = "Connect The Wires!";
+	//r->text = "Connect The Wires!";
+	RM_SetText(r, "Connect The Wires!");
 	r->renderPriority = PRI_UI;
 	r->textScale = CP_Vector_Set(3.0f, 3.0f);
 
@@ -235,7 +236,8 @@ void OB_ConnectUpdate()
 	if (iRedConnected && iBlueConnected && iGreenConnected && iYellowConnected)
 	{
 		Renderer* r = RM_GetComponent(OBJ_Title);
-		r->text = "Complete!";
+		//r->text = "Complete!";
+		RM_SetText(r, "Complete!");
 
 		for (int j = 0; j < NumGrids; j++)
 		{

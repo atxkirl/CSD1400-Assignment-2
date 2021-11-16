@@ -82,7 +82,8 @@ void Weiyi_init(void)
     k->space = COLSPC_SCREEN;
     k->isLockedPos = 1;
     r = RM_AddComponent(e5);
-    r->text = "test";
+    //r->text = "test";
+    RM_SetText(r, "test");
     r->renderPriority = PRI_UI;
 
 
@@ -90,7 +91,8 @@ void Weiyi_init(void)
     r = RM_AddComponent(e2);
     r = RM_AddComponent(e3);
     r = RM_AddComponent(e4);
-    r->text = "hide";
+    //r->text = "hide";
+    RM_SetText(r, "hide");
 }
 
 void Weiyi_update(void)

@@ -43,7 +43,8 @@ void Xinyun_init(void)
     ck->space = COLSPC_SCREEN;
     ck->isLockedPos = 1;
     Renderer* cr = RM_AddComponent(credits_button);
-    cr->text = "test";
+    //cr->text = "test";
+    RM_SetText(cr, "test");
     cr->renderPriority = PRI_UI;
 
     SM_SystemsInit();

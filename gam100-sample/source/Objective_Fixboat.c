@@ -71,7 +71,8 @@ void OB_FixBoatInit()
 	ofb_title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(800, 100));
 	Renderer* r = RM_AddComponent(ofb_title);
 	r->color.a = 0;
-	r->text = "Fix the boat!";
+	//r->text = "Fix the boat!";
+	RM_SetText(r, "Fix the boat!");
 	r->renderPriority = PRI_UI;
 	r->textScale = CP_Vector_Set(3.0f, 3.0f);
 
@@ -225,7 +226,8 @@ void OB_FixBoatUpdate()
 	if (ofb_isFixed1 && ofb_isFixed2 && ofb_isFixed3)
 	{
 		Renderer* r = RM_GetComponent(ofb_title);
-		r->text = "Boat fixed!";
+		//r->text = "Boat fixed!";
+		RM_SetText(r, "Boat fixed!");
 	}
 }
 

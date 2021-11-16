@@ -50,7 +50,8 @@ void SceneOptions_init(void)
     Options_Title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(800, 100));
     Renderer* r = RM_AddComponent(Options_Title);
     r->color.a = 0;
-    r->text = "Options";
+    //r->text = "Options";
+    RM_SetText(r, "Options");
     r->renderPriority = PRI_UI;
     r->textScale = CP_Vector_Set(3.0f, 3.0f);
 
@@ -160,7 +161,8 @@ void SceneOptionsUI_Buttons()
         r->renderPriority = PRI_UI;
         ButtonL->scale = ButtonScale;
         ButtonL->position = Button_Left[i];
-        r->text = cTextLeft[i];
+        //r->text = cTextLeft[i];
+        RM_SetText(r, cTextLeft[i]);
     }
 
     ButtonRUp = GOM_Create(RECTANGLE);
@@ -170,7 +172,9 @@ void SceneOptionsUI_Buttons()
     ButtonRUp->tag = "ButtonUp";
     ButtonRUp->scale = ButtonScale;
     ButtonRUp->position = Button_Right[0];
-    r->text = cRightText[0];
+    //r->text = cRightText[0];
+    //char tempStr[2] = { cRightText[0], '\0' };
+    RM_SetText(r, cRightText[0]);
 
     ButtonRDown = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRDown);
@@ -179,7 +183,9 @@ void SceneOptionsUI_Buttons()
     ButtonRDown->tag = "ButtonDown";
     ButtonRDown->scale = ButtonScale;
     ButtonRDown->position = Button_Right[1];
-    r->text = cRightText[1];
+    //char tempStr1[2] = { cRightText[1], '\0' };
+    //RM_SetText(r, tempStr1);
+    RM_SetText(r, cRightText[1]);
 
     ButtonRLeft = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRLeft);
@@ -188,7 +194,9 @@ void SceneOptionsUI_Buttons()
     ButtonRLeft->tag = "ButtonLeft";
     ButtonRLeft->scale = ButtonScale;
     ButtonRLeft->position = Button_Right[2];
-    r->text = cRightText[2];
+    //char tempStr2[2] = { cRightText[2], '\0' };
+    //RM_SetText(r, tempStr2);
+    RM_SetText(r, cRightText[2]);
 
     ButtonRRight = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRRight);
@@ -197,7 +205,9 @@ void SceneOptionsUI_Buttons()
     ButtonRRight->tag = "ButtonRight";
     ButtonRRight->scale = ButtonScale;
     ButtonRRight->position = Button_Right[3];
-    r->text = cRightText[3];
+    //char tempStr3[2] = { cRightText[3], '\0' };
+    //RM_SetText(r, tempStr3);
+    RM_SetText(r, cRightText[3]);
 
     ButtonRInteract = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRInteract);
@@ -206,7 +216,9 @@ void SceneOptionsUI_Buttons()
     ButtonRInteract->tag = "ButtonInteract";
     ButtonRInteract->scale = ButtonScale;
     ButtonRInteract->position = Button_Right[4];
-    r->text = cRightText[4];
+    //char tempStr4[2] = { cRightText[4], '\0' };
+    //RM_SetText(r, tempStr4);
+    RM_SetText(r, cRightText[4]);
 
    /* ButtonSave = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonSave);

@@ -46,7 +46,8 @@ void DM_PrintDialogue(char* text, DialogueType type)
 	dialogueBox->scale = CP_Vector_Set(dialogueBoxWidth, dialogueBoxHeight);
 
 	dialogueType = type;
-	dialogueBoxRenderer->text = text;
+	//dialogueBoxRenderer->text = text;
+	RM_SetText(dialogueBoxRenderer, text);
 	dialogueBox->isEnabled = 1;
 }
 

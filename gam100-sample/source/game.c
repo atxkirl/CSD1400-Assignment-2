@@ -85,7 +85,8 @@ void game_init(void)
     Renderer* r = RM_AddComponent(button);
     button->tag = "marcus"; //For collision
     r->renderPriority = PRI_UI;
-    r->text = "marcus";
+    //r->text = "marcus";
+    RM_SetText(r, "marcus");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, game_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -95,7 +96,7 @@ void game_init(void)
     r = RM_AddComponent(button);
     button->tag = "hongyu";
     r->renderPriority = PRI_UI;
-    r->text = "hongyu";
+    RM_SetText(r, "hongyu");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, game_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -105,7 +106,7 @@ void game_init(void)
     r = RM_AddComponent(button);
     button->tag = "adrian";
     r->renderPriority = PRI_UI;
-    r->text = "adrian";
+    RM_SetText(r, "adrian");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, game_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -115,7 +116,7 @@ void game_init(void)
     r = RM_AddComponent(button);
     button->tag = "astartest";
     r->renderPriority = PRI_UI;
-    r->text = "A* Test";
+    RM_SetText(r, "A* Test");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, game_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -125,7 +126,7 @@ void game_init(void)
     r = RM_AddComponent(button);
     button->tag = "weiyi";
     r->renderPriority = PRI_UI;
-    r->text = "weiyi";
+    RM_SetText(r, "weiyi");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, game_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -135,7 +136,7 @@ void game_init(void)
     r = RM_AddComponent(button);
     button->tag = "xinyun";
     r->renderPriority = PRI_UI;
-    r->text = "xinyun";
+    RM_SetText(r, "xinyun");
     c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, game_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -148,7 +149,7 @@ void game_init(void)
     r = RM_AddComponent(button);
     button->tag = "game"; //For collision
     r->renderPriority = PRI_UI;
-    r->text = "Start";
+    RM_SetText(r, "Start");
     r->color.a = 0;
     r->textScale = CP_Vector_Set(2, 2);
     MainMenuStartCollider = CLM_AddComponent(button);
