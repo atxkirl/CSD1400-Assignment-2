@@ -91,10 +91,6 @@ void EM_Update_FSMAndMovement()
 		if (currentEnemy == NULL)
 			continue;
 
-#if _DEBUG
-		if (currentEnemy->stateMachine)
-			RM_SetText(RM_GetComponent(currentEnemy->go), currentEnemy->stateMachine->currentState);
-#endif
 
 		// Update FSM
 		FSM* fsm = currentEnemy->stateMachine;
@@ -147,6 +143,45 @@ void EM_Update_FSMAndMovement()
 				}
 			}
 		}
+
+#if _DEBUG
+		char str[100] = { 0 };
+		if (currentEnemy->stateMachine)
+		{
+
+			int di = 0;
+			if (currentEnemy->movementPath)
+			{
+				LinkedList* n = currentEnemy->movementPath;
+				CP_Color c = CP_Color_Create(0, 0, 255, 255);
+				for (; n; n = n->next, di++)
+				{
+					AStar_Node* an = (AStar_Node*)n->curr;
+					if (an)
+					{
+						if (di > 12)
+							di = 0;
+						CP_Color tc = CP_Color_Create(c.r, c.g + di * 20, (int)c.b - di * 20, c.a);
+						RM_DebugDrawLine(currentEnemy->go->position,
+							an->position,
+							PRI_GAME_OBJECT, tc);
+					}
+
+				}
+			}
+
+
+			sprintf_s(str, 100, "%s\n%2d",
+				currentEnemy->stateMachine->currentState,
+				LL_GetCount(currentEnemy->movementPath));
+
+			RM_SetText(RM_GetComponent(currentEnemy->go), str);
+		}
+
+
+#endif
+
+
 	}
 }
 

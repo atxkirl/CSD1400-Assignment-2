@@ -43,6 +43,15 @@ typedef struct Renderer
 	int isEnabled;
 } Renderer;
 
+
+typedef struct DebugLine
+{
+	CP_Vector from, to;
+	RENDER_PRIORITY space;
+	CP_Color color;
+} DebugLine;
+
+
 void RM_Init();
 Renderer* RM_AddComponent(GameObject*);
 Renderer* RM_GetComponent(GameObject*);
@@ -111,3 +120,13 @@ void RM_SetCameraZoom(float);
 @return void
 */
 void RM_SetText(Renderer*, const char* );
+
+/*!
+@brief draw line from position to position in space. it will delete itself after drawn in frame
+@param from - start position of line
+@param to - end position of line
+@param space - space of line world or screen
+@param color - color of line
+@return void
+*/
+void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Color color);

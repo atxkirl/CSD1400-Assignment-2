@@ -79,7 +79,7 @@ void game_init(void)
     bgr->renderPriority = PRI_UI;
     RM_LoadImage(bgr, "Assets/BananaBoi_Title.jpg");
 
-#ifdef _DEBUG
+#if _DEBUG
     GameObject* button = GOM_Create2(RECTANGLE,
         CP_Vector_Set(80.0f, 25.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
     Renderer* r = RM_AddComponent(button);

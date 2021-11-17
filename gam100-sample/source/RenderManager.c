@@ -7,6 +7,7 @@
 
 LinkedList* renderObjects = NULL;
 LinkedList* matrixStack = NULL;
+LinkedList* debugLinesList = NULL;
 
 CP_Vector cameraPos;
 CP_Vector cameraScale;
@@ -84,7 +85,14 @@ void RM_Clear()
 		}
 		free(node->curr);
 	}
+	node = debugLinesList;
+	for (; node; node = node->next)
+	{
+		free(node->curr);
+	}
+	
 	LL_Clear(&renderObjects);
+	LL_Clear(&debugLinesList);
 	matrixStack = MS_Clear(matrixStack);
 }
 void RM_Render()
@@ -119,6 +127,26 @@ void RM_Render()
 
 	RenderAllOfType(PRI_UI);
 	//CP_Settings_ResetMatrix();
+
+#if _DEBUG
+	LinkedList* node = debugLinesList;
+	for (; node; node = node->next)
+	{
+		DebugLine* line = (DebugLine*)node->curr;
+		if (line->space == PRI_GAME_OBJECT)
+		{
+			CP_Settings_ApplyMatrix(view);
+		}
+
+		CP_Settings_Stroke(line->color);
+		CP_Graphics_DrawLine(line->from.x, line->from.y, line->to.x, line->to.y);
+		CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+
+		CP_Settings_ResetMatrix();
+		free(node->curr);
+	}
+	LL_Clear(&debugLinesList);
+#endif
 }
 
 void RM_SetCameraPosition(CP_Vector pos)
@@ -219,6 +247,19 @@ void RM_SetText(Renderer* r, const char* text)
 	r->text = calloc(count + 1, sizeof(char));
 	if (r->text)
 		strcpy_s(r->text, count + 1, text);
+}
+
+void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Color color)
+{
+	DebugLine* line = malloc(sizeof(DebugLine));
+	if (line)
+	{
+		line->from = from;
+		line->to = to;
+		line->space = space;
+		line->color = color;
+	}
+	LL_Add(&debugLinesList, line);
 }
 
 void RenderAllOfType(RENDER_PRIORITY type)
