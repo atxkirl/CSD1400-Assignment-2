@@ -67,7 +67,8 @@ void LevelOne_init(void)
         ObjectiveUI->tag = "ObjectiveUI";
         r= RM_AddComponent(ObjectiveUI);
         r->color = CP_Color_Create(255, 255, 255, 255);
-        r->text = "";
+        //r->text = "";
+        RM_SetText(r, "");
 
         for (int j = 0; j < NumGrids; j++)
         {

@@ -1,4 +1,5 @@
 #include "EnemyManager.h"
+#include "CollisionManager.h"
 
 /// <summary>
 /// Allocates memory for an Enemy and returns a pointer to it.
@@ -34,6 +35,10 @@ Enemy* EM_CreateEnemy(char* enemyName, char* startingStateName, CP_Vector positi
 		enemy->targetCol = 0;
 		enemy->targetPrevRow = 0;
 		enemy->targetPrevCol = 0;
+
+		Collider* c = CLM_AddComponent(enemy->go);
+		//TODO add collision response so when touch player is a gg
+		CLM_Set(c, COL_BOX, NULL);
 
 		LL_Add(&enemyList, enemy);
 	}
@@ -85,6 +90,11 @@ void EM_Update_FSMAndMovement()
 		currentEnemy = (Enemy*)LL_Get(enemyList, i);
 		if (currentEnemy == NULL)
 			continue;
+
+#if _DEBUG
+		if (currentEnemy->stateMachine)
+			RM_SetText(RM_GetComponent(currentEnemy->go), currentEnemy->stateMachine->currentState);
+#endif
 
 		// Update FSM
 		FSM* fsm = currentEnemy->stateMachine;
