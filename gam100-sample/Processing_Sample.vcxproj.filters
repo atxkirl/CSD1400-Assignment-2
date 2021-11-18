@@ -50,9 +50,6 @@
     <ClCompile Include="source\Player.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\AStar.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="source\CollisionManager.c">
       <Filter>Systems</Filter>
     </ClCompile>
@@ -71,9 +68,6 @@
     <ClCompile Include="source\SystemManager.c">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="source\EnemyManager.c">
-      <Filter>Systems</Filter>
-    </ClCompile>
     <ClCompile Include="source\Dialogue.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -88,12 +82,6 @@
     </ClCompile>
     <ClCompile Include="source\LevelOne_AStar.c">
       <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="source\BBEM_States.c">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="source\MiniMonke_States.c">
-      <Filter>FSM</Filter>
     </ClCompile>
     <ClCompile Include="source\Objective_Pickup.c">
       <Filter>Minigames</Filter>
@@ -110,10 +98,19 @@
     <ClCompile Include="source\Scene_Credits.c">
       <Filter>UI Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="source\Helpers.c">
+      <Filter>Source</Filter>
+    </ClCompile>
     <ClCompile Include="source\AIManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BBEM_States.c">
       <Filter>FSM</Filter>
     </ClCompile>
-    <ClCompile Include="source\Helpers.c">
+    <ClCompile Include="source\MiniMonke_States.c">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AStar.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -195,20 +192,8 @@
     <ClInclude Include="source\GameObject.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="source\EnemyManager.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
     <ClInclude Include="source\Objective_Fixboat.h">
       <Filter>Minigames</Filter>
-    </ClInclude>
-    <ClInclude Include="source\FSM.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="source\BBEM_States.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="source\MiniMonke_States.h">
-      <Filter>FSM</Filter>
     </ClInclude>
     <ClInclude Include="source\Objective_BreakCoconut.h">
       <Filter>Minigames</Filter>
@@ -223,6 +208,15 @@
       <Filter>UI Scenes</Filter>
     </ClInclude>
     <ClInclude Include="source\AIManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FSM.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="source\BBEM_States.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="source\MiniMonke_States.h">
       <Filter>FSM</Filter>
     </ClInclude>
   </ItemGroup>

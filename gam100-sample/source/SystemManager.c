@@ -39,7 +39,6 @@ void SM_SystemsInit()
 	AM_Init();
 	DM_Init();
 	AIM_Init();
-	EM_Init();
 }
 
 void SM_SystemsPreUpdate()
@@ -60,7 +59,7 @@ void SM_SystemsPreUpdate()
 
 void SM_SystemsUpdate()
 {
-	EM_Update();
+	AIM_Update();
 	DM_Update();
 	CLM_Update();
 	AM_Update();
@@ -86,7 +85,6 @@ void SM_SystemsExit()
 	RM_Clear();
 	GOM_Clear();
 	DM_Clear();
-	EM_Clear();
 	AIM_Clear();
 }
 

@@ -196,14 +196,13 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
   <ItemGroup>
     <ClCompile Include="main.c" />
     <ClCompile Include="source\Adrian.c" />
+    <ClCompile Include="source\AIManager.c" />
     <ClCompile Include="source\AnimationManager.c" />
     <ClCompile Include="source\AStar.c" />
     <ClCompile Include="source\BBEM_States.c" />
     <ClCompile Include="source\CollisionManager.c" />
     <ClCompile Include="source\Dialogue.c" />
-    <ClCompile Include="source\EnemyManager.c" />
     <ClCompile Include="source\FileParser.c" />
-    <ClCompile Include="source\AIManager.c" />
     <ClCompile Include="source\game.c" />
     <ClCompile Include="source\game2.c" />
     <ClCompile Include="source\gameEndScene.c" />
@@ -218,8 +217,8 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Loader.c" />
     <ClCompile Include="source\Marcus.c" />
     <ClCompile Include="source\MatrixStack.c" />
-    <ClCompile Include="source\Objective_BreakCoconut.c" />
     <ClCompile Include="source\MiniMonke_States.c" />
+    <ClCompile Include="source\Objective_BreakCoconut.c" />
     <ClCompile Include="source\Objective_Connect.c" />
     <ClCompile Include="source\Objective_Fixboat.c" />
     <ClCompile Include="source\Objective_Pickup.c" />
@@ -235,16 +234,15 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Xinyun.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\AIManager.h" />
     <ClInclude Include="source\AnimationManager.h" />
     <ClInclude Include="source\AStar.h" />
     <ClInclude Include="source\BBEM_States.h" />
     <ClInclude Include="source\CollisionManager.h" />
     <ClInclude Include="source\Colors.h" />
     <ClInclude Include="source\Dialogue.h" />
-    <ClInclude Include="source\EnemyManager.h" />
-    <ClInclude Include="source\FSM.h" />
     <ClInclude Include="source\FileParser.h" />
-    <ClInclude Include="source\AIManager.h" />
+    <ClInclude Include="source\FSM.h" />
     <ClInclude Include="source\GameObject.h" />
     <ClInclude Include="source\GameObjectManager.h" />
     <ClInclude Include="source\Helpers.h" />
@@ -252,8 +250,8 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\LinkedList.h" />
     <ClInclude Include="source\Loader.h" />
     <ClInclude Include="source\MatrixStack.h" />
-    <ClInclude Include="source\Objective_BreakCoconut.h" />
     <ClInclude Include="source\MiniMonke_States.h" />
+    <ClInclude Include="source\Objective_BreakCoconut.h" />
     <ClInclude Include="source\Objective_Connect.h" />
     <ClInclude Include="source\Objective_Fixboat.h" />
     <ClInclude Include="source\Objective_Pickup.h" />
