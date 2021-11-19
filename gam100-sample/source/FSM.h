@@ -42,7 +42,7 @@ struct FSM
 	// Functionality Variables:
 	float waitTime, elapsedTime;	// Allows a State to be "held" in wait for awhile, either as a countdown, or to do something for waitTime amount of seconds.
 	float tileSize;					// Size of a single map tile. Set when creating this FSM.
-	float searchCount;
+	int searchCount;
 };
 
 /// <summary>

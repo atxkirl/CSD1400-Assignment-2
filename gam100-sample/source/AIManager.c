@@ -10,6 +10,17 @@ void AIM_Init(void)
 
 void AIM_Clear(void)
 {
+	// Free any allocated memory for each enemy.
+	for (int i = 0; i < LL_GetCount(allEnemies); ++i)
+	{
+		FSM* enemy = (FSM*)LL_Get(allEnemies, i);
+		if (enemy)
+		{
+			free(enemy->targetPosition);
+		}
+	}
+
+	// Clear all lists!
 	LL_Clear(&allEnemies);
 	LL_Clear(&allStates);
 
@@ -33,7 +44,6 @@ void AIM_Update(void)
 		enemy->onUpdate(enemy, NULL);
 		if (strcmp(enemy->currentState, enemy->nextState) != 0)
 		{
-			printf("Changing State to: %s\n", enemy->nextState);
 			AIM_ChangeStates(enemy->nextState, enemy);
 		}
 
@@ -82,7 +92,7 @@ void AIM_Update(void)
 							if (di > 12)
 								di = 0;
 
-							CP_Color tc = CP_Color_Create(c.r - di * 20, c.g + di * 20, c.b, c.a);
+							CP_Color tc = CP_Color_Create(c.r - di * 40, c.g + di * 40, c.b, c.a);
 							RM_DebugDrawLine(an->position, ann->position, PRI_GAME_OBJECT, tc);
 						}
 
@@ -120,9 +130,9 @@ void AIM_InitStates(void)
 	LL_Add(&allStates, &BBEM_Chase);
 
 	BBEM_Search.name = "BBEM_Search";
-	BBEM_Search.onEnter = FSMState_BBEM_Roam_OnEnter;
-	BBEM_Search.onExit = FSMState_BBEM_Roam_OnExit;
-	BBEM_Search.onUpdate = FSMState_BBEM_Roam_OnUpdate;
+	BBEM_Search.onEnter = FSMState_BBEM_Search_OnEnter;
+	BBEM_Search.onExit = FSMState_BBEM_Search_OnExit;
+	BBEM_Search.onUpdate = FSMState_BBEM_Search_OnUpdate;
 	LL_Add(&allStates, &BBEM_Search);
 
 
@@ -159,12 +169,13 @@ void AIM_InitFSM(FSM* controller, char* startStateName, GameObject* targetObject
 
 	// Initialize Target variables.
 	controller->targetObject = targetObject;
-	if (targetObject != NULL)
-		controller->targetPosition = &targetObject->position;
-	else
-		controller->targetPosition = NULL;
 	controller->tileSize = GetTileScale();
 	controller->searchCount = 0;
+	controller->targetPosition = (CP_Vector*)malloc(sizeof(CP_Vector));
+	if (controller->targetPosition && targetObject != NULL)
+	{
+		*controller->targetPosition = targetObject->position;
+	}
 
 	// Initalize State variables.
 	controller->currentState = startStateName;
@@ -209,6 +220,7 @@ State* AIM_FindState(char* stateName)
 		State* state = (State*)LL_Get(allStates, i);
 		if (state && strcmp(state->name, stateName) == 0)
 		{
+			printf("Found state %s!\n", state->name);
 			return state;
 		}
 	}

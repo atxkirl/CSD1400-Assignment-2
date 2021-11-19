@@ -207,7 +207,7 @@ void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList
 /// <param name="map -">The overall map that contains all nodes.</param>
 /// <param name="row -">Reference to the row of the estimated node. This function will assign the value of the estimated row to this.</param>
 /// <param name="col -">Reference to the column of the estimated node. This function will assign the value of the estimated column to this.</param>
-void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col)
+bool AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col)
 {
 	float deltaX, deltaY;
 	for (int r = 0; r < map->rows; ++r)
@@ -220,10 +220,93 @@ void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col)
 			{
 				*row = r;
 				*col = c;
-				return;
+				return true;
 			}
 		}
 	}
+	printf("Unable to find a Tile near position [%4.2f,%4.2f]!\n", position.x, position.y);
+	return false;
+}
+
+/// <summary>
+/// Returns the location of a valid floor Tile in a map.
+/// </summary>
+/// <param name="position -">World position to search around from.</param>
+/// <param name="map -">The overall map that contains all the nodes.</param>
+/// <param name="radiusMin -">Minimum radius from position.</param>
+/// <param name="radiusMax -">Maximum radius from position.</param>
+void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* map, int radiusMin, int radiusMax)
+{
+	// Pick a location around the position.
+	int dRow, dCol;
+	int negativeRow, negativeCol;
+	int row, col;
+	int detectInfLoop = 0;
+
+	// Get the row and column values of the Player.
+	if (!AStar_GetRowCol(epicenter, map, &row, &col))
+	{
+		printf("AStar_GetTile() was unable to get a valid Tile! Returning the input position instead.\n");
+		return;
+	}
+
+	// Look to find valid position in map
+	while (1)
+	{
+		if (detectInfLoop++ >= INFINITE_LOOP)
+		{
+			printf("WARNING! Stuck in an infinite loop!!!\n");
+			break;
+		}
+
+		dRow = RAND(radiusMin, radiusMax);
+		dCol = RAND(radiusMin, radiusMax);
+		negativeRow = RAND(0, 1);
+		negativeCol = RAND(0, 1);
+
+		// Look for valid row number
+		while (1)
+		{
+			if (negativeRow && (row - dRow) >= 0)
+			{
+				row -= dRow;
+				break;
+			}
+			else if ((row + dRow) < map->rows)
+			{
+				row += dRow;
+				break;
+			}
+			dRow = RAND(radiusMin, radiusMax);
+		}
+
+		// Look for valid col number
+		while (1)
+		{
+			if (negativeCol && (col - dCol) >= 0)
+			{
+				col -= dCol;
+				break;
+			}
+			else if ((col + dCol) < map->columns)
+			{
+				col += dCol;
+				break;
+			}
+			dCol = RAND(radiusMin, radiusMax);
+		}
+
+		// Check if the given row/col is a wall or not.
+		if (map->map[row][col].type == NODE_WALL)
+			continue;
+
+		// Passed all the tests, now we can set the target position!
+		printf("Found valid location!\n");
+		*returnPosition = map->map[row][col].position;
+		return;
+	}
+
+	printf("AStar_GetTile() was unable to get a valid Tile! Returning the input position instead.\n");
 }
 
 /// <summary>

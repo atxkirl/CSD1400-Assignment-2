@@ -72,74 +72,13 @@ void FSMState_BBEM_Roam_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 
 	// Set main variables.
 	controller->moveSpeed = roamSpeed;
+	
+	// Set the AI to target the Player
+	*controller->targetPosition = controller->targetObject->position;
 
-	// Pick a location around the Player.
-	int dRow = RAND(roamRadiusMin, roamRadiusMax);
-	int dCol = RAND(roamRadiusMin, roamRadiusMax);
-	int negativeRow = RAND(0, 1);
-	int negativeCol = RAND(0, 1);
-	int row, col;
-	AStar_GetRowCol(controller->targetObject->position, controller->map, &row, &col); // Get the row and column values of the Player.
-
-	// Look to find valid position in map
-	while (1)
-	{
-		// Look for valid row number
-		while (1)
-		{
-			if (negativeRow && (row - dRow) >= 0)
-			{
-				row -= dRow;
-				break;
-			}
-			else if ((row + dRow) < controller->map->rows)
-			{
-				row += dRow;
-				break;
-			}
-			else
-			{
-				dRow = RAND(roamRadiusMin, roamRadiusMax);
-			}
-		}
-
-		// Look for valid col number
-		while (1)
-		{
-			if (negativeCol && (col - dCol) >= 0)
-			{
-				col -= dCol;
-				break;
-			}
-			else if ((col + dCol) < controller->map->columns)
-			{
-				col += dCol;
-				break;
-			}
-			else
-			{
-				dCol = RAND(roamRadiusMin, roamRadiusMax);
-			}
-		}
-
-		// Check if the given row/col is a wall or not.
-		if (controller->map->map[row][col].type == NODE_WALL)
-		{
-			// Given node is a wall, recheck for new location!
-			dRow = RAND(roamRadiusMin, roamRadiusMax);
-			dCol = RAND(roamRadiusMin, roamRadiusMax);
-			negativeRow = RAND(0, 1);
-			negativeCol = RAND(0, 1);
-			continue;
-		}
-
-		// Passed all the tests, now we can set the target position!
-		printf("Found valid location!\n");
-		controller->targetPosition = &controller->map->map[row][col].position;
-		break;
-	}
-
-	// Calculate path to target position
+	// Get random position near the Player.
+	AStar_GetTile(controller->targetPosition , *controller->targetPosition, controller->map, roamRadiusMin, roamRadiusMax);
+	// Calculate path to target position.
 	AStar_GetPathWorldPosition(controller->controlledObject->position, *controller->targetPosition, &controller->movementPath, controller->map);
 }
 
@@ -184,7 +123,7 @@ void FSMState_BBEM_Chase_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 	controller->moveSpeed = chaseSpeed;
 
 	// Set AI to chase player.
-	controller->targetPosition = &controller->targetObject->position;
+	*controller->targetPosition = controller->targetObject->position;
 	AStar_GetPathWorldPosition(controller->controlledObject->position, *controller->targetPosition, &controller->movementPath, controller->map);
 	// Save the targetPosition.
 	controller->targetPrevPosition = *controller->targetPosition;
@@ -192,13 +131,12 @@ void FSMState_BBEM_Chase_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 
 void FSMState_BBEM_Chase_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 {
-
 }
 
 void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
 	// Keep track of Player position.
-	controller->targetPosition = &controller->targetObject->position;
+	*controller->targetPosition = controller->targetObject->position;
 
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
 	// Is Player too far from AI?
@@ -250,6 +188,9 @@ void FSMState_BBEM_Search_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 	printf("BBEM_Search_OnEnter()\n");
 
 	controller->moveSpeed = searchSpeed;
+
+	// Get how many spots the AI will "search" through.
+	controller->searchCount = RAND(searchMin, searchMax);
 }
 
 void FSMState_BBEM_Search_OnExit(FSM* controller, CP_Vector* newTargetPosition)
@@ -258,5 +199,23 @@ void FSMState_BBEM_Search_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 
 void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
-	// 
+	// If reached position, then get the next search position.
+	if (controller->movementPath == NULL)
+	{
+		if (controller->searchCount > 0)
+		{
+			printf("Hmm... Searching... Count = %d\n", controller->searchCount);
+
+			// Get the search location.
+			AStar_GetTile(controller->targetPosition, *controller->targetPosition, controller->map, roamRadiusMin, roamRadiusMax);
+			// Calculate path to search position.
+			AStar_GetPathWorldPosition(controller->controlledObject->position, *controller->targetPosition, &controller->movementPath, controller->map);
+
+			--controller->searchCount;
+		}
+		else
+		{
+			controller->nextState = "BBEM_Idle";
+		}
+	}
 }

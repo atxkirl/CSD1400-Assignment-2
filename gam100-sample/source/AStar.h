@@ -6,6 +6,7 @@
 #include <string.h>		// For memcpy()
 #include <math.h>		// For abs() and sqrt()
 #include "LinkedList.h"	// For LinkedLists
+#include "Helpers.h"	// For RAND
 #include "../CProcessing/inc/cprocessing.h"
 
 /*-------------------*/
@@ -71,6 +72,7 @@ static AStar_Node* neighbours[8];
 /// <param name="destRow">Node A's column.</param>
 /// <param name="destCol">Node B's column</param>
 static int Estimate(int currRow, int currCol, int destRow, int destCol);
+
 /// <summary>
 /// Clears the parents of all nodes within a list.
 /// </summary>
@@ -102,7 +104,16 @@ void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList
 /// <param name="map -">The overall map that contains all nodes.</param>
 /// <param name="row -">Reference to the row of the estimated node. This function will assign the value of the estimated row to this.</param>
 /// <param name="col -">Reference to the column of the estimated node. This function will assign the value of the estimated column to this.</param>
-void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col);
+bool AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col);
+
+/// <summary>
+/// Returns the location of a valid floor Tile in a map.
+/// </summary>
+/// <param name="position -">World position to search around from.</param>
+/// <param name="map -">The overall map that contains all the nodes.</param>
+/// <param name="radiusMin -">Minimum radius from position.</param>
+/// <param name="radiusMax -">Maximum radius from position.</param>
+void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* map, int radiusMin, int radiusMax);
 
 /// <summary>
 /// Initializes the value of a Node.
