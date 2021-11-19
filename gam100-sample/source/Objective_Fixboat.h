@@ -7,3 +7,5 @@ void OB_FixBoatTrigger();
 void OB_FixBoatUnTrigger();
 
 int OB_IsFixBoatComplete();
+int OB_IsFixBoatActive();
+void OB_SetFixBoatActive(int iSetter);

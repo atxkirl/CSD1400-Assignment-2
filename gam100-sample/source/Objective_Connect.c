@@ -17,7 +17,6 @@ float StartingScaleX, StartingScaleY;
 
 float screenWidth, screenHeight;
 CP_Vector initialPos;
-int isComplete;
 int isActive;
 
 void OB_SetPosition();
@@ -159,7 +158,6 @@ void OB_ConnectInit()
 	c->isTrigger = 1;
 
 	CreateConnectors();
-	isComplete = 0;
 	isActive = 0;
 	RedConnector_L->isEnabled = 0;
 	GreenConnector_L->isEnabled = 0;
@@ -212,59 +210,55 @@ void OB_ConnectUpdate()
 		CLM_Set(c, COL_POINT, NULL);
 	}
 
-	if (isActive > 0)
+	if (hold_Wire)
+	{
+		//StartingScaleX + CP_Input_GetMouseX() - initialPos.x
+		CP_Vector Distance = CP_Vector_Set(CP_Input_GetMouseX() - hold_Wire->position.x, CP_Input_GetMouseY() - hold_Wire->position.y);
+		hold_Wire->scale = CP_Vector_Set(CP_Vector_Length(Distance), 0.f);
+
+		float fAngle = CP_Vector_Angle(CP_Vector_Set(1.f, 0.f), Distance);
+		if (Distance.y > 0.f)
+			fAngle = 360.f - fAngle;
+		hold_Wire->rotation = fAngle;
+	}
+
+	if (CP_Input_MouseReleased(MOUSE_BUTTON_1))
 	{
 		if (hold_Wire)
 		{
-			//StartingScaleX + CP_Input_GetMouseX() - initialPos.x
-			CP_Vector Distance = CP_Vector_Set(CP_Input_GetMouseX() - hold_Wire->position.x, CP_Input_GetMouseY() - hold_Wire->position.y);
-			hold_Wire->scale = CP_Vector_Set(CP_Vector_Length(Distance), 0.f);
+			hold_Wire = NULL;
+			//iRedConnected = 0, BlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0
 
-			float fAngle = CP_Vector_Angle(CP_Vector_Set(1.f, 0.f), Distance);
-			if (Distance.y > 0.f)
-				fAngle = 360.f - fAngle;
-			hold_Wire->rotation = fAngle;
-		}
-
-		if (CP_Input_MouseReleased(MOUSE_BUTTON_1))
-		{
-			if (hold_Wire)
+			if (!iRedConnected)
 			{
-				hold_Wire = NULL;
-				//iRedConnected = 0, BlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0
-
-				if (!iRedConnected)
-				{
-					WireConnector_R->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
-					WireConnector_R->rotation = 0;
-				}
-				if (!iGreenConnected)
-				{
-					WireConnector_G->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
-					WireConnector_G->rotation = 0;
-				}
-				if (!iBlueConnected)
-				{
-					WireConnector_B->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
-					WireConnector_B->rotation = 0;
-				}
-				if (!iYellowConnected)
-				{
-					WireConnector_Y->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
-					WireConnector_Y->rotation = 0;
-				}
-
-				initialPos = CP_Vector_Set(0, 0);
+				WireConnector_R->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
+				WireConnector_R->rotation = 0;
 			}
-		}
+			if (!iGreenConnected)
+			{
+				WireConnector_G->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
+				WireConnector_G->rotation = 0;
+			}
+			if (!iBlueConnected)
+			{
+				WireConnector_B->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
+				WireConnector_B->rotation = 0;
+			}
+			if (!iYellowConnected)
+			{
+				WireConnector_Y->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
+				WireConnector_Y->rotation = 0;
+			}
 
-		if (iRedConnected && iBlueConnected && iGreenConnected && iYellowConnected)
-		{
-			Renderer* r = RM_GetComponent(OBJ_Title);
-			//r->text = "Complete!";
-			RM_SetText(r, "Complete!");
-			isComplete = 1;
+			initialPos = CP_Vector_Set(0, 0);
 		}
+	}
+
+	if (iRedConnected && iBlueConnected && iGreenConnected && iYellowConnected)
+	{
+		Renderer* r = RM_GetComponent(OBJ_Title);
+		//r->text = "Complete!";
+		RM_SetText(r, "Complete!");
 	}
 }
 
@@ -291,23 +285,22 @@ void OB_ConnectToggleActive()
 	cross->isEnabled = !cross->isEnabled;
 	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
 	isActive = !isActive;
-	isComplete = 0;
 	OB_SetPosition();
 }
 
 int OB_ConnectIsComplete()
 {
-	return isComplete;
+	return (iRedConnected && iBlueConnected && iGreenConnected && iYellowConnected);
+}
+
+int OB_ConnectGetActive()
+{
+	return isActive;
 }
 
 void OB_ConnectSetActive(int iSetter)
 {
 	isActive = iSetter;
-}
-
-void OB_ConnectSetComplete(int iSetter)
-{
-	isComplete = iSetter;
 }
 
 void CreateConnectors()

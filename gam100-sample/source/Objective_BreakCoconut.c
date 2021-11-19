@@ -10,6 +10,7 @@ const float obc_delayHit = 0.5f;
 GameObject* obc_cross;
 GameObject* obc_coconut;
 Renderer* r1, *r2, *r3, *r4;
+int isActive;
 
 void EnableImage(int _stage)
 {
@@ -86,9 +87,10 @@ void OB_BreakCoconutInit()
 	obc_cross->isEnabled = 0;
 	obc_stage = 0;
 	obc_canHit = 1;
+	isActive = 0;
 }
 void OB_BreakCoconutUpdate()
-{
+{	
 	static float et = 0.0f;
 	if (!obc_canHit)
 	{
@@ -106,6 +108,7 @@ void OB_BreakCoconutTrigger()
 	EnableImage(obc_stage);
 	obc_coconut->isEnabled = 1;
 	obc_cross->isEnabled = 1;
+	isActive = 1;
 }
 void OB_BreakCoconutUnTrigger()
 {
@@ -119,9 +122,20 @@ void OB_BreakCoconutUnTrigger()
 	obc_coconut->isEnabled = 0;
 	obc_cross->isEnabled = 0;
 	obc_canHit = 1;
+	isActive = 0;
 }
 
 int OB_IsBreakCoconutComplete()
 {
 	return obc_stage == obc_MAX_STAGE;
+}
+
+int OB_IsBreakCoconutActive()
+{
+	return isActive;
+}
+
+void OB_SetBreakCoconutActive(int iSetter)
+{
+	isActive = iSetter;
 }

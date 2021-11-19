@@ -8,51 +8,15 @@ GameObject* ofb_part2;
 GameObject* ofb_part3;
 GameObject* ofb_title, *ofb_cross;
 GameObject* ofb_UI;
-Renderer* ofb_fixed1;
-Renderer* ofb_fixed2;
-Renderer* ofb_fixed3;
+GameObject* ofb_boatfixed1;
+GameObject* ofb_boatfixed2;
+GameObject* ofb_boatfixed3;
 GameObject* ofb_brokenboat;
 GameObject* ofb_fix1Col, * ofb_fix2Col, *ofb_fix3Col;
 int ofb_isFixed1, ofb_isFixed2, ofb_isFixed3;
 GameObject* ofb_hold = NULL;
 #include <stdio.h>
-
-void FixBoatEnableImage()
-{
-	ofb_fixed1->isEnabled = ofb_isFixed1;
-	ofb_fixed2->isEnabled = ofb_isFixed2;
-	ofb_fixed3->isEnabled = ofb_isFixed3;
-}
-void FixBoatRandomisePartsTransform()
-{
-	float xlb = 0.325f, xub = 0.675f, ylb = 0.65f, yub = 0.75f;
-	float screenWidth, screenHeight;
-	RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
-
-	if (ofb_part1)
-	{
-		ofb_part1->position = CP_Vector_Set(screenWidth * CP_Random_RangeFloat(xlb, xub), screenHeight * CP_Random_RangeFloat(ylb, yub));
-		ofb_part1->rotation = CP_Random_RangeFloat(0.0f, 360.0f);
-		ofb_part1->scale = CP_Vector_Set(screenHeight * 0.2f, screenHeight * 0.2f);
-	}
-
-	if (ofb_part2)
-	{
-		ofb_part2->position = CP_Vector_Set(screenWidth * CP_Random_RangeFloat(xlb, xub),
-			screenHeight * CP_Random_RangeFloat(ylb, yub));
-		ofb_part2->rotation = CP_Random_RangeFloat(0.0f, 360.0f);
-		ofb_part2->scale = CP_Vector_Set(screenHeight * 0.2f, screenHeight * 0.2f); //sq
-	}
-
-	if (ofb_part3)
-	{
-		ofb_part3->position = CP_Vector_Set(screenWidth * CP_Random_RangeFloat(xlb, xub),
-			screenHeight * CP_Random_RangeFloat(ylb, yub));
-		ofb_part3->rotation = CP_Random_RangeFloat(0.0f, 360.0f);
-		ofb_part3->scale = CP_Vector_Set(screenHeight * 0.2f, screenHeight * 0.2f); //sq
-	}
-
-}
+int isActive;
 
 void OB_FixBoatOnCollision(Collider* left, Collider* right)
 {
@@ -74,25 +38,25 @@ void OB_FixBoatOnCollision(Collider* left, Collider* right)
 	{
 		if (strcmp(left->obj->tag, "ofb_part1") == 0 && strcmp(right->obj->tag, "fix1") == 0)
 		{
-			//SM_DeleteGameObject(left->obj);
-			//SM_DeleteGameObject(right->obj);
-			left->obj->isEnabled = 0;
-			right->obj->isEnabled = 0;
+			SM_DeleteGameObject(left->obj);
+			SM_DeleteGameObject(right->obj);
 			ofb_isFixed1 = 1;
+			ofb_boatfixed1->isEnabled = 1;
 		}
 		else if (strcmp(left->obj->tag, "ofb_part2") == 0 && strcmp(right->obj->tag, "fix2") == 0)
 		{
-			left->obj->isEnabled = 0;
-			right->obj->isEnabled = 0;
+			SM_DeleteGameObject(left->obj);
+			SM_DeleteGameObject(right->obj);
 			ofb_isFixed2 = 1;
+			ofb_boatfixed2->isEnabled = 1;
 		}
 		else if (strcmp(left->obj->tag, "ofb_part3") == 0 && strcmp(right->obj->tag, "fix3") == 0)
 		{
-			left->obj->isEnabled = 0;
-			right->obj->isEnabled = 0;
+			SM_DeleteGameObject(left->obj);
+			SM_DeleteGameObject(right->obj);
 			ofb_isFixed3 = 1;
+			ofb_boatfixed3->isEnabled = 1;
 		}
-		FixBoatEnableImage();
 
 		return;
 	}
@@ -143,25 +107,25 @@ void OB_FixBoatInit()
 	CP_Vector ofb_part3MatchPos = CP_Vector_Set(boatTopLeft.x + 24.0f * boatPixelScale.x, 
 		boatTopLeft.y + 33.0f * boatPixelScale.y);
 	CP_Vector partScale = CP_Vector_Set(10.0f * boatPixelScale.x, 2.0f * boatPixelScale.y); //horizontal
-	//=====
-	ofb_brokenboat = GOM_Create2(RECTANGLE, boatPos, 0, boatScale);
-
 	//==1==
-	ofb_fixed1 = RM_AddComponent(ofb_brokenboat);
-	ofb_fixed1->renderPriority = PRI_UI;
-	RM_LoadImage(ofb_fixed1, "Assets/boat/boatfix1.png");
-
+	ofb_boatfixed1 = GOM_Create2(RECTANGLE, boatPos , 0 , boatScale);
+	r = RM_AddComponent(ofb_boatfixed1);
+	r->renderPriority = PRI_UI;
+	RM_LoadImage(r, "Assets/boat/boatfix1.png");
 	ofb_fix1Col = GOM_Create2(RECTANGLE, ofb_part1MatchPos, 0, CP_Vector_Set(partScale.y, partScale.x));
 	ofb_fix1Col->tag = "fix1";
+	//r = RM_AddComponent(g);
+	//r->renderPriority = PRI_ofb_UI;
+	//r->color = CP_Color_Create(255, 0, 0, 180);
 	c = CLM_AddComponent(ofb_fix1Col);
 	CLM_Set(c, COL_BOX, OB_FixBoatOnCollision);
 	c->space = COLSPC_SCREEN;
 	c->isTrigger = 1;
 	//==2==
-	ofb_fixed2 = RM_AddComponent(ofb_brokenboat);
-	ofb_fixed2->renderPriority = PRI_UI;
-	RM_LoadImage(ofb_fixed2, "Assets/boat/boatfix2.png");
-
+	ofb_boatfixed2 = GOM_Create2(RECTANGLE, boatPos, 0, boatScale);
+	r = RM_AddComponent(ofb_boatfixed2);
+	r->renderPriority = PRI_UI;
+	RM_LoadImage(r, "Assets/boat/boatfix2.png");
 	ofb_fix2Col = GOM_Create2(RECTANGLE, ofb_part2MatchPos, 0, CP_Vector_Set(partScale.x, partScale.y));
 	ofb_fix2Col->tag = "fix2";
 	c = CLM_AddComponent(ofb_fix2Col);
@@ -169,10 +133,10 @@ void OB_FixBoatInit()
 	c->space = COLSPC_SCREEN;
 	c->isTrigger = 1;
 	//==3==
-	ofb_fixed3 = RM_AddComponent(ofb_brokenboat);
-	ofb_fixed3->renderPriority = PRI_UI;
-	RM_LoadImage(ofb_fixed3, "Assets/boat/boatfix3.png");
-
+	ofb_boatfixed3 = GOM_Create2(RECTANGLE, boatPos, 0, boatScale);
+	r = RM_AddComponent(ofb_boatfixed3);
+	r->renderPriority = PRI_UI;
+	RM_LoadImage(r, "Assets/boat/boatfix3.png");
 	ofb_fix3Col = GOM_Create2(RECTANGLE, ofb_part3MatchPos, 0, CP_Vector_Set(partScale.x, partScale.y));
 	ofb_fix3Col->tag = "fix3";
 	c = CLM_AddComponent(ofb_fix3Col);
@@ -180,15 +144,17 @@ void OB_FixBoatInit()
 	c->space = COLSPC_SCREEN;
 	c->isTrigger = 1;
 
-	
+	ofb_brokenboat = GOM_Create2(RECTANGLE, boatPos, 0, boatScale);
 	r = RM_AddComponent(ofb_brokenboat);
 	r->renderPriority = PRI_UI;
 	RM_LoadImage(r, "Assets/boat/brokenboat.png");
 
-	
+	float xlb = 0.325f, xub = 0.675f, ylb = 0.65f, yub = 0.75f;
 	//==1==
-	ofb_part1 = GOM_Create(RECTANGLE);
-
+	ofb_part1 = GOM_Create2(RECTANGLE, 
+		CP_Vector_Set(screenWidth * CP_Random_RangeFloat(xlb, xub), 
+			screenHeight * CP_Random_RangeFloat(ylb, yub)),
+		CP_Random_RangeFloat(0.0f, 359.9f), CP_Vector_Set(screenHeight * 0.2f, screenHeight * 0.2f));
 	ofb_part1->tag = "ofb_part1";
 	r = RM_AddComponent(ofb_part1);
 	r->renderPriority = PRI_UI;
@@ -200,7 +166,10 @@ void OB_FixBoatInit()
 	c->isTrigger = 1;
 	//==2==
 	ofb_part2 = GOM_Create(RECTANGLE);
-
+	ofb_part2->position = CP_Vector_Set(screenWidth * CP_Random_RangeFloat(xlb, xub),
+		screenHeight * CP_Random_RangeFloat(ylb, yub));
+	ofb_part2->rotation = CP_Random_RangeFloat(0.0f, 359.9f);
+	ofb_part2->scale = CP_Vector_Set(screenHeight * 0.2f, screenHeight * 0.2f); //sq
 	ofb_part2->tag = "ofb_part2";
 	r = RM_AddComponent(ofb_part2);
 	r->renderPriority = PRI_UI;
@@ -212,7 +181,10 @@ void OB_FixBoatInit()
 	c->isTrigger = 1;
 	//==3==
 	ofb_part3 = GOM_Create(RECTANGLE);
-
+	ofb_part3->position = CP_Vector_Set(screenWidth * CP_Random_RangeFloat(xlb, xub),
+		screenHeight * CP_Random_RangeFloat(ylb, yub));
+	ofb_part3->rotation = CP_Random_RangeFloat(0.0f, 359.9f);
+	ofb_part3->scale = CP_Vector_Set(screenHeight * 0.2f, screenHeight * 0.2f); //sq
 	ofb_part3->tag = "ofb_part3";
 	r = RM_AddComponent(ofb_part3);
 	r->renderPriority = PRI_UI;
@@ -223,11 +195,12 @@ void OB_FixBoatInit()
 	c->useScaleValue = 0; c->width = 50; c->height = 50;
 	c->isTrigger = 1;
 	
-	FixBoatRandomisePartsTransform();
+
+	isActive = 0;
 
 	ofb_title->isEnabled = ofb_UI->isEnabled = ofb_cross->isEnabled = 0;
 	ofb_brokenboat->isEnabled = 0;
-	FixBoatEnableImage();
+	ofb_boatfixed1->isEnabled = ofb_boatfixed2->isEnabled = ofb_boatfixed3->isEnabled = 0;
 	ofb_part1->isEnabled = ofb_part2->isEnabled = ofb_part3->isEnabled = 0;
 	ofb_isFixed1 = ofb_isFixed2 = ofb_isFixed3 = 0;
 	ofb_fix1Col->isEnabled = ofb_fix2Col->isEnabled = ofb_fix3Col->isEnabled = 0;
@@ -264,37 +237,38 @@ void OB_FixBoatTrigger()
 {
 	ofb_title->isEnabled = ofb_UI->isEnabled = ofb_cross->isEnabled = 1;
 	ofb_brokenboat->isEnabled = 1;
-	//ofb_isFixed1 ? ofb_boatfixed1->isEnabled = 1 :( ofb_part1->isEnabled = 1, ofb_boatfixed1->isEnabled = 0, ofb_fix1Col->isEnabled = 1);
-	//ofb_isFixed2 ? ofb_boatfixed2->isEnabled = 1 : (ofb_part2->isEnabled = 1, ofb_boatfixed2->isEnabled = 0, ofb_fix2Col->isEnabled = 1);
-	//ofb_isFixed3 ? ofb_boatfixed3->isEnabled = 1 : (ofb_part3->isEnabled = 1, ofb_boatfixed3->isEnabled = 0, ofb_fix3Col->isEnabled = 1);
-	if (ofb_part1) ofb_part1->isEnabled = 1;
-	if (ofb_part2) ofb_part2->isEnabled = 1;
-	if (ofb_part3) ofb_part3->isEnabled = 1;
-	if (ofb_fix1Col) ofb_fix1Col->isEnabled = 1;
-	if (ofb_fix2Col) ofb_fix2Col->isEnabled = 1;
-	if (ofb_fix3Col) ofb_fix3Col->isEnabled = 1;
-
-	ofb_isFixed1 = ofb_isFixed2 = ofb_isFixed3 = 0;
-	FixBoatEnableImage();
-	FixBoatRandomisePartsTransform();
+	ofb_isFixed1 ? ofb_boatfixed1->isEnabled = 1 :( ofb_part1->isEnabled = 1, ofb_boatfixed1->isEnabled = 0, ofb_fix1Col->isEnabled = 1);
+	ofb_isFixed2 ? ofb_boatfixed2->isEnabled = 1 : (ofb_part2->isEnabled = 1, ofb_boatfixed2->isEnabled = 0, ofb_fix2Col->isEnabled = 1);
+	ofb_isFixed3 ? ofb_boatfixed3->isEnabled = 1 : (ofb_part3->isEnabled = 1, ofb_boatfixed3->isEnabled = 0, ofb_fix3Col->isEnabled = 1);
+	isActive = 1;
 }
 
 void OB_FixBoatUnTrigger()
 {
 	ofb_title->isEnabled = ofb_UI->isEnabled = ofb_cross->isEnabled = 0;
 	ofb_brokenboat->isEnabled = 0;
-	ofb_isFixed1 = ofb_isFixed2 = ofb_isFixed3 = 0;
-	FixBoatEnableImage();
+	ofb_boatfixed1->isEnabled = ofb_boatfixed2->isEnabled = ofb_boatfixed3->isEnabled = 0;
 	if (ofb_part1) ofb_part1->isEnabled = 0;
 	if (ofb_part2) ofb_part2->isEnabled = 0;
 	if (ofb_part3) ofb_part3->isEnabled = 0;
 	if (ofb_fix1Col) ofb_fix1Col->isEnabled = 0;
 	if (ofb_fix2Col) ofb_fix2Col->isEnabled = 0;
 	if (ofb_fix3Col) ofb_fix3Col->isEnabled = 0;
+	isActive = 0;
 	ofb_hold = NULL;
 }
 
 int OB_IsFixBoatComplete()
 {
 	return ofb_isFixed1 && ofb_isFixed2 && ofb_isFixed3;
+}
+
+int OB_IsFixBoatActive()
+{
+	return isActive;
+}
+
+void OB_SetFixBoatActive(int iSetter)
+{
+	isActive = iSetter;
 }

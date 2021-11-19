@@ -107,43 +107,58 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
 
 void Objectives_Update()
 {
-    if (OB_ConnectIsComplete() == 1)
+    if (!OB_IsBreakCoconutActive() && !OB_ConnectGetActive() && !OB_IsFixBoatActive() && !iUpdatePlayer)
+        iUpdatePlayer = 1;
+
+    if (OB_ConnectIsComplete() == 1 && strcmp(gObjectives[iCurrentObjective]->tag, "Objective1Read") == 0)
     {
         gObjectives[iCurrentObjective]->tag = "Objective1Done";
     }
 
+    if (OB_IsFixBoatComplete() == 1 && strcmp(gObjectives[iCurrentObjective]->tag, "Objective2Read") == 0)
+    {
+        gObjectives[iCurrentObjective]->tag = "Objective2Done";
+    }
+
+    if (OB_IsBreakCoconutComplete() == 1 && strcmp(gObjectives[iCurrentObjective]->tag, "Objective3Read") == 0)
+    {
+        gObjectives[iCurrentObjective]->tag = "Objective3Done";
+    }
+
     if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective1Done") == 0)
     {
-        g_ObjectiveUI[iCurrentObjective]->position = vObjectiveOnePos;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective1Complete";
         rObjUI->renderPriority = PRI_UI;
-        iUpdatePlayer = 1;
 
         Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]); 
         RM_GetComponent(c->obj)->color.a = 0;
         CLM_RemoveGO(gObjectives[iCurrentObjective]);
-
-        OB_ConnectSetActive(0);
-        OB_ConnectSetComplete(0);
+        iUpdatePlayer = 1;
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective2Done") == 0)
     {
-        g_ObjectiveUI[iCurrentObjective]->position = vObjectiveOnePos;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective2Complete";
         rObjUI->renderPriority = PRI_UI;
+
+        Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]);
+        RM_GetComponent(c->obj)->color.a = 0;
+        CLM_RemoveGO(gObjectives[iCurrentObjective]);
         iUpdatePlayer = 1;
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective3Done") == 0)
     {
-        g_ObjectiveUI[iCurrentObjective]->position = vObjectiveOnePos;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective3Complete";
         rObjUI->renderPriority = PRI_UI;
+
+        Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]);
+        RM_GetComponent(c->obj)->color.a = 0;
+        CLM_RemoveGO(gObjectives[iCurrentObjective]);
         iUpdatePlayer = 1;
     }
 
