@@ -17,6 +17,7 @@
 #include "Colors.h"
 #include "SystemManager.h"
 #include "SceneManager.h"
+#include"Objectives.h"
 
 static GameObject* player = NULL;
 static GameObject* ObjectiveUI = NULL;
