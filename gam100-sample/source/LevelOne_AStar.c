@@ -17,13 +17,14 @@
 #include "Colors.h"
 #include "SystemManager.h"
 #include "SceneManager.h"
+#include"Objectives.h"
 
-static GameObject* gLOne = NULL;
+static GameObject* player = NULL;
 static GameObject* ObjectiveUI = NULL;
 
 static AStar_Map map;
 //TESTCODE
-Enemy* enemy1, * enemy2, * enemy3, * enemy4;
+FSM* enemy1, * enemy2, * enemy3, * enemy4;
 
 void LevelOneAStar_UI_render();
 void LevelOneAStar_GridColliderInit();
@@ -108,12 +109,12 @@ void LevelOneAStar_init(void)
         }
 
         // Player
-        gLOne = GOM_Create2(RECTANGLE, CP_Vector_Set(500, 500), 0.0f, CP_Vector_Set(50, 50));
-        gLOne->tag = "player";
-        SetPlayerPosition(gLOne->position.x, gLOne->position.y);
-        r = RM_AddComponent(gLOne);
+        player = GOM_Create2(RECTANGLE, CP_Vector_Set(462, 462), 0.0f, CP_Vector_Set(50, 50));
+        player->tag = "player";
+        SetPlayerPosition(player->position.x, player->position.y);
+        r = RM_AddComponent(player);
         RM_LoadImage(r, "Assets/bananaboi.png");
-        CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOneAStar_OnCollision);
+        CLM_Set(CLM_AddComponent(player), COL_BOX, LevelOneAStar_OnCollision);
         LevelOneAStar_GridColliderInit();
     }
 
@@ -127,9 +128,9 @@ void LevelOneAStar_init(void)
 
     // Enemies
     {
-        enemy1 = EM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), &map, gLOne);
-        enemy2 = EM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(594.f, 66.f), &map, gLOne);
-        enemy3 = EM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(594.f, 264.f), &map, gLOne);
+        enemy1 = AIM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
+        //enemy2 = AIM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
+        //enemy3 = AIM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
     }
 }
 
@@ -144,19 +145,19 @@ void LevelOneAStar_update(void)
     {
         if (CP_Input_KeyDown((enum CP_KEY)KEY_W))
         {
-            gLOne->position.y -= spd * dt;
+            player->position.y -= spd * dt;
         }
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
+        else if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
         {
-            gLOne->position.y += spd * dt;
+            player->position.y += spd * dt;
         }
         if (CP_Input_KeyDown((enum CP_KEY)KEY_A))
         {
-            gLOne->position.x -= spd * dt;
+            player->position.x -= spd * dt;
         }
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
+        else if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
         {
-            gLOne->position.x += spd * dt;
+            player->position.x += spd * dt;
         }
     }
 
@@ -172,7 +173,7 @@ void LevelOneAStar_update(void)
 
     SM_SystemsUpdate();
 
-    RM_SetCameraPosition(gLOne->position);
+    RM_SetCameraPosition(player->position);
     SM_SystemsLateUpdate();
 
     LevelOneAStar_UI_render();

@@ -48,8 +48,13 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 		printf("Warning! Starting or Ending node is NULL. [LinkedList* GetPath]\n");
 		return;
 	}
+	if (starting == ending)
+	{
+		printf("Warning! Starting and Ending node is the same. [LinkedList* GetPath]\n");
+		return;
+	}
 
-	printf("Calculating new path... Start [%.4f, %.4f]  End [%.4f, %.4f]\n", starting->position.x, starting->position.y, ending->position.x, ending->position.y);
+	printf("Calculating new path... Start [%d, %d]  End [%d, %d]\n", starting->row, starting->column, ending->row, ending->column);
 
 	LinkedList* openList = NULL; // List of nodes that we want to test.
 	LinkedList* closedList = NULL; // List of nodes that we've already tested.
@@ -98,10 +103,11 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 					printf("Circular parenting!\n");
 					break;
 				}
-
+				printf("path\n");
 				LL_Add(path, lowestF);
 				prevNode = lowestF;
 			}
+			LL_Reverse(path);
 
 			// Remove parents from all the nodes in these lists, to prevent any future parenting errors when calling for pathfinding.
 			OrphaniseList(*path);
@@ -116,6 +122,10 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 		// Get neighbouring nodes.
 		int lowestRow = lowestF->row;
 		int lowestCol = lowestF->column;
+
+		int cornerRow = lowestRow;
+		int cornerCol = lowestCol;
+
 		for (int i = 0; i < directions; ++i)
 		{
 			lowestRow = lowestF->row + deltaRow[i];
@@ -135,8 +145,15 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 			if (LL_ContainsPtr(closedList, neighbour))
 				continue;
 			// Make sure diagonal walls aren't crossed.
-			if ((&map->map[lowestRow][lowestCol + deltaHori[i]])->type == NODE_WALL || (&map->map[lowestRow + deltaVert[i]][lowestCol])->type == NODE_WALL)
-				continue;
+			cornerRow = lowestRow + deltaVert[i];
+			cornerCol = lowestCol + deltaCol[i];
+			// Don't do neighbour check if at map edge.
+			if (cornerRow > 0 && cornerRow < map->rows &&
+				cornerCol > 0 && cornerCol < map->columns)
+			{
+				if ((&map->map[lowestRow][cornerCol])->type == NODE_WALL || (&map->map[cornerRow][lowestCol])->type == NODE_WALL)
+					continue;
+			}
 
 			// Calculate costs for neighbouring nodes.
 			int gCost, hCost, fCost;
@@ -180,39 +197,16 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 /// <param name="map -">The overall map that contains all the nodes that we can traverse.</param>
 void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList** path, AStar_Map* map)
 {
-	AStar_Node* start = NULL;
-	AStar_Node* end = NULL;
-	float deltaX, deltaY;
+	int startRow, startCol, endRow, endCol;
+	startRow = startCol = endRow = endCol = -1;
 
-	for (int row = 0; row < map->rows; ++row)
+	AStar_GetRowCol(startPos, map, &startRow, &startCol);
+	AStar_GetRowCol(endPos, map, &endRow, &endCol);
+
+	if (startRow > -1 && startCol > -1 && endRow > -1 && endCol > -1)
 	{
-		if (start != NULL && end != NULL)
-			break;
-
-		for (int col = 0; col < map->columns; ++col)
-		{
-			// Found both start and end.
-			if (start != NULL && end != NULL)
-				break;
-
-			// Found starting node.
-			deltaX = (float)fabs((double)map->map[row][col].position.x - (double)startPos.x);
-			deltaY = (float)fabs((double)map->map[row][col].position.y - (double)startPos.y);
-			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
-			{
-				start = &map->map[row][col];
-			}
-			// Found end node.
-			deltaX = (float)fabs((double)map->map[row][col].position.x - (double)endPos.x);
-			deltaY = (float)fabs((double)map->map[row][col].position.y - (double)endPos.y);
-			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
-			{
-				end = &map->map[row][col];
-			}
-		}
+		AStar_GetPath(&map->map[startRow][startCol], &map->map[endRow][endCol], path, map);
 	}
-
-	AStar_GetPath(start, end, path, map);
 }
 
 /// <summary>
@@ -224,17 +218,18 @@ void AStar_GetPathWorldPosition(CP_Vector startPos, CP_Vector endPos, LinkedList
 /// <param name="col -">Reference to the column of the estimated node. This function will assign the value of the estimated column to this.</param>
 void AStar_GetRowCol(CP_Vector position, AStar_Map* map, int* row, int* col)
 {
+	float deltaX, deltaY;
 	for (int r = 0; r < map->rows; ++r)
 	{
 		for (int c = 0; c < map->columns; ++c)
 		{
-			// Found starting node.
-			float deltaX = (float)fabs((double)map->map[r][c].position.x - (double)position.x);
-			float deltaY = (float)fabs((double)map->map[r][c].position.y - (double)position.y);
+			deltaX = (float)fabs((double)map->map[r][c].position.x - (double)position.x);
+			deltaY = (float)fabs((double)map->map[r][c].position.y - (double)position.y);
 			if (deltaX < positionToNodeSnap && deltaY < positionToNodeSnap)
 			{
 				*row = r;
 				*col = c;
+				return;
 			}
 		}
 	}

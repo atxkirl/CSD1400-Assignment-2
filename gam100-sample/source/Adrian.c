@@ -16,7 +16,6 @@
 #include "../DetectMemoryLeak.h"
 #include "SystemManager.h"
 #include "AStar.h"
-#include "EnemyManager.h"
 #include "SceneManager.h"
 
 #define NODE_SIZE 30

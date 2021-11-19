@@ -6,7 +6,7 @@
 #include "FileParser.h"
 #include "Colors.h"
 #include "LevelEditor.h"
-
+#include "Objectives.h"
 
 #define UIHEIGHT 50.f
 #define UIWIDTH 300.f
@@ -14,10 +14,12 @@
 int iSize;
 float fPlayerPositionX;
 float fPlayerPositionY;
+int iNumObjectives;
 
 void LoaderInit()
 {
 	iSize = CP_System_GetWindowHeight() / NumGrids;
+	iNumObjectives = 0;
 
 	for (int i = 0; i < MAX_OBJECTIVES; i++)
 	{
@@ -175,6 +177,8 @@ void LoadObjectives(char* cInput)
 			{
 				int iRandom = rand() % MAX_OBJECTIVES;
 				snprintf(gLoadedGrids->gGrid[i][j]->tag, 30, "Objective%d", iRandom + 1);
+				printf("%s\n", gLoadedGrids->gGrid[i][j]->tag);
+				++iNumObjectives;
 			}
 		}
 	}
@@ -188,4 +192,9 @@ void SetObjectiveComplete(int iIndex, int iSetter)
 CP_Vector SetPlayerPosition()
 {
 	return CP_Vector_Set(fPlayerPositionX, fPlayerPositionY);
+}
+
+int GetNumObjectives()
+{
+	return iNumObjectives;
 }

@@ -10,5 +10,6 @@
 #define IS_BETWEEN_INC(a,x,b) (a <= x && x <= b)
 
 #define RAND(min, max) (rand() % (max - min + 1) + min)
+#define FRAND(min, max) (float)(rand() % (max - min + 1) + min)
 
 float GetTileScale();
