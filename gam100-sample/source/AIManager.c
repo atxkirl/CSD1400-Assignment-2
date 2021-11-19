@@ -62,43 +62,40 @@ void AIM_Update(void)
 			}
 		}
 
-
-#if _DEBUG
-		char str[100] = { 0 };
-		if (enemy)
+		// Debug Lines showing AI's Path
 		{
-
-			int di = 0;
-			if (enemy->movementPath)
+			char str[100] = { 0 };
+			if (enemy)
 			{
-				LinkedList* n = enemy->movementPath;
-				CP_Color c = CP_Color_Create(0, 0, 255, 255);
-				for (; n; n = n->next, di++)
+				int di = 0;
+				if (enemy->movementPath)
 				{
-					AStar_Node* an = (AStar_Node*)n->curr;
-					AStar_Node* ann = NULL;
-					if (n->next)
-						ann = (AStar_Node*)n->next->curr;
-					
-					if (an && ann)
+					LinkedList* n = enemy->movementPath;
+					CP_Color c = CP_Color_Create(255, 0, 0, 255);
+					for (; n; n = n->next, di++)
 					{
-						if (di > 12)
-							di = 0;
-						
-						CP_Color tc = CP_Color_Create(c.r, c.g + di * 20, (int)c.b - di * 20, c.a);
-						RM_DebugDrawLine(an->position, ann->position, PRI_GAME_OBJECT, tc);
+						AStar_Node* an = (AStar_Node*)n->curr;
+						AStar_Node* ann = NULL;
+						if (n->next)
+							ann = (AStar_Node*)n->next->curr;
+
+						if (an && ann)
+						{
+							if (di > 12)
+								di = 0;
+
+							CP_Color tc = CP_Color_Create(c.r - di * 20, c.g + di * 20, c.b, c.a);
+							RM_DebugDrawLine(an->position, ann->position, PRI_GAME_OBJECT, tc);
+						}
+
 					}
-
 				}
+
+
+				sprintf_s(str, 100, "%s\n%2d", enemy->currentState, LL_GetCount(enemy->movementPath));
+				RM_SetText(RM_GetComponent(enemy->controlledObject), str);
 			}
-
-
-			sprintf_s(str, 100, "%s\n%2d", enemy->currentState, LL_GetCount(enemy->movementPath));
-			RM_SetText(RM_GetComponent(enemy->controlledObject), str);
 		}
-
-
-#endif
 	}
 }
 

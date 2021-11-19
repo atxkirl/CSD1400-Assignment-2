@@ -25,6 +25,7 @@ struct FSM
 	// Target Variables:
 	GameObject* targetObject;		// The GameObject that this AI is tracking. Typically would be the Player.
 	CP_Vector* targetPosition;		// The Position of where the AI is supposed to go to. Typically would be set to targetObject's position, but can be changed to be a point in the map.
+	CP_Vector targetPrevPosition;	// The Position of targetPosition since last pathing update. Used to check if repathing is needed.
 
 	// State Variables:
 	StateFunctionPtr onEnter;		// Function pointer to the current state's OnEnter() function.
