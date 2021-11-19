@@ -140,12 +140,12 @@ void FSMState_BBEM_Roam_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 
 void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
-	//// Is Player too near me?
-	//float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	//if (distance <= (idleDetectionRadius * controller->tileSize))
-	//{
-	//	controller->nextState = "BBEM_Chase";
-	//}
+	// Is Player too near me?
+	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
+	if (distance <= (idleDetectionRadius * controller->tileSize))
+	{
+		controller->nextState = "BBEM_Chase";
+	}
 
 	// Reached destination?
 	if (controller->movementPath == NULL)

@@ -14,19 +14,95 @@
 #include "SystemManager.h"
 #include "Colors.h"
 
-static float digipenFadeSpeed = 150.f;
-static float digipenLogoTimer = 1.f;
+static float logoFadeSpeed = 250.f;
+static float logoWaitTimer = 0.5f;
 static float elapsedTime = 0.f;
-static int startCount = 0;
 
-static GameObject* digipen;
+static int digipenState;
+static int bananaState;
+
+// Digipen Logo
+static GameObject* digipenObj;
 static Renderer* digipenRenderer;
+// Team Logo
+static GameObject* bananaObj;
+static Renderer* bananaRenderer;
+
+void update_digipen(void)
+{
+    if (digipenState == 3)
+        return;
+
+    if (digipenState == 1)
+    {
+        elapsedTime += CP_System_GetDt();
+        if (elapsedTime > logoWaitTimer)
+        {
+            digipenState = 2;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    if(digipenState != 1)
+        digipenRenderer->color.a += (char)(CP_System_GetDt() * logoFadeSpeed); // Slowly increment alpha.
+
+    if (digipenRenderer->color.a > 250 && digipenState == 0)
+    {
+        logoFadeSpeed *= -1;
+        digipenState = 1;
+    }
+    if (digipenRenderer->color.a < 5 && digipenState == 2)
+    {
+        digipenRenderer->color.a = 0;
+        digipenState = 3;
+
+        elapsedTime = 0.f;
+        logoFadeSpeed *= -1;
+    }
+}
+
+void update_bananaboi(void)
+{
+    if (bananaState == 3)
+        return;
+
+    if (bananaState == 1)
+    {
+        elapsedTime += CP_System_GetDt();
+        if (elapsedTime > logoWaitTimer)
+        {
+            bananaState = 2;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    if (bananaState != 1)
+        bananaRenderer->color.a += (char)(CP_System_GetDt() * logoFadeSpeed); // Slowly increment alpha.
+
+    if (bananaRenderer->color.a > 250 && bananaState == 0)
+    {
+        logoFadeSpeed *= -1;
+        bananaState = 1;
+    }
+    if (bananaRenderer->color.a < 5 && bananaState == 2)
+    {
+        bananaRenderer->color.a = 0;
+        bananaState = 3;
+
+        elapsedTime = 0.f;
+        logoFadeSpeed *= -1;
+    }
+}
 
 void splashscreen_init(void)
 {
     SM_SystemsInit();
-
-    // Create Digipen Logo
     float screenWidth, screenHeight;
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
 
@@ -34,12 +110,25 @@ void splashscreen_init(void)
     Renderer* bgRenderer = RM_AddComponent(bg);
     bgRenderer->renderPriority = PRI_UI;
     bgRenderer->color = CP_Color_Create(0, 0, 0, 255);
-
-    digipen = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.25f));
-    digipenRenderer = RM_AddComponent(digipen);
+    
+    // Create Digipen Logo
+    digipenObj = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.25f));
+    digipenRenderer = RM_AddComponent(digipenObj);
     digipenRenderer->renderPriority = PRI_UI;
     digipenRenderer->color = CP_Color_Create(0, 0, 0, 0); // Start off as transparent.
     RM_LoadImage(digipenRenderer, "Assets/Logo_Digipen.png");
+
+    // Create BananaBoi Logo
+    bananaObj = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.35f));
+    bananaRenderer = RM_AddComponent(bananaObj);
+    bananaRenderer->renderPriority = PRI_UI;
+    bananaRenderer->color = CP_Color_Create(0, 0, 0, 0); // Start off as transparent.
+    RM_LoadImage(bananaRenderer, "Assets/Logo_BananaBoi.png");
+
+    // Initialize variables
+    digipenState = 0;
+    bananaState = 0;
+    elapsedTime = 0.f;
 }
 
 void splashscreen_update(void)
@@ -49,27 +138,17 @@ void splashscreen_update(void)
         SceneManager_ChangeSceneByName("mainmenu");
     }
 
-    if (startCount >= 0)
-    {
-        digipenRenderer->color.a += (char)(CP_System_GetDt() * digipenFadeSpeed); // Slowly increment alpha.
-    }
-    else if (startCount == -1)
-    {
-        elapsedTime += CP_System_GetDt();
-        if (elapsedTime > digipenLogoTimer)
-        {
-            digipenFadeSpeed *= -1;
-            startCount = 2;
-        }
-    }
-
-    if (startCount == 0 && digipenRenderer->color.a >= 245)
-    {
-        startCount = -1;
-    }
-    else if (startCount == 2 && digipenRenderer->color.a <= 10)
+    if (digipenState == 3 && bananaState == 3)
     {
         SceneManager_ChangeSceneByName("mainmenu");
+    }
+    else if (digipenState != 3)
+    {
+        update_digipen();
+    }
+    else
+    {
+        update_bananaboi();
     }
 
     SM_SystemsPreUpdate();
