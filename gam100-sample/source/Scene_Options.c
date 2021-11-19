@@ -5,6 +5,7 @@
 #include "Colors.h"
 #include "SystemManager.h"
 #include "FileParser.h"
+#include "Scene_Options.h"
 
 #define BUTTON_WIDTH 60.f
 #define BUTTON_HEIGHT 30.f
@@ -337,5 +338,14 @@ void SceneOptions_AssignKeyPress()
             iEditInteract = 0;
             return;
         }
+    }
+}
+
+void Options_LoadControls(char* controls)
+{
+    ReadControlsFromFile("Controls/controls.txt", cRightText);
+    for (int i = 0; i < (int)(sizeof(cRightText) / sizeof(*cRightText)); ++i)
+    {
+        controls[i] = cRightText[i];
     }
 }

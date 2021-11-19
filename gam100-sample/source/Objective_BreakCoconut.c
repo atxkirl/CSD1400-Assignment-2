@@ -109,8 +109,16 @@ void OB_BreakCoconutTrigger()
 }
 void OB_BreakCoconutUnTrigger()
 {
+	obc_stage = 0;
+	EnableImage(obc_stage);
+
+	//Animation* a = AM_GetComponent(obc_coconut);
+	//AM_SetShake(a, 5.0f, 0.35f, 1, 0);
+	//a->isEnabled = 0;
+
 	obc_coconut->isEnabled = 0;
 	obc_cross->isEnabled = 0;
+	obc_canHit = 1;
 }
 
 int OB_IsBreakCoconutComplete()

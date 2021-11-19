@@ -14,6 +14,7 @@
 #include "SystemManager.h"
 #include "Objective_Fixboat.h"
 #include "Objective_BreakCoconut.h"
+#include "Player.h"
 
 GameObject* g = NULL;
 int tempSize = 0;
@@ -85,6 +86,8 @@ void hy_OnCollision(Collider* left, Collider* right)
 void HongYu_init(void)
 {
     SM_SystemsInit();
+
+    PLY_CreatePlayer(90, 90);
 
     g = GOM_Create2(RECTANGLE, CP_Vector_Set(50, 20), 0.0f, CP_Vector_Set(50, 50));
     g->tag = "player";
@@ -184,26 +187,26 @@ void HongYu_update(void)
     SM_SystemsPreUpdate();
     RM_GetComponent(grass)->color.a = 255;
 
-    float dt = CP_System_GetDt();
-    float spd = 200.0f;
+    //float dt = CP_System_GetDt();
+    //float spd = 200.0f;
     //Collider* gc = CLM_GetComponent(g);
     //gc->velocity = CP_Vector_Set(0, 0);
-    if (CP_Input_KeyDown((enum CP_KEY)KEY_W))
-    {
-        g->position.y -= spd * dt;
-    }
-    if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
-    {
-        g->position.y += spd * dt;
-    }
-    if (CP_Input_KeyDown((enum CP_KEY)KEY_A))
-    {
-        g->position.x -= spd * dt;
-    }
-    if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
-    {
-        g->position.x += spd * dt;
-    }
+    //if (CP_Input_KeyDown((enum CP_KEY)KEY_W))
+    //{
+    //    g->position.y -= spd * dt;
+    //}
+    //if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
+    //{
+    //    g->position.y += spd * dt;
+    //}
+    //if (CP_Input_KeyDown((enum CP_KEY)KEY_A))
+    //{
+    //    g->position.x -= spd * dt;
+    //}
+    //if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
+    //{
+    //    g->position.x += spd * dt;
+    //}
     GameObject* clickPoint = NULL;
     if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
     {
@@ -235,8 +238,11 @@ void HongYu_update(void)
     RM_SetText(r, str);
     //r->text = str;
 
+
+    PLY_Update();
+
     SM_SystemsUpdate();
-    RM_SetCameraPosition(g->position);
+    //RM_SetCameraPosition(g->position);
     OB_FixBoatUpdate();
     OB_BreakCoconutUpdate();
     SM_SystemsLateUpdate();

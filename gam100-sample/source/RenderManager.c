@@ -14,7 +14,7 @@ CP_Vector cameraScale;
 float zoom = 1.0f;
 
 //private functions
-void RenderAllOfType(RENDER_PRIORITY type);
+void RenderAllInList(LinkedList* list);
 
 void RM_Init() 
 {
@@ -95,47 +95,63 @@ void RM_Clear()
 	LL_Clear(&debugLinesList);
 	matrixStack = MS_Clear(matrixStack);
 }
+
+CP_Matrix RM_GetViewMatrix()
+{
+	float w = (float)CP_System_GetWindowWidth();
+	float h = (float)CP_System_GetWindowHeight();
+	float hworld = WORLD_HEIGHT * zoom; //fit 500 grid in window height
+	float hratio = h / hworld;
+	RM_SetCameraScale(CP_Vector_Set(hratio, hratio));
+	//coz 0,0 is top left.
+	CP_Vector camFinalPos = CP_Vector_Subtract(cameraPos, CP_Vector_Set(w * 0.5f / cameraScale.x, h * 0.5f / cameraScale.y));
+	CP_Matrix view = CP_Matrix_Multiply(CP_Matrix_Scale(cameraScale), CP_Matrix_Translate(CP_Vector_Negate(camFinalPos)));
+	return view;
+}
 void RM_Render()
 {
 	CP_Graphics_ClearBackground(CP_Color_Create(37, 150, 190, 255));
 
-	float w = (float)CP_System_GetWindowWidth();
-	float h = (float)CP_System_GetWindowHeight();
-	//printf("%.0f %.0f\n", w, h);
-	float hworld = WORLD_HEIGHT * zoom; //fit 500 grid in window height
-	float hratio = h / hworld;
-	RM_SetCameraScale(CP_Vector_Set(hratio, hratio));
-	//CP_Vector sc = RM_GetCameraScale();
-	//printf("%f %f\n", sc.x, sc.y);
+	LinkedList* renderLayers[PRI_TOTAL] = { NULL };
+	LinkedList* node = renderObjects;
+	for (; node; node = node->next)
+	{
+		Renderer* r = (Renderer*)node->curr;
+		LL_Add(&renderLayers[r->renderPriority] ,r);
+	}
+
+	for (int i = 0; i < PRI_TOTAL; ++i)
+	{
+		if (i != PRI_UI)
+		{
+			CP_Settings_ApplyMatrix(RM_GetViewMatrix());
+			//MS_Translate(matrixStack, CP_Vector_Negate(cameraPos));
+
+			RenderAllInList(renderLayers[i]);
+			CP_Settings_ResetMatrix();
+		}
+		else
+		{
+			RenderAllInList(renderLayers[i]);
+		}
+
+	}
+
+
+	for (int i = 0; i < PRI_TOTAL; ++i)
+	{
+		LL_Clear(&renderLayers[i]);
+	}
+
 	
-	//coz 0,0 is top left.
-	CP_Vector camFinalPos = CP_Vector_Subtract(cameraPos, CP_Vector_Set(w * 0.5f / cameraScale.x, h * 0.5f / cameraScale.y));
-	CP_Matrix view = CP_Matrix_Multiply(CP_Matrix_Scale(cameraScale) , CP_Matrix_Translate(CP_Vector_Negate(camFinalPos)));
-	CP_Settings_ApplyMatrix(view);
-	//MS_Translate(matrixStack, CP_Vector_Negate(cameraPos));
-
-	RenderAllOfType(PRI_GAME_OBJECT);
-	CP_Settings_ResetMatrix();
-
-	//CP_Vector screenScale = CP_Vector_Set(1,1);
-	//hworld = SCREEN_HEIGHT;
-	//hratio = h / hworld;
-	//whratio = w / (float)h;
-	//wscale = whratio * hworld;
-	//screenScale = CP_Vector_Set(w / wscale, hratio);
-	//CP_Settings_ApplyMatrix(CP_Matrix_Scale(screenScale));
-
-	RenderAllOfType(PRI_UI);
-	//CP_Settings_ResetMatrix();
-
 #if _DEBUG
-	LinkedList* node = debugLinesList;
+	node = debugLinesList;
 	for (; node; node = node->next)
 	{
 		DebugLine* line = (DebugLine*)node->curr;
 		if (line->space == PRI_GAME_OBJECT)
 		{
-			CP_Settings_ApplyMatrix(view);
+			CP_Settings_ApplyMatrix(RM_GetViewMatrix());
 		}
 
 		CP_Settings_Stroke(line->color);
@@ -262,17 +278,17 @@ void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Co
 	LL_Add(&debugLinesList, line);
 }
 
-void RenderAllOfType(RENDER_PRIORITY type)
+void RenderAllInList(LinkedList* list)
 {
-	LinkedList* currNode = renderObjects;
+	LinkedList* currNode = list;
 	for (; currNode != NULL; currNode = currNode->next)
 	{
 		Renderer* r = (Renderer*)currNode->curr;
 		GameObject* go = (GameObject*)r->go;
 		if (!go->isEnabled || !r->isEnabled)
 			continue;
-		if (r->renderPriority != type)
-			continue;
+		//if (r->renderPriority != type)
+		//	continue;
 
 		CP_Settings_Fill(r->color);
 

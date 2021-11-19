@@ -30,6 +30,17 @@ typedef enum COMPONENT
 }COMPONENT;
 
 /*!
+@brief Struct to hold the object and delete after et overs delAfter
+@return void
+*/
+typedef struct DeleteAfter
+{
+	GameObject* go;
+	float et;
+	float delAfter;
+}DeleteAfter;
+
+/*!
 @brief Inits all systems
 @return void
 */
@@ -70,3 +81,11 @@ void* SM_GetComponent(GameObject*, COMPONENT);
 @return void
 */
 void SM_DeleteGameObject(GameObject*);
+
+/*!
+@brief Delete gameobject from all systems AFTER time in seconds
+@param g - gameobject clean delete
+@param t - to delete after this time has passed
+@return void
+*/
+void SM_DeleteGameObjectAfter(GameObject*, float);

@@ -17,8 +17,15 @@ this is the worldspace size vertically. rendering is based on this size.
 
 typedef enum RENDER_PRIORITY //lowest to highest
 {
-	PRI_GAME_OBJECT,
+	PRI_GAME_OBJECT, //lowest of lowest
+	PRI_MAP,
+	PRI_OBJ,
+	PRI_PLY,
+
+	//only this is for ui
 	PRI_UI,
+
+	PRI_TOTAL
 }RENDER_PRIORITY;
 
 

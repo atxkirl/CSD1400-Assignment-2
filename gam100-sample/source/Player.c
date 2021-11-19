@@ -6,6 +6,7 @@
 #include "SystemManager.h"
 #include "Player.h"
 #include "FileParser.h"
+#include "Scene_Options.h"
 
 #include <time.h>
 #include <stdbool.h>
@@ -166,8 +167,11 @@ void PLY_CreatePlayer(float x, float y) {
     player = GOM_Create2(RECTANGLE, CP_Vector_Set(x,y), 0.0f, CP_Vector_Set(50, 50)); //makes the player object
     player->tag ="player";
     render = RM_AddComponent(player);
+    render->renderPriority = PRI_PLY;
     RM_LoadImage(render, "Assets/bananaboi.png");
     CLM_Set(CLM_AddComponent(player),COL_BOX,Player_OnCollision);
+    Animation* a = AM_AddComponent(player);
+    AM_SetWalk(a);
 
     playerhealth = 3;
 
@@ -177,6 +181,8 @@ void PLY_CreatePlayer(float x, float y) {
     Renderer* r = RM_AddComponent(temp);
     RM_LoadImage(r, "Assets/fow.png");
     r->renderPriority = PRI_UI;
+
+    Options_LoadControls(cControls);
 } 
     
 void PLY_Update() { // handles input from player and checking for flags
@@ -189,9 +195,9 @@ void PLY_Update() { // handles input from player and checking for flags
         //  player controls
         if (CP_Input_KeyDown(cControls[0])) player->position.y -= currentSpd * dt; // up
 
-        if (CP_Input_KeyDown(cControls[1])) player->position.y += currentSpd * dt; // down
+        if (CP_Input_KeyDown(cControls[1])) player->position.x -= currentSpd * dt; // down
 
-        if (CP_Input_KeyDown(cControls[2])) player->position.x -= currentSpd * dt; // left
+        if (CP_Input_KeyDown(cControls[2])) player->position.y += currentSpd * dt; // left
 
         if (CP_Input_KeyDown(cControls[3])) player->position.x += currentSpd * dt; // right
     }

@@ -1,7 +1,8 @@
 #include "SystemManager.h"
 #include "LinkedList.h"
 
-LinkedList* delList = NULL;
+LinkedList* SM_delList = NULL;
+LinkedList* SM_timedDel = NULL;
 
 /*!
 @brief Delete gameobject from all systems
@@ -56,6 +57,28 @@ void SM_SystemsPreUpdate()
 		CLM_Set(c, COL_POINT, NULL);
 		c->space = COLSPC_SCREEN;
 	}
+
+	//triggers deletion for timeddeletes
+	LinkedList* node = SM_timedDel;
+	LinkedList* clr = NULL;
+	for (; node; node = node->next)
+	{
+		DeleteAfter* del = (DeleteAfter*)node->curr;
+		del->et += CP_System_GetDt();
+		if (del->et > del->delAfter)
+		{
+			SM_DeleteGameObject(del->go);
+			LL_Add(&clr, del);
+		}
+	}
+
+	node = clr;
+	for (; node; node = node->next)
+	{
+		LL_RemovePtr(&SM_timedDel, node->curr);
+		free(node->curr);
+	}
+	LL_Clear(&clr);
 }
 
 void SM_SystemsUpdate()
@@ -68,13 +91,13 @@ void SM_SystemsUpdate()
 
 void SM_SystemsLateUpdate()
 {
-	LinkedList* arr = delList;
+	LinkedList* arr = SM_delList;
 	for (; arr; arr = arr->next)
 	{
 		SM_DeleteFromAllSystems((GameObject*)(arr->curr));
 	}
-	LL_Clear(&delList);
-	//GOM_ClearTempObjects();
+	LL_Clear(&SM_delList);
+
 	RM_Render();
 	DM_LateUpdate();
 }
@@ -110,7 +133,20 @@ void* SM_GetComponent(GameObject* g, COMPONENT c)
 
 void SM_DeleteGameObject(GameObject* g)
 {
-	LL_Add(&delList, g);
+	LL_Add(&SM_delList, g);
+}
+
+void SM_DeleteGameObjectAfter(GameObject* g, float t)
+{
+	DeleteAfter* del = malloc(sizeof(DeleteAfter));
+	if (del)
+	{
+		del->go = g;
+		del->et = 0.0f;
+		del->delAfter = t;
+	}
+
+	LL_Add(&SM_timedDel, del);
 }
 
 

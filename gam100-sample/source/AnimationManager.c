@@ -1,7 +1,6 @@
-#include "AnimationManager.h"
+#include "SystemManager.h"
 #include "LinkedList.h"
 #include <stdlib.h>
-#include "RenderManager.h"
 #include <math.h>
 #include "Helpers.h"
 
@@ -78,6 +77,30 @@ void Update_ZoomAnimation(Animation* a, float dt)
 
 	
 }
+void Update_WalkAnimation(Animation* a, float dt)
+{
+	if (CP_Vector_Distance(a->oldPos, a->go->position) > FLT_EPS)
+	{
+		a->elapsedTime += dt;
+		if (a->elapsedTime > a->loopTime)
+		{
+			float t = 0.5f;
+			CP_Vector pos = a->go->position;
+			CP_Vector scale = CP_Vector_Set(20, 20);
+			pos.y += a->go->scale.y * 0.5f - scale.y * 0.3f;
+			float rot = CP_Random_RangeFloat(0.0f, 360.0f);
+			GameObject* p = GOM_Create2(RECTANGLE, pos, rot, scale);
+			Renderer* r = RM_AddComponent(p);
+			RM_LoadImage(r, "Assets/walkparticle.png");
+			Animation* ani = AM_AddComponent(p);
+			AM_SetZoom(ani, scale, CP_Vector_Set(2.f, 2.f), t * 2.0f, 0);
+			SM_DeleteGameObjectAfter(p, t);
+			a->elapsedTime = 0.0f;
+		}
+		a->oldPos = a->go->position;
+	}
+
+}
 
 
 
@@ -101,6 +124,9 @@ void AM_Update()
 			break;
 		case ANIM_ZOOM:
 			Update_ZoomAnimation(a, CP_System_GetDt());
+			break;
+		case ANIM_WALKSAND:
+			Update_WalkAnimation(a, CP_System_GetDt());
 			break;
 		default:
 			Update_SpriteAnimation(a, CP_System_GetDt());
@@ -176,6 +202,7 @@ void AM_Remove(Animation* a)
 
 void AM_SetSprite(Animation* a, int x, int y, int f, float fps)
 {
+	a->elapsedTime = 0.0f;
 	a->splitX = x;
 	a->splitY = y;
 	a->frameCount = f;
@@ -193,6 +220,7 @@ void AM_SetSprite(Animation* a, int x, int y, int f, float fps)
 
 void AM_SetShake(Animation* a, float rotateAngle, float loopTime, int loopCount, int isContinuous)
 {
+	a->elapsedTime = 0.0f;
 	a->rotateAngle = rotateAngle;
 	a->loopCount = loopCount;
 	a->loopTime = loopTime;
@@ -204,9 +232,18 @@ void AM_SetShake(Animation* a, float rotateAngle, float loopTime, int loopCount,
 
 void AM_SetZoom(Animation* a, CP_Vector defaultScale, CP_Vector targetScale, float scaleToTime, int isFlipped)
 {
+	a->elapsedTime = 0.0f;
 	a->defaultScale = defaultScale;
 	a->targetScale = targetScale;
 	a->scaleToTime = scaleToTime;
 	a->isFlipped = isFlipped;
 	a->type = ANIM_ZOOM;
+}
+
+void AM_SetWalk(Animation* a)
+{
+	a->type = ANIM_WALKSAND;
+	a->elapsedTime = 0.0f;
+	a->loopTime = 0.5f;
+	a->oldPos = a->go->position;
 }

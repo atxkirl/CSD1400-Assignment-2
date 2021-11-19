@@ -4,11 +4,14 @@
 #include "../CProcessing/inc/cprocessing.h"
 #include "GameObject.h"
 
+//Cam also use for particles generation. dw create so many manager class
+
 typedef enum ANIM_TYPE
 {
 	ANIM_SPRITE,
 	ANIM_SHAKE,
-	ANIM_ZOOM
+	ANIM_ZOOM,
+	ANIM_WALKSAND
 } ANIM_TYPE;
 //think as a big struct that holds all the values for any animation sad
 typedef struct Animation
@@ -35,6 +38,9 @@ typedef struct Animation
 	CP_Vector targetScale;
 	float scaleToTime;
 	int isFlipped;
+
+	//for walk animatino
+	CP_Vector oldPos;
 
 }Animation;
 
@@ -102,3 +108,10 @@ void AM_SetShake(Animation*, float, float, int, int);
 @return void
 */
 void AM_SetZoom(Animation*, CP_Vector, CP_Vector, float, int);
+
+/*!
+@brief Set a particle generator to generate particles when player walks/moves
+@param a - animation to be set
+@return void
+*/
+void AM_SetWalk(Animation*);
