@@ -122,42 +122,33 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 		// Get neighbouring nodes.
 		int lowestRow = lowestF->row;
 		int lowestCol = lowestF->column;
-
-		int cornerRow = lowestRow;
-		int cornerCol = lowestCol;
-
 		for (int i = 0; i < directions; ++i)
 		{
 			lowestRow = lowestF->row + deltaRow[i];
 			lowestCol = lowestF->column + deltaCol[i];
-			
+
 			// Do not look for neighbours if out of bounds.
 			if (lowestRow < 0 || lowestRow >= map->rows ||
 				lowestCol < 0 || lowestCol >= map->columns)
 				continue;
 
 			AStar_Node* neighbour = &map->map[lowestRow][lowestCol];
-			
+
 			// Skip walls.
 			if (neighbour->type == NODE_WALL)
 				continue;
 			// Skip nodes in the closed list, aka "already checked".
 			if (LL_ContainsPtr(closedList, neighbour))
 				continue;
-			// Make sure diagonal walls aren't crossed.
-			cornerRow = lowestRow + deltaVert[i];
-			cornerCol = lowestCol + deltaCol[i];
-			// Don't do neighbour check if at map edge.
-			if (cornerRow > 0 && cornerRow < map->rows &&
-				cornerCol > 0 && cornerCol < map->columns)
-			{
-				if ((&map->map[lowestRow][cornerCol])->type == NODE_WALL || (&map->map[cornerRow][lowestCol])->type == NODE_WALL)
-					continue;
-			}
+			// Check diagonal if they have walls for neighbours.
+			int cornerRow = lowestRow + deltaRowNeighbour[i];
+			int cornerCol = lowestCol + deltaColNeighbour[i];
+			if ((&map->map[lowestRow][cornerCol])->type == NODE_WALL || (&map->map[cornerRow][lowestCol])->type == NODE_WALL)
+				continue;
 
 			// Calculate costs for neighbouring nodes.
 			int gCost, hCost, fCost;
-			if (i % 2 == 0) 
+			if (i % 2 == 0)
 				gCost = lowestF->gCost + 14; // Diagonal nodes cost more than cardinal nodes.
 			else
 				gCost = lowestF->gCost + 10;

@@ -44,18 +44,18 @@ typedef struct
 
 static float const positionToNodeSnap = 33.f; // How close must a world position be to a node's position to count as "inside the node".
 
-static int directions = 8; // Number of directions to check around a node for it's neighbours.
-static int deltaRow[] = {-1, 0, 1, 1, 1, 0,-1,-1}; // Delta to offset a Node's row values by, to find neighbouring nodes.
-static int deltaCol[] = {-1,-1,-1, 0, 1, 1, 1, 0}; // Delta to offset a Node's column values by, to find neighbouring nodes.
-static int deltaVert[] = {-1, 0,-1, 0, 1, 0, 1, 0 }; // Delta to offset a diagonal Node's row values by, to find it's cardinal neighbours. Used for calculating diagonal wall pathing.
-static int deltaHori[] = { 1, 0,-1, 0,-1, 0, 1, 0 }; // Delta to offset a diagonal Node's column values by, to find it's cardinal neighbours. Used for calculating diagonal wall pathing.
+static const int directions = 8; // Number of directions to check around a node for it's neighbours.
+static const int deltaRow[] = { -1, 0, 1, 1, 1, 0,-1,-1 }; // Delta to offset a Node's row values by, to find neighbouring nodes.
+static const int deltaCol[] = { -1,-1,-1, 0, 1, 1, 1, 0 }; // Delta to offset a Node's column values by, to find neighbouring nodes.
+static const int deltaRowNeighbour[] = { 1, 0,-1, 0,-1, 0, 1 };
+static const int deltaColNeighbour[] = { 1, 0, 1, 0,-1, 0,-1 };
 static AStar_Node* neighbours[8];
 
-//static int directions = 4; // Number of directions to check around a node for it's neighbours.
-//static int deltaRow[] = { -1, 0, 0, 1 }; // Delta to offset a Node's row values by, to find neighbouring nodes.
-//static int deltaCol[] = { 0, -1, 1, 0 }; // Delta to offset a Node's column values by, to find neighbouring nodes.
-//static int deltaVert[] = { 0, 0, 0, 0}; // Delta to offset a diagonal Node's row values by, to find it's cardinal neighbours. Used for calculating diagonal wall pathing.
-//static int deltaHori[] = { 0, 0, 0, 0}; // Delta to offset a diagonal Node's column values by, to find it's cardinal neighbours. Used for calculating diagonal wall pathing.
+//static const int directions = 4; // Number of directions to check around a node for it's neighbours.
+//static const int deltaRow[] = { -1, 0, 0, 1 }; // Delta to offset a Node's row values by, to find neighbouring nodes.
+//static const int deltaCol[] = { 0, -1, 1, 0 }; // Delta to offset a Node's column values by, to find neighbouring nodes.
+//static const int deltaVert[] = { 0, 0, 0, 0}; // Delta to offset a diagonal Node's row values by, to find it's cardinal neighbours. Used for calculating diagonal wall pathing.
+//static const int deltaHori[] = { 0, 0, 0, 0}; // Delta to offset a diagonal Node's column values by, to find it's cardinal neighbours. Used for calculating diagonal wall pathing.
 //static AStar_Node* neighbours[4];
 
 

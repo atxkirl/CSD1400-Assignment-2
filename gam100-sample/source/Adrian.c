@@ -67,15 +67,6 @@ void Adrian_CallAStar(void)
 
 void Adrian_Render(void)
 {
-    gBackgroundColor = CP_Color_Create(128, 128, 128, 255);
-    gGridColor = CP_Color_Create(0, 0, 0, 255);
-
-    defaultColor = CP_Color_Create(128, 128, 128, 255);
-    startColor = CP_Color_Create(0, 255, 0, 255);
-    endColor = CP_Color_Create(255, 0, 0, 255);
-    wallColor = CP_Color_Create(0, 0, 0, 255);
-    pathColor = CP_Color_Create(255, 255, 255, 255);
-
     // Clear the window.
     CP_Graphics_ClearBackground(gBackgroundColor);
 
@@ -188,7 +179,7 @@ void Adrian_Input(void)
         int cellX = (int)(gMousePositionX / gCellWidth);
         int cellY = (int)(gMousePositionY / gCellHeight);
 
-        if (map.map[cellY][cellX].type == NODE_WALL)
+        if (map.map[cellY][cellX].type != NODE_DEFAULT)
         {
             map.map[cellY][cellX].type = NODE_DEFAULT;
         }
@@ -230,6 +221,15 @@ void Adrian_init(void)
     gWindowHeight = (float)CP_System_GetWindowHeight();
     gCellHeight = gWindowHeight / NODE_SIZE;
     gCellWidth = gWindowWidth / NODE_SIZE;
+
+    gBackgroundColor = CP_Color_Create(128, 128, 128, 255);
+    gGridColor = CP_Color_Create(0, 0, 0, 255);
+
+    defaultColor = CP_Color_Create(128, 128, 128, 255);
+    startColor = CP_Color_Create(0, 255, 0, 255);
+    endColor = CP_Color_Create(255, 0, 0, 255);
+    wallColor = CP_Color_Create(0, 0, 0, 255);
+    pathColor = CP_Color_Create(255, 255, 255, 255);
 
     // Allocate Memory for map.
     AStar_InitializeMap(&map, 30, 30);

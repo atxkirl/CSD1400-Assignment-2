@@ -69,7 +69,6 @@ void game_init(void)
     //GameObject* g = 
     GOM_Create2(CIRCLE,
         CP_Vector_Set(20, 20), 0.0f, CP_Vector_Set(20, 20));
-    Collider* c = NULL;
 
     float screenWidth, screenHeight;
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
@@ -79,15 +78,17 @@ void game_init(void)
     bgr->renderPriority = PRI_UI;
     RM_LoadImage(bgr, "Assets/BananaBoi_Title.jpg");
 
+    GameObject* button;
+    Renderer* r;
+
 #if _DEBUG
-    GameObject* button = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(80.0f, 25.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
-    Renderer* r = RM_AddComponent(button);
+    button = GOM_Create2(RECTANGLE, CP_Vector_Set(80.0f, 25.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
+    r = RM_AddComponent(button);
     button->tag = "marcus"; //For collision
     r->renderPriority = PRI_UI;
     //r->text = "marcus";
     RM_SetText(r, "marcus");
-    c = CLM_AddComponent(button);
+    Collider* c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, game_OnCollision);
     c->space = COLSPC_SCREEN;
 

@@ -63,7 +63,7 @@ void FSMState_BBEM_Idle_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 // - HOWEVER, if Player walks within a certain radius, the AI will change to CHASE state.
 
 static const float roamSpeed = 100.f;
-static const int roamRadiusMin = 1;
+static const int roamRadiusMin = 1;		// Minimum radius around player.
 static const int roamRadiusMax = 2;
 
 void FSMState_BBEM_Roam_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
@@ -242,6 +242,8 @@ void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 // - HOWEVER, if Player is found, the AI will change to CHASE state.
 
 static const float searchSpeed = 100.f;
+static const int searchMin = 1;
+static const int searchMax = 3;
 
 void FSMState_BBEM_Search_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 {
@@ -256,5 +258,5 @@ void FSMState_BBEM_Search_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 
 void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
-	//
+	// 
 }

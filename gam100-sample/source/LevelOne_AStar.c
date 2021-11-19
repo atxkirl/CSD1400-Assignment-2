@@ -129,8 +129,8 @@ void LevelOneAStar_init(void)
     // Enemies
     {
         enemy1 = AIM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
-        //enemy2 = AIM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
-        //enemy3 = AIM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
+        //enemy2 = AIM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(598.f, 66.f), player, &map);
+        //enemy3 = AIM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(698.f, 66.f), player, &map);
     }
 }
 

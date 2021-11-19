@@ -50,7 +50,6 @@ void AIM_Update(void)
 			if (CP_Vector_Length(distance) <= (distanceTillReached * enemy->tileSize))
 			{
 				enemy->movementPath = enemy->movementPath->next;
-				printf("Reached a node.\n");
 			}
 			else
 			{
@@ -58,7 +57,6 @@ void AIM_Update(void)
 				direction = CP_Vector_Normalize(direction);
 
 				enemy->controlledObject->position = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(direction, enemy->moveSpeed * CP_System_GetDt()));
-				printf("Moving AI! Speed = %.2f\n", enemy->moveSpeed);
 			}
 		}
 
@@ -166,6 +164,7 @@ void AIM_InitFSM(FSM* controller, char* startStateName, GameObject* targetObject
 	else
 		controller->targetPosition = NULL;
 	controller->tileSize = GetTileScale();
+	controller->searchCount = 0;
 
 	// Initalize State variables.
 	controller->currentState = startStateName;
