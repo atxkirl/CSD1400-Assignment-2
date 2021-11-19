@@ -254,11 +254,12 @@ int CLM_GetIndex(Collider* c)
 }
 void CLM_Update()
 {
-	void** objArray = LL_ToArray(CLM_objects);
-	int size = LL_GetCount(CLM_objects);
-	for (int i = 0; i < size; ++i)
+	//void** objArray = LL_ToArray(CLM_objects);
+	//int size = LL_GetCount(CLM_objects);
+	LinkedList* node = CLM_objects;
+	for (; node; node = node->next)
 	{
-		Collider* left = (Collider*)objArray[i];
+		Collider* left = (Collider*)node->curr;
 		if (left->useScaleValue)
 		{
 			left->radius = left->obj->scale.x * 0.5f;
@@ -267,9 +268,9 @@ void CLM_Update()
 		}
 		if (!left->isEnabled || !left->obj->isEnabled)
 			continue;
-		for (int j = i + 1; j < size; ++j)
+		for (LinkedList* rightNode = node->next; rightNode; rightNode = rightNode ->next)
 		{
-			Collider* right = (Collider*)objArray[j];
+			Collider* right = (Collider*)rightNode->curr;
 			if (right->useScaleValue)
 			{
 				right->radius = right->obj->scale.x * 0.5f;

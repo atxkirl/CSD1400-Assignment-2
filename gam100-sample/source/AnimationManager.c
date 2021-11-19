@@ -110,11 +110,12 @@ void AM_Init()
 
 void AM_Update()
 {
-	int count = LL_GetCount(animationList);
-	void** arr = LL_ToArray(animationList);
-	for (int i = 0; i < count; ++i)
+	//int count = LL_GetCount(animationList);
+	//void** arr = LL_ToArray(animationList);
+	LinkedList* node = animationList;
+	for (; node; node = node->next)
 	{
-		Animation* a = arr[i];
+		Animation* a = (Animation*) node->curr;
 		if (!a->isEnabled || !a->go->isEnabled)
 			continue;
 		switch (a->type)
@@ -132,7 +133,6 @@ void AM_Update()
 			Update_SpriteAnimation(a, CP_System_GetDt());
 			break;
 		}
-		
 	}
 }
 

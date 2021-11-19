@@ -285,17 +285,17 @@ void LL_Reverse(LinkedList** ll)
 	}
 	*ll = last;
 }
-void** LL_ToArray(LinkedList* ll)
-{
-	if (LL_IsEmpty(ll))
-		return NULL;
-	int count = LL_GetCount(ll);
-	void** ret = (void**)calloc(count, sizeof(void*));
-	LinkedList* node = ll;
-	for (int i = 0; i < count; ++i, node = node->next)
-	{
-		if (ret)
-			ret[i] = node->curr;
-	}
-	return ret;
-}
+//void** LL_ToArray(LinkedList* ll)
+//{
+//	if (LL_IsEmpty(ll))
+//		return NULL;
+//	int count = LL_GetCount(ll);
+//	void** ret = (void**)calloc(count, sizeof(void*));
+//	LinkedList* node = ll;
+//	for (int i = 0; i < count; ++i, node = node->next)
+//	{
+//		if (ret)
+//			ret[i] = node->curr;
+//	}
+//	return ret;
+//}
