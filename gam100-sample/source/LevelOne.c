@@ -42,7 +42,7 @@ void LevelOne_init(void)
     PLY_CreatePlayer(90.f, 90.f);
 
     //load level and objectives
-    LoadGrid("level01", 0);
+    LoadGrid("Level01", 0);
     Objectives_Init(screenWidth, screenHeight);
     Objectives_RenderUI();
 

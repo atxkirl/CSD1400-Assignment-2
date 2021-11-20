@@ -13,6 +13,18 @@
 #define RCLICK_SHIFT "RCLICK_SHIFT"
 #define RCLICK_CTRL "RCLICK_CTRL"
 
+// SPACEBAR to auto generate grid
+// ENTER to save grid to txt
+// wasd to move
+// 1 2 to zoom in and out
+// 3 to Load Map
+// 4 to toggle tile mode
+// Q E to change GameObject Type
+// Q E + LSHIFT to change GameObject Direction
+// LEFT CLICK to set tile, RIGHT CLICK to delete tile
+// LEFT CLICK + SHIFT to set direction, RIGHT CLICK + SHIFT to reset direction
+// LEFT CLICK + CTRL to set PlayerSpawn, RIGHT CLICK + CTRL to set Objectives
+
 int iSize;
 OBJECT_TYPE objType;
 OBJECT_DIRECTION objDirection;
@@ -24,25 +36,49 @@ CP_Vector vScale;
 CP_Matrix mScale;
 
 Grid gGrids;
+Grid gObjectGrids;
 int iAutoGenerate;
 
 extern GameObject *GameObjectList;
 Renderer* renderImage;
 
+int isTileMode;
+
 void CheckGridInt(int iX, int iY, int iObjType)
 {
-	if (gGrids.gGrid[iY][iX]->type != iObjType)
+	if (isTileMode)
 	{
-		gGrids.gGrid[iY][iX]->type = iObjType;
+		if (gGrids.gGrid[iY][iX]->type != iObjType)
+		{
+			gGrids.gGrid[iY][iX]->type = iObjType;
+		}
+	}
+	else
+	{
+		if (gObjectGrids.gGrid[iY][iX]->type != iObjType && (iObjType == GRASS || iObjType == CORAL))
+		{
+			gObjectGrids.gGrid[iY][iX]->type = iObjType;
+		}
 	}
 }
 
 void AssignDirectionInt(int iX, int iY, int iDirection)
 {
-	if (gGrids.gGrid[iY][iX]->oDirection != iDirection)
+	if (isTileMode)
 	{
-		gGrids.gGrid[iY][iX]->oDirection = iDirection;
-		gGrids.gGrid[iY][iX]->rotation = gGrids.gGrid[iY][iX]->oDirection * 90.f;
+		if (gGrids.gGrid[iY][iX]->oDirection != iDirection)
+		{
+			gGrids.gGrid[iY][iX]->oDirection = iDirection;
+			gGrids.gGrid[iY][iX]->rotation = gGrids.gGrid[iY][iX]->oDirection * 90.f;
+		}
+	}
+	else
+	{
+		if (gObjectGrids.gGrid[iY][iX]->oDirection != iDirection)
+		{
+			gObjectGrids.gGrid[iY][iX]->oDirection = iDirection;
+			gObjectGrids.gGrid[iY][iX]->rotation = gObjectGrids.gGrid[iY][iX]->oDirection * 90.f;
+		}
 	}
 }
 
@@ -159,7 +195,28 @@ void LevelEditorInit()
 		}
 	}
 
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			//gGrids.gGrid[i][j] = isFLOOR;
+			GameObject* go = GOM_Create(EMPTY);
+			Renderer* r = RM_AddComponent(go);
+			go->position = CP_Vector_Set(j * vScale.x * iSize, i * vScale.y * iSize);
+			go->scale = CP_Vector_Set(vScale.x, vScale.y);
+			go->oDirection = UP * 90.0f;
+			r->color = CP_Color_Create(255, 255, 0, 255);
+			gObjectGrids.gGrid[i][j] = go;
+			go->tag = "object";
+			Collider* c = CLM_AddComponent(go);
+			CLM_Set(c, COL_BOX, LevelEditor_OnClickGrid);
+			c->isLockedPos = 1;
+			c->layer = COLLAY_WALL;
+		}
+	}
+
 	iAutoGenerate = 0;
+	isTileMode = 1;
 
 	RM_SetCameraPosition(CP_Vector_Set(WORLD_HEIGHT * 0.5f, WORLD_HEIGHT * 0.5f));
 
@@ -228,7 +285,7 @@ void LevelEditorUpdate()
 		}
 		else
 		{
-			objType = (++objType >= TYPE_END) ? 0 : objType;
+			objType = (--objType < 0) ? TYPE_END - 1 : objType;
 			PrintCurrentType(objType);
 		}
 	}
@@ -242,7 +299,7 @@ void LevelEditorUpdate()
 		}
 		else
 		{
-			objType = (--objType < 0) ? TYPE_END - 1 : objType;
+			objType = (++objType >= TYPE_END) ? 0 : objType;
 			PrintCurrentType(objType);
 		}
 	}
@@ -302,6 +359,12 @@ void LevelEditorUpdate()
 	if (CP_Input_KeyTriggered(KEY_3))
 	{
 		LoadSavedMap();
+	}
+
+	if (CP_Input_KeyTriggered(KEY_4))
+	{
+		isTileMode = !isTileMode;
+		printf("%s\n", (isTileMode != 0 ? "Tile Mode!" : "Object Mode!"));
 	}
 
 	//PlaceObject();
@@ -443,8 +506,8 @@ void CheckGrid(float fMouseX, float fMouseY, int iObjType)
 */
 void SaveGrid()
 {
-	//450, 30
-	char **GridObj = malloc(sizeof(char*) * 900);
+	char cFileName[50];
+	char** GridObj = malloc(sizeof(char*) * 900);
 
 	for (int i = 0; i < 900; i++)
 	{
@@ -506,7 +569,6 @@ void SaveGrid()
 
 	if (GridObj != NULL)
 	{
-		char cFileName[50];
 		char cFileLocation[100] = { "Levels/" };
 
 		printf("Input a file name: ");
@@ -517,6 +579,87 @@ void SaveGrid()
 		printf("%s \n", cFileLocation);
 		WriteToFile(cFileLocation, GridObj, 900);
 	}
+
+	char** GridObjects = malloc(sizeof(char*) * 900);
+	for (int i = 0; i < 900; i++)
+	{
+		if (GridObjects)
+		{
+			GridObjects[i] = malloc(sizeof(char) * 70);
+
+			if (GridObjects[i])
+			{
+				GridObjects[i][0] = '\0';
+			}
+		}
+	}
+
+	iObjNum = 0;
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			if (gObjectGrids.gGrid[i][j]->type != EMPTY && iObjNum < 900)
+			{
+				char ObjType[10];
+				char ObjPosX[10];
+				char ObjPosY[10];
+				char cObjDirection[30];
+				if (GridObjects)
+				{
+					if (GridObjects[iObjNum])
+					{
+						sprintf_s(ObjType, 10, "%d", gObjectGrids.gGrid[i][j]->type);
+						strcpy_s(GridObjects[iObjNum], 70, ObjType); //type
+						strcat_s(GridObjects[iObjNum], 70, ",");
+
+						sprintf_s(ObjPosX, 10, "%d", j);
+						strcat_s(GridObjects[iObjNum], 70, ObjPosX); // x
+						strcat_s(GridObjects[iObjNum], 70, ",");
+
+						sprintf_s(ObjPosY, 10, "%d", i);
+						strcat_s(GridObjects[iObjNum], 70, ObjPosY); // y
+						strcat_s(GridObjects[iObjNum], 70, ",");
+						printf("%s\n", GridObjects[iObjNum]);
+
+						sprintf_s(cObjDirection, 10, "%d", (int)gObjectGrids.gGrid[i][j]->oDirection);
+						strcat_s(GridObjects[iObjNum], 70, cObjDirection); // dir
+						strcat_s(GridObjects[iObjNum], 70, ",");
+
+						sprintf_s(cObjDirection, 30, "%s", gObjectGrids.gGrid[i][j]->tag);
+						strcat_s(GridObjects[iObjNum], 70, cObjDirection); // tag
+						strcat_s(GridObjects[iObjNum], 70, "\n");
+
+						iObjNum++;
+					}
+				}
+			}
+		}
+	}
+
+	if (GridObjects != NULL)
+	{
+		char cObjectFileLocation[100] = { "Objects/" };
+		strcat_s(cObjectFileLocation, 100, cFileName);
+		printf("%s \n", cObjectFileLocation);
+		WriteToFile(cObjectFileLocation, GridObjects, 900);
+	}
+
+
+	for (int i = 0; i < 900; i++)
+	{
+		if (GridObj)
+		{
+			free(GridObj[i]);
+		}
+
+		if (GridObjects)
+		{
+			free(GridObjects[i]);
+		}
+	}
+	free(GridObj);
+	free(GridObjects);
 }
 
 void AutoGenerateGrid()
@@ -900,6 +1043,30 @@ void PrintCurrentType(int iObjType)
 	case(LINE):
 		printf("Object Type: LINE\n");
 		break;
+
+	case(FLOOR_MIDDLE):
+		printf("Object Type: FLOOR_MIDDLE\n");
+		break;
+
+	case(THREE_CORNER):
+		printf("Object Type: THREE_CORNER\n");
+		break;
+
+	case(PLAYER_SPAWN):
+		printf("Object Type: PLAYER_SPAWN\n");
+		break;
+
+	case(ENEMY_SPAWN):
+		printf("Object Type: ENEMY_SPAWN\n");
+		break;
+
+	case(CORAL):
+		printf("Object Type: CORAL\n");
+		break;
+
+	case(GRASS):
+		printf("Object Type: GRASS\n");
+		break;
 	default:
 		break;
 	}
@@ -958,8 +1125,6 @@ void LoadTileImage()
 			{
 			case(WALL):
 				RM_LoadImage(renderImage, "Assets/W.png");
-				//CP_Settings_Fill(CP_Color_Create(255, 0, 128, 225)); // r, g, b, a
-				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
 
 			case(FLOOR_MIDDLE):
@@ -976,13 +1141,33 @@ void LoadTileImage()
 
 			case(CORNER):
 				RM_LoadImage(renderImage, "Assets/C.png");
-				//CP_Settings_Fill(CP_Color_Create(255, 128, 0, 225)); // r, g, b, a
-				//CP_Graphics_DrawRect((float)j * iSize + fMoveX, (float)i * iSize + fMoveY, (float)iSize, (float)iSize);
 				break;
 
 			case(WATER):
-			case(EMPTY):
 				RM_LoadImage(renderImage, "Assets/sand-tiles/sea-tile-1.png");
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			gObjectGrids.gGrid[i][j]->scale.x = 16.f;
+			gObjectGrids.gGrid[i][j]->scale.y = 16.f;
+			renderImage = RM_GetComponent(gObjectGrids.gGrid[i][j]);
+			switch (gObjectGrids.gGrid[i][j]->type)
+			{
+			case(CORAL):
+				RM_LoadImage(renderImage, "Assets/redcoral.png");
+				break;
+
+			case(GRASS):
+				RM_LoadImage(renderImage, "Assets/tempgrass.png");
 				break;
 
 			default:
@@ -994,19 +1179,22 @@ void LoadTileImage()
 
 void LoadSavedMap()
 {
-	char cFileLocation[100] = { "Levels/" };
+	char cLevelFileLocation[100] = { "Levels/" };
+	char cObjectFileLocation[100] = { "Objects/" };
 	char* cInput = malloc(sizeof(char) * 50);
 	printf("Open File: ");
 	scanf_s("%s", cInput, 50);
 
 	if (cInput)
 	{
-		strcat_s(cFileLocation, 100, cInput);
-		strcat_s(cFileLocation, 100, ".txt");
+		strcat_s(cLevelFileLocation, 100, cInput);
+		strcat_s(cLevelFileLocation, 100, ".txt");
+		strcat_s(cObjectFileLocation, 100, cInput);
+		strcat_s(cObjectFileLocation, 100, ".txt");
 	}
 
 	Map* objList = new_Map();
-	ReadLevelFromFile(cFileLocation, objList);
+	ReadLevelFromFile(cLevelFileLocation, objList);
 	Renderer* r;
 	for (int i = 0; i < objList->iSize; i++)
 	{
@@ -1034,32 +1222,35 @@ void LoadSavedMap()
 			}
 		}
 	}
+
+	Map* objList2 = new_Map();
+	ReadLevelFromFile(cObjectFileLocation, objList2);
+	for (int i = 0; i < objList2->iSize; i++)
+	{
+		if (objList2->fObjList[i])
+		{
+			int iY = objList2->fObjList[i]->iPosY;
+			int iX = objList2->fObjList[i]->iPosX;
+			gObjectGrids.gGrid[iY][iX]->type = objList2->fObjList[i]->iType;
+			gObjectGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * vScale.x * iSize, iY * vScale.y * iSize);
+			gObjectGrids.gGrid[iY][iX]->scale = CP_Vector_Set(vScale.x, vScale.y);
+			gObjectGrids.gGrid[iY][iX]->oDirection = objList2->fObjList[i]->iDir;
+			gObjectGrids.gGrid[iY][iX]->rotation = gObjectGrids.gGrid[iY][iX]->oDirection * 90.f;
+			r = RM_GetComponent(gObjectGrids.gGrid[iY][iX]);
+			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
+			r->color = CP_Color_Create(255, 255, 255, 255);
+
+			//switch (gObjectGrids.gGrid[iY][iX]->type)
+			//{
+			//case(CORAL):
+			//case(GRASS):
+			//	CLM_AddComponent(gObjectGrids.gGrid[iY][iX]);
+			//	break;
+			//default:
+			//	break;
+			//}
+		}
+	}
 	LoadTileImage();
 	free(cInput);
 }
-
-//void CheckSurrounding(int x, int y, int newX, int newY)
-//{
-//	int offset = 1;
-//	int bounds = offset + 1;
-//
-//	if (x < NumGrids - bounds && gGrids.gGrid[y][x + bounds]->type == FLOOR)
-//	{
-//		gGrids.gGrid[y][x + offset]->type = FLOOR; // left
-//	}
-//
-//	else if (x > bounds && gGrids.gGrid[y][x - bounds]->type == FLOOR)
-//	{
-//		gGrids.gGrid[y][x - offset]->type = FLOOR; // right
-//	}
-//
-//	else if (y < NumGrids - bounds && newY && gGrids.gGrid[y + bounds][x]->type == FLOOR)
-//	{
-//		gGrids.gGrid[y + offset][x]->type = FLOOR; // up
-//	}
-//
-//	else if (y > bounds && gGrids.gGrid[y - bounds][x]->type == FLOOR)
-//	{
-//		gGrids.gGrid[y - offset][x]->type = FLOOR; // down
-//	}
-//}

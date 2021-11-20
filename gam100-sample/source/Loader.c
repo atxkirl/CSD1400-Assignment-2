@@ -46,6 +46,24 @@ void LoaderInit()
 		}
 	}
 
+	gLoadedObjects = malloc(sizeof(Grid));
+	if (gLoadedObjects)
+	{// set all to empty first
+		for (int i = 0; i < NumGrids; i++)
+		{
+			for (int j = 0; j < NumGrids; j++)
+			{
+				//gGrids.gGrid[i][j] = isEmpty;
+				GameObject* go = GOM_Create(EMPTY);
+				Renderer* r = RM_AddComponent(go);
+				go->position = CP_Vector_Set((float)j, (float)i);
+				go->scale = CP_Vector_Set(1.f, 1.f);
+				r->color = CP_Color_Create(255, 255, 0, 255);
+				gLoadedObjects->gGrid[i][j] = go;
+			}
+		}
+	}
+
 	fPlayerPositionX = 0.f;
 	fPlayerPositionY = 0.f;
 }
@@ -58,7 +76,9 @@ void LoaderUpdate()
 void LoaderExit()
 {
 	SM_SystemsExit();
+
 	free(gLoadedGrids);
+	free(gLoadedObjects);
 }
 /*!
 @brief Loads the Grid based on the cInput which is the file name.
@@ -68,17 +88,20 @@ void LoaderExit()
 */
 void LoadGrid(char* cInput, int iLoad)
 {
-	char cFileLocation[100] = { "Levels/" };
+	char cLevelFileLocation[100] = { "Levels/" };
+	char cObjectFileLocation[100] = { "Objects/" };
 
-	strcat_s(cFileLocation, 100, cInput);
-	strcat_s(cFileLocation, 100, ".txt");
-
-	Map* objList = new_Map();
-	ReadLevelFromFile(cFileLocation, objList);
+	strcat_s(cLevelFileLocation, 100, cInput);
+	strcat_s(cLevelFileLocation, 100, ".txt");
+	strcat_s(cObjectFileLocation, 100, cInput);
+	strcat_s(cObjectFileLocation, 100, ".txt");
 
 	float fWorldHeight = WORLD_HEIGHT;
 	float fScale = fWorldHeight / NumGrids * 4.f; //fit 30 grids vertically in the screen
+
 	Renderer* r;
+	Map* objList = new_Map();
+	ReadLevelFromFile(cLevelFileLocation, objList);
 	for (int i = 0; i < objList->iSize; i++)
 	{
 		if (objList->fObjList[i])
@@ -121,9 +144,42 @@ void LoadGrid(char* cInput, int iLoad)
 				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-3c.png");
 				break;
 			case(WATER):
-			case(EMPTY):
 				CLM_AddComponent(gLoadedGrids->gGrid[iY][iX]);
 				RM_LoadImage(r, "Assets/sand-tiles/sea-tile-1.png");
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	Map* objList2 = new_Map();
+	ReadLevelFromFile(cObjectFileLocation, objList2);
+	for (int i = 0; i < objList2->iSize; i++)
+	{
+		if (objList2->fObjList[i])
+		{
+			int iY = objList2->fObjList[i]->iPosY;
+			int iX = objList2->fObjList[i]->iPosX;
+			gLoadedObjects->gGrid[iY][iX]->type = objList2->fObjList[i]->iType;
+			gLoadedObjects->gGrid[iY][iX]->position = CP_Vector_Set(iX * fScale - fScale, iY * fScale - fScale);
+			gLoadedObjects->gGrid[iY][iX]->scale = CP_Vector_Set(fScale, fScale);
+			gLoadedObjects->gGrid[iY][iX]->oDirection = objList2->fObjList[i]->iDir;
+			gLoadedObjects->gGrid[iY][iX]->rotation = gLoadedObjects->gGrid[iY][iX]->oDirection * 90.f;
+			gLoadedObjects->gGrid[iY][iX]->tag = objList2->fObjList[i]->cTag;
+
+			r = RM_GetComponent(gLoadedObjects->gGrid[iY][iX]);
+			//gLoadedObjects.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
+			r->color = CP_Color_Create(255, 255, 255, 255);
+
+			switch (gLoadedObjects->gGrid[iY][iX]->type)
+			{
+			case(CORAL):
+				RM_LoadImage(r, "Assets/redcoral.png");
+				break;
+
+			case(GRASS):
+				RM_LoadImage(r, "Assets/tempgrass.png");
 				break;
 			default:
 				break;
