@@ -1,4 +1,5 @@
 #include "AIManager.h"
+#include "Player.h"
 
 void AIM_Init(void)
 {

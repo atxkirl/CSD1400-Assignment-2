@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "cprocessing.h"
 #include "Helpers.h"
-#include "../DetectMemoryLeak.h"
+#include "DetectMemoryLeak.h"
 #include "SystemManager.h"
 #include "Player.h"
 #include "FileParser.h"
@@ -25,11 +25,8 @@ float n_weight = 0;
 float weight = 50.0f;
 
 // Insert all flags that are needed below
-
 bool p_Slowed = false;
 bool p_Hideable = false;
-bool p_Hidden = false;
-bool p_Invincible = false;
 bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_objective4 = false, g_objective5 = false;
 bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
 char cControls[5];
@@ -56,7 +53,7 @@ void Player_OnCollision(Collider* left, Collider* right)
     if (p_Invincible == 0) {
         while (1) {
             // Checks for enemy hits
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "enemy") == 0) {
+            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "BBEM") == 0) {
                 printf("hit");
                 startTime = clock(); //holds information on when the player was last hit according to the time
                 p_Invincible = true;
@@ -162,7 +159,7 @@ void Player_OnCollision(Collider* left, Collider* right)
 
 }
 
-void PLY_CreatePlayer(float x, float y) {
+GameObject* PLY_CreatePlayer(float x, float y) {
 
     player = GOM_Create2(RECTANGLE, CP_Vector_Set(x,y), 0.0f, CP_Vector_Set(50, 50)); //makes the player object
     player->tag ="player";
@@ -183,6 +180,8 @@ void PLY_CreatePlayer(float x, float y) {
     r->renderPriority = PRI_UI;
 
     Options_LoadControls(cControls);
+
+    return player;
 } 
     
 void PLY_Update() { // handles input from player and checking for flags

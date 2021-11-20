@@ -199,7 +199,15 @@ void FSMState_BBEM_Search_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 
 void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
-	// If reached position, then get the next search position.
+	// Is Player too near me?
+	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
+	if (distance <= (immediateDetectionRadius * controller->tileSize))
+	{
+		controller->nextState = "BBEM_Chase";
+		return;
+	}
+
+	// Get the next search position, if search count is greater than 0.
 	if (controller->movementPath == NULL)
 	{
 		if (controller->searchCount > 0)

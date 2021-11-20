@@ -17,7 +17,8 @@
 #include "Colors.h"
 #include "SystemManager.h"
 #include "SceneManager.h"
-#include"Objectives.h"
+#include "Objectives.h"
+#include "Player.h"
 
 static GameObject* player = NULL;
 static GameObject* ObjectiveUI = NULL;
@@ -61,6 +62,11 @@ void LevelOneAStar_init(void)
 {
     SM_SystemsInit();
 
+    // Player
+    {
+        player = PLY_CreatePlayer(462, 462);
+    }
+
     // Loader
     {
         LoaderInit();
@@ -69,7 +75,7 @@ void LevelOneAStar_init(void)
         LoadObjectives("Obj1");
     }
 
-    // Scene UI & Player
+    // Scene UI
     {
         // Objective UI
         GameObject* button = GOM_Create(RECTANGLE);
@@ -108,14 +114,14 @@ void LevelOneAStar_init(void)
             r->renderPriority = PRI_UI;
         }
 
-        // Player
-        player = GOM_Create2(RECTANGLE, CP_Vector_Set(462, 462), 0.0f, CP_Vector_Set(50, 50));
-        player->tag = "player";
-        SetPlayerPosition(player->position.x, player->position.y);
-        r = RM_AddComponent(player);
-        RM_LoadImage(r, "Assets/bananaboi.png");
-        CLM_Set(CLM_AddComponent(player), COL_BOX, LevelOneAStar_OnCollision);
-        LevelOneAStar_GridColliderInit();
+        //// Player
+        //player = GOM_Create2(RECTANGLE, CP_Vector_Set(462, 462), 0.0f, CP_Vector_Set(50, 50));
+        //player->tag = "player";
+        //SetPlayerPosition(player->position.x, player->position.y);
+        //r = RM_AddComponent(player);
+        //RM_LoadImage(r, "Assets/bananaboi.png");
+        //CLM_Set(CLM_AddComponent(player), COL_BOX, LevelOneAStar_OnCollision);
+        //LevelOneAStar_GridColliderInit();
     }
 
     // AStar
@@ -128,7 +134,7 @@ void LevelOneAStar_init(void)
 
     // Enemies
     {
-        enemy1 = AIM_CreateEnemy("Testnemy1", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
+        enemy1 = AIM_CreateEnemy("BBEM", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
         //enemy2 = AIM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(598.f, 66.f), player, &map);
         //enemy3 = AIM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(698.f, 66.f), player, &map);
     }
@@ -137,30 +143,6 @@ void LevelOneAStar_init(void)
 void LevelOneAStar_update(void)
 {
     SM_SystemsPreUpdate();
-
-    float dt = CP_System_GetDt();
-    float spd = 200.0f;
-
-    // Player Movement
-    {
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_W))
-        {
-            player->position.y -= spd * dt;
-        }
-        else if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
-        {
-            player->position.y += spd * dt;
-        }
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_A))
-        {
-            player->position.x -= spd * dt;
-        }
-        else if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
-        {
-            player->position.x += spd * dt;
-        }
-    }
-
 
     // Miscellaneous Keyboard Inputs
     {
@@ -171,6 +153,7 @@ void LevelOneAStar_update(void)
         }
     }
 
+    PLY_Update();
     SM_SystemsUpdate();
 
     RM_SetCameraPosition(player->position);

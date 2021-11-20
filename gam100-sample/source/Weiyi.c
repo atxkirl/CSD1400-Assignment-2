@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include "cprocessing.h"
 #include "Helpers.h"
-#include "../DetectMemoryLeak.h"
+#include "DetectMemoryLeak.h"
 #include "SystemManager.h"
 #include "CollisionManager.h"
 #include "Player.h"

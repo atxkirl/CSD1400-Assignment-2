@@ -194,7 +194,6 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.c" />
     <ClCompile Include="source\Adrian.c" />
     <ClCompile Include="source\AIManager.c" />
     <ClCompile Include="source\AnimationManager.c" />
@@ -215,6 +214,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\LevelOne_AStar.c" />
     <ClCompile Include="source\LinkedList.c" />
     <ClCompile Include="source\Loader.c" />
+    <ClCompile Include="source\main.c" />
     <ClCompile Include="source\Marcus.c" />
     <ClCompile Include="source\MatrixStack.c" />
     <ClCompile Include="source\MiniMonke_States.c" />

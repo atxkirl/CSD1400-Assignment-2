@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
-#include "source/SceneManager.h"
+#include "SceneManager.h"
 
 /* Entry point */
 int main(void)

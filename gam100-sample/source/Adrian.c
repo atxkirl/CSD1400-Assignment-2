@@ -13,7 +13,7 @@
 #include <time.h>
 #include "cprocessing.h"
 #include "Helpers.h"
-#include "../DetectMemoryLeak.h"
+#include "DetectMemoryLeak.h"
 #include "SystemManager.h"
 #include "AStar.h"
 #include "SceneManager.h"

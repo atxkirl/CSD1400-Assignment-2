@@ -3,15 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+bool p_Hidden = false;
+bool p_Invincible = false;
 
 // creates player gameobject. Will take in values to input where to generate the player
-void PLY_CreatePlayer(float x, float y);
+GameObject* PLY_CreatePlayer(float x, float y);
 
 // controls the player and check for updates
 void PLY_Update();
-
-/*typedef struct Player
-{
-	Player tag;
-
-} Player;*/
