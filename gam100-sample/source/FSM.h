@@ -19,8 +19,12 @@ struct FSM
 {
 	// Enemy Variables:
 	GameObject* controlledObject;	// The actual GameObject that this FSM is tagged to.
+	CP_Vector controlledObjForward;	// The forward vector of the controlled GameObject.
 	Renderer* controlledRenderer;
 	Collider* controlledCollider;
+	// Enemy State Display:
+	GameObject* displayObject;
+	Renderer* displayRenderer;
 
 	// Target Variables:
 	GameObject* targetObject;		// The GameObject that this AI is tracking. Typically would be the Player.
@@ -38,6 +42,12 @@ struct FSM
 	AStar_Map* map;					// The map that this AI is currently in, used to calculating pathfinding.
 	LinkedList* movementPath;		// LinkedList of map Nodes that the AI will follow for movement.
 	float moveSpeed;				// The movement speed attached to the current state.
+
+	// Detection Variables:
+	int immediateDetectionRadius;	// Radius (in tiles) where the AI will immediately detect the Player, regardless of line of sight.
+	int fovDetectionRadius;			// Radius (in tiles) where the AI will detect the Player, if Player is within FOV angle.
+	float fovDetectionHalfAngle;	// Angle (in degrees) where the AI will detect the Player, if within FOV distance.
+	CP_Vector fovDetectionForward;	// Forward vector of controlled GameObject scaled with tile size and fov detection radius.
 
 	// Functionality Variables:
 	float waitTime, elapsedTime;	// Allows a State to be "held" in wait for awhile, either as a countdown, or to do something for waitTime amount of seconds.

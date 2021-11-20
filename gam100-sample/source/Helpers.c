@@ -7,5 +7,6 @@ float GetTileScale()
 	float fWorldHeight = WORLD_HEIGHT;
 	float fScale = fWorldHeight / NumGrids * 4.f; //fit 30 grids vertically in the screen
 
+	printf("Tile Scale %.2f\n", fScale);
 	return fScale;
 }

@@ -2,14 +2,6 @@
 #include "Helpers.h"
 #include "Player.h"
 
-//-------------//
-// BBEM Global //
-//-------------//
-//
-// - Variables that ALL states will use!
-
-static const int immediateDetectionRadius = 2; // Radius of 2 tiles around the AI.
-
 //-----------//
 // BBEM Idle //
 //-----------//
@@ -40,7 +32,9 @@ void FSMState_BBEM_Idle_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
 	// Is Player too near me?
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	if (distance <= (immediateDetectionRadius * controller->tileSize))
+	float angle = CP_Vector_Angle(controller->fovDetectionForward, controller->targetObject->position);
+	if (distance <= (controller->immediateDetectionRadius * controller->tileSize) ||
+	   (distance <= (controller->fovDetectionRadius * controller->tileSize) && angle < controller->fovDetectionHalfAngle))
 	{
 		controller->nextState = "BBEM_Chase";
 		return;
@@ -91,7 +85,9 @@ void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
 	// Is Player too near me?
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	if (distance <= (immediateDetectionRadius * controller->tileSize))
+	float angle = CP_Vector_Angle(controller->fovDetectionForward, controller->targetObject->position);
+	if (distance <= (controller->immediateDetectionRadius * controller->tileSize) ||
+	   (distance <= (controller->fovDetectionRadius * controller->tileSize) && angle < controller->fovDetectionHalfAngle))
 	{
 		controller->nextState = "BBEM_Chase";
 		return;
@@ -113,7 +109,7 @@ void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 // - Upon reaching the Player, the AI will change to IDLE state. (Note, on Chase Exit, deal damage to Player)
 // - HOWEVER, if Player walks outside a certain radius, the AI will change to SEARCH state. (Note, in future add Line-of-Sight as well.)
 
-static const float chaseSpeed = 200.f;
+static const float chaseSpeed = 150.f;
 static const int chaseLoseRadius = 6;
 static const float chaseRepathDist = 0.5f;
 
@@ -212,7 +208,7 @@ void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition
 {
 	// Is Player too near me and visible?
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	if (PLY_IsHidden() != 1 && distance <= (immediateDetectionRadius * controller->tileSize))
+	if (PLY_IsHidden() != 1 && distance <= (controller->immediateDetectionRadius * controller->tileSize))
 	{
 		controller->nextState = "BBEM_Chase";
 		return;

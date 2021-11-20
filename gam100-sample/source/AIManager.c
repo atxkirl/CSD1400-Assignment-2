@@ -32,7 +32,7 @@ void AIM_Update(void)
 {
 	// Update Enemy FSM and Movement
 	FSM* enemy;
-	CP_Vector distance, direction;
+	CP_Vector distance;
 
 	for (int i = 0; i < LL_GetCount(allEnemies); ++i)
 	{
@@ -63,23 +63,27 @@ void AIM_Update(void)
 			}
 			else
 			{
-				direction = CP_Vector_Subtract(currentNode->position, enemy->controlledObject->position);
-				direction = CP_Vector_Normalize(direction);
+				enemy->controlledObjForward = CP_Vector_Normalize(CP_Vector_Subtract(currentNode->position, enemy->controlledObject->position));
+				enemy->controlledObject->position = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(enemy->controlledObjForward, enemy->moveSpeed * CP_System_GetDt()));
 
-				enemy->controlledObject->position = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(direction, enemy->moveSpeed * CP_System_GetDt()));
+				enemy->fovDetectionForward = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(enemy->controlledObjForward, enemy->fovDetectionRadius * enemy->tileSize));
 			}
 		}
 
 		// Debug Lines showing AI's Path
 		{
-			char str[100] = { 0 };
 			if (enemy)
 			{
+				char str[100] = { 0 };
+				CP_Color c;
+				GameObject* go = enemy->controlledObject;
+
+				// Show AI state and movement path.
 				int di = 0;
 				if (enemy->movementPath)
 				{
 					LinkedList* n = enemy->movementPath;
-					CP_Color c = CP_Color_Create(255, 0, 0, 255);
+					c = CP_Color_Create(255, 0, 0, 255);
 					for (; n; n = n->next, di++)
 					{
 						AStar_Node* an = (AStar_Node*)n->curr;
@@ -98,10 +102,26 @@ void AIM_Update(void)
 
 					}
 				}
-
-
 				sprintf_s(str, 100, "%s\n%2d", enemy->currentState, LL_GetCount(enemy->movementPath));
-				RM_SetText(RM_GetComponent(enemy->controlledObject), str);
+				RM_SetText(RM_GetComponent(go), str);
+
+				// Show AI detection cone.
+				c = CP_Color_Create(255, 0, 0, 255);
+				CP_Matrix rotation;
+				CP_Vector rotateForward;
+
+				// Draw forward
+				RM_DebugDrawLine(go->position, enemy->fovDetectionForward, PRI_GAME_OBJECT, c);
+				// Draw fov extents
+				c = CP_Color_Create(0, 255, 0, 255);
+				rotation = CP_Matrix_Rotate(enemy->fovDetectionHalfAngle);
+				rotateForward = CP_Vector_MatrixMultiply(rotation, enemy->controlledObjForward);
+				rotateForward = CP_Vector_Normalize(rotateForward);
+				RM_DebugDrawLine(go->position, CP_Vector_Add(go->position, CP_Vector_Scale(rotateForward, enemy->fovDetectionRadius * enemy->tileSize)), PRI_GAME_OBJECT, c);
+				rotation = CP_Matrix_Rotate(-enemy->fovDetectionHalfAngle);
+				rotateForward = CP_Vector_MatrixMultiply(rotation, enemy->controlledObjForward);
+				rotateForward = CP_Vector_Normalize(rotateForward);
+				RM_DebugDrawLine(go->position, CP_Vector_Add(go->position, CP_Vector_Scale(rotateForward, enemy->fovDetectionRadius * enemy->tileSize)), PRI_GAME_OBJECT, c);
 			}
 		}
 	}
@@ -172,10 +192,16 @@ void AIM_InitFSM(FSM* controller, char* startStateName, GameObject* targetObject
 	controller->tileSize = GetTileScale();
 	controller->searchCount = 0;
 	controller->targetPosition = (CP_Vector*)malloc(sizeof(CP_Vector));
+	controller->controlledObjForward = CP_Vector_Set(0.f, -1.f);
 	if (controller->targetPosition && targetObject != NULL)
 	{
 		*controller->targetPosition = targetObject->position;
 	}
+
+	// Initialize Detection Variables.
+	controller->immediateDetectionRadius = 1;
+	controller->fovDetectionHalfAngle = 30.f;
+	controller->fovDetectionRadius = 3;
 
 	// Initalize State variables.
 	controller->currentState = startStateName;
@@ -260,3 +286,8 @@ FSM* AIM_CreateEnemy(char* enemyName, char* startStateName, CP_Vector enemyPos, 
 	LL_Add(&allEnemies, enemy);
 	return enemy;
 }
+
+// TODO:
+// - Add detection cone with variable detection angle (FOV)
+// - Add "hideable" tiles to Search state.
+// - Add "emotion" GameObject and Renderers above AI's head. (To display stuff like "??" when AI is searching for Player, and "!!" when AI finds player.
