@@ -270,7 +270,7 @@ FSM* AIM_CreateEnemy(char* enemyName, char* startStateName, CP_Vector enemyPos, 
 	enemy->controlledObject->tag = enemyName;
 	// Renderer
 	enemy->controlledRenderer = RM_AddComponent(enemy->controlledObject);
-	RM_LoadImage(enemy->controlledRenderer, "Assets/bananaboi.png");
+	RM_LoadImage(enemy->controlledRenderer, "Assets/monke/bigmonke-front.png");
 	// Collider
 	enemy->controlledCollider = CLM_AddComponent(enemy->controlledObject);
 	CLM_Set(enemy->controlledCollider, COL_BOX, NULL);			// TODO: Add function in Enemy to handle collisions with Player to deal damage or something.

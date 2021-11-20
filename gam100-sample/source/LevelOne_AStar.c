@@ -22,6 +22,8 @@
 
 static GameObject* bananaBoi = NULL;
 static GameObject* ObjectiveUI = NULL;
+static float screenWidth;
+static float screenHeight;
 
 static AStar_Map map;
 //TESTCODE
@@ -61,18 +63,34 @@ void LevelOneAStar_OnCollision(Collider* left, Collider* right)
 void LevelOneAStar_init(void)
 {
     SM_SystemsInit();
-
-    // Player
-    {
-        bananaBoi = PLY_CreatePlayer(462, 462);
-    }
+    RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
 
     // Loader
     {
         LoaderInit();
         LoadGrid("level01", 0);
-        //here is where ill load objectives
         LoadObjectives("Obj1");
+        Objectives_Init(screenWidth, screenHeight);
+        Objectives_RenderUI();
+
+        // Initialize level colliders
+        for (int i = 0; i < NumGrids; i++)
+        {
+            for (int j = 0; j < NumGrids; j++)
+            {
+                if (gLoadedGrids->gGrid[i][j]->type == WATER || gLoadedGrids->gGrid[i][j]->type == EMPTY)
+                {
+                    CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOneAStar_OnCollision);
+                    CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;
+                }
+            }
+        }
+    }
+
+    // Player
+    {
+        CP_Vector PlayerPos = SetPlayerPosition();
+        bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
     }
 
     // Scene UI
@@ -153,7 +171,13 @@ void LevelOneAStar_update(void)
         }
     }
 
-    PLY_Update();
+    if (Objectives_GetPlayerUpdate())
+    {
+        PLY_Update();
+    }
+
+    Objectives_Update();
+
     SM_SystemsUpdate(0);
 
     RM_SetCameraPosition(bananaBoi->position);
