@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "FileParser.h"
 #include "Scene_Options.h"
+#include "SoundManager.h"
 
 #include <time.h>
 #include <stdbool.h>
@@ -31,6 +32,7 @@ bool p_Invincible = false;
 bool p_Hideable = false;
 bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_objective4 = false, g_objective5 = false;
 bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
+bool p_walk = false;
 char cControls[5];
 
 
@@ -201,13 +203,17 @@ void PLY_Update() { // handles input from player and checking for flags
 
     if (p_Hidden == false) {
         //  player controls
-        if (CP_Input_KeyDown(cControls[0])) player->position.y -= currentSpd * dt; // up
-
+        if (CP_Input_KeyDown(cControls[0])) {
+            player->position.y -= currentSpd * dt;
+        }
+        // up
         if (CP_Input_KeyDown(cControls[1])) player->position.x -= currentSpd * dt; // down
 
         if (CP_Input_KeyDown(cControls[2])) player->position.y += currentSpd * dt; // left
 
         if (CP_Input_KeyDown(cControls[3])) player->position.x += currentSpd * dt; // right
+
+
     }
      
     // update and checks for invincibility
@@ -233,6 +239,7 @@ void PLY_Update() { // handles input from player and checking for flags
             }
         }
     }
+
 
     //check if player reach drop off
     if (g_object1drop == true) {

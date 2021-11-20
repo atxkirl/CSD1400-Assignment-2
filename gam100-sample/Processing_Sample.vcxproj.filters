@@ -118,6 +118,9 @@
     <ClCompile Include="source\main.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="source\SoundManager.c">
+      <Filter>Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="source\Objectives.h">
       <Filter>Minigames</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SoundManager.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

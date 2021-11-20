@@ -16,6 +16,7 @@
 #include "CollisionManager.h"
 #include "Player.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -93,6 +94,9 @@ void Weiyi_init(void)
     r = RM_AddComponent(e4);
     //r->text = "hide";
     RM_SetText(r, "hide");
+
+    SDM_Init();
+    SDM_PlayBgMusic();
 }
 
 void Weiyi_update(void)
@@ -110,6 +114,7 @@ void Weiyi_exit(void)
     SM_SystemsExit();
 
     _CrtDumpMemoryLeaks();
+    SDM_StopBgMusic();
 }
 
 void Weiyi_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
