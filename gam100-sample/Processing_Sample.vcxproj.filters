@@ -121,6 +121,9 @@
     <ClCompile Include="source\SoundManager.c">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="source\Controls.c">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -212,9 +215,6 @@
     <ClInclude Include="source\Objective_Pickup.h">
       <Filter>Minigames</Filter>
     </ClInclude>
-    <ClInclude Include="source\Scene_Options.h">
-      <Filter>UI Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="source\AIManager.h">
       <Filter>Systems</Filter>
     </ClInclude>
@@ -232,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="source\SoundManager.h">
       <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Controls.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

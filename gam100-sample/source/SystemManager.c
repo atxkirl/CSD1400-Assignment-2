@@ -1,5 +1,6 @@
 #include "SystemManager.h"
 #include "LinkedList.h"
+#include "Controls.h"
 
 LinkedList* SM_delList = NULL;
 LinkedList* SM_timedDel = NULL;
@@ -40,6 +41,7 @@ void SM_SystemsInit()
 	AM_Init();
 	DM_Init();
 	AIM_Init();
+	Init_Controls();
 }
 
 void SM_SystemsPreUpdate()
@@ -109,6 +111,7 @@ void SM_SystemsExit()
 	GOM_Clear();
 	DM_Clear();
 	AIM_Clear();
+	Exit_Controls();
 }
 
 void* SM_GetComponent(GameObject* g, COMPONENT c)

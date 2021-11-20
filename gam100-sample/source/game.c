@@ -17,6 +17,7 @@
 #include "SceneManager.h"
 #include "SystemManager.h"
 #include "Colors.h"
+#include "Controls.h"
 
 
 //Animation* MainMenuStartAnim1, *MainMenuStartAnim2;

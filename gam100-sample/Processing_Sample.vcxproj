@@ -200,6 +200,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\AStar.c" />
     <ClCompile Include="source\BBEM_States.c" />
     <ClCompile Include="source\CollisionManager.c" />
+    <ClCompile Include="source\Controls.c" />
     <ClCompile Include="source\Dialogue.c" />
     <ClCompile Include="source\FileParser.c" />
     <ClCompile Include="source\game.c" />
@@ -242,6 +243,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\BBEM_States.h" />
     <ClInclude Include="source\CollisionManager.h" />
     <ClInclude Include="source\Colors.h" />
+    <ClInclude Include="source\Controls.h" />
     <ClInclude Include="source\Dialogue.h" />
     <ClInclude Include="source\FileParser.h" />
     <ClInclude Include="source\FSM.h" />
@@ -262,7 +264,6 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\RenderManager.h" />
     <ClInclude Include="source\Scene.h" />
     <ClInclude Include="source\SceneManager.h" />
-    <ClInclude Include="source\Scene_Options.h" />
     <ClInclude Include="source\SoundManager.h" />
     <ClInclude Include="source\SystemManager.h" />
   </ItemGroup>

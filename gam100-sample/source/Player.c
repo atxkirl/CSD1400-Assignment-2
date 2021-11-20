@@ -6,12 +6,12 @@
 #include "SystemManager.h"
 #include "Player.h"
 #include "FileParser.h"
-#include "Scene_Options.h"
 #include "SoundManager.h"
 
 #include <time.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "Controls.h"
 
 GameObject* player = NULL;
 Renderer* render = NULL;
@@ -33,8 +33,6 @@ bool p_Hideable = false;
 bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_objective4 = false, g_objective5 = false;
 bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
 bool p_walk = false;
-char cControls[5];
-
 
 /*
 @brief Handles invincibility counter to ensure that player will not take damage when invincible.
@@ -183,8 +181,6 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     RM_LoadImage(r, "Assets/fow.png");
     r->renderPriority = PRI_UI;
 
-    Options_LoadControls(cControls);
-
     p_Slowed = false;
     p_Hidden = false;
     p_Invincible = false;
@@ -203,15 +199,15 @@ void PLY_Update() { // handles input from player and checking for flags
 
     if (p_Hidden == false) {
         //  player controls
-        if (CP_Input_KeyDown(cControls[0])) {
+        if (CP_Input_KeyDown((CP_KEY)cControls->cUp)) {
             player->position.y -= currentSpd * dt;
         }
         // up
-        if (CP_Input_KeyDown(cControls[1])) player->position.x -= currentSpd * dt; // down
+        if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) player->position.x -= currentSpd * dt; // down
 
-        if (CP_Input_KeyDown(cControls[2])) player->position.y += currentSpd * dt; // left
+        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) player->position.y += currentSpd * dt; // left
 
-        if (CP_Input_KeyDown(cControls[3])) player->position.x += currentSpd * dt; // right
+        if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) player->position.x += currentSpd * dt; // right
 
 
     }
@@ -225,7 +221,7 @@ void PLY_Update() { // handles input from player and checking for flags
     //checks for whether player can hide or not 
     if (p_Hideable == true)
     {
-        if (CP_Input_KeyTriggered((enum CP_KEY)KEY_E)) {
+        if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
             switch (p_Hidden) {
             
             case true: 
@@ -243,7 +239,7 @@ void PLY_Update() { // handles input from player and checking for flags
 
     //check if player reach drop off
     if (g_object1drop == true) {
-        if (CP_Input_KeyTriggered(cControls[4])) {
+        if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
             if (g_object1collect == true) {
                 g_object1collect = false;
                 g_object1comp = true;

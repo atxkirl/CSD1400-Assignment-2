@@ -58,32 +58,32 @@ void LevelOne_update(void)
 {
     SM_SystemsPreUpdate();
 
-    float dt = CP_System_GetDt();
-    float spd = 200.0f;
+    //float dt = CP_System_GetDt();
+    //float spd = 200.0f;
     //Collider* gc = CLM_GetComponent(g);
     //gc->velocity = CP_Vector_Set(0, 0);
 
     if (Objectives_GetPlayerUpdate())
     {
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_W))
-        {
-            gLOne->position.y -= spd * dt;
-        }
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
-        {
-            gLOne->position.y += spd * dt;
-        }
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_A))
-        {
-            gLOne->position.x -= spd * dt;
-        }
-        if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
-        {
-            gLOne->position.x += spd * dt;
-        }
+        //if (CP_Input_KeyDown((enum CP_KEY)KEY_W))
+        //{
+        //    gLOne->position.y -= spd * dt;
+        //}
+        //if (CP_Input_KeyDown((enum CP_KEY)KEY_S))
+        //{
+        //    gLOne->position.y += spd * dt;
+        //}
+        //if (CP_Input_KeyDown((enum CP_KEY)KEY_A))
+        //{
+        //    gLOne->position.x -= spd * dt;
+        //}
+        //if (CP_Input_KeyDown((enum CP_KEY)KEY_D))
+        //{
+        //    gLOne->position.x += spd * dt;
+        //}
+        PLY_Update();
     }
     Objectives_Update();
-    PLY_Update();
 
     SM_SystemsUpdate();
 
