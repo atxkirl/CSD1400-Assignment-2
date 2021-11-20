@@ -77,8 +77,6 @@ void AutoGenerateGrid();
 
 void AddFrontierCell(int x, int y, LinkedList* List);
 
-//void CheckSurrounding(int x, int y, int newX, int newY);
-
 void PrintCurrentType(int iObjType);
 
 void PrintCurrentDirection(int iObjDirection);

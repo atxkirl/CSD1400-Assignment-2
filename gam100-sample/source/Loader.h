@@ -2,7 +2,8 @@
 typedef struct Grid Grid;
 typedef union CP_Vector CP_Vector;
 
-Grid *gLoadedGrids;
+Grid* gLoadedGrids;
+Grid *gLoadedObjects;
 /*!
 @brief Initialises the variables
 @param void

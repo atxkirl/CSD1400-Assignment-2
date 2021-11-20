@@ -107,6 +107,9 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
 
 void Objectives_Update()
 {
+    if (iNumObjectives == 0)
+        return;
+
     if (!OB_IsBreakCoconutActive() && !OB_ConnectGetActive() && !OB_IsFixBoatActive() && !iUpdatePlayer)
         iUpdatePlayer = 1;
 

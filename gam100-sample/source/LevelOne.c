@@ -38,7 +38,7 @@ void LevelOne_init(void)
     LoaderInit();
 
     //load level and objectives
-    LoadGrid("level01", 0);
+    LoadGrid("Level01", 0);
     Objectives_Init(screenWidth, screenHeight);
     Objectives_RenderUI();
 

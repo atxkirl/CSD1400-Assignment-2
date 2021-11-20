@@ -52,8 +52,11 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 	int iObjNum = 0;
 	if (eError == 0 && fFile != NULL)
 	{
-		while (fgets(cFileRead, 900, fFile))
+		while (fgets(cFileRead, 900, fFile) != NULL)
 		{
+			if (cFileRead[0] == '\n')
+				break;
+
 			printf("%s", cFileRead);
 
 			if (cFileRead != NULL)
