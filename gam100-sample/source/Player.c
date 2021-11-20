@@ -183,6 +183,13 @@ GameObject* PLY_CreatePlayer(float x, float y) {
 
     Options_LoadControls(cControls);
 
+    p_Slowed = false;
+    p_Hidden = false;
+    p_Invincible = false;
+    p_Hideable = false;
+    g_objective1 = g_objective2 = g_objective3 = g_objective4 = g_objective5 = false;
+    g_object1collect = g_object1drop = g_object1comp = false;
+
     return player;
 } 
     

@@ -18,6 +18,7 @@
 #include "SystemManager.h"
 #include "Objectives.h"
 #include "Objective_Connect.h"
+#include "Player.h"
 
 GameObject* gLOne = NULL;
 
@@ -36,6 +37,9 @@ void LevelOne_init(void)
     //RM_AddComponent(g);
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
     LoaderInit();
+
+    //Insert spawn x,y here
+    PLY_CreatePlayer(90.f, 90.f);
 
     //load level and objectives
     LoadGrid("level01", 0);
@@ -79,6 +83,7 @@ void LevelOne_update(void)
         }
     }
     Objectives_Update();
+    PLY_Update();
 
     SM_SystemsUpdate();
 

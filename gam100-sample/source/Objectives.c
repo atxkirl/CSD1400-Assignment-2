@@ -16,6 +16,7 @@ GameObject** gObjectives;
 int iNumObjectives;
 int iCurrentObjective;
 GameObject* g_ObjectiveUI[MAX_OBJECTIVES];
+Renderer* g_ObjectiveTileOverlay[MAX_OBJECTIVES];
 
 void Objectives_onCollision(Collider* left, Collider* right)
 {
@@ -132,8 +133,9 @@ void Objectives_Update()
         gObjectives[iCurrentObjective]->tag = "Objective1Complete";
         rObjUI->renderPriority = PRI_UI;
 
-        Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]); 
-        RM_GetComponent(c->obj)->color.a = 0;
+        //Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]); 
+        g_ObjectiveTileOverlay[iCurrentObjective]->isEnabled = 0;
+        //RM_GetComponent(c->obj)->color.a = 0;
         CLM_RemoveGO(gObjectives[iCurrentObjective]);
         iUpdatePlayer = 1;
     }
@@ -144,8 +146,9 @@ void Objectives_Update()
         gObjectives[iCurrentObjective]->tag = "Objective2Complete";
         rObjUI->renderPriority = PRI_UI;
 
-        Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]);
-        RM_GetComponent(c->obj)->color.a = 0;
+        //Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]);
+        g_ObjectiveTileOverlay[iCurrentObjective]->isEnabled = 0;
+        //RM_GetComponent(c->obj)->color.a = 0;
         CLM_RemoveGO(gObjectives[iCurrentObjective]);
         iUpdatePlayer = 1;
     }
@@ -156,8 +159,9 @@ void Objectives_Update()
         gObjectives[iCurrentObjective]->tag = "Objective3Complete";
         rObjUI->renderPriority = PRI_UI;
 
-        Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]);
-        RM_GetComponent(c->obj)->color.a = 0;
+        //Collider* c = CLM_GetComponent(gObjectives[iCurrentObjective]);
+        g_ObjectiveTileOverlay[iCurrentObjective]->isEnabled = 0;
+        //RM_GetComponent(c->obj)->color.a = 0;
         CLM_RemoveGO(gObjectives[iCurrentObjective]);
         iUpdatePlayer = 1;
     }
@@ -215,9 +219,9 @@ void Objectives_RenderUI()
                     Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
-                    Renderer* rObj = RM_AddComponent(c->obj);
-                    rObj->color = COLOR_RED;
-                    rObj->color.a = 120;
+                    g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
+                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
+                    g_ObjectiveTileOverlay[i]->color.a = 120;
                     printf("CONNECT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
                     ++i;
@@ -238,9 +242,9 @@ void Objectives_RenderUI()
                     Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
-                    Renderer* rObj = RM_AddComponent(c->obj);
-                    rObj->color = COLOR_RED;
-                    rObj->color.a = 120;
+                    g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
+                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
+                    g_ObjectiveTileOverlay[i]->color.a = 120;
                     printf("BOAT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
                     ++i;
@@ -261,9 +265,9 @@ void Objectives_RenderUI()
                     Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
-                    Renderer* rObj = RM_AddComponent(c->obj);
-                    rObj->color = COLOR_RED;
-                    rObj->color.a = 120;
+                    g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
+                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
+                    g_ObjectiveTileOverlay[i]->color.a = 120;
                     printf("COCO: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
                     ++i;
