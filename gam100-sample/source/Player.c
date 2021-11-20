@@ -26,6 +26,8 @@ float weight = 50.0f;
 
 // Insert all flags that are needed below
 bool p_Slowed = false;
+bool p_Hidden = false;
+bool p_Invincible = false;
 bool p_Hideable = false;
 bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_objective4 = false, g_objective5 = false;
 bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
@@ -265,4 +267,14 @@ void PLY_Update() { // handles input from player and checking for flags
     //spd = 200.0f;
 
     RM_SetCameraPosition(player->position);
+}
+
+int PLY_IsHidden(void)
+{
+    return p_Hidden;
+}
+
+int PLY_IsInvincible(void)
+{
+    return p_Invincible;
 }

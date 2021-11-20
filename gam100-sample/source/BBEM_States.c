@@ -1,5 +1,6 @@
 #include "BBEM_States.h"
 #include "Helpers.h"
+#include "Player.h"
 
 //-------------//
 // BBEM Global //
@@ -112,7 +113,7 @@ void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 // - Upon reaching the Player, the AI will change to IDLE state. (Note, on Chase Exit, deal damage to Player)
 // - HOWEVER, if Player walks outside a certain radius, the AI will change to SEARCH state. (Note, in future add Line-of-Sight as well.)
 
-static const float chaseSpeed = 100.f;
+static const float chaseSpeed = 200.f;
 static const int chaseLoseRadius = 6;
 static const float chaseRepathDist = 0.5f;
 
@@ -138,9 +139,19 @@ void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 	// Keep track of Player position.
 	*controller->targetPosition = controller->targetObject->position;
 
+	// If Player is invincible, means we've just hit him, so walk slower.
+	if (PLY_IsInvincible())
+	{
+		controller->moveSpeed = 0.8f * chaseSpeed;
+	}
+	else
+	{
+		controller->moveSpeed = chaseSpeed;
+	}
+
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
 	// Is Player too far from AI?
-	if (distance > (chaseLoseRadius * controller->tileSize))
+	if (distance > (chaseLoseRadius * controller->tileSize) || PLY_IsHidden())
 	{
 		printf("Where'd he go??\n");
 		controller->nextState = "BBEM_Search";
@@ -199,9 +210,9 @@ void FSMState_BBEM_Search_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 
 void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
-	// Is Player too near me?
+	// Is Player too near me and visible?
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	if (distance <= (immediateDetectionRadius * controller->tileSize))
+	if (PLY_IsHidden() != 1 && distance <= (immediateDetectionRadius * controller->tileSize))
 	{
 		controller->nextState = "BBEM_Chase";
 		return;

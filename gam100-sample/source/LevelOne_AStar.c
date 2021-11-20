@@ -20,7 +20,7 @@
 #include "Objectives.h"
 #include "Player.h"
 
-static GameObject* player = NULL;
+static GameObject* bananaBoi = NULL;
 static GameObject* ObjectiveUI = NULL;
 
 static AStar_Map map;
@@ -64,7 +64,7 @@ void LevelOneAStar_init(void)
 
     // Player
     {
-        player = PLY_CreatePlayer(462, 462);
+        bananaBoi = PLY_CreatePlayer(462, 462);
     }
 
     // Loader
@@ -134,7 +134,7 @@ void LevelOneAStar_init(void)
 
     // Enemies
     {
-        enemy1 = AIM_CreateEnemy("BBEM", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), player, &map);
+        enemy1 = AIM_CreateEnemy("BBEM", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), bananaBoi, &map);
         //enemy2 = AIM_CreateEnemy("Testnemy2", "BBEM_Idle", CP_Vector_Set(598.f, 66.f), player, &map);
         //enemy3 = AIM_CreateEnemy("Testnemy3", "BBEM_Idle", CP_Vector_Set(698.f, 66.f), player, &map);
     }
@@ -156,7 +156,7 @@ void LevelOneAStar_update(void)
     PLY_Update();
     SM_SystemsUpdate();
 
-    RM_SetCameraPosition(player->position);
+    RM_SetCameraPosition(bananaBoi->position);
     SM_SystemsLateUpdate();
 
     LevelOneAStar_UI_render();
