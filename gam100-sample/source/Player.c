@@ -203,9 +203,9 @@ void PLY_Update() { // handles input from player and checking for flags
             player->position.y -= currentSpd * dt;
         }
         // up
-        if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) player->position.x -= currentSpd * dt; // down
+        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) player->position.x -= currentSpd * dt; // left
 
-        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) player->position.y += currentSpd * dt; // left
+        if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) player->position.y += currentSpd * dt; // down
 
         if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) player->position.x += currentSpd * dt; // right
 

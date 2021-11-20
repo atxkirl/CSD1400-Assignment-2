@@ -7,6 +7,7 @@
 #include "Objective_Fixboat.h"
 #include "Objective_Pickup.h"
 #include "Colors.h"
+#include "Controls.h"
 
 int iUpdatePlayer;
 CP_Vector vObjectiveOnePos, vObjectiveTwoPos, vObjectiveThreePos;
@@ -25,7 +26,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
     {
         if (strcmp(((GameObject*)left->obj)->tag, "Objective1Read") == 0)
         {
-            if (CP_Input_KeyTriggered(KEY_E))
+            if (CP_Input_KeyTriggered(cControls->cInteract))
             {
                 for (int i = 0; i < iNumObjectives; i++)
                 {
@@ -42,7 +43,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
 
         else if (strcmp(((GameObject*)left->obj)->tag, "Objective2Read") == 0)
         {
-            if (CP_Input_KeyTriggered(KEY_E))
+            if (CP_Input_KeyTriggered(cControls->cInteract))
             {
                 for (int i = 0; i < iNumObjectives; i++)
                 {
@@ -59,7 +60,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
 
         else if (strcmp(((GameObject*)left->obj)->tag, "Objective3Read") == 0)
         {
-            if (CP_Input_KeyTriggered(KEY_E))
+            if (CP_Input_KeyTriggered(cControls->cInteract))
             {
                 for (int i = 0; i < iNumObjectives; i++)
                 {

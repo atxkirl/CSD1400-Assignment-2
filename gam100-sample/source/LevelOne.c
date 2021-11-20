@@ -20,7 +20,7 @@
 #include "Objective_Connect.h"
 #include "Player.h"
 
-GameObject* gLOne = NULL;
+//GameObject* gLOne = NULL;
 
 float screenWidth, screenHeight;
 void LevelOneUI_render();
@@ -38,19 +38,22 @@ void LevelOne_init(void)
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
     LoaderInit();
 
-    //Insert spawn x,y here
-    PLY_CreatePlayer(90.f, 90.f);
-
     //load level and objectives
     LoadGrid("Level01", 0);
     Objectives_Init(screenWidth, screenHeight);
     Objectives_RenderUI();
 
-    gLOne = GOM_Create2(RECTANGLE, SetPlayerPosition(), 0.0f, CP_Vector_Set(50, 50));
-    gLOne->tag = "player";
-    Renderer *r = RM_AddComponent(gLOne);
-    RM_LoadImage(r, "Assets/bananaboi.png");
-    CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
+    //gLOne = GOM_Create2(RECTANGLE, SetPlayerPosition(), 0.0f, CP_Vector_Set(50, 50));
+    //gLOne->tag = "player";
+    //Renderer *r = RM_AddComponent(gLOne);
+    //RM_LoadImage(r, "Assets/bananaboi.png");
+    //CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
+
+    //Insert spawn x,y here
+    CP_Vector PlayerPos = SetPlayerPosition();
+    PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
+
+
     LevelOneGridColliderInit();
 }
 
@@ -86,11 +89,7 @@ void LevelOne_update(void)
     Objectives_Update();
 
     SM_SystemsUpdate();
-
-    RM_SetCameraPosition(gLOne->position);
     SM_SystemsLateUpdate();
-
-    //CP_Graphics_ClearBackground(COLOR_BLUE);
     LevelOneUI_render();
     //LoaderUpdate();
 }
