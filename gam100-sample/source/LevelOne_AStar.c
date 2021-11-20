@@ -154,7 +154,7 @@ void LevelOneAStar_update(void)
     }
 
     PLY_Update();
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
 
     RM_SetCameraPosition(bananaBoi->position);
     SM_SystemsLateUpdate();

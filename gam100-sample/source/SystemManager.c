@@ -53,7 +53,7 @@ void SM_SystemsPreUpdate()
 		//Creates a point obj to test collision against button
 		clickPoint = GOM_CreateTemp(EMPTY);//param doesnt matter
 		clickPoint->position = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-		clickPoint->tag = "Click";
+		clickPoint->tag = ONCLICK_TAG;
 		Collider* c = CLM_AddComponent(clickPoint);
 		CLM_Set(c, COL_POINT, NULL);
 		c->space = COLSPC_SCREEN;
@@ -82,7 +82,7 @@ void SM_SystemsPreUpdate()
 	LL_Clear(&clr);
 }
 
-void SM_SystemsUpdate()
+void SM_SystemsUpdate(int isPause)
 {
 	AIM_Update();
 	DM_Update();

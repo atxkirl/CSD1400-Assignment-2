@@ -23,6 +23,12 @@ void SceneCredits_init(void)
     float screenWidth, screenHeight;
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
 
+    GameObject* bg = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
+    Renderer* bgr = RM_AddComponent(bg);
+    bgr->renderPriority = PRI_UI;
+    RM_LoadImage(bgr, "Assets/BananaBoi_Title.jpg");
+
     // render credits scene
     credits = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
     credits->tag = "credits";
@@ -51,7 +57,7 @@ void SceneCredits_update(void)
 {
 
     SM_SystemsPreUpdate();
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
     SM_SystemsLateUpdate();
 }
 

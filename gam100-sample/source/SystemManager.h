@@ -18,6 +18,7 @@
 #include "Dialogue.h"
 #include "AIManager.h"
 
+#define ONCLICK_TAG "Click"
 //Prefix: SM
 
 typedef enum COMPONENT
@@ -51,9 +52,10 @@ void SM_SystemsInit();
 void SM_SystemsPreUpdate();
 /*!
 @brief Update systems
+@param isPause - boolean for if pause or not
 @return void
 */
-void SM_SystemsUpdate();
+void SM_SystemsUpdate(int isPause);
 /*!
 @brief Update systems at the end of the frame
 @return void

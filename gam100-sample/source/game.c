@@ -261,7 +261,7 @@ void game_update(void)
         }
     
 
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
 
     //gameUI_render();
     SM_SystemsLateUpdate();

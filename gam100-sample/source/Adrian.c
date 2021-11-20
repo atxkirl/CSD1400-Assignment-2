@@ -253,7 +253,7 @@ void Adrian_update(void)
     Adrian_Input();
     Adrian_Render();
 
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
     CP_Settings_Fill(CP_Color_Create(255, 255, 128, 255));
 
     SM_SystemsLateUpdate();

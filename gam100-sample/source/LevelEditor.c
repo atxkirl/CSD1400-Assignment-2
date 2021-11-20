@@ -370,7 +370,7 @@ void LevelEditorUpdate()
 	//PlaceObject();
 	RenderObjects();
 
-	SM_SystemsUpdate();
+	SM_SystemsUpdate(0);
 
 	RM_SetCameraPosition(CP_Vector_Set(fMoveX + WORLD_HEIGHT * 0.5f, -fMoveY + WORLD_HEIGHT * 0.5f));
 

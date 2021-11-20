@@ -76,15 +76,15 @@ void SDM_StopWEffect(void) {
 }
 
 void SDM_FreeSounds(void) {
-	CP_Sound_Free(bg);
-	CP_Sound_Free(foot);
-	CP_Sound_Free(hurt1);
-	CP_Sound_Free(hurt2);
-	CP_Sound_Free(hurt3);
-	CP_Sound_Free(electric1);
-	CP_Sound_Free(electric2);
-	CP_Sound_Free(electric3);
-	CP_Sound_Free(drop1);
-	CP_Sound_Free(wood1);
+	CP_Sound_Free(&bg);
+	CP_Sound_Free(&foot);
+	CP_Sound_Free(&hurt1);
+	CP_Sound_Free(&hurt2);
+	CP_Sound_Free(&hurt3);
+	CP_Sound_Free(&electric1);
+	CP_Sound_Free(&electric2);
+	CP_Sound_Free(&electric3);
+	CP_Sound_Free(&drop1);
+	CP_Sound_Free(&wood1);
 	
 }

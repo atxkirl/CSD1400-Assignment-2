@@ -104,7 +104,7 @@ void Weiyi_update(void)
     SM_SystemsPreUpdate();
    
     PLY_Update();
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
 
     SM_SystemsLateUpdate();
 }

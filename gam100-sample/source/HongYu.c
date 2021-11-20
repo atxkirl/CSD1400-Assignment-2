@@ -241,7 +241,7 @@ void HongYu_update(void)
 
     PLY_Update();
 
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
     //RM_SetCameraPosition(g->position);
     OB_FixBoatUpdate();
     OB_BreakCoconutUpdate();

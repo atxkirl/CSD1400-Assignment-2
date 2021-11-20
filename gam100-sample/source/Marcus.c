@@ -86,7 +86,7 @@ void Marcus_update(void)
 {
     SM_SystemsPreUpdate();
 
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
 
     //MarcusUI_render();
     SM_SystemsLateUpdate();

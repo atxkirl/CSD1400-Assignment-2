@@ -86,6 +86,12 @@ void SceneOptions_init(void)
     SM_SystemsInit();
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
 
+    GameObject* bg = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
+    Renderer* bgr = RM_AddComponent(bg);
+    bgr->renderPriority = PRI_UI;
+    RM_LoadImage(bgr, "Assets/BananaBoi_Title.jpg");
+
     SaveFile = "Controls/controls.txt";
 
     Collider* c = NULL;
@@ -134,7 +140,7 @@ void SceneOptions_update(void)
 
     SceneOptions_AssignKeyPress();
 
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
 
     SM_SystemsLateUpdate();
 }

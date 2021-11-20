@@ -31,7 +31,7 @@ void game2_update(void)
     SM_SystemsPreUpdate();
 
     PLY_Update();
-    SM_SystemsUpdate();
+    SM_SystemsUpdate(0);
 
     CP_Settings_Fill(CP_Color_Create(255, 128, 128, 255));
     SM_SystemsLateUpdate();
