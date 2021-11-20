@@ -240,10 +240,60 @@ int IsPaused()
     {
         SetPause(1);
     }
+    int b_IsPaused = 0;
     if (pauseMenus)
-        return ((GameObject*)pauseMenus->curr)->isEnabled;
-    else
-        return 0;
+        b_IsPaused = ((GameObject*)pauseMenus->curr)->isEnabled;
+    
+    if (b_IsPaused)
+    {
+        LinkedList* n = pauseMenus; GameObject* button = NULL;
+        for (; n; n = n->next)
+        {
+            GameObject* tn = (GameObject*)n->curr;
+            if (strcmp(tn->tag, "ReturnToMainMenu") == 0)
+            {
+                button = tn;
+                break;
+            }
+        }
+        if (button)
+        {
+            float mouseX = CP_Input_GetMouseX();
+            float mouseY = CP_Input_GetMouseY();
+            GameObject* tempMouse = GOM_CreateTemp(EMPTY);
+            tempMouse->position = CP_Vector_Set(mouseX, mouseY);
+            Collider* c = CLM_AddComponent(tempMouse);
+            CLM_Set(c, COL_POINT, NULL);
+            c->space = COLSPC_SCREEN;
+            c->isTrigger = 1;
+
+            Collider* buttonc = CLM_GetComponent(button);
+            CP_Vector spd = CP_Vector_Set(200, 100);
+            CP_Vector def = CP_Vector_Set(220, 50);
+            CP_Vector max = CP_Vector_Set(260, 70);
+            if (IsBoxCollidePoint(buttonc, c))
+            {
+                button->scale.x += spd.x * CP_System_GetDt();
+                button->scale.y += spd.y * CP_System_GetDt();
+                button->scale.x = min(button->scale.x, max.x);
+                button->scale.y = min(button->scale.y, max.y);
+            }
+            else
+            {
+                //scale down
+                button->scale.x -= spd.x * CP_System_GetDt();
+                button->scale.y -= spd.y * CP_System_GetDt();
+                button->scale.x = max(button->scale.x, def.x);
+                button->scale.y = max(button->scale.y, def.y);
+            }
+        }
+
+    }
+    
+
+
+
+    return b_IsPaused;
 }
 /*!
 @brief This function clears memory used by pause menu
