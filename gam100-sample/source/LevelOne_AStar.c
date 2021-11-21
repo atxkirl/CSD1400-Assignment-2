@@ -68,12 +68,6 @@ void LevelOneAStar_init(void)
         }
     }
 
-    // Player
-    {
-        CP_Vector PlayerPos = SetPlayerPosition();
-        bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
-    }
-
     // Scene UI
     {
         // Objective UI

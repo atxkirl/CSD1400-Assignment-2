@@ -90,20 +90,22 @@ void LevelOne_init(void)
     //RM_AddComponent(g);
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
 
-    LoaderInit();
+    // Loader
+    {
+        LoaderInit();
+        LoadGrid("level01", 0);
 
-    //load level and objectives
-    LoadGrid("Level01", 0);
+        //Insert spawn x,y here
+        CP_Vector PlayerPos = SetPlayerPosition();
+        bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
 
-    //Insert spawn x,y here
-    CP_Vector PlayerPos = SetPlayerPosition();
-    bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
+        Objectives_Init(screenWidth, screenHeight);
+        Objectives_RenderUI();
 
-    Objectives_Init(screenWidth, screenHeight);
-
-    Objectives_RenderUI();
-
-    LevelOneGridColliderInit();
+        // Initialize level colliders
+        LevelOneGridColliderInit();
+    }
+    
     InitPause();
     InitDrawFPS();
 
@@ -117,7 +119,7 @@ void LevelOne_init(void)
 
     // Enemies
     {
-        enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), bananaBoi, &map);
+        enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", CP_Vector_Set(133.f, 66.f), bananaBoi, &map);
     }
 }
 
@@ -131,10 +133,8 @@ void LevelOne_update(void)
         {
             PLY_Update();
         }
-
         Objectives_Update();
     }
-
 
     SM_SystemsUpdate(IsPaused());
 
@@ -146,7 +146,6 @@ void LevelOne_update(void)
 
     SM_SystemsLateUpdate();
     LevelOneUI_render(); 
-    //LoaderUpdate();
 }
 
 void LevelOne_exit(void)
@@ -179,10 +178,8 @@ void LevelOneGridColliderInit()
         {
             if (gLoadedGrids->gGrid[i][j]->type == WATER || gLoadedGrids->gGrid[i][j]->type == EMPTY)
             {
-                //CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOne_OnCollision);
-                //CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;
-
-                CLM_GetComponent(gLoadedGrids->gGrid[i][j])->OnCollision = LevelOne_OnCollision;
+                CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOne_OnCollision);
+                CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;
             }
             if (gLoadedObjects->gGrid[i][j]->type == CORAL || gLoadedObjects->gGrid[i][j]->type == GRASS)
             {
@@ -191,7 +188,6 @@ void LevelOneGridColliderInit()
         }
     }
 }
-
 
 /*!
 @brief This function initialises the pause menu
