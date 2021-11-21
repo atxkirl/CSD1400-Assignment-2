@@ -52,7 +52,7 @@ void Weiyi_init(void)
     PLY_CreatePlayer(90,90);
 
     e = GOM_Create2(CIRCLE, CP_Vector_Set(20, 20), 0.0f, CP_Vector_Set(50, 50));
-    e->tag = "enemy";
+    e->tag = "BBEM";
     k = CLM_AddComponent(e);
     CLM_Set(k,COL_CIRCLE, NULL);
 
