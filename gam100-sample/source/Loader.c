@@ -196,7 +196,12 @@ void LoadGrid(char* cInput, int iLoad)
 			switch (gLoadedObjects->gGrid[iY][iX]->type)
 			{
 			case(CORAL):
+			{
+				Collider* c = CLM_AddComponent(gLoadedObjects->gGrid[iY][iX]);
+				CLM_Set(c, COL_BOX, NULL);
+				c->isTrigger = 1;
 				RM_LoadImage(r, "Assets/redcoral.png");
+			}
 				break;
 
 			case(GRASS):

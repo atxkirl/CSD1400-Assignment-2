@@ -101,6 +101,12 @@ void Player_OnCollision(Collider* left, Collider* right)
                 break;
             }
 
+            if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL)
+            {
+                p_Hideable = true;
+                break;
+            }
+
             if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "box") == 0)
             {
                 p_Hideable = true;
@@ -142,6 +148,12 @@ void Player_OnCollision(Collider* left, Collider* right)
             if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "mud") == 0) { // testing collisions currently not working to slow player down
                 spd = 100.0f;
                 printf("SLOWED!");
+                break;
+            }
+
+            if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL)
+            {
+                p_Hideable = true;
                 break;
             }
 
@@ -210,6 +222,13 @@ void PLY_Update() { // handles input from player and checking for flags
         if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) player->position.x += currentSpd * dt; // right
 
 
+        if (render)
+            render->color.a = 255;
+    }
+    else
+    {
+        if (render)
+            render->color.a = 122;
     }
      
     // update and checks for invincibility
@@ -219,23 +238,32 @@ void PLY_Update() { // handles input from player and checking for flags
     if (playerhealth == 0) SM_DeleteGameObject(player);
 
     //checks for whether player can hide or not 
-    if (p_Hideable == true)
+    if (p_Hidden == false)
     {
-        if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
-                player->isEnabled = 0;
+        if (p_Hideable == true)
+        {
+            if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
+                //player->isEnabled = 0;
                 p_Hidden = true;
+            }
         }
-        
     }
+   
 
     else {
-        if (p_Hidden == true) {
-            if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
-                player->isEnabled = 1;
-                p_Hidden = false;
-            } 
+        if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
+            //player->isEnabled = 1;
+            p_Hidden = false;
         }
+
+        //if (p_Hidden == true) {
+
+        //}
     }
+
+
+    //RESET FLAG FOR COLLISION USE LATER
+    p_Hideable = false;
 
     //check if player reach drop off
     if (g_object1drop == true) {

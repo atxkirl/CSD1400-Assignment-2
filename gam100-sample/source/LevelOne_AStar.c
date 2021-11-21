@@ -222,9 +222,10 @@ void LevelOneAStar_GridColliderInit()
             if (gLoadedObjects->gGrid[i][j]->type == CORAL || gLoadedObjects->gGrid[i][j]->type == GRASS)
             {
                 printf("Coral detected!\n");
-                CLM_Set(CLM_GetComponent(gLoadedObjects->gGrid[i][j]), COL_BOX, LevelOneAStar_OnCollision);
-                CLM_GetComponent(gLoadedObjects->gGrid[i][j])->isLockedPos = 1;
-                CLM_GetComponent(gLoadedObjects->gGrid[i][j])->isTrigger = 1;
+                //CLM_Set(CLM_GetComponent(gLoadedObjects->gGrid[i][j]), COL_BOX, LevelOneAStar_OnCollision);
+                //CLM_GetComponent(gLoadedObjects->gGrid[i][j])->isLockedPos = 1;
+                //CLM_GetComponent(gLoadedObjects->gGrid[i][j])->isTrigger = 1;
+                CLM_GetComponent(gLoadedGrids->gGrid[i][j])->OnCollision = LevelOneAStar_OnCollision;
             }
         }
     }
