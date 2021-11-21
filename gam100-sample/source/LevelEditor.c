@@ -23,7 +23,7 @@
 // Q E + LSHIFT to change GameObject Direction
 // LEFT CLICK to set tile, RIGHT CLICK to delete tile
 // LEFT CLICK + SHIFT to set direction, RIGHT CLICK + SHIFT to reset direction
-// LEFT CLICK + CTRL to set PlayerSpawn, RIGHT CLICK + CTRL to set Objectives
+// LEFT CLICK + CTRL to set PlayerSpawn (in TileMode) or EnemySpawn (in ObjectMode), RIGHT CLICK + CTRL to set Objectives
 
 int iSize;
 OBJECT_TYPE objType;
