@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "FileParser.h"
 #include "SoundManager.h"
+#include "SceneManager.h"
 
 #include <time.h>
 #include <stdbool.h>
@@ -14,6 +15,9 @@
 #include "Controls.h"
 
 GameObject* player = NULL;
+GameObject* heart1 = NULL;
+GameObject* heart2 = NULL;
+GameObject* heart3 = NULL;
 Renderer* render = NULL;
 time_t startTime;
 
@@ -195,6 +199,24 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     RM_LoadImage(r, "Assets/fow.png");
     r->renderPriority = PRI_UI;
 
+    float xD = (float)CP_System_GetWindowWidth() / 100, yD = (float)CP_System_GetWindowHeight() / 100;
+
+    heart1 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 90, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+    heart2 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 85, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+    heart3 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 80, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+
+    render = RM_AddComponent(heart1);
+    RM_LoadImage(render, "Assets/heart.png");
+    render->renderPriority = PRI_UI;
+
+    render = RM_AddComponent(heart2);
+    RM_LoadImage(render, "Assets/heart.png");
+    render->renderPriority = PRI_UI;
+
+    render = RM_AddComponent(heart3);
+    RM_LoadImage(render, "Assets/heart.png");
+    render->renderPriority = PRI_UI;
+
     p_Slowed = false;
     p_Hidden = false;
     p_Invincible = false;
@@ -290,13 +312,21 @@ void PLY_Update() { // handles input from player and checking for flags
 
     switch (playerhealth) {
     case 3: {
-
+        heart1->isEnabled = true;
+        heart2->isEnabled = true;
+        heart3->isEnabled = true;
         break;
     }
     case 2: {
+        heart1->isEnabled = true;
+        heart2->isEnabled = true;
+        heart3->isEnabled = false;
         break;
     }
     case 1:{
+        heart1->isEnabled = true;
+        heart2->isEnabled = false;
+        heart3->isEnabled = false;
         break;
     }
     default: {
@@ -306,8 +336,12 @@ void PLY_Update() { // handles input from player and checking for flags
 
     // returns player back to normal speed when 
     //spd = 200.0f;
-    p_Hideable = false;
     RM_SetCameraPosition(player->position);
+
+    if (playerhealth <= 0)
+    {
+        SceneManager_ChangeSceneByName("gameEnd");
+    }
 }
 
 int PLY_IsHidden(void)

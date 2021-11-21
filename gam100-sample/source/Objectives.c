@@ -252,6 +252,7 @@ void Objectives_RenderUI()
     ObjectiveUIBox->tag = "ObjectiveUI";
     Renderer* r = RM_AddComponent(ObjectiveUIBox);
     r->color = CP_Color_Create(255, 255, 255, 255);
+    //RM_LoadImage(r, "Assets/TempWindow.png");
     r->renderPriority = PRI_UI;
 
     for (int i = 0; i < iNumObjectives;)
