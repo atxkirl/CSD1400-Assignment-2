@@ -19,6 +19,9 @@ int iCurrentObjective;
 GameObject* g_ObjectiveUI[MAX_OBJECTIVES];
 Renderer* g_ObjectiveTileOverlay[MAX_OBJECTIVES];
 
+int iAllObjectivesComplete;
+int iPrintExit;
+
 void Objectives_onCollision(Collider* left, Collider* right)
 {
     //me, other
@@ -105,6 +108,9 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
     OB_ConnectInit();
     OB_FixBoatInit();
     OB_BreakCoconutInit();
+
+    iAllObjectivesComplete = 0;
+    iPrintExit = 0;
 }
 
 void Objectives_Update()
@@ -142,6 +148,7 @@ void Objectives_Update()
         //RM_GetComponent(c->obj)->color.a = 0;
         CLM_RemoveGO(gObjectives[iCurrentObjective]);
         iUpdatePlayer = 1;
+        ++iAllObjectivesComplete;
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective2Done") == 0)
     {
@@ -155,6 +162,7 @@ void Objectives_Update()
         //RM_GetComponent(c->obj)->color.a = 0;
         CLM_RemoveGO(gObjectives[iCurrentObjective]);
         iUpdatePlayer = 1;
+        ++iAllObjectivesComplete;
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective3Done") == 0)
     {
@@ -168,6 +176,21 @@ void Objectives_Update()
         //RM_GetComponent(c->obj)->color.a = 0;
         CLM_RemoveGO(gObjectives[iCurrentObjective]);
         iUpdatePlayer = 1;
+        ++iAllObjectivesComplete;
+    }
+
+    if (iAllObjectivesComplete == iNumObjectives && !iPrintExit)
+    {
+        iPrintExit = 1;
+
+        Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[0]);
+        RM_SetText(rObjUI, "Find the Exit!");
+
+        for (int i = 1; i < iNumObjectives; ++i)
+        {
+            rObjUI = RM_GetComponent(g_ObjectiveUI[i]);
+            RM_SetText(rObjUI, "");
+        }
     }
 
     OB_ConnectUpdate();
