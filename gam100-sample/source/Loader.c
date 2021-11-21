@@ -153,8 +153,11 @@ void LoadGrid(char* cInput, int iLoad)
 				RM_LoadImage(r, "Assets/sand-tiles/sand-tile-3c.png");
 				break;
 			case(WATER):
-				CLM_AddComponent(gLoadedGrids->gGrid[iY][iX]);
+			{
+				Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[iY][iX]);
+				c->layer = COLLAY_WALL;
 				RM_LoadImage(r, "Assets/sand-tiles/sea-tile-1.png");
+			}
 				break;
 			default:
 				break;

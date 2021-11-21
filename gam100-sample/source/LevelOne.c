@@ -52,6 +52,13 @@ int IsPaused();
 *//*______________________________________________________________*/
 void ClearPause();
 
+GameObject* GameFpsCounterObj;
+/*!
+@brief Initialises the fps counter gameobject
+@return void
+*//*______________________________________________________________*/
+void InitDrawFPS();
+
 void LevelOne_OnCollision(Collider* left, Collider* right)
 {
     if (strcmp(right->obj->tag, ONCLICK_TAG) == 0)
@@ -91,17 +98,12 @@ void LevelOne_init(void)
 
     LevelOneGridColliderInit();
     InitPause();
+    InitDrawFPS();
 }
 
 void LevelOne_update(void)
 {
     SM_SystemsPreUpdate();
-
-    //float dt = CP_System_GetDt();
-    //float spd = 200.0f;
-    //Collider* gc = CLM_GetComponent(g);
-    //gc->velocity = CP_Vector_Set(0, 0);
-
 
     if (!IsPaused())
     {
@@ -116,8 +118,14 @@ void LevelOne_update(void)
 
     SM_SystemsUpdate(0);
 
+    Renderer* r = RM_GetComponent(GameFpsCounterObj);
+    float fps = 1.0f / CP_System_GetDt();
+    char t[7] = { 0 };
+    sprintf_s(t, 7, "%5.2f", fps);
+    RM_SetText(r, t);
+
     SM_SystemsLateUpdate();
-    LevelOneUI_render();
+    LevelOneUI_render(); 
     //LoaderUpdate();
 }
 
@@ -302,4 +310,27 @@ void ClearPause()
 {
     LL_Clear(&pauseMenus);
     pauseMenus = NULL;
+}
+
+void InitDrawFPS()
+{
+    RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
+    CP_Vector padding = CP_Vector_Set(20, 20);
+    CP_Vector size = CP_Vector_Set(50, 20);
+    GameFpsCounterObj = GOM_Create(EMPTY);
+    GameFpsCounterObj->position = CP_Vector_Set(screenWidth - padding.y - size.x * 0.5f, 0 + padding.y + size.y * 0.5f);
+    GameFpsCounterObj->scale = size;
+    Renderer* r = RM_AddComponent(GameFpsCounterObj);
+    r->renderPriority = PRI_UI;
+    RM_SetText(r, "FPS:");
+    r->textColor = COLOR_GREEN;
+    GameFpsCounterObj->isEnabled = 0;
+
+#if _DEBUG
+    GameFpsCounterObj->isEnabled = 1;
+#endif
+}
+
+void RenderFpsCounter()
+{
 }
