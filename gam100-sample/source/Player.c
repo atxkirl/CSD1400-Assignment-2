@@ -222,20 +222,20 @@ void PLY_Update() { // handles input from player and checking for flags
     if (p_Hideable == true)
     {
         if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
-            switch (p_Hidden) {
-            
-            case true: 
-                player->isEnabled = 1;
-                p_Hidden = false;
-                break;
-            case false:
                 player->isEnabled = 0;
                 p_Hidden = true;
-                break;
-            }
         }
+        
     }
 
+    else {
+        if (p_Hidden == true) {
+            if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
+                player->isEnabled = 1;
+                p_Hidden = false;
+            } 
+        }
+    }
 
     //check if player reach drop off
     if (g_object1drop == true) {
@@ -275,7 +275,7 @@ void PLY_Update() { // handles input from player and checking for flags
 
     // returns player back to normal speed when 
     //spd = 200.0f;
-
+    p_Hideable = false;
     RM_SetCameraPosition(player->position);
 }
 
