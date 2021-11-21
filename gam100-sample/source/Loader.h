@@ -39,4 +39,6 @@ void SetObjectiveComplete(int iIndex, int iSetter);
 
 CP_Vector SetPlayerPosition();
 
+CP_Vector SetEnemyPosition();
+
 int GetNumObjectives();

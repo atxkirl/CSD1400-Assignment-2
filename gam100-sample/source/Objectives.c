@@ -78,6 +78,11 @@ void Objectives_onCollision(Collider* left, Collider* right)
             }
         }
 
+        else if (strcmp(((GameObject*)left->obj)->tag, "Exit") == 0 && Objectives_GetCompleteAll())
+        {
+            printf("yay!\n");
+        }
+
         //if (strcmp(((GameObject*)left->obj)->tag, "Objective4Read") == 0)
         //{
         //    if (CP_Input_KeyTriggered(KEY_E))
@@ -191,6 +196,25 @@ void Objectives_Update()
             rObjUI = RM_GetComponent(g_ObjectiveUI[i]);
             RM_SetText(rObjUI, "");
         }
+
+        for (int i = 0; i < NumGrids; i++)
+        {
+            for (int j = 0; j < NumGrids; j++)
+            {
+                if(gLoadedObjects->gGrid[i][j]->type == EXIT)
+                {
+                    Renderer* r = RM_AddComponent(gLoadedObjects->gGrid[i][j]);
+                    r->renderPriority = PRI_PLY;
+                    r->color = COLOR_GREEN;
+                    r->color.a = 125;
+
+                    Collider* c = CLM_AddComponent(gLoadedObjects->gGrid[i][j]);
+                    CLM_Set(c, COL_BOX, Objectives_onCollision);
+                    c->isTrigger = 1;
+                    gLoadedObjects->gGrid[i][j]->tag = "Exit";
+                }
+            }
+        }
     }
 
     OB_ConnectUpdate();
@@ -302,4 +326,9 @@ void Objectives_RenderUI()
             }
         }
     }
+}
+
+int Objectives_GetCompleteAll()
+{
+    return (iAllObjectivesComplete == iNumObjectives);
 }

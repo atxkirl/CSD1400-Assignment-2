@@ -55,7 +55,7 @@ void CheckGridInt(int iX, int iY, int iObjType)
 	}
 	else
 	{
-		if (gObjectGrids.gGrid[iY][iX]->type != iObjType && (iObjType == GRASS || iObjType == CORAL))
+		if (gObjectGrids.gGrid[iY][iX]->type != iObjType)
 		{
 			gObjectGrids.gGrid[iY][iX]->type = iObjType;
 		}
@@ -104,8 +104,17 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 			//AssignDirection((CP_Input_GetMouseX() - fMoveX) / fScaleBy, (CP_Input_GetMouseY() - fMoveY) / fScaleBy, objDirection);
 			int iX = (int)tempGO->position.x / iSize;
 			int iY = (int)tempGO->position.y / iSize;
-			gGrids.gGrid[iY][iX]->tag = "PlayerSpawn";
-			printf("Player Spawn set\n");
+
+			if (isTileMode)
+			{
+				gGrids.gGrid[iY][iX]->tag = "PlayerSpawn";
+				printf("Player Spawn set\n");
+			}
+			else
+			{
+				gObjectGrids.gGrid[iY][iX]->tag = "EnemySpawn";
+				printf("Enemy Spawn set\n");
+			}
 		}
 		else if (strcmp(r->obj->tag, RCLICK) == 0)
 		{
@@ -1067,6 +1076,14 @@ void PrintCurrentType(int iObjType)
 	case(GRASS):
 		printf("Object Type: GRASS\n");
 		break;
+
+	case(EXIT):
+		printf("Object Type: EXIT\n");
+		break;
+
+	case(BOAT):
+		printf("Object Type: BOAT\n");
+		break;
 	default:
 		break;
 	}
@@ -1170,6 +1187,10 @@ void LoadTileImage()
 				RM_LoadImage(renderImage, "Assets/tempgrass.png");
 				break;
 
+			case(BOAT):
+				RM_LoadImage(renderImage, "Assets/boat/boat.png");
+				break;
+
 			default:
 				break;
 			}
@@ -1203,6 +1224,7 @@ void LoadSavedMap()
 			int iY = objList->fObjList[i]->iPosY;
 			int iX = objList->fObjList[i]->iPosX;
 			gGrids.gGrid[iY][iX]->type = objList->fObjList[i]->iType;
+			gGrids.gGrid[iY][iX]->tag = objList->fObjList[i]->cTag;
 			gGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * vScale.x * iSize, iY * vScale.y * iSize);
 			gGrids.gGrid[iY][iX]->scale = CP_Vector_Set(vScale.x, vScale.y);
 			gGrids.gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
@@ -1232,6 +1254,7 @@ void LoadSavedMap()
 			int iY = objList2->fObjList[i]->iPosY;
 			int iX = objList2->fObjList[i]->iPosX;
 			gObjectGrids.gGrid[iY][iX]->type = objList2->fObjList[i]->iType;
+			gObjectGrids.gGrid[iY][iX]->tag = objList2->fObjList[i]->cTag;
 			gObjectGrids.gGrid[iY][iX]->position = CP_Vector_Set(iX * vScale.x * iSize, iY * vScale.y * iSize);
 			gObjectGrids.gGrid[iY][iX]->scale = CP_Vector_Set(vScale.x, vScale.y);
 			gObjectGrids.gGrid[iY][iX]->oDirection = objList2->fObjList[i]->iDir;

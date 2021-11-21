@@ -77,7 +77,6 @@ void LevelOne_init(void)
     //load level and objectives
     LoadGrid("Level01", 0);
     Objectives_Init(screenWidth, screenHeight);
-    Objectives_RenderUI();
 
     //gLOne = GOM_Create2(RECTANGLE, SetPlayerPosition(), 0.0f, CP_Vector_Set(50, 50));
     //gLOne->tag = "player";
@@ -88,7 +87,7 @@ void LevelOne_init(void)
     //Insert spawn x,y here
     CP_Vector PlayerPos = SetPlayerPosition();
     PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
-
+    Objectives_RenderUI();
 
     LevelOneGridColliderInit();
     InitPause();

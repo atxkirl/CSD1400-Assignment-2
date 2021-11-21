@@ -15,5 +15,6 @@ void Objectives_Exit();
 void Objectives_SetPlayerUpdate(int iSetter);
 void Objectives_RenderUI();
 int Objectives_GetPlayerUpdate();
+int Objectives_GetCompleteAll();
 
 Objectives oObjectiveList[MAX_OBJECTIVES];

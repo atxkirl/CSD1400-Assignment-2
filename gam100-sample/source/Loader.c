@@ -14,6 +14,9 @@
 int iSize;
 float fPlayerPositionX;
 float fPlayerPositionY;
+
+float fEnemyPositionX;
+float fEnemyPositionY;
 int iNumObjectives;
 
 void LoaderInit()
@@ -66,6 +69,9 @@ void LoaderInit()
 
 	fPlayerPositionX = 0.f;
 	fPlayerPositionY = 0.f;
+
+	fEnemyPositionX = 0.f;
+	fEnemyPositionY = 0.f;
 }
 
 void LoaderUpdate()
@@ -172,6 +178,14 @@ void LoadGrid(char* cInput, int iLoad)
 			//gLoadedObjects.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 			r->color = CP_Color_Create(255, 255, 255, 255);
 
+
+			if (strcmp(objList2->fObjList[i]->cTag, "EnemySpawn") == 0)
+			{
+				fEnemyPositionX = gLoadedObjects->gGrid[iY][iX]->position.x;
+				fEnemyPositionY = gLoadedObjects->gGrid[iY][iX]->position.y;
+				printf("Enemy Spawned\n");
+			}
+
 			switch (gLoadedObjects->gGrid[iY][iX]->type)
 			{
 			case(CORAL):
@@ -181,6 +195,8 @@ void LoadGrid(char* cInput, int iLoad)
 			case(GRASS):
 				RM_LoadImage(r, "Assets/tempgrass.png");
 				break;
+			case(BOAT):
+				RM_LoadImage(r, "Assets/boat/boat.png");
 			default:
 				break;
 			}
@@ -248,6 +264,11 @@ void SetObjectiveComplete(int iIndex, int iSetter)
 CP_Vector SetPlayerPosition()
 {
 	return CP_Vector_Set(fPlayerPositionX, fPlayerPositionY);
+}
+
+CP_Vector SetEnemyPosition()
+{
+	return CP_Vector_Set(fEnemyPositionX, fEnemyPositionY);
 }
 
 int GetNumObjectives()
