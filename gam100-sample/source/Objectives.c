@@ -8,6 +8,7 @@
 #include "Objective_Pickup.h"
 #include "Colors.h"
 #include "Controls.h"
+#include "SceneManager.h"
 
 int iUpdatePlayer;
 CP_Vector vObjectiveOnePos, vObjectiveTwoPos, vObjectiveThreePos;
@@ -80,6 +81,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
 
         else if (strcmp(((GameObject*)left->obj)->tag, "Exit") == 0 && Objectives_GetCompleteAll())
         {
+            SceneManager_ChangeSceneByName("gameEnd");
             printf("yay!\n");
         }
 
