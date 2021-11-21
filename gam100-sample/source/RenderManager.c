@@ -135,7 +135,7 @@ void RM_Render()
 			RenderAllInList(renderLayers[i]);
 		}
 
-#if _DEBUG
+//#if _DEBUG
 		//rendered last
 		if (i == PRI_GAME_OBJECT)
 		{
@@ -158,7 +158,7 @@ void RM_Render()
 			LL_Clear(&debugLinesList);
 		}
 		
-#endif
+//#endif
 
 	}
 
@@ -169,7 +169,6 @@ void RM_Render()
 	}
 
 	
-
 }
 
 void RM_SetCameraPosition(CP_Vector pos)
