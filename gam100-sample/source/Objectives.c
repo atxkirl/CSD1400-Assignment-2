@@ -197,14 +197,19 @@ void Objectives_Update()
             RM_SetText(rObjUI, "");
         }
 
+        //Add box overlay for exit
         for (int i = 0; i < NumGrids; i++)
         {
             for (int j = 0; j < NumGrids; j++)
             {
                 if(gLoadedObjects->gGrid[i][j]->type == EXIT)
                 {
-                    Renderer* r = RM_AddComponent(gLoadedObjects->gGrid[i][j]);
-                    r->renderPriority = PRI_PLY;
+                    GameObject* g = GOM_Create(RECTANGLE);
+                    g->position = gLoadedObjects->gGrid[i][j]->position;
+                    g->rotation = gLoadedObjects->gGrid[i][j]->rotation;
+                    g->scale = gLoadedObjects->gGrid[i][j]->scale;
+                    Renderer* r = RM_AddComponent(g);
+                    //r->renderPriority = PRI_PLY;
                     r->color = COLOR_GREEN;
                     r->color.a = 125;
 
@@ -212,6 +217,8 @@ void Objectives_Update()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     gLoadedObjects->gGrid[i][j]->tag = "Exit";
+
+                    break;
                 }
             }
         }

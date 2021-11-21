@@ -45,6 +45,7 @@ void LoaderInit()
 				go->scale = CP_Vector_Set(1.f, 1.f);
 				r->color = CP_Color_Create(255, 255, 0, 255);
 				gLoadedGrids->gGrid[i][j] = go;
+				go->isEnabled = 0;
 			}
 		}
 	}
@@ -57,12 +58,13 @@ void LoaderInit()
 			for (int j = 0; j < NumGrids; j++)
 			{
 				//gGrids.gGrid[i][j] = isEmpty;
-				GameObject* go = GOM_Create(EMPTY);
+				GameObject* go = GOM_Create(RECTANGLE);
 				Renderer* r = RM_AddComponent(go);
 				go->position = CP_Vector_Set((float)j, (float)i);
 				go->scale = CP_Vector_Set(1.f, 1.f);
 				r->color = CP_Color_Create(255, 255, 0, 255);
 				gLoadedObjects->gGrid[i][j] = go;
+				go->isEnabled = 0;
 			}
 		}
 	}
@@ -120,6 +122,7 @@ void LoadGrid(char* cInput, int iLoad)
 			gLoadedGrids->gGrid[iY][iX]->oDirection = objList->fObjList[i]->iDir;
 			gLoadedGrids->gGrid[iY][iX]->rotation = gLoadedGrids->gGrid[iY][iX]->oDirection * 90.f;
 			gLoadedGrids->gGrid[iY][iX]->tag = objList->fObjList[i]->cTag;
+			gLoadedGrids->gGrid[iY][iX]->isEnabled = 1;
 
 			if (strcmp(objList->fObjList[i]->cTag, "PlayerSpawn") == 0)
 			{
@@ -173,6 +176,7 @@ void LoadGrid(char* cInput, int iLoad)
 			gLoadedObjects->gGrid[iY][iX]->oDirection = objList2->fObjList[i]->iDir;
 			gLoadedObjects->gGrid[iY][iX]->rotation = gLoadedObjects->gGrid[iY][iX]->oDirection * 90.f;
 			gLoadedObjects->gGrid[iY][iX]->tag = objList2->fObjList[i]->cTag;
+			gLoadedObjects->gGrid[iY][iX]->isEnabled = 1;
 
 			r = RM_GetComponent(gLoadedObjects->gGrid[iY][iX]);
 			//gLoadedObjects.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
