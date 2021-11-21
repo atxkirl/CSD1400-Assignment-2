@@ -110,7 +110,7 @@ CP_Matrix RM_GetViewMatrix()
 }
 void RM_Render()
 {
-	CP_Graphics_ClearBackground(CP_Color_Create(37, 150, 190, 255));
+	CP_Graphics_ClearBackground(CP_Color_Create(112, 228, 204, 255));
 
 	LinkedList* renderLayers[PRI_TOTAL] = { NULL };
 	LinkedList* node = renderObjects;
