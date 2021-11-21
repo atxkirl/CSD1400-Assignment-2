@@ -94,12 +94,13 @@ void LevelOne_init(void)
 
     //load level and objectives
     LoadGrid("Level01", 0);
-    Objectives_Init(screenWidth, screenHeight);
 
     //Insert spawn x,y here
     CP_Vector PlayerPos = SetPlayerPosition();
     bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
-    
+
+    Objectives_Init(screenWidth, screenHeight);
+
     Objectives_RenderUI();
 
     LevelOneGridColliderInit();

@@ -105,9 +105,9 @@ void OB_FixBoatInit()
 	RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
 	Collider* c = NULL;
 
-	ofb_title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(800, 100));
+	ofb_title = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(screenWidth * 0.6f, 60));
 	Renderer* r = RM_AddComponent(ofb_title);
-	r->color.a = 0;
+	r->color.a = 200;
 	//r->text = "Fix the boat!";
 	RM_SetText(r, "Fix the boat!");
 	r->renderPriority = PRI_UI;

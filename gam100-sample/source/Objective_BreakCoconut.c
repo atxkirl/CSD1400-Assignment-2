@@ -48,9 +48,9 @@ void OB_BreakCoconutInit()
 	Renderer* r = NULL;
 	Collider* c = NULL;
 
-	obc_title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(800, 100));
+	obc_title = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(screenWidth * 0.6f, 60));
 	r = RM_AddComponent(obc_title);
-	r->color.a = 0;
+	r->color.a = 200;
 	RM_SetText(r, "Break the coconut!");
 	r->renderPriority = PRI_UI;
 	r->textScale = CP_Vector_Set(3.0f, 3.0f);
