@@ -1,5 +1,5 @@
-#define BUTTON_WIDTH 60.f
-#define BUTTON_HEIGHT 30.f
+#define BUTTON_WIDTH 80.f
+#define BUTTON_HEIGHT 40.f
 
 #include <stdio.h>
 #include "cprocessing.h"

@@ -251,7 +251,7 @@ void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* ma
 	}
 
 	// Look to find valid position in map
-	while (1)
+	while (true)
 	{
 		if (detectInfLoop++ >= INFINITE_LOOP)
 		{

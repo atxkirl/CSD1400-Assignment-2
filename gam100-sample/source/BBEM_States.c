@@ -67,6 +67,8 @@ void FSMState_BBEM_Roam_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 
 	// Set main variables.
 	controller->moveSpeed = roamSpeed;
+	controller->elapsedTime = 0.f;
+	controller->waitTime = 0.f;
 	
 	// Set the AI to target the Player
 	*controller->targetPosition = controller->targetObject->position;
@@ -112,12 +114,16 @@ void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 static const float chaseSpeed = 150.f;
 static const int chaseLoseRadius = 6;
 static const float chaseRepathDist = 0.5f;
+static const float chaseDamageDist = 1.2f;
 
 void FSMState_BBEM_Chase_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 {
 	printf("BBEM_Chase_OnEnter()\n");
 
+	// Set main variables.
 	controller->moveSpeed = chaseSpeed;
+	controller->elapsedTime = 0.f;
+	controller->waitTime = 0.f;
 
 	// Set AI to chase player.
 	*controller->targetPosition = controller->targetObject->position;
@@ -128,12 +134,20 @@ void FSMState_BBEM_Chase_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 
 void FSMState_BBEM_Chase_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 {
+	// Keep track of Player position.
+	*controller->targetPosition = controller->targetObject->position;
 }
 
 void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
 	// Keep track of Player position.
 	*controller->targetPosition = controller->targetObject->position;
+	// If AI needs to wait, just wait.
+	controller->elapsedTime += CP_System_GetDt();
+	if (controller->elapsedTime < controller->waitTime)
+	{
+		return;
+	}
 
 	// If Player is invincible, means we've just hit him, so walk slower.
 	if (PLY_IsInvincible())
@@ -146,6 +160,19 @@ void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 	}
 
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
+	// Is Player within smacking range?
+	if (distance <= (chaseDamageDist * controller->tileSize))
+	{
+		// Deal damage to the player.
+		bool pass = PLY_TakeDamage();
+		if (pass)
+		{
+			// Make AI wait for abit before continuing to chase or change state.
+			controller->elapsedTime = 0.f;
+			controller->waitTime = FRAND(1, 2);
+			return;
+		}
+	}
 	// Is Player too far from AI?
 	if (distance > (chaseLoseRadius * controller->tileSize) || PLY_IsHidden())
 	{
@@ -186,18 +213,29 @@ void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 // - IF Player if still not found, the AI will change to IDLE state. (Note, found means Player is not hidden, and within radius of AI.)
 // - HOWEVER, if Player is found, the AI will change to CHASE state.
 
-static const float searchSpeed = 100.f;
+static const float searchSpeed = 50.f;
 static const int searchMin = 1;
 static const int searchMax = 3;
+static const int searchRadiusMin = 0;		// Minimum radius around player.
+static const int searchRadiusMax = 2;
 
 void FSMState_BBEM_Search_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 {
 	printf("BBEM_Search_OnEnter()\n");
 
+	// Set main variables.
 	controller->moveSpeed = searchSpeed;
+	controller->elapsedTime = 0.f;
+	controller->waitTime = 0.f;
 
 	// Get how many spots the AI will "search" through.
 	controller->searchCount = RAND(searchMin, searchMax);
+
+	// Pick the first location to search.
+	AStar_GetTile(controller->targetPosition, *controller->targetPosition, controller->map, searchRadiusMin, searchRadiusMax);
+	// Calculate path to search position.
+	AStar_GetPathWorldPosition(controller->controlledObject->position, *controller->targetPosition, &controller->movementPath, controller->map);
+	--controller->searchCount;
 }
 
 void FSMState_BBEM_Search_OnExit(FSM* controller, CP_Vector* newTargetPosition)
@@ -208,7 +246,13 @@ void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition
 {
 	// Is Player too near me and visible?
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	if (PLY_IsHidden() != 1 && distance <= (controller->immediateDetectionRadius * controller->tileSize))
+	float angle = CP_Vector_Angle(controller->fovDetectionForward, controller->targetObject->position);
+	if (distance <= (controller->immediateDetectionRadius * controller->tileSize))
+	{
+		controller->nextState = "BBEM_Chase";
+		return;
+	}
+	else if (!PLY_IsHidden() && distance <= (controller->fovDetectionRadius * controller->tileSize) && angle < controller->fovDetectionHalfAngle)
 	{
 		controller->nextState = "BBEM_Chase";
 		return;
@@ -222,7 +266,7 @@ void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition
 			printf("Hmm... Searching... Count = %d\n", controller->searchCount);
 
 			// Get the search location.
-			AStar_GetTile(controller->targetPosition, *controller->targetPosition, controller->map, roamRadiusMin, roamRadiusMax);
+			AStar_GetTile(controller->targetPosition, *controller->targetPosition, controller->map, searchRadiusMin, searchRadiusMax);
 			// Calculate path to search position.
 			AStar_GetPathWorldPosition(controller->controlledObject->position, *controller->targetPosition, &controller->movementPath, controller->map);
 

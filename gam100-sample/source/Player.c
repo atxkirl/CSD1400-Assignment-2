@@ -16,6 +16,9 @@
 
 GameObject* player = NULL;
 GameObject* player_fogofwar = NULL;
+GameObject* heart1 = NULL;
+GameObject* heart2 = NULL;
+GameObject* heart3 = NULL;
 Renderer* render = NULL;
 time_t startTime;
 
@@ -56,14 +59,14 @@ void Player_OnCollision(Collider* left, Collider* right)
 {
     if (p_Invincible == 0) {
         while (1) {
-            // Checks for enemy hits
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "BBEM") == 0) {
-                printf("hit");
-                startTime = clock(); //holds information on when the player was last hit according to the time
-                p_Invincible = true;
-                playerhealth--;
-                break;
-            }
+            //// Checks for enemy hits
+            //if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "BBEM") == 0) {
+            //    printf("hit");
+            //    startTime = clock(); //holds information on when the player was last hit according to the time
+            //    p_Invincible = true;
+            //    playerhealth--;
+            //    break;
+            //}
 
             // Pick-up minigame
             if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "wood") == 0) {
@@ -105,7 +108,9 @@ void Player_OnCollision(Collider* left, Collider* right)
 
             if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL)
             {
-                p_Hideable = true;
+                //p_Hideable = true;
+                p_Hidden = true;
+                AM_GetComponent(player_fogofwar)->loopDir = 1;
                 break;
             }
 
@@ -153,10 +158,12 @@ void Player_OnCollision(Collider* left, Collider* right)
                 break;
             }
 
-            if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL)
+            if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL) // Auto hide the Player when they're in Tall Grass / Coral.
             {
-                p_Hideable = true;
+                //p_Hideable = true;
                 AM_GetComponent(player_fogofwar)->loopDir = 1;
+                //p_Hideable = true;
+                p_Hidden = true;
                 break;
             }
 
@@ -196,9 +203,28 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     RM_LoadImage(r, "Assets/fow2.png");
     r->renderPriority = PRI_UI;
     a = AM_AddComponent(temp);
-    AM_SetSprite(a, 4, 1, 4, 0.5f);
+    AM_SetSprite(a, 4, 1, 4, 10.0f);
+    a->isContinuous = 0;
     a->loopDir = -1;
     player_fogofwar = temp;
+
+    float xD = (float)CP_System_GetWindowWidth() / 100, yD = (float)CP_System_GetWindowHeight() / 100;
+
+    heart1 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 90, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+    heart2 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 85, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+    heart3 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 80, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+
+    render = RM_AddComponent(heart1);
+    RM_LoadImage(render, "Assets/heart.png");
+    render->renderPriority = PRI_UI;
+
+    render = RM_AddComponent(heart2);
+    RM_LoadImage(render, "Assets/heart.png");
+    render->renderPriority = PRI_UI;
+
+    render = RM_AddComponent(heart3);
+    RM_LoadImage(render, "Assets/heart.png");
+    render->renderPriority = PRI_UI;
 
     p_Slowed = false;
     p_Hidden = false;
@@ -211,33 +237,31 @@ GameObject* PLY_CreatePlayer(float x, float y) {
 } 
     
 void PLY_Update() { // handles input from player and checking for flags
-
     float dt = CP_System_GetDt();
 
     float currentSpd = 200.0f - (n_weight * weight);
 
     AM_GetComponent(player_fogofwar)->loopDir = -1;
 
-    if (p_Hidden == false) {
+    if (p_Hidden == false) 
+    {
+        RM_GetComponent(player)->color.a = 255;
+    }
+    else
+    {
+        RM_GetComponent(player)->color.a = 122;
+    }
+
+    if (!p_Hideable)
+    {
         //  player controls
-        if (CP_Input_KeyDown((CP_KEY)cControls->cUp)) {
-            player->position.y -= currentSpd * dt;
-        }
-        // up
+        if (CP_Input_KeyDown((CP_KEY)cControls->cUp)) player->position.y -= currentSpd * dt; // up
+
         if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) player->position.x -= currentSpd * dt; // left
 
         if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) player->position.y += currentSpd * dt; // down
 
         if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) player->position.x += currentSpd * dt; // right
-
-
-        if (render)
-            render->color.a = 255;
-    }
-    else
-    {
-        if (render)
-            render->color.a = 122;
     }
      
     // update and checks for invincibility
@@ -251,28 +275,29 @@ void PLY_Update() { // handles input from player and checking for flags
     {
         if (p_Hideable == true)
         {
-            if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
+            p_Hidden = true;
+
+            if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) 
+            {
                 //player->isEnabled = 0;
                 p_Hidden = true;
             }
         }
     }
-   
-
-    else {
-        if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
+    else 
+    {
+        if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) 
+        {
             //player->isEnabled = 1;
             p_Hidden = false;
         }
-
-        //if (p_Hidden == true) {
-
-        //}
     }
 
 
     //RESET FLAG FOR COLLISION USE LATER
     p_Hideable = false;
+    //REST FLAG
+    p_Hidden = false;
 
     //check if player reach drop off
     if (g_object1drop == true) {
@@ -296,13 +321,21 @@ void PLY_Update() { // handles input from player and checking for flags
 
     switch (playerhealth) {
     case 3: {
-
+        heart1->isEnabled = true;
+        heart2->isEnabled = true;
+        heart3->isEnabled = true;
         break;
     }
     case 2: {
+        heart1->isEnabled = true;
+        heart2->isEnabled = true;
+        heart3->isEnabled = false;
         break;
     }
     case 1:{
+        heart1->isEnabled = true;
+        heart2->isEnabled = false;
+        heart3->isEnabled = false;
         break;
     }
     default: {
@@ -312,7 +345,6 @@ void PLY_Update() { // handles input from player and checking for flags
 
     // returns player back to normal speed when 
     //spd = 200.0f;
-    p_Hideable = false;
     RM_SetCameraPosition(player->position);
 
     if (playerhealth <= 0)
@@ -329,4 +361,17 @@ int PLY_IsHidden(void)
 int PLY_IsInvincible(void)
 {
     return p_Invincible;
+}
+
+bool PLY_TakeDamage(void)
+{
+    if (!p_Invincible)
+    {
+        startTime = clock(); //holds information on when the player was last hit according to the time
+        p_Invincible = true;
+        playerhealth--;
+        return true;
+    }
+    else
+        return false;
 }

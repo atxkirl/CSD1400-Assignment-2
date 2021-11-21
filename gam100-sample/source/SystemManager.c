@@ -84,11 +84,11 @@ void SM_SystemsPreUpdate()
 
 void SM_SystemsUpdate(int isPause)
 {
-	if(!isPause)
-		AIM_Update();
 	DM_Update();
 	CLM_Update();
 	AM_Update();
+	if(!isPause)
+		AIM_Update();
 }
 
 void SM_SystemsLateUpdate()
