@@ -19,6 +19,7 @@
 #include "SceneManager.h"
 #include "Objectives.h"
 #include "Player.h"
+#include "DetectMemoryLeak.h"
 
 static GameObject* bananaBoi = NULL;
 static GameObject* ObjectiveUI = NULL;
@@ -36,28 +37,8 @@ void LevelOneAStar_AStarInit(void);
 
 void LevelOneAStar_OnCollision(Collider* left, Collider* right)
 {
-    //me, other
-    if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
-    {
-        if (strcmp(((GameObject*)left->obj)->tag, "objone") == 0)
-        {
-            SetObjectiveComplete(1, 1);
-            for (int i = 0; i < MAX_OBJECTIVES; i++)
-            {
-                if (oObjectiveList[i].isComplete && !oObjectiveList[i].isSet)
-                {
-                    ObjectiveUI->position = CP_Vector_Set(180.0f, 50.0f + i * 50.f);
-
-                    Renderer* rObjUI = RM_AddComponent(ObjectiveUI);
-                    rObjUI->color = CP_Color_Create(255, 255, 255, 255);
-                    //rObjUI->text = "Done.";
-                    RM_SetText(rObjUI, "Done.");
-                    rObjUI->renderPriority = PRI_UI;
-                    oObjectiveList[i].isSet = 1;
-                }
-            }
-        }
-    }
+    if(strcmp(left->obj->tag, "Coral") == 0 || strcmp(right->obj->tag, "Coral") == 0)
+        printf("COLLIDING!!! Left=%s, Right=%s\n", left->obj->tag, right->obj->tag);
 }
 
 void LevelOneAStar_init(void)
@@ -206,6 +187,9 @@ void LevelOneAStar_exit(void)
 
     LoaderExit();
     SM_SystemsExit();
+
+    // Print out memory leaks
+    //_CrtDumpMemoryLeaks();
 }
 
 void LevelOneAStar_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
@@ -233,6 +217,14 @@ void LevelOneAStar_GridColliderInit()
             {
                 CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOneAStar_OnCollision);
                 CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;
+            }
+
+            if (gLoadedObjects->gGrid[i][j]->type == CORAL || gLoadedObjects->gGrid[i][j]->type == GRASS)
+            {
+                printf("Coral detected!\n");
+                CLM_Set(CLM_GetComponent(gLoadedObjects->gGrid[i][j]), COL_BOX, LevelOneAStar_OnCollision);
+                CLM_GetComponent(gLoadedObjects->gGrid[i][j])->isLockedPos = 1;
+                CLM_GetComponent(gLoadedObjects->gGrid[i][j])->isTrigger = 1;
             }
         }
     }

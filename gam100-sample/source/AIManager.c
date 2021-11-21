@@ -200,8 +200,8 @@ void AIM_InitFSM(FSM* controller, char* startStateName, GameObject* targetObject
 
 	// Initialize Detection Variables.
 	controller->immediateDetectionRadius = 1;
-	controller->fovDetectionHalfAngle = 30.f;
-	controller->fovDetectionRadius = 3;
+	controller->fovDetectionHalfAngle = 20.f;
+	controller->fovDetectionRadius = 2;
 
 	// Initalize State variables.
 	controller->currentState = startStateName;
