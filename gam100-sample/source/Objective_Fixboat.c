@@ -228,9 +228,9 @@ void OB_FixBoatInit()
 
 	ofb_title->isEnabled = ofb_UI->isEnabled = ofb_cross->isEnabled = 0;
 	ofb_brokenboat->isEnabled = 0;
+	ofb_isFixed1 = ofb_isFixed2 = ofb_isFixed3 = 0;
 	FixBoatEnableImage();
 	ofb_part1->isEnabled = ofb_part2->isEnabled = ofb_part3->isEnabled = 0;
-	ofb_isFixed1 = ofb_isFixed2 = ofb_isFixed3 = 0;
 	ofb_fix1Col->isEnabled = ofb_fix2Col->isEnabled = ofb_fix3Col->isEnabled = 0;
 }
 
