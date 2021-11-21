@@ -94,17 +94,7 @@ void LevelOne_init(void)
 
     //load level and objectives
     LoadGrid("Level01", 0);
-
-    CP_Vector PlayerPos = SetPlayerPosition();
-    PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
-
     Objectives_Init(screenWidth, screenHeight);
-
-    //gLOne = GOM_Create2(RECTANGLE, SetPlayerPosition(), 0.0f, CP_Vector_Set(50, 50));
-    //gLOne->tag = "player";
-    //Renderer *r = RM_AddComponent(gLOne);
-    //RM_LoadImage(r, "Assets/bananaboi.png");
-    //CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
 
     //Insert spawn x,y here
     CP_Vector PlayerPos = SetPlayerPosition();
@@ -188,8 +178,14 @@ void LevelOneGridColliderInit()
         {
             if (gLoadedGrids->gGrid[i][j]->type == WATER || gLoadedGrids->gGrid[i][j]->type == EMPTY)
             {
-                CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOne_OnCollision);
-                CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;
+                //CLM_Set(CLM_GetComponent(gLoadedGrids->gGrid[i][j]), COL_BOX, LevelOne_OnCollision);
+                //CLM_GetComponent(gLoadedGrids->gGrid[i][j])->isLockedPos = 1;
+
+                CLM_GetComponent(gLoadedGrids->gGrid[i][j])->OnCollision = LevelOne_OnCollision;
+            }
+            if (gLoadedObjects->gGrid[i][j]->type == CORAL || gLoadedObjects->gGrid[i][j]->type == GRASS)
+            {
+                CLM_GetComponent(gLoadedObjects->gGrid[i][j])->OnCollision = LevelOne_OnCollision;
             }
         }
     }

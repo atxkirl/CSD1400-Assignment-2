@@ -103,7 +103,8 @@ void Player_OnCollision(Collider* left, Collider* right)
 
             if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL)
             {
-                p_Hideable = true;
+                //p_Hideable = true;
+                p_Hidden = true;
                 break;
             }
 
@@ -151,9 +152,10 @@ void Player_OnCollision(Collider* left, Collider* right)
                 break;
             }
 
-            if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL)
+            if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL) // Auto hide the Player when they're in Tall Grass / Coral.
             {
-                p_Hideable = true;
+                //p_Hideable = true;
+                p_Hidden = true;
                 break;
             }
 
@@ -204,24 +206,12 @@ GameObject* PLY_CreatePlayer(float x, float y) {
 } 
     
 void PLY_Update() { // handles input from player and checking for flags
-
     float dt = CP_System_GetDt();
 
     float currentSpd = 200.0f - (n_weight * weight);
 
-    if (p_Hidden == false) {
-        //  player controls
-        if (CP_Input_KeyDown((CP_KEY)cControls->cUp)) {
-            player->position.y -= currentSpd * dt;
-        }
-        // up
-        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) player->position.x -= currentSpd * dt; // left
-
-        if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) player->position.y += currentSpd * dt; // down
-
-        if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) player->position.x += currentSpd * dt; // right
-
-
+    if (p_Hidden == false) 
+    {
         if (render)
             render->color.a = 255;
     }
@@ -229,6 +219,18 @@ void PLY_Update() { // handles input from player and checking for flags
     {
         if (render)
             render->color.a = 122;
+    }
+
+    if (!p_Hideable)
+    {
+        //  player controls
+        if (CP_Input_KeyDown((CP_KEY)cControls->cUp)) player->position.y -= currentSpd * dt; // up
+
+        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) player->position.x -= currentSpd * dt; // left
+
+        if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) player->position.y += currentSpd * dt; // down
+
+        if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) player->position.x += currentSpd * dt; // right
     }
      
     // update and checks for invincibility
@@ -242,28 +244,29 @@ void PLY_Update() { // handles input from player and checking for flags
     {
         if (p_Hideable == true)
         {
-            if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
+            p_Hidden = true;
+
+            if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) 
+            {
                 //player->isEnabled = 0;
                 p_Hidden = true;
             }
         }
     }
-   
-
-    else {
-        if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) {
+    else 
+    {
+        if (CP_Input_KeyTriggered((CP_KEY)cControls->cInteract)) 
+        {
             //player->isEnabled = 1;
             p_Hidden = false;
         }
-
-        //if (p_Hidden == true) {
-
-        //}
     }
 
 
     //RESET FLAG FOR COLLISION USE LATER
     p_Hideable = false;
+    //REST FLAG
+    p_Hidden = false;
 
     //check if player reach drop off
     if (g_object1drop == true) {
