@@ -95,8 +95,8 @@ void LevelOne_init(void)
     //load level and objectives
     LoadGrid("Level01", 0);
 
-    CP_Vector PlayerPos = SetPlayerPosition();
-    PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
+    //CP_Vector PlayerPos = SetPlayerPosition();
+    //PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
 
     Objectives_Init(screenWidth, screenHeight);
 
