@@ -292,6 +292,7 @@ void OB_ConnectTrigger()
 	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
 	isActive = 1;
 	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
+	OB_SetPosition();
 }
 
 void OB_ConnectUnTrigger()
