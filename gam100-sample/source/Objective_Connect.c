@@ -286,10 +286,6 @@ void OB_ConnectToggleActive()
 	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
 	isActive = !isActive;
 	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
-	OB_SetPosition();
-
-	Renderer* r = RM_GetComponent(OBJ_Title);
-	RM_SetText(r, "Connect The Wires!");
 }
 
 int OB_ConnectIsComplete()
