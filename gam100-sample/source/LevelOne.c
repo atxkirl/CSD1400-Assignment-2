@@ -79,10 +79,15 @@ void LevelOne_init(void)
     SM_SystemsInit();
     //RM_AddComponent(g);
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
+
     LoaderInit();
 
     //load level and objectives
     LoadGrid("Level01", 0);
+
+    CP_Vector PlayerPos = SetPlayerPosition();
+    PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
+
     Objectives_Init(screenWidth, screenHeight);
 
     //gLOne = GOM_Create2(RECTANGLE, SetPlayerPosition(), 0.0f, CP_Vector_Set(50, 50));
@@ -92,8 +97,7 @@ void LevelOne_init(void)
     //CLM_Set(CLM_AddComponent(gLOne), COL_BOX, LevelOne_OnCollision);
 
     //Insert spawn x,y here
-    CP_Vector PlayerPos = SetPlayerPosition();
-    PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
+
     Objectives_RenderUI();
 
     LevelOneGridColliderInit();
