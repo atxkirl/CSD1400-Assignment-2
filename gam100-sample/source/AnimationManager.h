@@ -25,6 +25,7 @@ typedef struct Animation
 	int index;
 	int frameCount;
 	float fps;
+	int loopDir;
 
 	//for shake shake. should union heh
 	float rotateAngle;

@@ -12,7 +12,22 @@ void Update_SpriteAnimation(Animation* a, float dt)
 	float delay = 1.0f / a->fps;
 	if (a->elapsedTime >= delay)
 	{
-		a->index = (a->index + 1) % a->frameCount;
+		if (a->loopDir)
+			a->index = a->index + 1;
+		else
+			a->index = a->index - 1;
+
+		if (a->index >= a->frameCount && a->isContinuous)
+			a->index %= a->frameCount;
+		else if (a->index < 0 && a->isContinuous)
+			a->index = a->frameCount - 1;
+		else
+		{
+			if (a->index >= a->frameCount)
+				a->index = a->frameCount - 1;
+			else
+				a->index = 0;
+		}
 		a->elapsedTime = 0.0f;
 
 		float w = 1.0f / a->splitX;
@@ -208,6 +223,8 @@ void AM_SetSprite(Animation* a, int x, int y, int f, float fps)
 	a->frameCount = f;
 	a->fps = fps;
 	a->type = ANIM_SPRITE;
+	a->loopDir = 1;
+	a->isContinuous = 1;
 
 	float w = 1.0f / a->splitX;
 	float h = 1.0f / a->splitY;

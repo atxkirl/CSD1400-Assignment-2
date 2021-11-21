@@ -15,6 +15,7 @@
 #include "Controls.h"
 
 GameObject* player = NULL;
+GameObject* player_fogofwar = NULL;
 Renderer* render = NULL;
 time_t startTime;
 
@@ -155,6 +156,7 @@ void Player_OnCollision(Collider* left, Collider* right)
             if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL)
             {
                 p_Hideable = true;
+                AM_GetComponent(player_fogofwar)->loopDir = 1;
                 break;
             }
 
@@ -191,8 +193,12 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
     GameObject* temp = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f), 0, CP_Vector_Set(screenWidth, screenHeight));
     Renderer* r = RM_AddComponent(temp);
-    RM_LoadImage(r, "Assets/fow.png");
+    RM_LoadImage(r, "Assets/fow2.png");
     r->renderPriority = PRI_UI;
+    a = AM_AddComponent(temp);
+    AM_SetSprite(a, 4, 1, 4, 0.5f);
+    a->loopDir = -1;
+    player_fogofwar = temp;
 
     p_Slowed = false;
     p_Hidden = false;
@@ -209,6 +215,8 @@ void PLY_Update() { // handles input from player and checking for flags
     float dt = CP_System_GetDt();
 
     float currentSpd = 200.0f - (n_weight * weight);
+
+    AM_GetComponent(player_fogofwar)->loopDir = -1;
 
     if (p_Hidden == false) {
         //  player controls
