@@ -13,7 +13,7 @@ void gameEnd_OnCollision(Collider* left, Collider* right) {
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
         if (strcmp(((GameObject*)left->obj)->tag, "restart") == 0)
-            SceneManager_ChangeSceneByName("weiyi");
+            SceneManager_ChangeSceneByName("levelone");
         else if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
             SceneManager_ChangeSceneByName("mainmenu");
     }

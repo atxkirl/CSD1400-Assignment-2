@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "FileParser.h"
 #include "SoundManager.h"
+#include "SceneManager.h"
 
 #include <time.h>
 #include <stdbool.h>
@@ -305,6 +306,11 @@ void PLY_Update() { // handles input from player and checking for flags
     //spd = 200.0f;
     p_Hideable = false;
     RM_SetCameraPosition(player->position);
+
+    if (playerhealth <= 0)
+    {
+        SceneManager_ChangeSceneByName("gameEnd");
+    }
 }
 
 int PLY_IsHidden(void)
