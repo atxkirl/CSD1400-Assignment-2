@@ -126,6 +126,9 @@ void OB_BreakCoconutTrigger()
 	obc_coconut->isEnabled = 1;
 	obc_cross->isEnabled = 1;
 	isActive = 1;
+
+	Renderer* r = RM_GetComponent(obc_title);
+	RM_SetText(r, "Break the coconut!");
 }
 void OB_BreakCoconutUnTrigger()
 {

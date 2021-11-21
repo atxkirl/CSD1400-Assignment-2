@@ -279,6 +279,9 @@ void OB_FixBoatTrigger()
 	FixBoatEnableImage();
 	FixBoatRandomisePartsTransform();
 	isActive = 1;
+
+	Renderer* r = RM_GetComponent(ofb_title);
+	RM_SetText(r, "Fix the boat!");
 }
 
 void OB_FixBoatUnTrigger()
