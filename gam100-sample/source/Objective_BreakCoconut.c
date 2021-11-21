@@ -8,6 +8,7 @@ int obc_canHit = 1;
 const float obc_delayHit = 0.5f;
 
 GameObject* obc_cross;
+GameObject* obc_UI, * obc_title;
 GameObject* obc_coconut;
 Renderer* r1, *r2, *r3, *r4;
 int isActive;
@@ -47,6 +48,20 @@ void OB_BreakCoconutInit()
 	Renderer* r = NULL;
 	Collider* c = NULL;
 
+	obc_title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(800, 100));
+	r = RM_AddComponent(obc_title);
+	r->color.a = 0;
+	RM_SetText(r, "Break the coconut!");
+	r->renderPriority = PRI_UI;
+	r->textScale = CP_Vector_Set(3.0f, 3.0f);
+
+	obc_UI = GOM_Create(RECTANGLE);
+	r = RM_AddComponent(obc_UI);
+	r->color = CP_Color_Create(200, 200, 200, 255);
+	r->renderPriority = PRI_UI;
+	obc_UI->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
+	obc_UI->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
+
 	obc_cross = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.775f, screenHeight * 0.225f), 0 , CP_Vector_Set(50, 50));
 	obc_cross->tag = "cross";
 	r = RM_AddComponent(obc_cross);
@@ -82,12 +97,8 @@ void OB_BreakCoconutInit()
 	AM_SetShake(a, 5.0f, 0.35f, 1, 0);
 	
 	a->isEnabled = 0;
-	r2->isEnabled = r3->isEnabled = r4->isEnabled = 0;
-	obc_coconut->isEnabled = 0;
-	obc_cross->isEnabled = 0;
 	obc_stage = 0;
-	obc_canHit = 1;
-	isActive = 0;
+	OB_BreakCoconutUnTrigger();
 }
 void OB_BreakCoconutUpdate()
 {	
@@ -102,10 +113,16 @@ void OB_BreakCoconutUpdate()
 		}
 	}
 
+	if (OB_IsBreakCoconutComplete())
+	{
+		Renderer* r = RM_GetComponent(obc_title);
+		RM_SetText(r, "Coconut broken!");
+	}
 }
 void OB_BreakCoconutTrigger()
 {
 	EnableImage(obc_stage);
+	obc_UI->isEnabled = obc_title->isEnabled = 1;
 	obc_coconut->isEnabled = 1;
 	obc_cross->isEnabled = 1;
 	isActive = 1;
@@ -118,7 +135,7 @@ void OB_BreakCoconutUnTrigger()
 	//Animation* a = AM_GetComponent(obc_coconut);
 	//AM_SetShake(a, 5.0f, 0.35f, 1, 0);
 	//a->isEnabled = 0;
-
+	obc_UI->isEnabled = obc_title->isEnabled = 0;
 	obc_coconut->isEnabled = 0;
 	obc_cross->isEnabled = 0;
 	obc_canHit = 1;
