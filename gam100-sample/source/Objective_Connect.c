@@ -287,6 +287,9 @@ void OB_ConnectToggleActive()
 	isActive = !isActive;
 	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
 	OB_SetPosition();
+
+	Renderer* r = RM_GetComponent(OBJ_Title);
+	RM_SetText(r, "Connect The Wires!");
 }
 
 int OB_ConnectIsComplete()
