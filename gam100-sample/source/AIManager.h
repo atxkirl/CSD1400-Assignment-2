@@ -56,6 +56,6 @@ void AIM_Init(void);
 
 void AIM_Clear(void);
 
-void AIM_Update(void);
+void AIM_Update();
 
 FSM* AIM_CreateEnemy(char* enemyName, char* startStateName, CP_Vector enemyPos, GameObject* targetObj, AStar_Map* levelMap);

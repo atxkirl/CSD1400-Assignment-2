@@ -40,6 +40,11 @@ typedef struct DeleteAfter
 	float delAfter;
 }DeleteAfter;
 
+/// <summary>
+/// Pause State of the System Manager.
+/// </summary>
+bool SM_isPaused;
+
 /*!
 @brief Inits all systems
 @return void
@@ -66,6 +71,12 @@ void SM_SystemsLateUpdate();
 @return void
 */
 void SM_SystemsExit();
+
+/*!
+@brief Getter for SM pause state.
+@return bool Pause state of SystemManager.
+*/
+bool SM_IsPaused();
 
 /*!
 @brief Find component that is attached to gameobject

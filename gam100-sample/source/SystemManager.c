@@ -35,6 +35,8 @@ void SM_DeleteFromAllSystems(GameObject* g)
 
 void SM_SystemsInit()
 {
+	SM_isPaused = false;
+
 	GOM_Init();
 	RM_Init();
 	CLM_Init();
@@ -84,6 +86,8 @@ void SM_SystemsPreUpdate()
 
 void SM_SystemsUpdate(int isPause)
 {
+	SM_isPaused = isPause;
+
 	DM_Update();
 	CLM_Update();
 	AM_Update();
@@ -113,6 +117,11 @@ void SM_SystemsExit()
 	DM_Clear();
 	AIM_Clear();
 	Exit_Controls();
+}
+
+bool SM_IsPaused()
+{
+	return SM_isPaused;
 }
 
 void* SM_GetComponent(GameObject* g, COMPONENT c)

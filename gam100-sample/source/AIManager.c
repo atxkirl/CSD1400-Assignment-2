@@ -1,4 +1,5 @@
 #include "AIManager.h"
+#include "Objectives.h"
 
 void AIM_Init(void)
 {
@@ -28,7 +29,7 @@ void AIM_Clear(void)
 	allStates = NULL;
 }
 
-void AIM_Update(void)
+void AIM_Update()
 {
 	// Update Enemy FSM and Movement
 	FSM* enemy;
@@ -63,8 +64,13 @@ void AIM_Update(void)
 			}
 			else
 			{
+				float actualSpeed = enemy->moveSpeed;
+				if (!Objectives_GetPlayerUpdate())
+				{
+					actualSpeed = enemy->moveSpeed * 0.5f;
+				}
 				enemy->controlledObjForward = CP_Vector_Normalize(CP_Vector_Subtract(currentNode->position, enemy->controlledObject->position));
-				enemy->controlledObject->position = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(enemy->controlledObjForward, enemy->moveSpeed * CP_System_GetDt()));
+				enemy->controlledObject->position = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(enemy->controlledObjForward, actualSpeed * CP_System_GetDt()));
 
 				enemy->fovDetectionForward = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(enemy->controlledObjForward, enemy->fovDetectionRadius * enemy->tileSize));
 			}
@@ -204,7 +210,7 @@ void AIM_InitFSM(FSM* controller, char* startStateName, GameObject* targetObject
 	// Initialize Detection Variables.
 	controller->immediateDetectionRadius = 1;
 	controller->fovDetectionHalfAngle = 20.f;
-	controller->fovDetectionRadius = 2;
+	controller->fovDetectionRadius = 3;
 
 	// Initalize State variables.
 	controller->currentState = startStateName;

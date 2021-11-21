@@ -11,4 +11,4 @@ There is an enemy in the map! Avoid the enemy or face his wrath. Taking too much
 Complete all objectives and escape the island on the boat to win!
 
 We value your feedback, please take a moment to fill up our survey:
-<ATTACH_LINK_HERE>
+https://forms.gle/vsXDEAGAz7mpwVXb9
