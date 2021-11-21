@@ -135,6 +135,31 @@ void RM_Render()
 			RenderAllInList(renderLayers[i]);
 		}
 
+#if _DEBUG
+		//rendered last
+		if (i == PRI_GAME_OBJECT)
+		{
+			node = debugLinesList;
+			for (; node; node = node->next)
+			{
+				DebugLine* line = (DebugLine*)node->curr;
+				if (line->space == PRI_GAME_OBJECT)
+				{
+					CP_Settings_ApplyMatrix(RM_GetViewMatrix());
+				}
+
+				CP_Settings_Stroke(line->color);
+				CP_Graphics_DrawLine(line->from.x, line->from.y, line->to.x, line->to.y);
+				CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+
+				CP_Settings_ResetMatrix();
+				free(node->curr);
+			}
+			LL_Clear(&debugLinesList);
+		}
+		
+#endif
+
 	}
 
 
@@ -144,25 +169,7 @@ void RM_Render()
 	}
 
 	
-#if _DEBUG
-	node = debugLinesList;
-	for (; node; node = node->next)
-	{
-		DebugLine* line = (DebugLine*)node->curr;
-		if (line->space == PRI_GAME_OBJECT)
-		{
-			CP_Settings_ApplyMatrix(RM_GetViewMatrix());
-		}
 
-		CP_Settings_Stroke(line->color);
-		CP_Graphics_DrawLine(line->from.x, line->from.y, line->to.x, line->to.y);
-		CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
-
-		CP_Settings_ResetMatrix();
-		free(node->curr);
-	}
-	LL_Clear(&debugLinesList);
-#endif
 }
 
 void RM_SetCameraPosition(CP_Vector pos)

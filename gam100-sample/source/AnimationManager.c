@@ -12,20 +12,20 @@ void Update_SpriteAnimation(Animation* a, float dt)
 	float delay = 1.0f / a->fps;
 	if (a->elapsedTime >= delay)
 	{
-		if (a->loopDir)
+		if (a->loopDir > 0)
 			a->index = a->index + 1;
-		else
+		else if (a->loopDir < 0)
 			a->index = a->index - 1;
 
 		if (a->index >= a->frameCount && a->isContinuous)
-			a->index %= a->frameCount;
+			a->index = 0;
 		else if (a->index < 0 && a->isContinuous)
 			a->index = a->frameCount - 1;
 		else
 		{
 			if (a->index >= a->frameCount)
 				a->index = a->frameCount - 1;
-			else
+			else if (a->index < 0)
 				a->index = 0;
 		}
 		a->elapsedTime = 0.0f;
