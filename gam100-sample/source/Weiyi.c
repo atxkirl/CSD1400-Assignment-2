@@ -96,7 +96,7 @@ void Weiyi_init(void)
     RM_SetText(r, "hide");
 
     SDM_Init();
-    SDM_PlayBgMusic();
+    SDM_PlayBgMusic(2);
 }
 
 void Weiyi_update(void)

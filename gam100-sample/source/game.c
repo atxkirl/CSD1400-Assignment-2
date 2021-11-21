@@ -18,6 +18,7 @@
 #include "SystemManager.h"
 #include "Colors.h"
 #include "Controls.h"
+#include "SoundManager.h"
 
 
 //Animation* MainMenuStartAnim1, *MainMenuStartAnim2;
@@ -73,8 +74,7 @@ void game_init(void)
 
     float screenWidth, screenHeight;
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
-    GameObject* bg = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(0.5f * screenWidth, 0.5f* screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
+    GameObject* bg = GOM_Create2(RECTANGLE,CP_Vector_Set(0.5f * screenWidth, 0.5f* screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
     Renderer* bgr = RM_AddComponent(bg);
     bgr->renderPriority = PRI_UI;
     RM_LoadImage(bgr, "Assets/BananaBoi_Title.jpg");
@@ -183,6 +183,9 @@ void game_init(void)
     CLM_Set(MainMenuCreditsCollider, COL_BOX, game_OnCollision);
     MainMenuCreditsCollider->space = COLSPC_SCREEN;
     MainMenuCreditsCollider->isTrigger = 1;
+
+    SDM_Init();
+    SDM_PlayBgMusic(1);
 }
 
 void game_update(void)
@@ -272,6 +275,8 @@ void game_update(void)
 void game_exit(void)
 {
     SM_SystemsExit();
+    SDM_StopAll();
+    SDM_FreeSounds();
 }
 
 void game_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

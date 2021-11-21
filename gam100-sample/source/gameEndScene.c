@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "SystemManager.h"
 #include "Colors.h"
+#include "SoundManager.h"
 
 void gameEnd_OnCollision(Collider* left, Collider* right) {
 
@@ -27,6 +28,14 @@ void gameEnd_init(void)
     Collider* gEnd = NULL;
     Renderer* rEnd = NULL;
 
+    float screenWidth, screenHeight;
+    RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
+    GameObject* bg = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
+    Renderer* bgr = RM_AddComponent(bg);
+    bgr->renderPriority = PRI_UI;
+    RM_LoadImage(bgr, "Assets/scenes/gameOver.png");
+
 
     GameObject* eButton = GOM_Create2(RECTANGLE, CP_Vector_Set(50 * xScale, 90 * yScale), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
     eButton->tag = "exit";
@@ -46,8 +55,8 @@ void gameEnd_init(void)
     rEnd->renderPriority = PRI_UI;
     RM_SetText(rEnd, "Restart");
 
-
-
+    SDM_Init();
+    SDM_PlayBgMusic(1);
 
 }
 
@@ -63,6 +72,8 @@ void gameEnd_update(void)
 void gameEnd_exit(void)
 {
     SM_SystemsExit();
+    SDM_StopAll();
+    SDM_FreeSounds();
 }
 
 void gameEnd_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

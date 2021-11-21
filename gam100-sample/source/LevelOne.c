@@ -20,6 +20,7 @@
 #include "Objective_Connect.h"
 #include "Player.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 
 //GameObject* gLOne = NULL;
 
@@ -121,6 +122,9 @@ void LevelOne_init(void)
     {
         enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", CP_Vector_Set(133.f, 66.f), bananaBoi, &map);
     }
+
+    SDM_Init();
+    SDM_PlayBgMusic(2);
 }
 
 void LevelOne_update(void)
@@ -153,6 +157,8 @@ void LevelOne_exit(void)
     ClearPause();
     LoaderExit();
     SM_SystemsExit();
+    SDM_StopAll();
+    SDM_FreeSounds();
 }
 
 void LevelOne_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
