@@ -144,7 +144,7 @@ void RM_Render()
 	}
 
 	
-#if _DEBUG
+//#if _DEBUG
 	node = debugLinesList;
 	for (; node; node = node->next)
 	{
@@ -162,7 +162,7 @@ void RM_Render()
 		free(node->curr);
 	}
 	LL_Clear(&debugLinesList);
-#endif
+//#endif
 }
 
 void RM_SetCameraPosition(CP_Vector pos)

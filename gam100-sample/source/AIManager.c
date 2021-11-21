@@ -74,7 +74,6 @@ void AIM_Update(void)
 		{
 			if (enemy)
 			{
-				char str[100] = { 0 };
 				CP_Color c;
 				GameObject* go = enemy->controlledObject;
 
@@ -102,8 +101,12 @@ void AIM_Update(void)
 
 					}
 				}
+
+#ifdef _DEBUG
+				char str[100] = { 0 };
 				sprintf_s(str, 100, "%s\n%2d", enemy->currentState, LL_GetCount(enemy->movementPath));
 				RM_SetText(RM_GetComponent(go), str);
+#endif
 
 				// Show AI detection cone.
 				c = CP_Color_Create(255, 0, 0, 255);
