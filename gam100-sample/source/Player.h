@@ -11,3 +11,4 @@ void PLY_Update();
 
 int PLY_IsHidden(void);
 int PLY_IsInvincible(void);
+bool PLY_TakeDamage(void);

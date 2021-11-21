@@ -58,14 +58,14 @@ void Player_OnCollision(Collider* left, Collider* right)
 {
     if (p_Invincible == 0) {
         while (1) {
-            // Checks for enemy hits
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "BBEM") == 0) {
-                printf("hit");
-                startTime = clock(); //holds information on when the player was last hit according to the time
-                p_Invincible = true;
-                playerhealth--;
-                break;
-            }
+            //// Checks for enemy hits
+            //if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "BBEM") == 0) {
+            //    printf("hit");
+            //    startTime = clock(); //holds information on when the player was last hit according to the time
+            //    p_Invincible = true;
+            //    playerhealth--;
+            //    break;
+            //}
 
             // Pick-up minigame
             if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "wood") == 0) {
@@ -234,13 +234,11 @@ void PLY_Update() { // handles input from player and checking for flags
 
     if (p_Hidden == false) 
     {
-        if (render)
-            render->color.a = 255;
+        RM_GetComponent(player)->color.a = 255;
     }
     else
     {
-        if (render)
-            render->color.a = 122;
+        RM_GetComponent(player)->color.a = 122;
     }
 
     if (!p_Hideable)
@@ -352,4 +350,17 @@ int PLY_IsHidden(void)
 int PLY_IsInvincible(void)
 {
     return p_Invincible;
+}
+
+bool PLY_TakeDamage(void)
+{
+    if (!p_Invincible)
+    {
+        startTime = clock(); //holds information on when the player was last hit according to the time
+        p_Invincible = true;
+        playerhealth--;
+        return true;
+    }
+    else
+        return false;
 }

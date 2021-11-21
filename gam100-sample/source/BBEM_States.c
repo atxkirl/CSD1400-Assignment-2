@@ -67,6 +67,8 @@ void FSMState_BBEM_Roam_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 
 	// Set main variables.
 	controller->moveSpeed = roamSpeed;
+	controller->elapsedTime = 0.f;
+	controller->waitTime = 0.f;
 	
 	// Set the AI to target the Player
 	*controller->targetPosition = controller->targetObject->position;
@@ -112,12 +114,16 @@ void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 static const float chaseSpeed = 150.f;
 static const int chaseLoseRadius = 6;
 static const float chaseRepathDist = 0.5f;
+static const float chaseDamageDist = 1.2f;
 
 void FSMState_BBEM_Chase_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 {
 	printf("BBEM_Chase_OnEnter()\n");
 
+	// Set main variables.
 	controller->moveSpeed = chaseSpeed;
+	controller->elapsedTime = 0.f;
+	controller->waitTime = 0.f;
 
 	// Set AI to chase player.
 	*controller->targetPosition = controller->targetObject->position;
@@ -136,6 +142,12 @@ void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
 	// Keep track of Player position.
 	*controller->targetPosition = controller->targetObject->position;
+	// If AI needs to wait, just wait.
+	controller->elapsedTime += CP_System_GetDt();
+	if (controller->elapsedTime < controller->waitTime)
+	{
+		return;
+	}
 
 	// If Player is invincible, means we've just hit him, so walk slower.
 	if (PLY_IsInvincible())
@@ -148,6 +160,19 @@ void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 	}
 
 	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
+	// Is Player within smacking range?
+	if (distance <= (chaseDamageDist * controller->tileSize))
+	{
+		// Deal damage to the player.
+		bool pass = PLY_TakeDamage();
+		if (pass)
+		{
+			// Make AI wait for abit before continuing to chase or change state.
+			controller->elapsedTime = 0.f;
+			controller->waitTime = FRAND(1, 2);
+			return;
+		}
+	}
 	// Is Player too far from AI?
 	if (distance > (chaseLoseRadius * controller->tileSize) || PLY_IsHidden())
 	{
@@ -198,7 +223,10 @@ void FSMState_BBEM_Search_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 {
 	printf("BBEM_Search_OnEnter()\n");
 
+	// Set main variables.
 	controller->moveSpeed = searchSpeed;
+	controller->elapsedTime = 0.f;
+	controller->waitTime = 0.f;
 
 	// Get how many spots the AI will "search" through.
 	controller->searchCount = RAND(searchMin, searchMax);
