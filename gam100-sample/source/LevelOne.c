@@ -27,6 +27,10 @@ float screenWidth, screenHeight;
 void LevelOneUI_render();
 void LevelOneGridColliderInit();
 
+static GameObject* bananaBoi = NULL;
+static AStar_Map map;
+FSM* enemy;
+
 int IsGamePaused;
 LinkedList* pauseMenus;
 /*!
@@ -58,6 +62,12 @@ GameObject* GameFpsCounterObj;
 @return void
 *//*______________________________________________________________*/
 void InitDrawFPS();
+
+/*!
+@brief Initialises AStar map grid for this level.
+@return void
+*//*______________________________________________________________*/
+void LevelOne_AStarInit(void);
 
 void LevelOne_OnCollision(Collider* left, Collider* right)
 {
@@ -93,12 +103,25 @@ void LevelOne_init(void)
 
     //Insert spawn x,y here
     CP_Vector PlayerPos = SetPlayerPosition();
-    PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
+    bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
     Objectives_RenderUI();
 
     LevelOneGridColliderInit();
     InitPause();
     InitDrawFPS();
+
+    // AStar
+    {
+        AStar_InitializeMap(&map, NumGrids, NumGrids);
+
+        // Set settings of each node in the level based on the level loaded.
+        LevelOne_AStarInit();
+    }
+
+    // Enemies
+    {
+        enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", CP_Vector_Set(198.f, 66.f), bananaBoi, &map);
+    }
 }
 
 void LevelOne_update(void)
@@ -116,7 +139,7 @@ void LevelOne_update(void)
     }
 
 
-    SM_SystemsUpdate(0);
+    SM_SystemsUpdate(IsPaused());
 
     Renderer* r = RM_GetComponent(GameFpsCounterObj);
     float fps = 1.0f / CP_System_GetDt();
@@ -333,4 +356,29 @@ void InitDrawFPS()
 
 void RenderFpsCounter()
 {
+}
+
+/*!
+@brief Initialises AStar map grid for this level.
+@return void
+*//*______________________________________________________________*/
+void LevelOne_AStarInit(void)
+{
+    for (int r = 0; r < map.rows; ++r)
+    {
+        for (int c = 0; c < map.columns; ++c)
+        {
+            AStar_Node* temp = &map.map[r][c];
+            AStar_InitializeNode(&temp, r, c, gLoadedGrids->gGrid[r][c]->position, NODE_DEFAULT);
+
+            if (gLoadedGrids->gGrid[r][c]->type == WATER || gLoadedGrids->gGrid[r][c]->type == EMPTY)
+            {
+                temp->type = NODE_WALL;
+            }
+            else if (gLoadedObjects->gGrid[r][c]->type == CORAL || gLoadedObjects->gGrid[r][c]->type == GRASS)
+            {
+                temp->type = NODE_HIDEABLE;
+            }
+        }
+    }
 }

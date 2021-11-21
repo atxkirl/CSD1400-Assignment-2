@@ -19,7 +19,8 @@ typedef enum
 	NODE_START,
 	NODE_END,
 	NODE_WALL,
-	NODE_PATH
+	NODE_PATH,
+	NODE_HIDEABLE
 }AStar_Type;
 
 typedef struct AStar_Node AStar_Node;
