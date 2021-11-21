@@ -40,7 +40,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                         iCurrentObjective = i;
                     }
                 }
-                OB_ConnectToggleActive();
+                OB_ConnectTrigger();
                 iUpdatePlayer = 0; 
             }
         }

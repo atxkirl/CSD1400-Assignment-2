@@ -58,27 +58,7 @@ void OB_ConnectOnCollision(Collider* left, Collider* right)
 		}
 		else if (strcmp(left->obj->tag, "cross") == 0)
 		{
-			RedConnector_L->isEnabled = 0;
-			GreenConnector_L->isEnabled = 0;
-			BlueConnector_L->isEnabled = 0;
-			YellowConnector_L->isEnabled = 0;
-			RedConnector_R->isEnabled = 0;
-			GreenConnector_R->isEnabled = 0;
-			BlueConnector_R->isEnabled = 0;
-			YellowConnector_R->isEnabled = 0;
-			WireConnector_R->isEnabled = 0;
-			WireConnector_G->isEnabled = 0;
-			WireConnector_B->isEnabled = 0;
-			WireConnector_Y->isEnabled = 0;
-			WireCollider_R->isEnabled = 0;
-			WireCollider_G->isEnabled = 0;
-			WireCollider_B->isEnabled = 0;
-			WireCollider_Y->isEnabled = 0;
-			OBJ_Title->isEnabled = 0;
-			UI_Background->isEnabled = 0;
-			isActive = 0;
-			cross->isEnabled = 0;
-			iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
+			OB_ConnectUnTrigger();
 		}
 	}
 
@@ -285,6 +265,58 @@ void OB_ConnectToggleActive()
 	cross->isEnabled = !cross->isEnabled;
 	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
 	isActive = !isActive;
+	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
+}
+
+void OB_ConnectTrigger()
+{
+	RedConnector_L->isEnabled = 1;
+	GreenConnector_L->isEnabled = 1;
+	BlueConnector_L->isEnabled = 1;
+	YellowConnector_L->isEnabled = 1;
+	RedConnector_R->isEnabled = 1;
+	GreenConnector_R->isEnabled = 1;
+	BlueConnector_R->isEnabled = 1;
+	YellowConnector_R->isEnabled = 1;
+	WireConnector_R->isEnabled = 1;
+	WireConnector_G->isEnabled = 1;
+	WireConnector_B->isEnabled = 1;
+	WireConnector_Y->isEnabled = 1;
+	WireCollider_R->isEnabled = 1;
+	WireCollider_G->isEnabled = 1;
+	WireCollider_B->isEnabled = 1;
+	WireCollider_Y->isEnabled = 1;
+	OBJ_Title->isEnabled = 1;
+	UI_Background->isEnabled = 1;
+	cross->isEnabled = 1;
+	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
+	isActive = 1;
+	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
+}
+
+void OB_ConnectUnTrigger()
+{
+	RedConnector_L->isEnabled = 0;
+	GreenConnector_L->isEnabled = 0;
+	BlueConnector_L->isEnabled = 0;
+	YellowConnector_L->isEnabled = 0;
+	RedConnector_R->isEnabled = 0;
+	GreenConnector_R->isEnabled = 0;
+	BlueConnector_R->isEnabled = 0;
+	YellowConnector_R->isEnabled = 0;
+	WireConnector_R->isEnabled = 0;
+	WireConnector_G->isEnabled = 0;
+	WireConnector_B->isEnabled = 0;
+	WireConnector_Y->isEnabled = 0;
+	WireCollider_R->isEnabled = 0;
+	WireCollider_G->isEnabled = 0;
+	WireCollider_B->isEnabled = 0;
+	WireCollider_Y->isEnabled = 0;
+	OBJ_Title->isEnabled = 0;
+	UI_Background->isEnabled = 0;
+	cross->isEnabled = 0;
+	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
+	isActive = 0;
 	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
 }
 

@@ -6,4 +6,7 @@ int OB_ConnectIsComplete();
 int OB_ConnectGetActive();
 void OB_ConnectSetActive(int iSetter);
 
+void OB_ConnectTrigger();
+void OB_ConnectUnTrigger();
+
 void CreateConnectors();
