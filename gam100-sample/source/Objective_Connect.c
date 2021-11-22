@@ -192,14 +192,50 @@ void OB_ConnectUpdate()
 
 	if (hold_Wire)
 	{
-		//StartingScaleX + CP_Input_GetMouseX() - initialPos.x
-		CP_Vector Distance = CP_Vector_Set(CP_Input_GetMouseX() - hold_Wire->position.x, CP_Input_GetMouseY() - hold_Wire->position.y);
-		hold_Wire->scale = CP_Vector_Set(CP_Vector_Length(Distance), 0.f);
+		if (strcmp(hold_Wire->tag, WireConnector_R->tag) == 0 && !iRedConnected)
+		{
+			CP_Vector Distance = CP_Vector_Set(CP_Input_GetMouseX() - hold_Wire->position.x, CP_Input_GetMouseY() - hold_Wire->position.y);
+			hold_Wire->scale = CP_Vector_Set(CP_Vector_Length(Distance), 0.f);
 
-		float fAngle = CP_Vector_Angle(CP_Vector_Set(1.f, 0.f), Distance);
-		if (Distance.y > 0.f)
-			fAngle = 360.f - fAngle;
-		hold_Wire->rotation = fAngle;
+			float fAngle = CP_Vector_Angle(CP_Vector_Set(1.f, 0.f), Distance);
+			if (Distance.y > 0.f)
+				fAngle = 360.f - fAngle;
+			hold_Wire->rotation = fAngle;
+		}
+
+		else if (strcmp(hold_Wire->tag, WireConnector_G->tag) == 0 && !iGreenConnected)
+		{
+			CP_Vector Distance = CP_Vector_Set(CP_Input_GetMouseX() - hold_Wire->position.x, CP_Input_GetMouseY() - hold_Wire->position.y);
+			hold_Wire->scale = CP_Vector_Set(CP_Vector_Length(Distance), 0.f);
+
+			float fAngle = CP_Vector_Angle(CP_Vector_Set(1.f, 0.f), Distance);
+			if (Distance.y > 0.f)
+				fAngle = 360.f - fAngle;
+			hold_Wire->rotation = fAngle;
+		}
+
+		else if (strcmp(hold_Wire->tag, WireConnector_B->tag) == 0 && !iBlueConnected)
+		{
+			CP_Vector Distance = CP_Vector_Set(CP_Input_GetMouseX() - hold_Wire->position.x, CP_Input_GetMouseY() - hold_Wire->position.y);
+			hold_Wire->scale = CP_Vector_Set(CP_Vector_Length(Distance), 0.f);
+
+			float fAngle = CP_Vector_Angle(CP_Vector_Set(1.f, 0.f), Distance);
+			if (Distance.y > 0.f)
+				fAngle = 360.f - fAngle;
+			hold_Wire->rotation = fAngle;
+		}
+
+		else if (strcmp(hold_Wire->tag, WireConnector_Y->tag) == 0 && !iYellowConnected)
+		{
+
+			CP_Vector Distance = CP_Vector_Set(CP_Input_GetMouseX() - hold_Wire->position.x, CP_Input_GetMouseY() - hold_Wire->position.y);
+			hold_Wire->scale = CP_Vector_Set(CP_Vector_Length(Distance), 0.f);
+
+			float fAngle = CP_Vector_Angle(CP_Vector_Set(1.f, 0.f), Distance);
+			if (Distance.y > 0.f)
+				fAngle = 360.f - fAngle;
+			hold_Wire->rotation = fAngle;
+		}
 	}
 
 	if (CP_Input_MouseReleased(MOUSE_BUTTON_1))
