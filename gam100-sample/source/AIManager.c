@@ -67,7 +67,7 @@ void AIM_Update()
 				float actualSpeed = enemy->moveSpeed;
 				if (!Objectives_GetPlayerUpdate())
 				{
-					actualSpeed = enemy->moveSpeed * 0.5f;
+					actualSpeed = enemy->moveSpeed * 0.25f;
 				}
 				enemy->controlledObjForward = CP_Vector_Normalize(CP_Vector_Subtract(currentNode->position, enemy->controlledObject->position));
 				enemy->controlledObject->position = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(enemy->controlledObjForward, actualSpeed * CP_System_GetDt()));

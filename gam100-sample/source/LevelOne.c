@@ -139,7 +139,6 @@ void LevelOne_update(void)
         }
         Objectives_Update();
     }
-
     SM_SystemsUpdate(IsPaused());
 
     Renderer* r = RM_GetComponent(GameFpsCounterObj);

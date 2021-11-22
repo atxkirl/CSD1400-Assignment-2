@@ -27,7 +27,7 @@ int main(void)
     SceneManager_Initialize();
     SceneManager_ChangeSceneByName("splashscreen");
 
-    CP_System_ShowConsole();
+    //CP_System_ShowConsole();
     CP_Engine_Run();
 
     return 0;

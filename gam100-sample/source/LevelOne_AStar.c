@@ -26,25 +26,39 @@ static GameObject* ObjectiveUI = NULL;
 static float screenWidth;
 static float screenHeight;
 
+static GameObject* howtoplay = NULL;
+static GameObject* close = NULL;
+
 static AStar_Map map;
-//TESTCODE
 FSM* enemy1, * enemy2, * enemy3, * enemy4;
+
+static bool isPaused;
 
 void LevelOneAStar_UI_render();
 void LevelOneAStar_GridColliderInit();
+void LevelOneAStar_InputUpdate(void);
 
 void LevelOneAStar_AStarInit(void);
 
 void LevelOneAStar_OnCollision(Collider* left, Collider* right)
 {
-    if(strcmp(left->obj->tag, "Coral") == 0 || strcmp(right->obj->tag, "Coral") == 0)
-        printf("COLLIDING!!! Left=%s, Right=%s\n", left->obj->tag, right->obj->tag);
+    if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
+    {
+        if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
+        {
+            howtoplay->isEnabled = 0;
+            close->isEnabled = 0;
+            isPaused = false;
+        }
+    }
 }
 
 void LevelOneAStar_init(void)
 {
     SM_SystemsInit();
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
+
+    isPaused = true;
 
     // Loader
     {
@@ -66,6 +80,13 @@ void LevelOneAStar_init(void)
                 }
             }
         }
+    }
+
+    // Player
+    {
+        //Insert spawn x,y here
+        CP_Vector PlayerPos = SetPlayerPosition();
+        bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
     }
 
     // Scene UI
@@ -107,6 +128,24 @@ void LevelOneAStar_init(void)
             r->renderPriority = PRI_UI;
         }
 
+        // render how to play
+        howtoplay = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
+        howtoplay->tag = "credits";
+        Renderer* howtoplayRenderer = RM_AddComponent(howtoplay);
+        howtoplayRenderer->renderPriority = PRI_UI;
+        RM_LoadImage(howtoplayRenderer, "Assets/scenes/howtoplay.png");
+        // close button
+        close = GOM_Create(RECTANGLE);
+        close->position = CP_Vector_Set(screenWidth * 0.975f, screenHeight * 0.045f);
+        close->scale = CP_Vector_Set(50, 50);
+        close->tag = "exit";
+        Collider* closeCollider = CLM_AddComponent(close);
+        CLM_Set(closeCollider, COL_BOX, LevelOneAStar_OnCollision);
+        closeCollider->space = COLSPC_SCREEN;
+        Renderer* closeRender = RM_AddComponent(close);
+        closeRender->renderPriority = PRI_UI;
+        RM_LoadImage(closeRender, "Assets/cross.png");
+
         //// Player
         //player = GOM_Create2(RECTANGLE, CP_Vector_Set(462, 462), 0.0f, CP_Vector_Set(50, 50));
         //player->tag = "player";
@@ -137,27 +176,20 @@ void LevelOneAStar_update(void)
 {
     SM_SystemsPreUpdate();
 
-    // Miscellaneous Keyboard Inputs
+    if (!isPaused)
     {
-        if (CP_Input_KeyTriggered(KEY_ESCAPE))
+        if (Objectives_GetPlayerUpdate())
         {
-            CP_Engine_Terminate();
-            //SceneManager_ChangeSceneByName("mainmenu");
+            PLY_Update();
         }
+        Objectives_Update();
     }
-
-    if (Objectives_GetPlayerUpdate())
-    {
-        PLY_Update();
-    }
-
-    Objectives_Update();
-
-    SM_SystemsUpdate(0);
+    SM_SystemsUpdate(isPaused);
 
     RM_SetCameraPosition(bananaBoi->position);
     SM_SystemsLateUpdate();
 
+    LevelOneAStar_InputUpdate();
     LevelOneAStar_UI_render();
 
     CP_Settings_TextSize(20);
@@ -243,5 +275,13 @@ void LevelOneAStar_AStarInit(void)
             else
                 rend->color = CP_Color_Create(0, 255, 0, 255);*/
         }
+    }
+}
+
+void LevelOneAStar_InputUpdate(void)
+{
+    if (CP_Input_KeyTriggered(KEY_ESCAPE))
+    {
+        SceneManager_ChangeSceneByName("mainmenu");
     }
 }
