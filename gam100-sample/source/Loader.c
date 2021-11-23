@@ -85,6 +85,15 @@ void LoaderExit()
 {
 	SM_SystemsExit();
 
+	for (int i = 0; i < NumGrids; ++i)
+	{
+		for (int j = 0; j < NumGrids; ++j)
+		{
+			free(gLoadedGrids->gGrid[i][j]);
+			free(gLoadedObjects->gGrid[i][j]);
+		}
+	}
+
 	free(gLoadedGrids);
 	free(gLoadedObjects);
 }

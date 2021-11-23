@@ -155,6 +155,7 @@ void LevelOne_exit(void)
 {
     ClearPause();
     LoaderExit();
+    Objectives_Exit();
     SM_SystemsExit();
     SDM_StopAll();
     SDM_FreeSounds();

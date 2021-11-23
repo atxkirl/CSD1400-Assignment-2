@@ -396,6 +396,16 @@ void LevelEditorExit()
 {
 	SM_SystemsExit();
 
+	for (int i = 0; i < NumGrids; i++)
+	{
+		for (int j = 0; j < NumGrids; j++)
+		{
+			free(gGrids.gGrid[i]);
+			free(gGrids.nGrid[i]);
+			free(gObjectGrids.nGrid[i]);
+		}
+	}
+
 	//free(gGrids.gGrid);
 }
 
