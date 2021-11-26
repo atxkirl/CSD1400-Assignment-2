@@ -106,7 +106,7 @@ void Player_OnCollision(Collider* left, Collider* right)
                 break;
             }
 
-            if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL)
+            if (strcmp(left->obj->tag, "player") == 0 && (right->obj->type == CORAL || right->obj->type == GRASS))
             {
                 //p_Hideable = true;
                 p_Hidden = true;
@@ -158,7 +158,7 @@ void Player_OnCollision(Collider* left, Collider* right)
                 break;
             }
 
-            if (strcmp(left->obj->tag, "player") == 0 && right->obj->type == CORAL) // Auto hide the Player when they're in Tall Grass / Coral.
+            if (strcmp(left->obj->tag, "player") == 0 && (right->obj->type == CORAL || right->obj->type == GRASS)) // Auto hide the Player when they're in Tall Grass / Coral.
             {
                 //p_Hideable = true;
                 AM_GetComponent(player_fogofwar)->loopDir = 1;

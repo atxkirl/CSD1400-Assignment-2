@@ -31,8 +31,10 @@ void FSMState_BBEM_Idle_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 void FSMState_BBEM_Idle_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
 	// Is Player too near me?
-	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	float angle = CP_Vector_Angle(controller->fovDetectionForward, controller->targetObject->position);
+	CP_Vector directionToPlayer = CP_Vector_Subtract(controller->targetObject->position, controller->controlledObject->position);
+	CP_Vector enemyForward = CP_Vector_Subtract(controller->fovDetectionForward, controller->controlledObject->position);
+	float distance = CP_Vector_Length(directionToPlayer);
+	float angle = CP_Vector_Angle(enemyForward, directionToPlayer);
 	if (distance <= (controller->immediateDetectionRadius * controller->tileSize) ||
 	   (distance <= (controller->fovDetectionRadius * controller->tileSize) && angle < controller->fovDetectionHalfAngle))
 	{
@@ -86,8 +88,10 @@ void FSMState_BBEM_Roam_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
 	// Is Player too near me?
-	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	float angle = CP_Vector_Angle(controller->fovDetectionForward, controller->targetObject->position);
+	CP_Vector directionToPlayer = CP_Vector_Subtract(controller->targetObject->position, controller->controlledObject->position);
+	CP_Vector enemyForward = CP_Vector_Subtract(controller->fovDetectionForward, controller->controlledObject->position);
+	float distance = CP_Vector_Length(directionToPlayer);
+	float angle = CP_Vector_Angle(enemyForward, directionToPlayer);
 	if (distance <= (controller->immediateDetectionRadius * controller->tileSize) ||
 	   (distance <= (controller->fovDetectionRadius * controller->tileSize) && angle < controller->fovDetectionHalfAngle))
 	{
@@ -111,7 +115,7 @@ void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 // - Upon reaching the Player, the AI will change to IDLE state. (Note, on Chase Exit, deal damage to Player)
 // - HOWEVER, if Player walks outside a certain radius, the AI will change to SEARCH state. (Note, in future add Line-of-Sight as well.)
 
-static const float chaseSpeed = 150.f;
+static const float chaseSpeed = 200.f;
 static const int chaseLoseRadius = 6;
 static const float chaseRepathDist = 0.5f;
 static const float chaseDamageDist = 1.2f;
@@ -240,13 +244,16 @@ void FSMState_BBEM_Search_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 
 void FSMState_BBEM_Search_OnExit(FSM* controller, CP_Vector* newTargetPosition)
 {
+
 }
 
 void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
 {
 	// Is Player too near me and visible?
-	float distance = CP_Vector_Length(CP_Vector_Subtract(controller->controlledObject->position, controller->targetObject->position));
-	float angle = CP_Vector_Angle(controller->fovDetectionForward, controller->targetObject->position);
+	CP_Vector directionToPlayer = CP_Vector_Subtract(controller->targetObject->position, controller->controlledObject->position);
+	CP_Vector enemyForward = CP_Vector_Subtract(controller->fovDetectionForward, controller->controlledObject->position);
+	float distance = CP_Vector_Length(directionToPlayer);
+	float angle = CP_Vector_Angle(enemyForward, directionToPlayer);
 	if (distance <= (controller->immediateDetectionRadius * controller->tileSize))
 	{
 		controller->nextState = "BBEM_Chase";
