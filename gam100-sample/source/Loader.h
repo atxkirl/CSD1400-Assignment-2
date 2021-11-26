@@ -42,3 +42,5 @@ CP_Vector SetPlayerPosition();
 CP_Vector SetEnemyPosition();
 
 int GetNumObjectives();
+
+int GetNumBoatParts();

@@ -727,7 +727,7 @@ void AutoGenerateGrid()
 			gGrids.nGrid[i][j].Curr = NotVisited;
 			gGrids.gGrid[i][j]->type = WATER;
 			gObjectGrids.gGrid[i][j]->type = EMPTY;
-			RM_DeleteImage(RM_GetComponent(gObjectGrids.gGrid[i][j]));
+			RM_GetComponent(gObjectGrids.gGrid[i][j])->sprite = NULL;
 		}
 	}
 
@@ -844,13 +844,6 @@ void AutoGenerateGrid()
 					continue;
 				}
 
-				else if (gGrids.gGrid[i][goRight]->type == WATER)
-				{
-					// UP RIGHT
-					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
-					continue;
-				}
-
 				else if (gGrids.gGrid[goDown][j]->type == WATER)
 				{
 					// UP DOWN
@@ -910,7 +903,7 @@ void AutoGenerateGrid()
 			{
 				if (gGrids.gGrid[i][goRight]->type == WATER)
 				{
-					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
+					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE; // LEFT RIGHT
 					continue;
 				}
 
@@ -922,12 +915,6 @@ void AutoGenerateGrid()
 
 			else if (gGrids.gGrid[i][goRight]->type == WATER)
 			{
-				if (gGrids.gGrid[i][goLeft]->type == WATER)
-				{
-					gGrids.gGrid[i][j]->type = FLOOR_MIDDLE;
-					continue;
-				}
-
 				gGrids.gGrid[i][j]->type = WALL;
 				gGrids.gGrid[i][j]->oDirection = RIGHT;
 				gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;

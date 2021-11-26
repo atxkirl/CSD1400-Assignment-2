@@ -18,11 +18,13 @@ float fPlayerPositionY;
 float fEnemyPositionX;
 float fEnemyPositionY;
 int iNumObjectives;
+int iNumBoatParts;
 
 void LoaderInit()
 {
 	iSize = CP_System_GetWindowHeight() / NumGrids;
 	iNumObjectives = 0;
+	iNumBoatParts = 0;
 
 	for (int i = 0; i < MAX_OBJECTIVES; i++)
 	{
@@ -214,8 +216,24 @@ void LoadGrid(char* cInput, int iLoad)
 				break;
 
 			case(GRASS):
+			{
+				Collider* c = CLM_AddComponent(gLoadedObjects->gGrid[iY][iX]);
+				CLM_Set(c, COL_BOX, NULL);
+				c->isTrigger = 1;
 				RM_LoadImage(r, "Assets/tempgrass.png");
 				break;
+			}
+
+			case(BOAT_PARTS):
+			{
+				Collider* c = CLM_AddComponent(gLoadedObjects->gGrid[iY][iX]);
+				CLM_Set(c, COL_BOX, NULL);
+				c->isTrigger = 1;
+				RM_LoadImage(r, "Assets/boat/boatpart3scaled.png.png");
+				iNumBoatParts++;
+				break;
+			}
+
 			case(BOAT):
 				RM_LoadImage(r, "Assets/boat/boat.png");
 			default:
@@ -295,4 +313,9 @@ CP_Vector SetEnemyPosition()
 int GetNumObjectives()
 {
 	return iNumObjectives;
+}
+
+int GetNumBoatParts()
+{
+	return iNumBoatParts;
 }

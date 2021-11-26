@@ -115,6 +115,7 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
     OB_ConnectInit();
     OB_FixBoatInit();
     OB_BreakCoconutInit();
+    SetBoatParts(GetNumBoatParts());
 
     iAllObjectivesComplete = 0;
     iPrintExit = 0;
