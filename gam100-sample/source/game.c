@@ -22,13 +22,13 @@
 
 
 //Animation* MainMenuStartAnim1, *MainMenuStartAnim2;
-Collider* MainMenuStartCollider, *MainMenuOptionsCollider, *MainMenuCreditsCollider;
+Collider* MainMenuStartCollider, *MainMenuOptionsCollider, *MainMenuCreditsCollider, *MainMenuHTPCollider;
 #define MainMenuStartDefaultScale CP_Vector_Set(200.0f, 50.0f)
 #define MainMenuStartMaxScale CP_Vector_Set(300.0f, 75.0f)
 #define MainMenuStartScaleSpd CP_Vector_Set(300.0f, 150.0f)
 
-#define MainMenuOptsCredsDefaultScale CP_Vector_Set(30.0f, 30.0f)
-#define MainMenuOptsCredsMaxScale CP_Vector_Set(50.0f, 50.0f)
+#define MainMenuOptsCredsDefaultScale CP_Vector_Set(150.0f, 40.0f)
+#define MainMenuOptsCredsMaxScale CP_Vector_Set(180.0f, 50.0f)
 #define MainMenuOptsCredsScaleSpd CP_Vector_Set(150.0f, 150.0f)
 
 void gameUI_render();
@@ -57,9 +57,11 @@ void game_OnCollision(Collider* left, Collider* right)
             SceneManager_ChangeSceneByName("xinyun");
         else if (strcmp(((GameObject*)left->obj)->tag, "game") == 0)
             SceneManager_ChangeSceneByName("levelone");
-        else if (strcmp(((GameObject*)left->obj)->tag, "options") == 0) //TODO
+        else if (strcmp(((GameObject*)left->obj)->tag, "options") == 0)
             SceneManager_ChangeSceneByName("options");
-        else if (strcmp(((GameObject*)left->obj)->tag, "credits") == 0) //TODO
+        else if (strcmp(((GameObject*)left->obj)->tag, "credits") == 0)
+            SceneManager_ChangeSceneByName("credits");
+        else if (strcmp(((GameObject*)left->obj)->tag, "howtoplay") == 0) //TODO
             SceneManager_ChangeSceneByName("credits");
     }
 
@@ -159,33 +161,58 @@ void game_init(void)
     MainMenuStartCollider->space = COLSPC_SCREEN;
     MainMenuStartCollider->isTrigger = 1;
 
-    float startX = 0.85f * screenWidth;
+    float subPosX = 0.83f * screenWidth;
+    float subPosY = 0.685f * screenHeight;
+    //CP_Vector subPos = CP_Vector_Set(subPosX, subPosY);
+
     button = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(startX, screenHeight * 0.9f), 0.0f, MainMenuOptsCredsDefaultScale);
+        CP_Vector_Set(subPosX, subPosY),
+        0.0f, MainMenuOptsCredsDefaultScale);
+    r = RM_AddComponent(button);
+    button->tag = "howtoplay"; //For collision
+    r->renderPriority = PRI_UI;
+    //RM_LoadImage(r, "Assets/creditsicon.png");
+    RM_SetText(r, "How To Play");
+    r->textScale = CP_Vector_Set(1.8f, 1.8f);
+    r->color.a = 0;
+    MainMenuHTPCollider = CLM_AddComponent(button);
+    CLM_Set(MainMenuHTPCollider, COL_BOX, game_OnCollision);
+    MainMenuHTPCollider->space = COLSPC_SCREEN;
+    MainMenuHTPCollider->isTrigger = 1;
+
+    button = GOM_Create2(RECTANGLE,
+        CP_Vector_Set(subPosX, subPosY + MainMenuOptsCredsDefaultScale.y * 1.5f), 0.0f, MainMenuOptsCredsDefaultScale);
     r = RM_AddComponent(button);
     button->tag = "options"; //For collision
     r->renderPriority = PRI_UI;
-    RM_LoadImage(r, "Assets/optionsicon.png");
+    RM_SetText(r, "Options");
+    r->textScale = CP_Vector_Set(1.8f, 1.8f);
+    r->color.a = 0;
+    //RM_LoadImage(r, "Assets/optionsicon.png");
     MainMenuOptionsCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuOptionsCollider, COL_BOX, game_OnCollision);
     MainMenuOptionsCollider->space = COLSPC_SCREEN;
     MainMenuOptionsCollider->isTrigger = 1;
 
-    float spacing = 1.5f * MainMenuOptsCredsDefaultScale.x;
+    //float spacing = 1.5f * MainMenuOptsCredsDefaultScale.x;
     button = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(startX + spacing,screenHeight * 0.9f),
+        CP_Vector_Set(subPosX, subPosY + MainMenuOptsCredsDefaultScale.y * 3.0f),
         0.0f, MainMenuOptsCredsDefaultScale);
     r = RM_AddComponent(button);
     button->tag = "credits"; //For collision
     r->renderPriority = PRI_UI;
-    RM_LoadImage(r, "Assets/creditsicon.png");
+    //RM_LoadImage(r, "Assets/creditsicon.png");
+    RM_SetText(r, "Credits");
+    r->textScale = CP_Vector_Set(1.8f, 1.8f);
+    r->color.a = 0;
     MainMenuCreditsCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuCreditsCollider, COL_BOX, game_OnCollision);
     MainMenuCreditsCollider->space = COLSPC_SCREEN;
     MainMenuCreditsCollider->isTrigger = 1;
 
-    SDM_Init();
-    SDM_PlayBgMusic(1);
+
+
+
 }
 
 void game_update(void)
@@ -262,6 +289,22 @@ void game_update(void)
             button->scale.x = max(button->scale.x, MainMenuOptsCredsDefaultScale.x);
             button->scale.y = max(button->scale.y, MainMenuOptsCredsDefaultScale.y);
         }
+
+        button = (GameObject*)MainMenuHTPCollider->obj;
+        if (IsBoxCollidePoint(MainMenuHTPCollider, c))
+        {
+            button->scale.x += MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
+            button->scale.y += MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
+            button->scale.x = min(button->scale.x, MainMenuOptsCredsMaxScale.x);
+            button->scale.y = min(button->scale.y, MainMenuOptsCredsMaxScale.y);
+        }
+        else
+        {
+            button->scale.x -= MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
+            button->scale.y -= MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
+            button->scale.x = max(button->scale.x, MainMenuOptsCredsDefaultScale.x);
+            button->scale.y = max(button->scale.y, MainMenuOptsCredsDefaultScale.y);
+        }
     
 
     SM_SystemsUpdate(0);
@@ -275,8 +318,8 @@ void game_update(void)
 void game_exit(void)
 {
     SM_SystemsExit();
-    SDM_StopAll();
-    SDM_FreeSounds();
+    //SDM_StopAll();
+    //SDM_FreeSounds();
 }
 
 void game_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

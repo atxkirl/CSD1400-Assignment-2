@@ -13,6 +13,7 @@
 #include "SceneManager.h"
 #include "SystemManager.h"
 #include "Colors.h"
+#include "SoundManager.h"
 
 static float logoFadeSpeed = 250.f;
 static float logoWaitTimer = 1.5f;
@@ -159,6 +160,9 @@ void splashscreen_update(void)
 void splashscreen_exit(void)
 {
     SM_SystemsExit();
+
+    SDM_Init();
+    SDM_PlayBgMusic(1);
 }
 
 void splashscreen_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

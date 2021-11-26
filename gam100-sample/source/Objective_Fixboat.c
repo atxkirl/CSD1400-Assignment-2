@@ -16,8 +16,12 @@ GameObject* ofb_fix1Col, * ofb_fix2Col, *ofb_fix3Col;
 int ofb_isFixed1, ofb_isFixed2, ofb_isFixed3;
 GameObject* ofb_hold = NULL;
 #include <stdio.h>
-int isActive;
+static int isActive;
+int ofb_hasClicked;
+GameObject* ofb_clickHints[3];
 
+#define OFB_CLICKBOXSIZE 50
+#define OFB_CLICKSTROKESIZE 3
 
 void FixBoatEnableImage()
 {
@@ -79,18 +83,21 @@ void OB_FixBoatOnCollision(Collider* left, Collider* right)
 			left->obj->isEnabled = 0;
 			right->obj->isEnabled = 0;
 			ofb_isFixed1 = 1;
+			ofb_clickHints[0]->isEnabled = !ofb_isFixed1; //so dont have that one frame it was enabled when fixed
 		}
 		else if (strcmp(left->obj->tag, "ofb_part2") == 0 && strcmp(right->obj->tag, "fix2") == 0)
 		{
 			left->obj->isEnabled = 0;
 			right->obj->isEnabled = 0;
 			ofb_isFixed2 = 1;
+			ofb_clickHints[1]->isEnabled = !ofb_isFixed2;
 		}
 		else if (strcmp(left->obj->tag, "ofb_part3") == 0 && strcmp(right->obj->tag, "fix3") == 0)
 		{
 			left->obj->isEnabled = 0;
 			right->obj->isEnabled = 0;
 			ofb_isFixed3 = 1;
+			ofb_clickHints[2]->isEnabled = !ofb_isFixed3;
 		}
 		FixBoatEnableImage();
 
@@ -195,8 +202,14 @@ void OB_FixBoatInit()
 	c = CLM_AddComponent(ofb_part1);
 	CLM_Set(c, COL_BOX, OB_FixBoatOnCollision);
 	c->space = COLSPC_SCREEN;
-	c->useScaleValue = 0; c->width = 50; c->height = 50;
+	c->useScaleValue = 0; c->width = OFB_CLICKBOXSIZE; c->height = OFB_CLICKBOXSIZE;
 	c->isTrigger = 1;
+	ofb_clickHints[0] = GOM_Create2(RECTANGLE, ofb_part1->position, 0, CP_Vector_Set(OFB_CLICKBOXSIZE, OFB_CLICKBOXSIZE));
+	r = RM_AddComponent(ofb_clickHints[0]);
+	r->color.a = 0; r->renderPriority = PRI_UI;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OFB_CLICKSTROKESIZE;
+	Animation* anim = AM_AddComponent(ofb_clickHints[0]);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
 	//==2==
 	ofb_part2 = GOM_Create(RECTANGLE);
 
@@ -209,6 +222,12 @@ void OB_FixBoatInit()
 	c->space = COLSPC_SCREEN;
 	c->useScaleValue = 0; c->width = 50; c->height = 50;
 	c->isTrigger = 1;
+	ofb_clickHints[1] = GOM_Create2(RECTANGLE, ofb_part2->position, 0, CP_Vector_Set(OFB_CLICKBOXSIZE, OFB_CLICKBOXSIZE));
+	r = RM_AddComponent(ofb_clickHints[1]);
+	r->color.a = 0; r->renderPriority = PRI_UI;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OFB_CLICKSTROKESIZE;
+	anim = AM_AddComponent(ofb_clickHints[1]);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
 	//==3==
 	ofb_part3 = GOM_Create(RECTANGLE);
 
@@ -221,21 +240,32 @@ void OB_FixBoatInit()
 	c->space = COLSPC_SCREEN;
 	c->useScaleValue = 0; c->width = 50; c->height = 50;
 	c->isTrigger = 1;
+	ofb_clickHints[2] = GOM_Create2(RECTANGLE, ofb_part3->position, 0, CP_Vector_Set(OFB_CLICKBOXSIZE, OFB_CLICKBOXSIZE));
+	r = RM_AddComponent(ofb_clickHints[2]);
+	r->color.a = 0; r->renderPriority = PRI_UI;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OFB_CLICKSTROKESIZE;
+	anim = AM_AddComponent(ofb_clickHints[2]);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
 	
 	FixBoatRandomisePartsTransform();
 
 	isActive = 0;
-
+	ofb_hasClicked = 0;
 	ofb_title->isEnabled = ofb_UI->isEnabled = ofb_cross->isEnabled = 0;
 	ofb_brokenboat->isEnabled = 0;
 	ofb_isFixed1 = ofb_isFixed2 = ofb_isFixed3 = 0;
 	FixBoatEnableImage();
 	ofb_part1->isEnabled = ofb_part2->isEnabled = ofb_part3->isEnabled = 0;
 	ofb_fix1Col->isEnabled = ofb_fix2Col->isEnabled = ofb_fix3Col->isEnabled = 0;
+	for (int i = 0; i < 3; i++)
+		ofb_clickHints[i]->isEnabled = 0;
 }
 
 void OB_FixBoatUpdate()
 {
+	if (isActive == 0)
+		return;
+
 	if (CP_Input_MouseDown(MOUSE_BUTTON_1))
 	{
 		if (ofb_hold)
@@ -252,6 +282,26 @@ void OB_FixBoatUpdate()
 			ofb_hold = NULL;
 		}
 	}
+
+	ofb_clickHints[0]->position = ofb_part1->position;
+	ofb_clickHints[1]->position = ofb_part2->position;
+	ofb_clickHints[2]->position = ofb_part3->position;
+
+	if (ofb_hold == NULL)
+	{
+		ofb_clickHints[0]->isEnabled = !ofb_isFixed1;
+		ofb_clickHints[1]->isEnabled = !ofb_isFixed2;
+		ofb_clickHints[2]->isEnabled = !ofb_isFixed3;
+	}
+	else
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			ofb_clickHints[i]->isEnabled = 0;
+		}
+	}
+
+
 
 	if (ofb_isFixed1 && ofb_isFixed2 && ofb_isFixed3)
 	{
@@ -282,6 +332,10 @@ void OB_FixBoatTrigger()
 
 	Renderer* r = RM_GetComponent(ofb_title);
 	RM_SetText(r, "Fix the boat!");
+
+	ofb_hasClicked = 0;
+	for (int i = 0; i < 3; i++)
+		ofb_clickHints[i]->isEnabled = 0;
 }
 
 void OB_FixBoatUnTrigger()
@@ -298,6 +352,8 @@ void OB_FixBoatUnTrigger()
 	if (ofb_fix3Col) ofb_fix3Col->isEnabled = 0;
 	isActive = 0;
 	ofb_hold = NULL;
+	for (int i = 0; i < 3; i++)
+		ofb_clickHints[i]->isEnabled = 0;
 }
 
 int OB_IsFixBoatComplete()

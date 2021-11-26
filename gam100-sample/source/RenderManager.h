@@ -46,6 +46,10 @@ typedef struct Renderer
 	CP_Vector textLocalPosition;//w reference to position
 	CP_Vector textScale;//defaulted 1,1
 	float textRotation;
+	
+	//DEFAULT 2.0f
+	float strokeWeight;
+	CP_Color strokeColor;
 
 	int isEnabled;
 } Renderer;

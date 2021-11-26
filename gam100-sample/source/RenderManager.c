@@ -48,6 +48,9 @@ Renderer* RM_AddComponent(GameObject* g)
 		r->textScale = CP_Vector_Set(1.0f, 1.0f);
 		r->textRotation = 0.0f;
 		r->isEnabled = 1;
+
+		r->strokeWeight = 2.0f;
+		r->strokeColor = CP_Color_Create(0, 0, 0, 255);
 	}
 
 	LL_Add(&renderObjects, r);
@@ -304,6 +307,9 @@ void RenderAllInList(LinkedList* list)
 		MS_Rotate(matrixStack, -go->rotation);//coz if camera tilt left, image will tilt right. but i want image to tilt left
 		//MS_Scale(matrixStack, go->scale);
 		CP_Settings_ApplyMatrix(*MS_Top(matrixStack));
+
+		CP_Settings_Stroke(r->strokeColor);
+		CP_Settings_StrokeWeight(r->strokeWeight);
 		
 		if (r->sprite)
 		{

@@ -11,7 +11,8 @@ typedef enum ANIM_TYPE
 	ANIM_SPRITE,
 	ANIM_SHAKE,
 	ANIM_ZOOM,
-	ANIM_WALKSAND
+	ANIM_WALKSAND,
+	ANIM_COLORBLINK
 } ANIM_TYPE;
 //think as a big struct that holds all the values for any animation sad
 typedef struct Animation
@@ -42,6 +43,14 @@ typedef struct Animation
 
 	//for walk animatino
 	CP_Vector oldPos;
+
+	//for blink
+	CP_Color targetColor;
+	CP_Color defaultColor;
+	//use looptime to go from default to target to default
+	//use is continuous
+	//use elapsedtime for et
+	//use index for mode
 
 }Animation;
 
@@ -116,3 +125,15 @@ void AM_SetZoom(Animation*, CP_Vector, CP_Vector, float, int);
 @return void
 */
 void AM_SetWalk(Animation*);
+
+/*!
+@brief Set animation to blinking color
+@param a - animation to be set
+@param defaultColor - default color
+@param targetColor - target color
+@param loopTime - time to loop from default to target to default
+@param isContinuous - will it continue non stop
+@param mode - 0 for fill, 1 for stroke, 2 for both
+@return void
+*/
+void AM_SetBlink(Animation* a, CP_Color defaultColor, CP_Color targetColor, float loopTime, int isContinuous, int mode);

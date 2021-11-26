@@ -15,11 +15,16 @@ int iRedConnected, iBlueConnected, iGreenConnected, iYellowConnected;
 float StartingPosX, StartingPosY;
 float StartingScaleX, StartingScaleY;
 
-float screenWidth, screenHeight;
-CP_Vector initialPos;
-int isActive;
+static float screenWidth, screenHeight;
+static CP_Vector initialPos;
+static int isActive;
 
 void OB_SetPosition();
+
+#define OBJWIRE_WIRELINE_WEIGHT 5.0f
+#define OBW_CLICKBOXSIZE 50
+#define OBW_CLICKSTROKESIZE 5.0f
+GameObject* obw_clickHints[4];
 
 void OB_ConnectOnCollision(Collider* left, Collider* right)
 {
@@ -164,6 +169,9 @@ void OB_ConnectInit()
 
 void OB_ConnectUpdate()
 {
+	if (!isActive)
+		return;
+
 	GameObject* holdPoint = NULL;
 	if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
 	{
@@ -189,6 +197,11 @@ void OB_ConnectUpdate()
 		c->space = COLSPC_SCREEN;
 		CLM_Set(c, COL_POINT, NULL);
 	}
+
+	obw_clickHints[0]->position = WireCollider_R->position;
+	obw_clickHints[1]->position = WireCollider_G->position;
+	obw_clickHints[2]->position = WireCollider_B->position;
+	obw_clickHints[3]->position = WireCollider_Y->position;
 
 	if (hold_Wire)
 	{
@@ -236,6 +249,18 @@ void OB_ConnectUpdate()
 				fAngle = 360.f - fAngle;
 			hold_Wire->rotation = fAngle;
 		}
+
+		//if holding wire, stop rendering hints
+		for (int i = 0; i < 4; ++i)
+			obw_clickHints[i]->isEnabled = 0;
+	}
+	else
+	{
+		// no holding wires, so just render yellow hints
+		obw_clickHints[0]->isEnabled = !iRedConnected;
+		obw_clickHints[1]->isEnabled = !iGreenConnected;
+		obw_clickHints[2]->isEnabled = !iBlueConnected;
+		obw_clickHints[3]->isEnabled = !iYellowConnected;
 	}
 
 	if (CP_Input_MouseReleased(MOUSE_BUTTON_1))
@@ -329,6 +354,9 @@ void OB_ConnectTrigger()
 	isActive = 1;
 	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
 	OB_SetPosition();
+
+	for (int i = 0; i < 4; ++i)
+		obw_clickHints[i]->isEnabled = 0;
 }
 
 void OB_ConnectUnTrigger()
@@ -355,6 +383,9 @@ void OB_ConnectUnTrigger()
 	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
 	isActive = 0;
 	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
+
+	for (int i = 0; i < 4; ++i)
+		obw_clickHints[i]->isEnabled = 0;
 }
 
 int OB_ConnectIsComplete()
@@ -388,6 +419,14 @@ void CreateConnectors()
 	r->color = CP_Color_Create(0, 0, 0, 255);
 	r->renderPriority = PRI_UI;
 	WireConnector_R->tag = "WireConnector_R";
+	r->strokeWeight = OBJWIRE_WIRELINE_WEIGHT;
+	GameObject* g = GOM_Create2(RECTANGLE, WireConnector_R->position, 0, CP_Vector_Set(OBW_CLICKBOXSIZE, OBW_CLICKBOXSIZE));
+	r = RM_AddComponent(g);
+	r->renderPriority = PRI_UI; r->color.a = 0;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OBW_CLICKSTROKESIZE;
+	Animation* anim = AM_AddComponent(g);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
+	obw_clickHints[0] = g;
 
 	WireCollider_R = GOM_Create(RECTANGLE);
 	WireCollider_R->scale = CP_Vector_Set(50.f, 50.f);
@@ -409,7 +448,15 @@ void CreateConnectors()
 	r->color = CP_Color_Create(0, 0, 0, 255);
 	r->renderPriority = PRI_UI;
 	WireConnector_B->tag = "WireConnector_B";
+	r->strokeWeight = OBJWIRE_WIRELINE_WEIGHT;
 	//WireConnector->tag = "WireConnector";
+	g = GOM_Create2(RECTANGLE, WireConnector_R->position, 0, CP_Vector_Set(OBW_CLICKBOXSIZE, OBW_CLICKBOXSIZE));
+	r = RM_AddComponent(g);
+	r->renderPriority = PRI_UI; r->color.a = 0;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OBW_CLICKSTROKESIZE;
+	anim = AM_AddComponent(g);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
+	obw_clickHints[1] = g;
 
 	WireCollider_B = GOM_Create(RECTANGLE);
 	WireCollider_B->scale = CP_Vector_Set(50.f, 50.f);
@@ -431,7 +478,15 @@ void CreateConnectors()
 	r->color = CP_Color_Create(0, 0, 0, 255);
 	r->renderPriority = PRI_UI;
 	WireConnector_G->tag = "WireConnector_G";
+	r->strokeWeight = OBJWIRE_WIRELINE_WEIGHT;
 	//WireConnector->tag = "WireConnector";
+	g = GOM_Create2(RECTANGLE, WireConnector_R->position, 0, CP_Vector_Set(OBW_CLICKBOXSIZE, OBW_CLICKBOXSIZE));
+	r = RM_AddComponent(g);
+	r->renderPriority = PRI_UI; r->color.a = 0;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OBW_CLICKSTROKESIZE;
+	anim = AM_AddComponent(g);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
+	obw_clickHints[2] = g;
 
 	WireCollider_G = GOM_Create(RECTANGLE);
 	WireCollider_G->scale = CP_Vector_Set(50.f, 50.f);
@@ -453,7 +508,15 @@ void CreateConnectors()
 	r->color = CP_Color_Create(0, 0, 0, 255);
 	r->renderPriority = PRI_UI;
 	WireConnector_Y->tag = "WireConnector_Y";
+	r->strokeWeight = OBJWIRE_WIRELINE_WEIGHT;
 	//WireConnector->tag = "WireConnector";
+	g = GOM_Create2(RECTANGLE, WireConnector_R->position, 0, CP_Vector_Set(OBW_CLICKBOXSIZE, OBW_CLICKBOXSIZE));
+	r = RM_AddComponent(g);
+	r->renderPriority = PRI_UI; r->color.a = 0;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OBW_CLICKSTROKESIZE;
+	anim = AM_AddComponent(g);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
+	obw_clickHints[3] = g;
 
 	WireCollider_Y = GOM_Create(RECTANGLE);
 	WireCollider_Y->scale = CP_Vector_Set(50.f, 50.f);
@@ -509,6 +572,10 @@ void CreateConnectors()
 	c->isTrigger = 1;
 
 	//OB_SetPosition();
+
+	//hide all hint boxs
+	for (int i = 0; i < 4; ++i)
+		obw_clickHints[i]->isEnabled = 0;
 }
 
 void OB_SetPosition() 

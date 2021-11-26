@@ -233,15 +233,15 @@ void Objectives_Update()
 
 void Objectives_Exit()
 {
-    for (int i = 0; i < MAX_OBJECTIVES; i++)
-    {
-        free(g_ObjectiveUI[i]);
-        free(g_ObjectiveTileOverlay);
-    }
-    for (int i = 0; i < iNumObjectives; i++)
-    {
-        free(gObjectives[i]);
-    }
+    //for (int i = 0; i < MAX_OBJECTIVES; i++)
+    //{
+    //    free(g_ObjectiveUI[i]);
+    //    free(g_ObjectiveTileOverlay);
+    //}
+    //for (int i = 0; i < iNumObjectives; i++)
+    //{
+    //    free(gObjectives[i]);
+    //}
 
     free(gObjectives);
 }

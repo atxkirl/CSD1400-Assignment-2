@@ -117,6 +117,76 @@ void Update_WalkAnimation(Animation* a, float dt)
 
 }
 
+/*!
+@brief This function updates the animation for blinking ( color change )
+@param a - Animation to be updated
+@param dt - delta time
+@return void
+*/
+void Update_BlinkAnimation(Animation* a, float dt)
+{
+	a->elapsedTime += CP_System_GetDt();
+
+	float r = a->elapsedTime / a->loopTime;
+	Renderer* renderer = RM_GetComponent(a->go);
+	CP_Color* c[2] = { NULL, NULL };
+	switch (a->index)
+	{
+	case 0:
+		c[0] = &renderer->color;
+		break;
+	case 1:
+		c[0] = &renderer->strokeColor;
+		break;
+	case 2:
+		c[0] = &renderer->color;
+		c[1] = &renderer->strokeColor;
+		break;
+	}
+
+
+	float ratio = r / 0.5f;
+	if (r < 1.0f)
+	{
+		if (r > 0.5f) //flip
+		{
+			ratio = (r - 0.5f) / 0.5f;
+			ratio = 1.0f - ratio;
+		}
+
+		for (int i = 0; i < 2; i++)
+		{
+			if (c[i] == NULL)
+				continue;
+			c[i]->r = (unsigned char)((a->targetColor.r - (float)a->defaultColor.r) * ratio + (float)a->defaultColor.r);
+			c[i]->g = (unsigned char)((a->targetColor.g - (float)a->defaultColor.g) * ratio + (float)a->defaultColor.g);
+			c[i]->b = (unsigned char)((a->targetColor.b - (float)a->defaultColor.b) * ratio + (float)a->defaultColor.b);
+			c[i]->a = (unsigned char)((a->targetColor.a - (float)a->defaultColor.a) * ratio + (float)a->defaultColor.a);
+		}
+
+	}
+	else
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			if (c[i] == NULL)
+				continue;
+			c[i]->r = a->defaultColor.r;
+			c[i]->g = a->defaultColor.g;
+			c[i]->b = a->defaultColor.b;
+			c[i]->a = a->defaultColor.a;
+		}
+
+		if (a->isContinuous)
+			a->elapsedTime = 0.0f;
+		else
+			a->isEnabled = 0;
+	}
+
+
+
+}
+
 
 
 void AM_Init()
@@ -143,6 +213,9 @@ void AM_Update()
 			break;
 		case ANIM_WALKSAND:
 			Update_WalkAnimation(a, CP_System_GetDt());
+			break;
+		case ANIM_COLORBLINK:
+			Update_BlinkAnimation(a, CP_System_GetDt());
 			break;
 		default:
 			Update_SpriteAnimation(a, CP_System_GetDt());
@@ -263,4 +336,15 @@ void AM_SetWalk(Animation* a)
 	a->elapsedTime = 0.0f;
 	a->loopTime = 0.5f;
 	a->oldPos = a->go->position;
+}
+
+void AM_SetBlink(Animation* a, CP_Color defaultColor, CP_Color targetColor, float loopTime, int isContinuous, int mode)
+{
+	a->type = ANIM_COLORBLINK;
+	a->elapsedTime = 0.0f;
+	a->loopTime = loopTime;
+	a->targetColor = targetColor;
+	a->defaultColor = defaultColor;
+	a->isContinuous = isContinuous;
+	a->index = mode;
 }
