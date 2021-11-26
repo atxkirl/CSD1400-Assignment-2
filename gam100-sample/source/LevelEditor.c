@@ -48,6 +48,9 @@ void CheckGridInt(int iX, int iY, int iObjType)
 {
 	if (isTileMode)
 	{
+		if (objType >= OBJECT_START)
+			return;
+
 		if (gGrids.gGrid[iY][iX]->type != iObjType)
 		{
 			gGrids.gGrid[iY][iX]->type = iObjType;
@@ -55,6 +58,9 @@ void CheckGridInt(int iX, int iY, int iObjType)
 	}
 	else
 	{
+		if (objType <= OBJECT_START)
+			return;
+
 		if (gObjectGrids.gGrid[iY][iX]->type != iObjType)
 		{
 			gObjectGrids.gGrid[iY][iX]->type = iObjType;
@@ -396,15 +402,14 @@ void LevelEditorExit()
 {
 	SM_SystemsExit();
 
-	for (int i = 0; i < NumGrids; i++)
+	/*for (int i = 0; i < NumGrids; i++)
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			free(gGrids.gGrid[i]);
-			free(gGrids.nGrid[i]);
-			free(gObjectGrids.nGrid[i]);
+			free(gGrids.gGrid[i][j]);
+			free(gObjectGrids.gGrid[i][j]);
 		}
-	}
+	}*/
 
 	//free(gGrids.gGrid);
 }
@@ -719,8 +724,10 @@ void AutoGenerateGrid()
 	{
 		for (int j = 1; j < NumGrids; j++)
 		{
-			gGrids.nGrid[j][i].Curr = NotVisited;
-			gGrids.gGrid[j][i]->type = WATER;
+			gGrids.nGrid[i][j].Curr = NotVisited;
+			gGrids.gGrid[i][j]->type = WATER;
+			gObjectGrids.gGrid[i][j]->type = EMPTY;
+			RM_DeleteImage(RM_GetComponent(gObjectGrids.gGrid[i][j]));
 		}
 	}
 
@@ -929,6 +936,21 @@ void AutoGenerateGrid()
 		}
 	}
 
+	int iNumWood = 3 + rand() % 5;
+
+	for (int i = 0; i < iNumWood; ++i)
+	{
+		int iX = 0;
+		int iY = 0;
+		while (gGrids.gGrid[iY][iX]->type == WATER)
+		{
+			iX = rand() % (NumGrids);
+			iY = rand() % (NumGrids);
+		}
+
+		gObjectGrids.gGrid[iY][iX]->type = BOAT_PARTS;
+	}
+
 	/*while (1)
 	{
 		gGrids.nGrid[positionY][positionX].Up = gGrids.nGrid[positionY > 0 ? positionY - 1 : positionY][positionX].Curr;
@@ -1094,6 +1116,10 @@ void PrintCurrentType(int iObjType)
 	case(BOAT):
 		printf("Object Type: BOAT\n");
 		break;
+
+	case(BOAT_PARTS):
+		printf("Object Type: BOAT_PARTS\n");
+		break;
 	default:
 		break;
 	}
@@ -1199,6 +1225,10 @@ void LoadTileImage()
 
 			case(BOAT):
 				RM_LoadImage(renderImage, "Assets/boat/boat.png");
+				break;
+
+			case(BOAT_PARTS):
+				RM_LoadImage(renderImage, "Assets/boat/boatpart3scaled.png");
 				break;
 
 			default:
