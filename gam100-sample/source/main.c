@@ -29,7 +29,7 @@ int main(void)
 
 #ifdef _DEBUG
     CP_System_ShowConsole();
-#endif // DEBUG
+#endif // _DEBUG
 
     CP_Engine_Run();
 

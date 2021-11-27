@@ -16,6 +16,7 @@
 
 GameObject* player = NULL;
 GameObject* player_fogofwar = NULL;
+GameObject* player_invulBubble = NULL;
 GameObject* heart1 = NULL;
 GameObject* heart2 = NULL;
 GameObject* heart3 = NULL;
@@ -226,6 +227,17 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     RM_LoadImage(render, "Assets/heart.png");
     render->renderPriority = PRI_UI;
 
+    // Player Invulnerability Bubble
+    player_invulBubble = GOM_Create2(RECTANGLE, CP_Vector_Set(x, y), 0.0f, CP_Vector_Set(50, 50));
+    player_invulBubble->tag = "playerBubble";
+    render = RM_AddComponent(player_invulBubble);
+    render->renderPriority = PRI_PLY;
+    RM_LoadImage(render, "Assets/bananaboi/bubble-sprite.png");
+    a = AM_AddComponent(player_invulBubble);
+    AM_SetSprite(a, 2, 1, 2, 2.f);
+    a->isContinuous = 1;
+    a->loopDir = 1;
+
     p_Slowed = false;
     p_Hidden = false;
     p_Invincible = false;
@@ -238,7 +250,6 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     
 void PLY_Update() { // handles input from player and checking for flags
     float dt = CP_System_GetDt();
-
     float currentSpd = 200.0f - (n_weight * weight);
 
     AM_GetComponent(player_fogofwar)->loopDir = -1;
@@ -277,7 +288,16 @@ void PLY_Update() { // handles input from player and checking for flags
     }
      
     // update and checks for invincibility
-    if (p_Invincible == 1) counter();
+    if (p_Invincible == 1) 
+    {
+        counter();
+        player_invulBubble->isEnabled = 1;
+        player_invulBubble->position = player->position;
+    }
+    else
+    {
+        player_invulBubble->isEnabled = 0;
+    }
 
     //checks for health
     if (playerhealth == 0) SM_DeleteGameObject(player);
