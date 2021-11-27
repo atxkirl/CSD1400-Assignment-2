@@ -43,4 +43,4 @@ CP_Vector SetEnemyPosition();
 
 int GetNumObjectives();
 
-int GetNumBoatParts();
+int GetLoadedNumBoatParts();
