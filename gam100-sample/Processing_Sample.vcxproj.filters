@@ -106,9 +106,6 @@
     <ClCompile Include="source\BBEM_States.c">
       <Filter>FSM</Filter>
     </ClCompile>
-    <ClCompile Include="source\MiniMonke_States.c">
-      <Filter>FSM</Filter>
-    </ClCompile>
     <ClCompile Include="source\AStar.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -222,9 +219,6 @@
       <Filter>FSM</Filter>
     </ClInclude>
     <ClInclude Include="source\BBEM_States.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="source\MiniMonke_States.h">
       <Filter>FSM</Filter>
     </ClInclude>
     <ClInclude Include="source\Objectives.h">

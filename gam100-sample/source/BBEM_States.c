@@ -1,3 +1,13 @@
+/*
+* @file		BBEM_States.c
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		26/11/2021
+* @brief	Contains function definitions for the statemachine functions to
+*			implement the Big Bad Evil Monkey behaviors.
+*//*----------------------------------------------------------------------*/
+
 #include "BBEM_States.h"
 #include "Helpers.h"
 #include "Player.h"

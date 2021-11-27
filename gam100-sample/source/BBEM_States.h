@@ -1,3 +1,13 @@
+/*
+* @file		BBEM_States.h
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		26/11/2021
+* @brief	Contains function declarations for the statemachine functions for
+*			the Big Bad Evil Monkey behaviors.
+*//*--------------------------------------------------------------------------*/
+
 #pragma once
 
 #include "FSM.h"
