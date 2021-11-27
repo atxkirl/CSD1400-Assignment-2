@@ -1,5 +1,6 @@
 #include "Controls.h"
 #include "FileParser.h"
+#include "SoundManager.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,7 +9,7 @@ void Init_Controls()
     if(!cControls)
         cControls = malloc(sizeof(Controls));
 
-    char cRightText[5];
+    char cRightText[7];
     ReadControlsFromFile("Controls/controls.txt", cRightText);
 
     if (cControls)
@@ -19,6 +20,9 @@ void Init_Controls()
         cControls->cRight = cRightText[3];
         cControls->cInteract = cRightText[4];
     }
+
+    SDM_SetBGVolume((int)cRightText[5]);
+    SDM_SetSFXVolume((int)cRightText[6]);
 }
 
 void Exit_Controls()

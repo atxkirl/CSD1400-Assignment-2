@@ -3,6 +3,8 @@
 
 CP_Sound bg, bg2, foot, wood1, wood2, wood3, electric1, electric2, electric3, hurt1, hurt2, hurt3, drop1;
 
+static int bgVolume, sfxVolume;
+
 void SDM_Init(void) {
 	bg = CP_Sound_LoadMusic("Assets/Sounds/MainBg.ogg");
 	bg2 = CP_Sound_LoadMusic("Assets/Sounds/bg2.ogg");
@@ -100,4 +102,39 @@ void SDM_FreeSounds(void) {
 	CP_Sound_Free(&drop1);
 	CP_Sound_Free(&wood1);
 	
+}
+
+/*!
+@brief Sets the BGM volume
+@param int - the volume 0-100 to be set
+@return void
+*/
+void SDM_SetBGVolume(int v)
+{
+	bgVolume = v;
+}
+/*!
+@brief Gets the BGM volume
+@return int - volume of BGM 0 - 100
+*/
+int SDM_GetBGVolume()
+{
+	return bgVolume;
+}
+/*!
+@brief Sets the SFX volume
+@param int - the volume 0-100 to be set
+@return void
+*/
+void SDM_SetSFXVolume(int v)
+{
+	sfxVolume = v;
+}
+/*!
+@brief Gets the SFX volume
+@return int - volume of SFX 0 - 100
+*/
+int SDM_GetSFXVolume()
+{
+	return sfxVolume;
 }

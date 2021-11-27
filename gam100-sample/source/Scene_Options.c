@@ -6,6 +6,7 @@
 #include "SystemManager.h"
 #include "FileParser.h"
 #include "Controls.h"
+#include "SoundManager.h"
 
 #define BUTTON_WIDTH 60.f
 #define BUTTON_HEIGHT 30.f
@@ -13,12 +14,36 @@
 GameObject* Options_Title, * Options_Background, * Options_Cross;
 GameObject* ButtonL, * ButtonRUp, * ButtonRDown, * ButtonRLeft, * ButtonRRight, * ButtonRInteract, * ButtonSave;
 float screenWidth, screenHeight;
-char cRightText[5];
+char cRightText[7];
 char* SaveFile;
 int iEditUp, iEditDown, iEditLeft, iEditRight,iEditInteract;
 
+
+GameObject* options_Sliders[4]; //0 bgm bg, 1 bgm knob, 2 sfx bg, 3 sfx knob
+GameObject* Options_HoldSlider;
+#define MAX_OPTIONSHIGHLIGHTS 7
+Renderer* options_highlight[MAX_OPTIONSHIGHLIGHTS]; //0 bgm, sfx, wsade
+#define KNOB_HIGHLIGHTCOLOR CP_Color_Create(120,120,120,60);
+#define KEYMAP_HIGHLIGHTCOLOR COLOR_YELLOW
+#define KEYMAP_STROKEWEIGHT 5.0f
+
 void SceneOptionsUI_Buttons();
 void SceneOptions_AssignKeyPress();
+/*!
+@brief Adjusts the slider knob on the sliderBar to value v / 100
+@param knob - knob of the slider
+@param sliderBar - bg of the slider bar, also determines the length
+@param v - value of slider 0 to 100
+@return void
+*/
+void AdjustSlider(GameObject* knob, GameObject* sliderBar, int v);
+/*!
+@brief returns the value of slider knob on sliderBar 0 - 100
+@param knob - knob of the slider
+@param sliderBar - bg of the slider bar, also determines the length
+@return int - value of knob on slider 0 - 100
+*/
+int GetSliderValue(GameObject* knob, GameObject* sliderBar);
 
 void SceneOptions_OnCollision(Collider* left, Collider* right)
 {
@@ -30,6 +55,7 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonSave") == 0)
         {
             WriteControlsToFile(SaveFile, cRightText, 5);
+            SceneManager_ChangeSceneByName("mainmenu");
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonUp") == 0)
@@ -39,6 +65,9 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
             iEditLeft = 0;
             iEditRight = 0;
             iEditInteract = 0;
+            //Will return the correct renderer because it is created first. 
+            Renderer* r = RM_GetComponent(ButtonRUp);
+            RM_SetText(r, "Enter a key");
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonDown") == 0)
@@ -48,6 +77,8 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
             iEditLeft = 0;
             iEditRight = 0;
             iEditInteract = 0;
+            Renderer* r = RM_GetComponent(ButtonRDown);
+            RM_SetText(r, "Enter a key");
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonLeft") == 0)
@@ -57,6 +88,8 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
             iEditDown = 0;
             iEditRight = 0;
             iEditInteract = 0;
+            Renderer* r = RM_GetComponent(ButtonRLeft);
+            RM_SetText(r, "Enter a key");
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonRight") == 0)
@@ -66,6 +99,8 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
             iEditDown = 0;
             iEditLeft = 0;
             iEditInteract = 0;
+            Renderer* r = RM_GetComponent(ButtonRRight);
+            RM_SetText(r, "Enter a key");
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonInteract") == 0)
@@ -75,8 +110,51 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
             iEditDown = 0;
             iEditLeft = 0;
             iEditRight = 0;
+            Renderer* r = RM_GetComponent(ButtonRInteract);
+            RM_SetText(r, "Enter a key");
         }
 
+        else if (strcmp(left->obj->tag, "bgmSlider") == 0)
+        {
+            Options_HoldSlider = left->obj;
+        }
+        else if (strcmp(left->obj->tag, "sfxSlider") == 0)
+        {
+            Options_HoldSlider = left->obj;
+        }
+    }
+
+    //FOR MOUSE HOVERING OVER
+    if (strcmp(((GameObject*)right->obj)->tag, "Mouse") == 0)
+    {
+        if (strcmp(((GameObject*)left->obj)->tag, "ButtonUp") == 0)
+        {
+            options_highlight[2]->isEnabled = 1;
+        }
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonDown") == 0)
+        {
+            options_highlight[3]->isEnabled = 1;
+        }
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonLeft") == 0)
+        {
+            options_highlight[4]->isEnabled = 1;
+        }
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonRight") == 0)
+        {
+            options_highlight[5]->isEnabled = 1;
+        }
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonInteract") == 0)
+        {
+            options_highlight[6]->isEnabled = 1;
+        }
+        else if (strcmp(left->obj->tag, "bgmSlider") == 0)
+        {
+            options_highlight[0]->isEnabled = 1;
+        }
+        else if (strcmp(left->obj->tag, "sfxSlider") == 0)
+        {
+            options_highlight[1]->isEnabled = 1;
+        }
     }
     return;
 }
@@ -131,16 +209,147 @@ void SceneOptions_init(void)
     iEditRight = 0;
     iEditInteract = 0;
 
+    CP_Vector labelStartPos = CP_Vector_Set(screenWidth * 0.365f, screenHeight * 0.275f);
+    CP_Vector labelScale = CP_Vector_Set(100, 50);
+    CP_Vector labelTextScale = CP_Vector_Set(1.5f, 1.5f);
+    CP_Vector startPos = CP_Vector_Set(screenWidth * 0.525f, screenHeight * 0.275f);
+    CP_Vector sliderScale = CP_Vector_Set(300, 10);
+    CP_Vector knobScale = CP_Vector_Set(30, 30);
+    float ygap = 50.0f;
+    //music optionss
+    GameObject* g = GOM_Create2(RECTANGLE, labelStartPos, 0, labelScale);
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    RM_SetText(r, "Music");
+    r->textScale = labelTextScale;
+    r->strokeWeight = 0.0f;
+
+    g = GOM_Create2(RECTANGLE, startPos,
+        0, sliderScale);
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    r->color = COLOR_DARKGREY;
+    options_Sliders[0] = g;
+    
+    g = GOM_Create2(CIRCLE, CP_Vector_Set(g->position.x + sliderScale.x * 0.5f, g->position.y),
+        0, knobScale);
+    g->tag = "bgmSlider";
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    c = CLM_AddComponent(g);
+    CLM_Set(c, COL_CIRCLE, SceneOptions_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
+    options_Sliders[1] = g;
+
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    r->color = KNOB_HIGHLIGHTCOLOR;
+    r->isEnabled = 0;
+    options_highlight[0] = r;
+
+    g = GOM_Create2(RECTANGLE, CP_Vector_Set(labelStartPos.x, labelStartPos.y + ygap), 0, labelScale);
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    RM_SetText(r, "SFX");
+    r->textScale = labelTextScale;
+    r->strokeWeight = 0.0f;
+
+    g = GOM_Create2(RECTANGLE, CP_Vector_Set(startPos.x, startPos.y + ygap),
+        0, sliderScale);
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    r->color = COLOR_DARKGREY;
+    options_Sliders[2] = g;
+
+    g = GOM_Create2(CIRCLE, CP_Vector_Set(g->position.x + sliderScale.x * 0.5f, g->position.y),
+        0, knobScale);
+    g->tag = "sfxSlider";
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    c = CLM_AddComponent(g);
+    CLM_Set(c, COL_CIRCLE, SceneOptions_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
+    options_Sliders[3] = g;
+
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    r->color = KNOB_HIGHLIGHTCOLOR;
+    r->isEnabled = 0;
+    options_highlight[1] = r;
+    
+    Options_HoldSlider = NULL;
+
+    //Loads and set volume IN SDM
     SceneOptionsUI_Buttons();
+
+    AdjustSlider(options_Sliders[1], options_Sliders[0], SDM_GetBGVolume());
+    AdjustSlider(options_Sliders[3], options_Sliders[2], SDM_GetSFXVolume());
 }
 
 void SceneOptions_update(void)
 {
     SM_SystemsPreUpdate();
 
+    //Options_HoldSlider = NULL;
     SceneOptions_AssignKeyPress();
 
+    {
+        float mouseX = CP_Input_GetMouseWorldX();
+        float mouseY = CP_Input_GetMouseWorldY();
+
+        GameObject* tempMouse = GOM_CreateTemp(EMPTY);
+        tempMouse->position = CP_Vector_Set(mouseX, mouseY);
+        //tempMouse->scale = CP_Vector_Set(10, 10);
+        tempMouse->tag = "Mouse";
+        Collider* mc = CLM_AddComponent(tempMouse);
+        CLM_Set(mc, COL_POINT, NULL);
+        mc->space = COLSPC_SCREEN;
+        mc->isTrigger = 1;
+        
+        for (int i = 0; i < MAX_OPTIONSHIGHLIGHTS; ++i)
+            options_highlight[i]->isEnabled = 0;
+    }
+
     SM_SystemsUpdate(0);
+
+    //After update collision, holdSlider may be not null
+    if (Options_HoldSlider)
+    {
+        if (CP_Input_MouseReleased(MOUSE_BUTTON_1))
+        {
+            Options_HoldSlider = NULL;
+        }
+        else
+        {
+            float mouseX = CP_Input_GetMouseWorldX();
+            //float mouseY = CP_Input_GetMouseWorldY();
+            CP_Vector defaultPos = Options_HoldSlider->position;
+
+            CP_Vector bgPos = options_Sliders[0]->position;
+            CP_Vector bgScale = options_Sliders[0]->scale;
+            char* save = &cRightText[5];
+            if (Options_HoldSlider == options_Sliders[3])
+            {
+                //is sfxslider
+                bgPos = options_Sliders[2]->position;
+                bgScale = options_Sliders[2]->scale;
+                save = &cRightText[6];
+            }
+
+            mouseX = CP_Math_ClampFloat(mouseX, bgPos.x - bgScale.x * 0.5f, bgPos.x + bgScale.x * 0.5f);
+            Options_HoldSlider->position = CP_Vector_Set(mouseX, defaultPos.y);
+            
+            int v = (int)(((mouseX - (bgPos.x - bgScale.x * 0.5f)) / bgScale.x) * 100);
+            *save = (char)v;
+
+            if (save == &cRightText[5]) //isfor bgm
+                SDM_SetBGVolume(v);
+            else if (save == &cRightText[6]) //isfor sfx
+                SDM_SetSFXVolume(v);
+        }
+    }
 
     SM_SystemsLateUpdate();
 }
@@ -160,19 +369,24 @@ void SceneOptions_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr*
 void SceneOptionsUI_Buttons()
 {
     ReadControlsFromFile(SaveFile, cRightText);
+    SDM_SetBGVolume((int)cRightText[5]);
+    SDM_SetSFXVolume((int)cRightText[6]);
+
 
 	CP_Vector ButtonScale = CP_Vector_Set(screenWidth * 0.125f, screenHeight * 0.06125f);
-	CP_Vector Button_One_Left = CP_Vector_Set(screenWidth * 0.4f, screenHeight * 0.3f);
-	CP_Vector ConnectorPositio_Two_Left = CP_Vector_Set(screenWidth * 0.4f, screenHeight * 0.4f);
-	CP_Vector Button_Three_Left = CP_Vector_Set(screenWidth * 0.4f, screenHeight * 0.5f);
-    CP_Vector Button_Four_Left = CP_Vector_Set(screenWidth * 0.4f, screenHeight * 0.6f);
-    CP_Vector Button_Five_Left = CP_Vector_Set(screenWidth * 0.4f, screenHeight * 0.7f);
+    float startY = screenHeight * 0.425f;
+    float incY = 50.f;
+	CP_Vector Button_One_Left = CP_Vector_Set(screenWidth * 0.4f, startY);
+	CP_Vector ConnectorPositio_Two_Left = CP_Vector_Set(screenWidth * 0.4f, startY + incY * 1.0f);
+	CP_Vector Button_Three_Left = CP_Vector_Set(screenWidth * 0.4f, startY + incY * 2.0f);
+    CP_Vector Button_Four_Left = CP_Vector_Set(screenWidth * 0.4f, startY + incY * 3.0f);
+    CP_Vector Button_Five_Left = CP_Vector_Set(screenWidth * 0.4f, startY + incY * 4.0f);
 
-	CP_Vector Button_One_Right = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.3f);
-	CP_Vector ConnectorPositio_Two_Right = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.4f);
-	CP_Vector Button_Three_Right = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.5f);
-    CP_Vector Button_Four_Right = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.6f);
-    CP_Vector Button_Five_Right = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
+	CP_Vector Button_One_Right = CP_Vector_Set(screenWidth * 0.6f, startY);
+	CP_Vector ConnectorPositio_Two_Right = CP_Vector_Set(screenWidth * 0.6f, startY + incY * 1.0f);
+	CP_Vector Button_Three_Right = CP_Vector_Set(screenWidth * 0.6f, startY + incY * 2.0f);
+    CP_Vector Button_Four_Right = CP_Vector_Set(screenWidth * 0.6f, startY + incY * 3.0f);
+    CP_Vector Button_Five_Right = CP_Vector_Set(screenWidth * 0.6f, startY + incY * 4.0f);
 
 	CP_Vector Button_Left[5];
 	Button_Left[0] = Button_One_Left;
@@ -216,6 +430,13 @@ void SceneOptionsUI_Buttons()
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
 
+    r = RM_AddComponent(ButtonRUp);
+    r->renderPriority = PRI_UI;
+    r->color.a = 0; 
+    r->strokeColor = KEYMAP_HIGHLIGHTCOLOR; r->strokeWeight = KEYMAP_STROKEWEIGHT;
+    r->isEnabled = 0;
+    options_highlight[2] = r;
+
     ButtonRDown = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRDown);
     r->color = COLOR_WHITE;
@@ -229,6 +450,13 @@ void SceneOptionsUI_Buttons()
     CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
+
+    r = RM_AddComponent(ButtonRDown);
+    r->renderPriority = PRI_UI;
+    r->color.a = 0;
+    r->strokeColor = KEYMAP_HIGHLIGHTCOLOR; r->strokeWeight = KEYMAP_STROKEWEIGHT;
+    r->isEnabled = 0;
+    options_highlight[3] = r;
 
     ButtonRLeft = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRLeft);
@@ -244,6 +472,13 @@ void SceneOptionsUI_Buttons()
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
 
+    r = RM_AddComponent(ButtonRLeft);
+    r->renderPriority = PRI_UI;
+    r->color.a = 0;
+    r->strokeColor = KEYMAP_HIGHLIGHTCOLOR; r->strokeWeight = KEYMAP_STROKEWEIGHT;
+    r->isEnabled = 0;
+    options_highlight[4] = r;
+
     ButtonRRight = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRRight);
     r->color = COLOR_WHITE;
@@ -258,6 +493,13 @@ void SceneOptionsUI_Buttons()
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
 
+    r = RM_AddComponent(ButtonRRight);
+    r->renderPriority = PRI_UI;
+    r->color.a = 0;
+    r->strokeColor = KEYMAP_HIGHLIGHTCOLOR; r->strokeWeight = KEYMAP_STROKEWEIGHT;
+    r->isEnabled = 0;
+    options_highlight[5] = r;
+
     ButtonRInteract = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonRInteract);
     r->color = COLOR_WHITE;
@@ -271,6 +513,13 @@ void SceneOptionsUI_Buttons()
     CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
+
+    r = RM_AddComponent(ButtonRInteract);
+    r->renderPriority = PRI_UI;
+    r->color.a = 0;
+    r->strokeColor = KEYMAP_HIGHLIGHTCOLOR; r->strokeWeight = KEYMAP_STROKEWEIGHT;
+    r->isEnabled = 0;
+    options_highlight[6] = r;
 
     ButtonSave = GOM_Create(RECTANGLE);
     r = RM_AddComponent(ButtonSave);
@@ -345,4 +594,21 @@ void SceneOptions_AssignKeyPress()
             return;
         }
     }
+}
+
+void AdjustSlider(GameObject* knob, GameObject* sliderBar, int v)
+{
+    float percentage = v / 100.0f;
+    float minx = sliderBar->position.x - sliderBar->scale.x * 0.5f;
+    float len = sliderBar->scale.x;
+
+    knob->position = CP_Vector_Set(minx + percentage * len, sliderBar->position.y);
+}
+
+int GetSliderValue(GameObject* knob, GameObject* sliderBar)
+{
+    float minx = sliderBar->position.x - sliderBar->scale.x * 0.5f;
+    float len = sliderBar->scale.x;
+    float v = knob->position.x - minx;
+    return (int)(v / len);
 }

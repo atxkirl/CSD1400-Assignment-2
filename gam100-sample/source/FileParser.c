@@ -207,17 +207,33 @@ void ReadControlsFromFile(char* cFileName, char* cText)
 	int iTextNum = 0;
 	if (eError == 0 && fFile != NULL)
 	{
-		int iLetterRead;
-		while ((iLetterRead = fgetc(fFile)) != '\0')
+		//int iLetterRead;
+		//while ((iLetterRead = fgetc(fFile)) != '\0')
+		//{
+		//	if (feof(fFile))
+		//		break;
+
+		//	printf("%c\n", iLetterRead);
+
+		//	cText[iTextNum] = (char)iLetterRead;
+		//	iTextNum++;
+		//}
+
+		char temp[6] = { 0 };
+		fgets(temp, 6, fFile); //read wasde
+		printf("%s\n", temp);
+		for (int i = 0; i < 5; i++)
 		{
-			if (feof(fFile))
-				break;
-
-			printf("%c\n", iLetterRead);
-
-			cText[iTextNum] = (char)iLetterRead;
-			iTextNum++;
+			cText[iTextNum++] = temp[i];
 		}
+		fgetc(fFile); //get rid of \n
+		fgets(temp, 6, fFile); //read music vol
+		printf("%s", temp);
+		cText[iTextNum++] = (char)atoi(temp);
+		fgets(temp, 6, fFile); //read sfx vol
+		printf("%s\n", temp);
+		cText[iTextNum++] = (char)atoi(temp);
+
 		fclose(fFile);
 	}
 	else if (eError != 0)
@@ -274,11 +290,23 @@ void WriteControlsToFile(char* cFileName, char* cToAdd, int iSize)
 
 	if (eError == 0 && fFile != NULL)
 	{
-		for (int i = 0; i < iSize; i++)
-		{
-			fputc(cToAdd[i], fFile);
-		}
-		printf("Saved!! \n");
+		//for (int i = 0; i < iSize; i++)
+		//{
+		//	fputc(cToAdd[i], fFile);
+		//}
+		//printf("Saved!! \n");
+		char temp[6] = { 0 };
+		for (int i = 0; i < 5; ++i)
+			temp[i] = cToAdd[i];
+		fputs(temp, fFile);
+		fputc((int)'\n', fFile);
+		char temp2[4] = { 0 };
+		sprintf_s(temp2, 4, "%d", (int)cToAdd[5]);
+		fputs(temp2, fFile);
+		fputc((int)'\n', fFile);
+		sprintf_s(temp2, 4, "%d", (int)cToAdd[6]);
+		fputs(temp2, fFile);
+
 		fclose(fFile);
 	}
 	else if (eError != 0)

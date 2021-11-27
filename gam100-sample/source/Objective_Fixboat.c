@@ -18,7 +18,8 @@ GameObject* ofb_hold = NULL;
 #include <stdio.h>
 static int isActive;
 int ofb_hasClicked;
-GameObject* ofb_clickHints[3];
+#define OFB_HINTSIZE 3
+GameObject* ofb_clickHints[OFB_HINTSIZE];
 
 #define OFB_CLICKBOXSIZE 50
 #define OFB_CLICKSTROKESIZE 3
@@ -163,6 +164,11 @@ void OB_FixBoatInit()
 	CLM_Set(c, COL_BOX, OB_FixBoatOnCollision);
 	c->space = COLSPC_SCREEN;
 	c->isTrigger = 1;
+	r = RM_AddComponent(ofb_fix1Col);
+	r->renderPriority = PRI_UI; r->color.a = 0;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OFB_CLICKSTROKESIZE;
+	Animation* anim = AM_AddComponent(ofb_fix1Col);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
 	//==2==
 	ofb_fixed2 = RM_AddComponent(ofb_brokenboat);
 	ofb_fixed2->renderPriority = PRI_UI;
@@ -174,6 +180,11 @@ void OB_FixBoatInit()
 	CLM_Set(c, COL_BOX, OB_FixBoatOnCollision);
 	c->space = COLSPC_SCREEN;
 	c->isTrigger = 1;
+	r = RM_AddComponent(ofb_fix2Col);
+	r->renderPriority = PRI_UI; r->color.a = 0;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OFB_CLICKSTROKESIZE;
+	anim = AM_AddComponent(ofb_fix2Col);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
 	//==3==
 	ofb_fixed3 = RM_AddComponent(ofb_brokenboat);
 	ofb_fixed3->renderPriority = PRI_UI;
@@ -185,6 +196,11 @@ void OB_FixBoatInit()
 	CLM_Set(c, COL_BOX, OB_FixBoatOnCollision);
 	c->space = COLSPC_SCREEN;
 	c->isTrigger = 1;
+	r = RM_AddComponent(ofb_fix3Col);
+	r->renderPriority = PRI_UI; r->color.a = 0;
+	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OFB_CLICKSTROKESIZE;
+	anim = AM_AddComponent(ofb_fix3Col);
+	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
 
 	ofb_brokenboat = GOM_Create2(RECTANGLE, boatPos, 0, boatScale);
 	r = RM_AddComponent(ofb_brokenboat);
@@ -208,7 +224,7 @@ void OB_FixBoatInit()
 	r = RM_AddComponent(ofb_clickHints[0]);
 	r->color.a = 0; r->renderPriority = PRI_UI;
 	r->strokeColor = COLOR_YELLOW; r->strokeWeight = OFB_CLICKSTROKESIZE;
-	Animation* anim = AM_AddComponent(ofb_clickHints[0]);
+	anim = AM_AddComponent(ofb_clickHints[0]);
 	AM_SetBlink(anim, COLOR_YELLOW, CP_Color_Create(255, 255, 0, 0), 2.0f, 1, 1);
 	//==2==
 	ofb_part2 = GOM_Create(RECTANGLE);
@@ -257,7 +273,7 @@ void OB_FixBoatInit()
 	FixBoatEnableImage();
 	ofb_part1->isEnabled = ofb_part2->isEnabled = ofb_part3->isEnabled = 0;
 	ofb_fix1Col->isEnabled = ofb_fix2Col->isEnabled = ofb_fix3Col->isEnabled = 0;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < OFB_HINTSIZE; i++)
 		ofb_clickHints[i]->isEnabled = 0;
 }
 
@@ -295,7 +311,7 @@ void OB_FixBoatUpdate()
 	}
 	else
 	{
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < OFB_HINTSIZE; ++i)
 		{
 			ofb_clickHints[i]->isEnabled = 0;
 		}
@@ -334,7 +350,7 @@ void OB_FixBoatTrigger()
 	RM_SetText(r, "Fix the boat!");
 
 	ofb_hasClicked = 0;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < OFB_HINTSIZE; i++)
 		ofb_clickHints[i]->isEnabled = 0;
 }
 
@@ -352,7 +368,7 @@ void OB_FixBoatUnTrigger()
 	if (ofb_fix3Col) ofb_fix3Col->isEnabled = 0;
 	isActive = 0;
 	ofb_hold = NULL;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < OFB_HINTSIZE; i++)
 		ofb_clickHints[i]->isEnabled = 0;
 }
 
