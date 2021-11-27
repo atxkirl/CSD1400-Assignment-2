@@ -19,3 +19,7 @@ void SDM_PlaySFX(int name);
 void SDM_FreeSounds(void);
 
 void SDM_StopAll(void);
+
+void SDM_EffectUpdate(void);
+
+void walk_timer(void);

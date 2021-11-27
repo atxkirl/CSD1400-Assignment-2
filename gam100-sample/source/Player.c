@@ -255,13 +255,25 @@ void PLY_Update() { // handles input from player and checking for flags
     if (!p_Hideable)
     {
         //  player controls
-        if (CP_Input_KeyDown((CP_KEY)cControls->cUp)) player->position.y -= currentSpd * dt; // up
+        if (CP_Input_KeyDown((CP_KEY)cControls->cUp)) {
+            player->position.y -= currentSpd * dt;
+            SDM_PlayWEffect();
+        }// up
 
-        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) player->position.x -= currentSpd * dt; // left
+        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) {
+            player->position.x -= currentSpd * dt;
+            SDM_PlayWEffect();
+        }  // left
 
-        if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) player->position.y += currentSpd * dt; // down
+        if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) {
+            player->position.y += currentSpd * dt; 
+            SDM_PlayWEffect();
+        } // down
 
-        if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) player->position.x += currentSpd * dt; // right
+        if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) {
+            player->position.x += currentSpd * dt;
+            SDM_PlayWEffect();
+        } // right
     }
      
     // update and checks for invincibility
@@ -346,6 +358,7 @@ void PLY_Update() { // handles input from player and checking for flags
     // returns player back to normal speed when 
     //spd = 200.0f;
     RM_SetCameraPosition(player->position);
+    SDM_EffectUpdate();
 
     if (playerhealth <= 0)
     {
