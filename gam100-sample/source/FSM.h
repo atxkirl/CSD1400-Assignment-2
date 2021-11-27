@@ -1,3 +1,13 @@
+/*
+* @file		FSM.h
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		26/11/2021
+* @brief	Contains structs that hold data relevant for AI statemachine, and AI
+*			pathfinding.
+*//*--------------------------------------------------------------------------*/
+
 #pragma once
 
 #include <stdio.h>

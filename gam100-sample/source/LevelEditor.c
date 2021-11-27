@@ -800,6 +800,8 @@ void AutoGenerateGrid()
 
 			if (gGrids.gGrid[i][j]->type != FLOOR)
 				continue;
+			gGrids.gGrid[i][j]->oDirection = 0;
+			gGrids.gGrid[i][j]->rotation = gGrids.gGrid[i][j]->oDirection * 90.f;
 
 			if (gGrids.gGrid[goUp][j]->type == WATER)
 			{

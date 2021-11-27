@@ -209,10 +209,6 @@ void game_init(void)
     CLM_Set(MainMenuCreditsCollider, COL_BOX, game_OnCollision);
     MainMenuCreditsCollider->space = COLSPC_SCREEN;
     MainMenuCreditsCollider->isTrigger = 1;
-
-
-
-
 }
 
 void game_update(void)

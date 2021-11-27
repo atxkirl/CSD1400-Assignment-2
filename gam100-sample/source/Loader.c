@@ -226,10 +226,7 @@ void LoadGrid(char* cInput, int iLoad)
 
 			case(BOAT_PARTS):
 			{
-				Collider* c = CLM_AddComponent(gLoadedObjects->gGrid[iY][iX]);
-				CLM_Set(c, COL_BOX, NULL);
-				c->isTrigger = 1;
-				RM_LoadImage(r, "Assets/boat/boatpart3scaled.png.png");
+				RM_LoadImage(r, "Assets/boat/boatpart3scaled.png");
 				iNumBoatParts++;
 				break;
 			}
@@ -315,7 +312,7 @@ int GetNumObjectives()
 	return iNumObjectives;
 }
 
-int GetNumBoatParts()
+int GetLoadedNumBoatParts()
 {
 	return iNumBoatParts;
 }

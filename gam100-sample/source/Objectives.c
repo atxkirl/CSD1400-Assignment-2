@@ -28,6 +28,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
     //me, other
     if (strcmp(((GameObject*)right->obj)->tag, "player") == 0)
     {
+        // CONNECT WIRES
         if (strcmp(((GameObject*)left->obj)->tag, "Objective1Read") == 0)
         {
             if (CP_Input_KeyTriggered(cControls->cInteract))
@@ -45,23 +46,32 @@ void Objectives_onCollision(Collider* left, Collider* right)
             }
         }
 
+        // FIX BOAT
         else if (strcmp(((GameObject*)left->obj)->tag, "Objective2Read") == 0)
         {
             if (CP_Input_KeyTriggered(cControls->cInteract))
             {
-                for (int i = 0; i < iNumObjectives; i++)
+                if (GetBoatParts() == GetLoadedNumBoatParts())
                 {
-                    if (((GameObject*)left->obj)->position.x == gObjectives[i]->position.x
-                        && ((GameObject*)left->obj)->position.y == gObjectives[i]->position.y)
+                    for (int i = 0; i < iNumObjectives; i++)
                     {
-                        iCurrentObjective = i;
+                        if (((GameObject*)left->obj)->position.x == gObjectives[i]->position.x
+                            && ((GameObject*)left->obj)->position.y == gObjectives[i]->position.y)
+                        {
+                            iCurrentObjective = i;
+                        }
                     }
+                    OB_FixBoatTrigger();
+                    iUpdatePlayer = 0;
                 }
-                OB_FixBoatTrigger();
-                iUpdatePlayer = 0;
+                else
+                {
+                    DM_PrintDialogue("Not Enough Boat Parts!", DIALOGUE_CLOSEBUTTON);
+                }
             }
         }
 
+        // BREAK COCONUT
         else if (strcmp(((GameObject*)left->obj)->tag, "Objective3Read") == 0)
         {
             if (CP_Input_KeyTriggered(cControls->cInteract))
@@ -115,7 +125,7 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
     OB_ConnectInit();
     OB_FixBoatInit();
     OB_BreakCoconutInit();
-    SetBoatParts(GetNumBoatParts());
+    OB_PickupInit();
 
     iAllObjectivesComplete = 0;
     iPrintExit = 0;

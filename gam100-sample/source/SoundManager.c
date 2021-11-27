@@ -1,9 +1,14 @@
 #include "cprocessing.h"
 #include "SoundManager.h"
 
+#include <time.h>
+
 CP_Sound bg, bg2, foot, wood1, wood2, wood3, electric1, electric2, electric3, hurt1, hurt2, hurt3, drop1;
 
+
 static int bgVolume, sfxVolume;
+int playing = 0;
+time_t startT;
 
 void SDM_Init(void) {
 	bg = CP_Sound_LoadMusic("Assets/Sounds/MainBg.ogg");
@@ -45,12 +50,15 @@ void SDM_StopBgMusic(void) {
 
 void SDM_PlayWEffect(void) {
 	float random = CP_Random_RangeFloat(0.5f, 1.0f);
-	int playing = 0;
-	while (playing == 0) {
+	if (playing == 0) {
 		CP_Sound_PlayAdvanced(foot, 1.0f, random, FALSE, CP_SOUND_GROUP_SFX);
 		playing = 1;
+		startT = clock();
 	}
-	
+}
+
+void SDM_EffectUpdate(void) {
+	walk_timer();
 }
 
 void SDM_PlaySFX(int name) {
@@ -102,6 +110,14 @@ void SDM_FreeSounds(void) {
 	CP_Sound_Free(&drop1);
 	CP_Sound_Free(&wood1);
 	
+}
+
+void walk_timer(void) {
+	time_t Current_T = clock();
+
+	if (difftime(Current_T, startT) >= 650.0f) {
+		playing = 0;
+	}
 }
 
 /*!

@@ -1,3 +1,13 @@
+/*
+* @file		AIManager.c
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		26/11/2021
+* @brief	Contains functions to create, modify, and control the behaviors,
+*			and movements of Enemy AI.
+*//*----------------------------------------------------------------------*/
+
 #include "AIManager.h"
 #include "Objectives.h"
 
@@ -163,28 +173,6 @@ void AIM_InitStates(void)
 	BBEM_Search.onExit = FSMState_BBEM_Search_OnExit;
 	BBEM_Search.onUpdate = FSMState_BBEM_Search_OnUpdate;
 	LL_Add(&allStates, &BBEM_Search);
-
-
-
-	// Mini Monke States
-
-	MM_Idle.name = "MM_Idle";
-	MM_Idle.onEnter = FSMState_MM_Idle_OnEnter;
-	MM_Idle.onExit = FSMState_MM_Idle_OnExit;
-	MM_Idle.onUpdate = FSMState_MM_Idle_OnUpdate;
-	LL_Add(&allStates, &MM_Idle);
-
-	MM_Roam.name = "MM_Roam";
-	MM_Roam.onEnter = FSMState_MM_Roam_OnEnter;
-	MM_Roam.onExit = FSMState_MM_Roam_OnExit;
-	MM_Roam.onUpdate = FSMState_MM_Roam_OnUpdate;
-	LL_Add(&allStates, &MM_Roam);
-
-	MM_Chase.name = "MM_Chase";
-	MM_Chase.onEnter = FSMState_MM_Roam_OnEnter;
-	MM_Chase.onExit = FSMState_MM_Roam_OnExit;
-	MM_Chase.onUpdate = FSMState_MM_Roam_OnUpdate;
-	LL_Add(&allStates, &MM_Chase);
 }
 
 void AIM_InitFSM(FSM* controller, char* startStateName, GameObject* targetObject)
