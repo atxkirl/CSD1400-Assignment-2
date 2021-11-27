@@ -32,6 +32,7 @@ Renderer* g_ObjectiveTileOverlay[MAX_OBJECTIVES];
 
 int iAllObjectivesComplete;
 int iPrintExit;
+char* cWire;
 
 void Objectives_onCollision(Collider* left, Collider* right)
 {
@@ -142,6 +143,7 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
 
     iAllObjectivesComplete = 0;
     iPrintExit = 0;
+    cWire = malloc(sizeof(char) * 100);
 }
 
 void Objectives_Update()
@@ -250,6 +252,25 @@ void Objectives_Update()
         }
     }
 
+    for (int i = 0; i < MAX_OBJECTIVES; ++i)
+    {
+        if (strcmp(g_ObjectiveUI[i]->tag, "ObjectiveUI2") == 0)
+        {
+            if (GetLoadedNumBoatParts() == GetBoatParts())
+            {
+                g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.06f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                RM_SetText(RM_GetComponent(g_ObjectiveUI[i]), oObjectiveList[1].cObjective);
+            }
+            else
+            {
+                // ADD RENDERTEXT HERE
+                g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.12f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                sprintf_s(cWire, 100, "Collect %d more boat parts to fix boat!", GetLoadedNumBoatParts() - GetBoatParts());
+                RM_SetText(RM_GetComponent(g_ObjectiveUI[i]), cWire);
+            }
+        }
+    }
+
     OB_ConnectUpdate();
     OB_BreakCoconutUpdate();
     OB_FixBoatUpdate();
@@ -267,7 +288,7 @@ void Objectives_Exit()
     //{
     //    free(gObjectives[i]);
     //}
-
+    free(cWire);
     free(gObjectives);
 }
 
@@ -284,7 +305,7 @@ int Objectives_GetPlayerUpdate()
 void Objectives_RenderUI()
 {
     GameObject* ObjectiveUIBox = GOM_Create(WALL);
-    ObjectiveUIBox->scale = CP_Vector_Set(screenWidth * 0.175f, screenHeight * 0.15f);
+    ObjectiveUIBox->scale = CP_Vector_Set(screenWidth * 0.19f, screenHeight * 0.15f);
     ObjectiveUIBox->position = CP_Vector_Set(screenWidth * 0.12f, screenHeight * 0.1f);
     ObjectiveUIBox->tag = "ObjectiveUI";
     Renderer* r = RM_AddComponent(ObjectiveUIBox);
@@ -299,11 +320,12 @@ void Objectives_RenderUI()
         {
             for (int k = 0; k < NumGrids; k++)
             {
+                //CONNECT
                 if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective1") == 0)
                 {
                     g_ObjectiveUI[i] = GOM_Create(EMPTY);
                     g_ObjectiveUI[i]->scale = CP_Vector_Set(175.f, 50.f);
-                    g_ObjectiveUI[i]->tag = "ObjectiveUI";
+                    g_ObjectiveUI[i]->tag = "ObjectiveUI1";
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
@@ -324,17 +346,18 @@ void Objectives_RenderUI()
                     //InitFloatingText(i, gLoadedGrids->gGrid[j][k]->position);
                     ++i;
                 }
+
+                // BOAT
                 else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective2") == 0)
                 {
                     g_ObjectiveUI[i] = GOM_Create(EMPTY);
                     g_ObjectiveUI[i]->scale = CP_Vector_Set(175.f, 50.f);
-                    g_ObjectiveUI[i]->tag = "ObjectiveUI";
+                    g_ObjectiveUI[i]->tag = "ObjectiveUI2";
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.07f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveTwoPos = g_ObjectiveUI[i]->position;
-                    RM_SetText(r, oObjectiveList[1].cObjective);
+
                     r->renderPriority = PRI_UI;
                     gLoadedGrids->gGrid[j][k]->tag = "Objective2Read";
                     Collider* c = CLM_AddComponent(gLoadedGrids->gGrid[j][k]);
@@ -349,11 +372,13 @@ void Objectives_RenderUI()
                     //InitFloatingText(i, gLoadedGrids->gGrid[j][k]->position);
                     ++i;
                 }
+
+                // BREAK COCONUT
                 else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective3") == 0)
                 {
                     g_ObjectiveUI[i] = GOM_Create(EMPTY);
                     g_ObjectiveUI[i]->scale = CP_Vector_Set(175.f, 50.f);
-                    g_ObjectiveUI[i]->tag = "ObjectiveUI";
+                    g_ObjectiveUI[i]->tag = "ObjectiveUI3";
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
