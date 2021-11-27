@@ -12,3 +12,8 @@ void PLY_Update();
 int PLY_IsHidden(void);
 int PLY_IsInvincible(void);
 bool PLY_TakeDamage(void);
+
+/*!
+@brief Triggers show interact hint
+*/
+void PLY_ShowInteractHint(void);

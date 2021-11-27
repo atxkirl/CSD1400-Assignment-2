@@ -9,6 +9,7 @@
 #include "Colors.h"
 #include "Controls.h"
 #include "SceneManager.h"
+#include "Player.h"
 
 int iUpdatePlayer;
 CP_Vector vObjectiveOnePos, vObjectiveTwoPos, vObjectiveThreePos;
@@ -19,6 +20,15 @@ int iNumObjectives;
 int iCurrentObjective;
 GameObject* g_ObjectiveUI[MAX_OBJECTIVES];
 Renderer* g_ObjectiveTileOverlay[MAX_OBJECTIVES];
+//GameObject* OBJ_FloatingTextHint[MAX_OBJECTIVES];
+
+/*!
+@brief Initialises OBJ_FloatingTextHint[index]
+@param index - index of array to be init
+@param pos - pos of flt text obj
+@return void
+*/
+//void InitFloatingText(int index, CP_Vector pos);
 
 int iAllObjectivesComplete;
 int iPrintExit;
@@ -44,6 +54,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                 OB_ConnectTrigger();
                 iUpdatePlayer = 0; 
             }
+            PLY_ShowInteractHint();
         }
 
         // FIX BOAT
@@ -69,6 +80,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                     DM_PrintDialogue("Not Enough Boat Parts!", DIALOGUE_CLOSEBUTTON);
                 }
             }
+            PLY_ShowInteractHint();
         }
 
         // BREAK COCONUT
@@ -87,6 +99,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                 OB_BreakCoconutTrigger();
                 iUpdatePlayer = 0;
             }
+            PLY_ShowInteractHint();
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "Exit") == 0 && Objectives_GetCompleteAll())
@@ -240,6 +253,7 @@ void Objectives_Update()
     OB_ConnectUpdate();
     OB_BreakCoconutUpdate();
     OB_FixBoatUpdate();
+
 }
 
 void Objectives_Exit()
@@ -306,6 +320,8 @@ void Objectives_RenderUI()
                     g_ObjectiveTileOverlay[i]->color.a = 120;
                     printf("CONNECT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
+
+                    //InitFloatingText(i, gLoadedGrids->gGrid[j][k]->position);
                     ++i;
                 }
                 else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective2") == 0)
@@ -329,6 +345,8 @@ void Objectives_RenderUI()
                     g_ObjectiveTileOverlay[i]->color.a = 120;
                     printf("BOAT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
+
+                    //InitFloatingText(i, gLoadedGrids->gGrid[j][k]->position);
                     ++i;
                 }
                 else if (strcmp(gLoadedGrids->gGrid[j][k]->tag, "Objective3") == 0)
@@ -352,6 +370,8 @@ void Objectives_RenderUI()
                     g_ObjectiveTileOverlay[i]->color.a = 120;
                     printf("COCO: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
+
+                    //InitFloatingText(i, gLoadedGrids->gGrid[j][k]->position);
                     ++i;
                 }
             }
@@ -363,3 +383,18 @@ int Objectives_GetCompleteAll()
 {
     return (iAllObjectivesComplete == iNumObjectives);
 }
+
+//void InitFloatingText(int index, CP_Vector pos)
+//{
+//    CP_Vector scale = CP_Vector_Set(100, 100);
+//    GameObject* g = GOM_Create2(EMPTY, pos, 0, scale);
+//    Renderer* r = RM_AddComponent(g);
+//    char temp[10] = {0};
+//    sprintf_s(temp, 10, "Press %c", cControls->cInteract);
+//    RM_SetText(r, temp);
+//    r->textScale = CP_Vector_Set(0.5f,0.5f);
+//    Animation* an = AM_AddComponent(g);
+//    AM_SetUpFloatDownState(an, pos, CP_Vector_Set(pos.x, pos.y - 20), 5.0f, 0.5f, 2.0f);
+//    g->isEnabled = 0;
+//    OBJ_FloatingTextHint[index] = g;
+//}

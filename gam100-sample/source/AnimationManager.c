@@ -6,6 +6,8 @@
 
 LinkedList* animationList;
 
+#define MY_PI 3.141592f
+
 void Update_SpriteAnimation(Animation* a, float dt)
 {
 	a->elapsedTime += CP_System_GetDt();
@@ -187,7 +189,96 @@ void Update_BlinkAnimation(Animation* a, float dt)
 
 }
 
+/*!
+@brief This function updates the animation for translation lerp
+@param a - Animation to be updated
+@param dt - delta time
+@return void
+*/
+void Update_TranslateLerp(Animation* a, float dt)
+{
+	if (a->type == ANIM_UFDSTATEFLTTRANSIT)
+	{
+		//special lerp state
+		float spd = 10 * dt;
+		CP_Vector v = CP_Vector_Subtract(a->targetScale, a->go->position);
+		float d = CP_Vector_Length(v);
+		
+		if (spd > d)
+		{
+			a->go->position = a->targetScale;
+			a->isNextStateFlag = 0;
+			a->type = ANIM_UFDSTATEDOWN;
+			a->isFlipped = 1;
+			a->elapsedTime = 0.0f;
+		}
+		else
+		{
+			a->go->position = CP_Vector_Add(a->go->position, CP_Vector_Scale(v, spd / d));
+		}
 
+		return;
+	}
+
+	float f = a->elapsedTime / a->scaleToTime;
+	if (f < 1.0f)
+	{
+		a->elapsedTime += CP_System_GetDt();
+		CP_Vector v = CP_Vector_Subtract(a->targetScale, a->defaultScale);
+		if (a->isFlipped)
+			f = 1.0f - f;
+		a->go->position = CP_Vector_Add(a->defaultScale, CP_Vector_Scale(v, f));
+	}
+	else
+	{
+		a->go->position = a->targetScale;
+
+		if (a->type == ANIM_UFDSTATEUP) //reach pos alr, next state is float there
+		{
+			a->type = ANIM_UFDSTATEFLT;
+			a->elapsedTime = 0.0f;
+		}
+		else if (a->type == ANIM_UFDSTATEDOWN)
+		{
+			//reach the end of down. off this state
+			a->isFlipped = 0;
+			a->type = ANIM_UFDSTATEUP;
+			a->elapsedTime = 0.0f;
+			a->go->isEnabled = 0;
+		}
+	}
+
+}
+
+/*!
+@brief This function updates the animation for translation floating
+@param a - Animation to be updated
+@param dt - delta time
+@return void
+*/
+void Update_TranslateFloating(Animation* a, float dt)
+{
+	float f = a->elapsedTime / a->loopTime;
+
+	{
+		a->elapsedTime += CP_System_GetDt();
+		a->go->position. y = a->oldPos.y + a->rotateAngle * sinf(f * 2.0f * MY_PI);
+	}
+
+	if (f >= 1.0f)
+	{
+		a->elapsedTime -= a->loopTime;
+	}
+
+	if (a->type == ANIM_UFDSTATEFLT && a->isNextStateFlag)
+	{
+		a->isNextStateFlag = 0;
+		a->type = ANIM_UFDSTATEFLTTRANSIT;
+		a->isFlipped = 1;
+		a->elapsedTime = 0.0f;
+	}
+
+}
 
 void AM_Init()
 {
@@ -216,6 +307,16 @@ void AM_Update()
 			break;
 		case ANIM_COLORBLINK:
 			Update_BlinkAnimation(a, CP_System_GetDt());
+			break;
+		case ANIM_UFDSTATEUP:
+		case ANIM_UFDSTATEDOWN:
+		case ANIM_UFDSTATEFLTTRANSIT:
+		case ANIM_TRANSLATELERP:
+			Update_TranslateLerp(a, CP_System_GetDt());
+			break;
+		case ANIM_UFDSTATEFLT:
+		case ANIM_TRANSLATEFLOAT:
+			Update_TranslateFloating(a, CP_System_GetDt());
 			break;
 		default:
 			Update_SpriteAnimation(a, CP_System_GetDt());
@@ -347,4 +448,38 @@ void AM_SetBlink(Animation* a, CP_Color defaultColor, CP_Color targetColor, floa
 	a->defaultColor = defaultColor;
 	a->isContinuous = isContinuous;
 	a->index = mode;
+}
+
+void AM_SetLerp(Animation* a, CP_Vector pa, CP_Vector pb, float t, int isFlipped)
+{
+	a->type = ANIM_TRANSLATELERP;
+	a->defaultScale = pa;
+	a->targetScale = pb;
+	a->scaleToTime = t;
+	a->elapsedTime = 0.0f;
+	a->isFlipped = isFlipped;
+}
+
+void AM_SetFloat(Animation* a, CP_Vector p, float amplitude, float t)
+{
+	a->type = ANIM_TRANSLATEFLOAT;
+	a->oldPos = p;
+	a->rotateAngle = amplitude;
+	a->loopTime = t;
+	a->elapsedTime = 0.0f;
+}
+
+void AM_SetUpFloatDownState(Animation* a, CP_Vector pa, CP_Vector pb, float amplitude, float t, float ft)
+{
+	a->type = ANIM_UFDSTATEUP;
+	a->defaultScale = pa;
+	a->targetScale = pb;
+	a->scaleToTime = t;
+	a->rotateAngle = amplitude;
+	a->elapsedTime = 0.0f;
+
+	a->oldPos = a->targetScale;
+	a->loopTime = ft;
+	a->isNextStateFlag = 0;
+	a->isFlipped = 0;
 }
