@@ -18,3 +18,4 @@
 #define COLOR_GREY CP_Color_Create(122, 122, 122, 255)
 #define COLOR_GRAY CP_Color_Create(122, 122, 122, 255)
 #define COLOR_YELLOW CP_Color_Create(255, 255, 0, 255)
+#define COLOR_LIGHTYELLOW CP_Color_Create(247, 240, 204, 255)

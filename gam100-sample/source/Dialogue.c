@@ -16,7 +16,7 @@
 /// <param name="right">Collider for close button.</param>
 void DM_Handle_CloseButton(Collider* left, Collider* right)
 {
-	printf("Clicked!\n");
+	printf("Handle Left = [%-20s] Right = [%-20s]\n", left->obj->tag, right->obj->tag);
 	if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
 	{
 		if (strcmp(((GameObject*)left->obj)->tag, "close") == 0)
@@ -24,6 +24,13 @@ void DM_Handle_CloseButton(Collider* left, Collider* right)
 			dialogueBox->isEnabled = 0;
 			closeButton->isEnabled = 0;
 			closeButtonCollider->isEnabled = 0;
+		}
+	}
+	if (strcmp(((GameObject*)right->obj)->tag, "Mouse") == 0)
+	{
+		if (strcmp(((GameObject*)left->obj)->tag, "close") == 0)
+		{
+			closeButtonHighlight->isEnabled = 1;
 		}
 	}
 }
@@ -92,13 +99,18 @@ void DM_Init()
 	closeButton->position.y -= (dialogueBoxHeight * 0.5f);
 	closeButton->tag = "close";
 
-	closeButtonRenderer = RM_AddComponent(closeButton);
-	closeButtonRenderer->renderPriority = PRI_UI;
-	closeButtonRenderer->color = CP_Color_Create(255, 0, 0, 255);
-	
 	closeButtonCollider = CLM_AddComponent(closeButton);
 	CLM_Set(closeButtonCollider, COL_CIRCLE, DM_Handle_CloseButton);
 	closeButtonCollider->space = COLSPC_SCREEN;
+
+	closeButtonRenderer = RM_AddComponent(closeButton);
+	closeButtonRenderer->renderPriority = PRI_UI;
+	RM_LoadImage(closeButtonRenderer, "Assets/cross.png");
+
+	closeButtonHighlight = RM_AddComponent(closeButton);
+	closeButtonHighlight->renderPriority = PRI_UI;
+	RM_LoadImage(closeButtonHighlight, "Assets/crosshighlight.png");
+	closeButtonHighlight->isEnabled = 0;
 	
 	// Disable all dialogue elements first.
 	dialogueBox->isEnabled = 0;
@@ -118,7 +130,20 @@ void DM_Clear()
 /// </summary>
 void DM_Update()
 {
+	// Disable highlight at the start of the frame
+	closeButtonHighlight->isEnabled = 0;
 
+	// Keep a collider following the mouse cursor if dialogue box is open.
+	float mouseX = CP_Input_GetMouseWorldX();
+	float mouseY = CP_Input_GetMouseWorldY();
+	GameObject* mouse = GOM_CreateTemp(EMPTY);
+	mouse->position = CP_Vector_Set(mouseX, mouseY);
+	mouse->scale = CP_Vector_Set(10.f, 10.f);
+	mouse->tag = "Mouse";
+	Collider* mouseCollider = CLM_AddComponent(mouse);
+	CLM_Set(mouseCollider, COL_POINT, NULL);
+	mouseCollider->space = COLSPC_SCREEN;
+	mouseCollider->isTrigger = 1;
 }
 
 /// <summary>

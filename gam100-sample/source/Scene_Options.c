@@ -31,8 +31,8 @@ int iEditUp, iEditDown, iEditLeft, iEditRight,iEditInteract;
 
 GameObject* options_Sliders[4]; //0 bgm bg, 1 bgm knob, 2 sfx bg, 3 sfx knob
 GameObject* Options_HoldSlider;
-#define MAX_OPTIONSHIGHLIGHTS 8
-Renderer* options_highlight[MAX_OPTIONSHIGHLIGHTS]; //0 bgm, sfx, wsade, save
+#define MAX_OPTIONSHIGHLIGHTS 9
+Renderer* options_highlight[MAX_OPTIONSHIGHLIGHTS]; //0 bgm, sfx, wsade, save, 9 cross
 #define KNOB_HIGHLIGHTCOLOR CP_Color_Create(120,120,120,60);
 #define KEYMAP_HIGHLIGHTCOLOR COLOR_YELLOW
 #define KEYMAP_STROKEWEIGHT 5.0f
@@ -182,6 +182,10 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
         {
             options_highlight[7]->isEnabled = 1;
         }
+        else if(strcmp(((GameObject*)left->obj)->tag, "cross") == 0)
+        {
+            options_highlight[8]->isEnabled = 1;
+        }
     }
     return;
 }
@@ -212,6 +216,7 @@ void SceneOptions_init(void)
     RM_SetText(r, "Options");
     RM_LoadImage(r, "Assets/Backgrounds/title-light.png");
     r->renderPriority = PRI_UI;
+    r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = CP_Vector_Set(3.0f, 3.0f);
 
     //UI Background
@@ -228,13 +233,19 @@ void SceneOptions_init(void)
     Options_Cross->position = CP_Vector_Set(screenWidth * 0.775f, screenHeight * 0.2f);
     Options_Cross->scale = CP_Vector_Set(50, 50);
     Options_Cross->tag = "cross";
-    r = RM_AddComponent(Options_Cross);
-    RM_LoadImage(r, "Assets/cross.png");
-    r->renderPriority = PRI_UI;
     c = CLM_AddComponent(Options_Cross);
     CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
+    // cross unhighlighted
+    r = RM_AddComponent(Options_Cross);
+    RM_LoadImage(r, "Assets/cross.png");
+    r->renderPriority = PRI_UI;
+    // cross highlighted
+    r = RM_AddComponent(Options_Cross);
+    RM_LoadImage(r, "Assets/crosshighlight.png");
+    r->renderPriority = PRI_UI;
+    options_highlight[8] = r;
 
     iEditUp = 0;
     iEditDown = 0;
@@ -256,6 +267,7 @@ void SceneOptions_init(void)
     r->color.a = 0;
     RM_SetText(r, "Music");
     r->textScale = labelTextScale;
+    r->textColor = COLOR_LIGHTYELLOW;
     r->strokeWeight = 0.0f;
 
     g = GOM_Create2(RECTANGLE, startPos,
@@ -287,6 +299,7 @@ void SceneOptions_init(void)
     r->renderPriority = PRI_UI;
     r->color.a = 0;
     RM_SetText(r, "SFX");
+    r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = labelTextScale;
     r->strokeWeight = 0.0f;
 

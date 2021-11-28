@@ -25,7 +25,6 @@
 //GameObject* gLOne = NULL;
 
 float screenWidth, screenHeight;
-void LevelOneUI_render();
 void LevelOneGridColliderInit();
 
 static GameObject* bananaBoi = NULL;
@@ -34,6 +33,8 @@ FSM* enemy;
 
 static GameObject* howtoplay = NULL;
 static GameObject* close = NULL;
+static Renderer* pauseCloseHighlight = NULL;
+static Renderer* howtoplayCloseHighlight = NULL;
 static bool isPaused;
 LinkedList* pauseMenus;
 
@@ -74,7 +75,7 @@ void LevelOne_OnCollision(Collider* left, Collider* right)
 {
     if (strcmp(right->obj->tag, ONCLICK_TAG) == 0)
     {
-        if (strcmp(left->obj->tag, "PauseClose") == 0)
+        if (strcmp(left->obj->tag, "pauseClose") == 0)
         {
             SetPause(0);
         }
@@ -82,11 +83,22 @@ void LevelOne_OnCollision(Collider* left, Collider* right)
         {
             SceneManager_ChangeSceneByName("mainmenu");
         }
-        else if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
+        else if (strcmp(((GameObject*)left->obj)->tag, "howtoplayClose") == 0)
         {
             howtoplay->isEnabled = 0;
             close->isEnabled = 0;
             SetPause(false);
+        }
+    }
+    if (strcmp(right->obj->tag, "Mouse") == 0)
+    {
+        if (strcmp(left->obj->tag, "pauseClose") == 0)
+        {
+            pauseCloseHighlight->isEnabled = 1;
+        }
+        else if (strcmp(left->obj->tag, "howtoplayClose") == 0)
+        {
+            howtoplayCloseHighlight->isEnabled = 1;
         }
     }
 }
@@ -131,13 +143,18 @@ void LevelOne_init(void)
         close = GOM_Create(RECTANGLE);
         close->position = CP_Vector_Set(screenWidth * 0.975f, screenHeight * 0.045f);
         close->scale = CP_Vector_Set(50, 50);
-        close->tag = "exit";
+        close->tag = "howtoplayClose";
         Collider* closeCollider = CLM_AddComponent(close);
         CLM_Set(closeCollider, COL_BOX, LevelOne_OnCollision);
         closeCollider->space = COLSPC_SCREEN;
+        // Close button unhighlight
         Renderer* closeRender = RM_AddComponent(close);
         closeRender->renderPriority = PRI_UI;
         RM_LoadImage(closeRender, "Assets/cross.png");
+        // Close button highlight
+        howtoplayCloseHighlight = RM_AddComponent(close);
+        howtoplayCloseHighlight->renderPriority = PRI_UI;
+        RM_LoadImage(howtoplayCloseHighlight, "Assets/crosshighlight.png");
     }
 
     // AStar
@@ -174,6 +191,11 @@ void LevelOne_update(void)
             PLY_Update();
         }
         Objectives_Update();
+    }
+    else
+    {
+        howtoplayCloseHighlight->isEnabled = 0;
+        pauseCloseHighlight->isEnabled = 0;
     }
     SM_SystemsUpdate(IsPaused());
 
@@ -261,15 +283,20 @@ void InitPause()
     g = GOM_Create(RECTANGLE);
     g->position = CP_Vector_Set(temp->position.x + temp->scale.x * 0.5f, temp->position.y - temp->scale.y * 0.5f);
     g->scale = CP_Vector_Set(50, 50);
-    g->tag = "PauseClose";
-    r = RM_AddComponent(g);
-    r->renderPriority = PRI_UI;
-    RM_LoadImage(r, "Assets/cross.png");
+    g->tag = "pauseClose";
     Collider* c = CLM_AddComponent(g);
     CLM_Set(c, COL_BOX, LevelOne_OnCollision);
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
     LL_Add(&pauseMenus, g);
+    // Close Button unhighlighted.
+    r = RM_AddComponent(g);
+    r->renderPriority = PRI_UI;
+    RM_LoadImage(r, "Assets/cross.png");
+    // Close Button highlighted.
+    pauseCloseHighlight = RM_AddComponent(g);
+    pauseCloseHighlight->renderPriority = PRI_UI;
+    RM_LoadImage(pauseCloseHighlight, "Assets/crosshighlight.png");
 
     g = GOM_Create(RECTANGLE);
     g->position = CP_Vector_Set(temp->position.x, temp->position.y + temp->scale.y * 0.2f);

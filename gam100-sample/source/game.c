@@ -23,7 +23,7 @@
 Collider* MainMenuStartCollider, *MainMenuOptionsCollider, *MainMenuCreditsCollider;
 #define MainMenuStartDefaultScale CP_Vector_Set(200.0f, 50.0f)
 #define MainMenuStartMaxScale CP_Vector_Set(300.0f, 75.0f)
-#define MainMenuStartScaleSpd CP_Vector_Set(300.0f, 150.0f)
+#define MainMenuStartScaleSpd CP_Vector_Set(500.0f, 350.0f)
 
 #define MainMenuOptsCredsDefaultScale CP_Vector_Set(150.0f, 40.0f)
 #define MainMenuOptsCredsMaxScale CP_Vector_Set(180.0f, 50.0f)
@@ -177,6 +177,7 @@ void game_init(void)
     r->renderPriority = PRI_UI;
     RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
     RM_SetText(r, "Start");
+    r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = CP_Vector_Set(2, 2);
     MainMenuStartCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuStartCollider, COL_BOX, game_OnCollision);
@@ -189,6 +190,7 @@ void game_init(void)
     r->renderPriority = PRI_UI;
     RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
     RM_SetText(r, "Options");
+    r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = CP_Vector_Set(1.8f, 1.8f);
     MainMenuOptionsCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuOptionsCollider, COL_BOX, game_OnCollision);
@@ -201,6 +203,7 @@ void game_init(void)
     r->renderPriority = PRI_UI;
     RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
     RM_SetText(r, "Credits");
+    r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = CP_Vector_Set(1.8f, 1.8f);
     MainMenuCreditsCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuCreditsCollider, COL_BOX, game_OnCollision);

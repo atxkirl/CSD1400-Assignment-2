@@ -41,6 +41,7 @@ Renderer* dialogueBoxRenderer; // This is the Renderer component attached to the
 // Close Button
 GameObject* closeButton;
 Renderer* closeButtonRenderer;
+Renderer* closeButtonHighlight;
 Collider* closeButtonCollider;
 
 /// <summary>
