@@ -97,7 +97,7 @@ void LevelOne_init(void)
         LoadGrid("level01", 0);
 
         //Insert spawn x,y here
-        CP_Vector PlayerPos = SetPlayerPosition();
+        CP_Vector PlayerPos = GetPlayerPosition();
         bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
 
         Objectives_Init(screenWidth, screenHeight);

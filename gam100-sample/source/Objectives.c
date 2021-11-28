@@ -1,3 +1,11 @@
+/*!
+@file            Objectives.c
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for all level objectives.
+*//*______________________________________________________________________*/
+
 #include "Objectives.h"
 #include "SystemManager.h"
 #include "LevelEditor.h"
@@ -34,6 +42,11 @@ int iAllObjectivesComplete;
 int iPrintExit;
 char* cWire;
 
+/// <summary>
+/// Handles the collision of the the GameObjects based on the left and right collider parameters.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void Objectives_onCollision(Collider* left, Collider* right)
 {
     //me, other
@@ -117,6 +130,11 @@ void Objectives_onCollision(Collider* left, Collider* right)
     }
 }
 
+/// <summary>
+/// Initialises the variables in this file.
+/// </summary>
+/// <param name="fScreenWidth"></param>
+/// <param name="fScreenHeight"></param>
 void Objectives_Init(float fScreenWidth, float fScreenHeight)
 {
     //here is where ill load objectives
@@ -146,6 +164,9 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
     cWire = malloc(sizeof(char) * 100);
 }
 
+/// <summary>
+/// Update.
+/// </summary>
 void Objectives_Update()
 {
     if (iNumObjectives == 0)
@@ -277,6 +298,9 @@ void Objectives_Update()
 
 }
 
+/// <summary>
+/// Exit.
+/// </summary>
 void Objectives_Exit()
 {
     //for (int i = 0; i < MAX_OBJECTIVES; i++)
@@ -292,16 +316,27 @@ void Objectives_Exit()
     free(gObjectives);
 }
 
+/// <summary>
+/// Toggles the player update when doing objectives.
+/// </summary>
+/// <param name="iSetter"></param>
 void Objectives_SetPlayerUpdate(int iSetter)
 {
     iUpdatePlayer = iSetter;
 }
 
+/// <summary>
+/// Render the Objectives Taskbar UI
+/// </summary>
 int Objectives_GetPlayerUpdate()
 {
     return iUpdatePlayer;
 }
 
+/// <summary>
+/// Returns the variable that handles the toggle of player update.
+/// </summary>
+/// <returns>int</returns>
 void Objectives_RenderUI()
 {
     GameObject* ObjectiveUIBox = GOM_Create(WALL);
@@ -404,6 +439,10 @@ void Objectives_RenderUI()
     }
 }
 
+/// <summary>
+/// Checks if player has completed all the objectives of the level.
+/// </summary>
+/// <returns>int</returns>
 int Objectives_GetCompleteAll()
 {
     return (iAllObjectivesComplete == iNumObjectives);

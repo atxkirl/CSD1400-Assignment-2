@@ -1,3 +1,12 @@
+/*!
+@file            Objective_Connect.c
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for Objective Connect
+				 Wire.
+*//*______________________________________________________________________*/
+
 #include "Objective_Connect.h"
 #include "SystemManager.h"
 #include "Colors.h"
@@ -26,6 +35,11 @@ void OB_SetPosition();
 #define OBW_CLICKSTROKESIZE 5.0f
 GameObject* obw_clickHints[4];
 
+/// <summary>
+/// Handles the collision of the the GameObjects based on the left and right collider parameters.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void OB_ConnectOnCollision(Collider* left, Collider* right)
 {
 	if (strcmp(((GameObject*)right->obj)->tag, "Drag") == 0)
@@ -107,6 +121,9 @@ void OB_ConnectOnCollision(Collider* left, Collider* right)
 
 }
 
+/// <summary>
+/// Initializes the variables.
+/// </summary>
 void OB_ConnectInit()
 {
 	RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
@@ -167,6 +184,9 @@ void OB_ConnectInit()
 	iRedConnected = 0, iBlueConnected = 0, iGreenConnected = 0, iYellowConnected = 0;
 }
 
+/// <summary>
+/// Update.
+/// </summary>
 void OB_ConnectUpdate()
 {
 	if (!isActive)
@@ -303,6 +323,9 @@ void OB_ConnectUpdate()
 	}
 }
 
+/// <summary>
+/// Toggle the active of the GameObjects.
+/// </summary>
 void OB_ConnectToggleActive()
 {
 	RedConnector_L->isEnabled = !RedConnector_L->isEnabled;
@@ -329,6 +352,9 @@ void OB_ConnectToggleActive()
 	RM_SetText(RM_GetComponent(OBJ_Title), "Connect The Wires!");
 }
 
+/// <summary>
+/// Enables the GameObjects
+/// </summary>
 void OB_ConnectTrigger()
 {
 	RedConnector_L->isEnabled = 1;
@@ -359,6 +385,9 @@ void OB_ConnectTrigger()
 		obw_clickHints[i]->isEnabled = 0;
 }
 
+/// <summary>
+/// Disables the GameObjects.
+/// </summary>
 void OB_ConnectUnTrigger()
 {
 	RedConnector_L->isEnabled = 0;
@@ -388,21 +417,36 @@ void OB_ConnectUnTrigger()
 		obw_clickHints[i]->isEnabled = 0;
 }
 
+/// <summary>
+/// Returns whether the objective is complete.
+/// </summary>
+/// <returns>int</returns>
 int OB_ConnectIsComplete()
 {
 	return (iRedConnected && iBlueConnected && iGreenConnected && iYellowConnected);
 }
 
+/// <summary>
+/// Return the active of the GameObjects.
+/// </summary>
+/// <returns>int</returns>
 int OB_ConnectGetActive()
 {
 	return isActive;
 }
 
+/// <summary>
+/// Set the active of the GameObjects
+/// </summary>
+/// <param name="iSetter"></param>
 void OB_ConnectSetActive(int iSetter)
 {
 	isActive = iSetter;
 }
 
+/// <summary>
+/// Creates the connector GameObjects.
+/// </summary>
 void CreateConnectors()
 {
 	CP_Vector ConnectorScale = CP_Vector_Set(screenWidth * 0.125f, screenHeight * 0.06125f);
@@ -578,6 +622,9 @@ void CreateConnectors()
 		obw_clickHints[i]->isEnabled = 0;
 }
 
+/// <summary>
+/// Set position of the connector GameObjects.
+/// </summary>
 void OB_SetPosition() 
 {
 	CP_Vector ConnectorPosition_One_Left = CP_Vector_Set(screenWidth * 0.275f, screenHeight * 0.3f);

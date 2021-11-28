@@ -1,7 +1,20 @@
+/*!
+@file            FileParser.c
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for handling the reading
+				 and writing to file.
+*//*______________________________________________________________________*/
+
 #include "FileParser.h"
 #include <stdio.h>
 #include <stdlib.h>
 
+/// <summary>
+/// Returns a Map* variable.
+/// </summary>
+/// <returns>Map*</returns>
 Map* new_Map()
 {
 	Map* goMap = (Map*)malloc(sizeof(Map));
@@ -32,13 +45,11 @@ Map* new_Map()
 	return goMap;
 }
 
-/*!
-@brief Reads the level from file and saves the info into the map*.
-
-@param char* - File name
-@param Map* - Pointer of type Map that points to the object list which stores the info that is read from file
-@return void
-*/
+/// <summary>
+/// Read the Map Tiles based on cFileName.txt
+/// </summary>
+/// <param name="cFileName"></param>
+/// <param name="mMap - contains all the info of the level based on the .txt"></param>
 void ReadLevelFromFile(char* cFileName, Map* mMap)
 {
 	// type,xpos,ypos\n
@@ -143,6 +154,11 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 	}
 }
 
+/// <summary>
+/// Read the Map Objectives based on cFileName.txt
+/// </summary>
+/// <param name="cFileName"></param>
+/// <param name="cOutputObjectives - Stores the values from the .txt"></param>
 void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
 {
 	FILE* fFile;
@@ -197,6 +213,11 @@ void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
 	}
 }
 
+/// <summary>
+/// Read the Player Controls based on cFileName.txt
+/// </summary>
+/// <param name="cFileName"></param>
+/// <param name="cText - Store the .txt values"></param>
 void ReadControlsFromFile(char* cFileName, char* cText)
 {
 	FILE* fFile;
@@ -248,13 +269,12 @@ void ReadControlsFromFile(char* cFileName, char* cText)
 	}
 }
 
-/*!
-@brief Write stuff to file based on the given file name.
-
-@param char* - File name
-@param char* - Stuff to add to the file
-@return void
-*/
+/// <summary>
+/// Write to file cFileName.txt
+/// </summary>
+/// <param name="cFileName"></param>
+/// <param name="cToAdd - The stuff to add to file."></param>
+/// <param name="iSize - Size of Buffer"></param>
 void WriteToFile(char* cFileName, char** cToAdd, int iSize)
 {
 	FILE* fFile;
@@ -281,6 +301,12 @@ void WriteToFile(char* cFileName, char** cToAdd, int iSize)
 	}
 }
 
+/// <summary>
+/// Write Controls to file cFileName.txt
+/// </summary>
+/// <param name="cFileName"></param>
+/// <param name="cToAdd - The stuff to add to file."></param>
+/// <param name="iSize - Size of Buffer"></param>
 void WriteControlsToFile(char* cFileName, char* cToAdd, int iSize)
 {
 	FILE* fFile;

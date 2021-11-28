@@ -1,3 +1,13 @@
+/*!
+@file            Scene_Options.c
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@co-author       Ow Hong Yu (ow.hy)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for the Scene Options.
+                 Player can edit the sounds and controls.
+*//*______________________________________________________________________*/
+
 #include <stdio.h>
 #include "cprocessing.h"
 #include "Helpers.h"
@@ -27,24 +37,37 @@ Renderer* options_highlight[MAX_OPTIONSHIGHLIGHTS]; //0 bgm, sfx, wsade
 #define KEYMAP_HIGHLIGHTCOLOR COLOR_YELLOW
 #define KEYMAP_STROKEWEIGHT 5.0f
 
+/// <summary>
+/// Sets the UI for the buttons.
+/// </summary>
 void SceneOptionsUI_Buttons();
+
+/// <summary>
+/// Assigns the button based on key press.
+/// </summary>
 void SceneOptions_AssignKeyPress();
-/*!
-@brief Adjusts the slider knob on the sliderBar to value v / 100
-@param knob - knob of the slider
-@param sliderBar - bg of the slider bar, also determines the length
-@param v - value of slider 0 to 100
-@return void
-*/
+
+/// <summary>
+/// Adjusts the slider knob on the sliderBar to value v / 100
+/// </summary>
+/// <param name="knob - knob of the slider"></param>
+/// <param name="sliderBar - bg of the slider bar, also determines the length"></param>
+/// <param name="v - value of slider 0 to 100"></param>
 void AdjustSlider(GameObject* knob, GameObject* sliderBar, int v);
-/*!
-@brief returns the value of slider knob on sliderBar 0 - 100
-@param knob - knob of the slider
-@param sliderBar - bg of the slider bar, also determines the length
-@return int - value of knob on slider 0 - 100
-*/
+
+/// <summary>
+/// returns the value of slider knob on sliderBar 0 - 100
+/// </summary>
+/// <param name="knob - knob of the slider"></param>
+/// <param name="sliderBar - bg of the slider bar, also determines the length"></param>
+/// <returns>int - value of knob on slider 0 - 100</returns>
 int GetSliderValue(GameObject* knob, GameObject* sliderBar);
 
+/// <summary>
+/// Handles the collision of the the GameObjects based on the left and right collider parameters.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void SceneOptions_OnCollision(Collider* left, Collider* right)
 {
     //me, other
@@ -159,6 +182,9 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
     return;
 }
 
+/// <summary>
+/// Initialises the variables in this scene.
+/// </summary>
 void SceneOptions_init(void)
 {
     SM_SystemsInit();
@@ -288,6 +314,9 @@ void SceneOptions_init(void)
     AdjustSlider(options_Sliders[3], options_Sliders[2], SDM_GetSFXVolume());
 }
 
+/// <summary>
+/// Update.
+/// </summary>
 void SceneOptions_update(void)
 {
     SM_SystemsPreUpdate();
@@ -354,11 +383,17 @@ void SceneOptions_update(void)
     SM_SystemsLateUpdate();
 }
 
+/// <summary>
+/// Exit.
+/// </summary>
 void SceneOptions_exit(void)
 {
     SM_SystemsExit();
 }
 
+/// <summary>
+/// Initialize function for the SceneManager.
+/// </summary>
 void SceneOptions_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = SceneOptions_init;
@@ -366,6 +401,9 @@ void SceneOptions_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr*
     *exit = SceneOptions_exit;
 }
 
+/// <summary>
+/// Handles the UI for the Buttons.
+/// </summary>
 void SceneOptionsUI_Buttons()
 {
     ReadControlsFromFile(SaveFile, cRightText);
@@ -535,6 +573,9 @@ void SceneOptionsUI_Buttons()
     c->isTrigger = 1;
 }
 
+/// <summary>
+/// Assigns the button based on key press.
+/// </summary>
 void SceneOptions_AssignKeyPress()
 {
     if (!iEditUp && !iEditDown && !iEditLeft && !iEditRight && !iEditInteract)
@@ -596,6 +637,13 @@ void SceneOptions_AssignKeyPress()
     }
 }
 
+/// <summary>
+/// Adjusts the slider knob on the sliderBar to value v / 100
+/// </summary>
+/// <param name="knob - knob of the slider"></param>
+/// <param name="sliderBar - bg of the slider bar, also determines the length"></param>
+/// <param name="v - value of slider 0 to 100"></param>
+/// <param name="">v - value of slider 0 to 100</param>
 void AdjustSlider(GameObject* knob, GameObject* sliderBar, int v)
 {
     float percentage = v / 100.0f;
@@ -605,6 +653,12 @@ void AdjustSlider(GameObject* knob, GameObject* sliderBar, int v)
     knob->position = CP_Vector_Set(minx + percentage * len, sliderBar->position.y);
 }
 
+/// <summary>
+/// returns the value of slider knob on sliderBar 0 - 100
+/// </summary>
+/// <param name="knob - knob of the slider"></param>
+/// <param name="sliderBar - bg of the slider bar, also determines the length"></param>
+/// <returns>int - value of knob on slider 0 - 100</returns>
 int GetSliderValue(GameObject* knob, GameObject* sliderBar)
 {
     float minx = sliderBar->position.x - sliderBar->scale.x * 0.5f;

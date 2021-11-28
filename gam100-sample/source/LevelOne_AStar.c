@@ -85,7 +85,7 @@ void LevelOneAStar_init(void)
     // Player
     {
         //Insert spawn x,y here
-        CP_Vector PlayerPos = SetPlayerPosition();
+        CP_Vector PlayerPos = GetPlayerPosition();
         bananaBoi = PLY_CreatePlayer(PlayerPos.x, PlayerPos.y);
     }
 
@@ -149,7 +149,7 @@ void LevelOneAStar_init(void)
         //// Player
         //player = GOM_Create2(RECTANGLE, CP_Vector_Set(462, 462), 0.0f, CP_Vector_Set(50, 50));
         //player->tag = "player";
-        //SetPlayerPosition(player->position.x, player->position.y);
+        //GetPlayerPosition(player->position.x, player->position.y);
         //r = RM_AddComponent(player);
         //RM_LoadImage(r, "Assets/bananaboi.png");
         //CLM_Set(CLM_AddComponent(player), COL_BOX, LevelOneAStar_OnCollision);
