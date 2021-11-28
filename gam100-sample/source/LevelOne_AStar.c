@@ -34,12 +34,25 @@ FSM* enemy1, * enemy2, * enemy3, * enemy4;
 
 static bool isPaused;
 
-void LevelOneAStar_UI_render();
-void LevelOneAStar_GridColliderInit();
+/// <summary>
+/// Foward declaration for: Initializes all colliders within this level.
+/// </summary>
+void LevelOneAStar_GridColliderInit(void);
+/// <summary>
+/// Forward declaration for: Update loop for inputs.
+/// </summary>
 void LevelOneAStar_InputUpdate(void);
-
+/// <summary>
+/// Forward declaration for: Initializes A* pathfinding map for this level.
+/// </summary>
+/// <param name=""></param>
 void LevelOneAStar_AStarInit(void);
 
+/// <summary>
+/// Collision function that's called whenever collision occurs in this level.
+/// </summary>
+/// <param name="left">First collider.</param>
+/// <param name="right">Second collider.</param>
 void LevelOneAStar_OnCollision(Collider* left, Collider* right)
 {
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
@@ -53,6 +66,9 @@ void LevelOneAStar_OnCollision(Collider* left, Collider* right)
     }
 }
 
+/// <summary>
+/// Initializes scene variables and systems.
+/// </summary>
 void LevelOneAStar_init(void)
 {
     SM_SystemsInit();
@@ -172,6 +188,9 @@ void LevelOneAStar_init(void)
     }
 }
 
+/// <summary>
+/// Update loop for this scene, called every frame.
+/// </summary>
 void LevelOneAStar_update(void)
 {
     SM_SystemsPreUpdate();
@@ -190,7 +209,6 @@ void LevelOneAStar_update(void)
     SM_SystemsLateUpdate();
 
     LevelOneAStar_InputUpdate();
-    LevelOneAStar_UI_render();
 
     CP_Settings_TextSize(20);
     CP_Settings_BlendMode(CP_BLEND_ALPHA);
@@ -206,6 +224,9 @@ void LevelOneAStar_update(void)
     CP_Settings_StrokeWeight(1.f);
 }
 
+/// <summary>
+/// Exit function that's called when scene is being changed.
+/// </summary>
 void LevelOneAStar_exit(void)
 {
     // Release memory for map.map
@@ -218,6 +239,12 @@ void LevelOneAStar_exit(void)
     //_CrtDumpMemoryLeaks();
 }
 
+/// <summary>
+/// Called by SceneManager to pass function pointers for this scene's init, update and exit.
+/// </summary>
+/// <param name="init">Function pointer to scene init.</param>
+/// <param name="update">Function pointer to scene update.</param>
+/// <param name="exit">Funciton pointer to scene exit.</param>
 void LevelOneAStar_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = LevelOneAStar_init;
@@ -225,15 +252,10 @@ void LevelOneAStar_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr
     *exit = LevelOneAStar_exit;
 }
 
-void LevelOneAStar_UI_render()
-{
-    CP_Settings_Fill(COLOR_WHITE); // r, g, b, a
-    //CP_Graphics_DrawRect(50.f, 170.f, 75.f, 50.f);
-    CP_Settings_Fill(COLOR_BLACK); // r, g, b, a
-    //CP_Font_DrawText("Objective", 55, 200);
-}
-
-void LevelOneAStar_GridColliderInit()
+/// <summary>
+/// Initializes all colliders within this level.
+/// </summary>
+void LevelOneAStar_GridColliderInit(void)
 {
     for (int i = 0; i < NumGrids; i++)
     {
@@ -254,6 +276,9 @@ void LevelOneAStar_GridColliderInit()
     }
 }
 
+/// <summary>
+/// Initializes A* pathfinding map for this level.
+/// </summary>
 void LevelOneAStar_AStarInit(void)
 {
     for (int r = 0; r < map.rows; ++r)
@@ -278,6 +303,9 @@ void LevelOneAStar_AStarInit(void)
     }
 }
 
+/// <summary>
+/// Update loop for inputs.
+/// </summary>
 void LevelOneAStar_InputUpdate(void)
 {
     if (CP_Input_KeyTriggered(KEY_ESCAPE))
