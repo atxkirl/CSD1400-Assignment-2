@@ -29,8 +29,8 @@ int iCurrentObjective;
 GameObject* g_ObjectiveUI[MAX_OBJECTIVES];
 Renderer* g_ObjectiveTileOverlay[MAX_OBJECTIVES];
 //GameObject* OBJ_FloatingTextHint[MAX_OBJECTIVES];
-#define OVERLAY_BLINK_DEFAULT CP_Color_Create(120,0,255,255)
-#define OVERLAY_BLINK_TARGET CP_Color_Create(120,0,255,50)
+#define OVERLAY_BLINK_DEFAULT CP_Color_Create(0, 100, 0, 255)
+#define OVERLAY_BLINK_TARGET CP_Color_Create(0, 100 , 0, 50)
 #define OVERLAY_BLINK_TIME 2.0f
 #define OVERLAY_BLINK_STROKE_WEIGHT 4.0f
 
@@ -377,8 +377,7 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
                     g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("CONNECT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
@@ -407,8 +406,7 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
                     g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("BOAT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
@@ -438,8 +436,7 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
                     g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("COCO: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
