@@ -132,19 +132,20 @@ void OB_ConnectInit()
 	//title
 	OBJ_Title = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(screenWidth * 0.6f, 60));
 	Renderer* r = RM_AddComponent(OBJ_Title);
-	r->color.a = 200;
+	r->color = CP_Color_Create(115, 62, 58, 255);
 	//r->text = "Connect The Wires!";
-	RM_SetText(r, "Connect The Wires!");
 	r->renderPriority = PRI_UI;
 	r->textScale = CP_Vector_Set(3.0f, 3.0f);
+	RM_SetText(r, "Connect The Wires!");
 
 	//UI Background
 	UI_Background = GOM_Create(RECTANGLE);
+	UI_Background->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
+	UI_Background->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
 	r = RM_AddComponent(UI_Background);
 	r->color = CP_Color_Create(200, 200, 200, 255);
 	r->renderPriority = PRI_UI;
-	UI_Background->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
-	UI_Background->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
+	RM_LoadImage(r, "Assets/Backgrounds/objective-light.png");
 
 	//cross
 	cross = GOM_Create(RECTANGLE);
