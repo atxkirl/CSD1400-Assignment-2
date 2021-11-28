@@ -53,6 +53,7 @@ typedef struct Animation
 	//for blink
 	CP_Color targetColor;
 	CP_Color defaultColor;
+	Renderer* forcedRenderer; //force animation to use this renderer
 	//use looptime to go from default to target to default
 	//use is continuous
 	//use elapsedtime for et

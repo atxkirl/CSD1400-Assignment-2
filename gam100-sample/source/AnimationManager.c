@@ -131,6 +131,8 @@ void Update_BlinkAnimation(Animation* a, float dt)
 
 	float r = a->elapsedTime / a->loopTime;
 	Renderer* renderer = RM_GetComponent(a->go);
+	if (a->forcedRenderer)
+		renderer = a->forcedRenderer;
 	CP_Color* c[2] = { NULL, NULL };
 	switch (a->index)
 	{
@@ -448,6 +450,7 @@ void AM_SetBlink(Animation* a, CP_Color defaultColor, CP_Color targetColor, floa
 	a->defaultColor = defaultColor;
 	a->isContinuous = isContinuous;
 	a->index = mode;
+	a->forcedRenderer = NULL;
 }
 
 void AM_SetLerp(Animation* a, CP_Vector pa, CP_Vector pb, float t, int isFlipped)

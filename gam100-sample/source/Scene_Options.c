@@ -308,8 +308,10 @@ void SceneOptions_update(void)
         mc->space = COLSPC_SCREEN;
         mc->isTrigger = 1;
         
+        //force bgm sfx to always reset highlight, and only reset keymaps if they are not being edited
+        int temp[MAX_OPTIONSHIGHLIGHTS] = { 0,0,iEditUp, iEditDown, iEditLeft, iEditRight, iEditInteract };
         for (int i = 0; i < MAX_OPTIONSHIGHLIGHTS; ++i)
-            options_highlight[i]->isEnabled = 0;
+            options_highlight[i]->isEnabled = temp[i];
     }
 
     SM_SystemsUpdate(0);
