@@ -1,3 +1,12 @@
+/*!
+@file		SystemManager.c
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		System manager that controls all the systems and their order of function calls.
+			It makes it easier for scenes to call updates, inits and clears all systems.
+*//*______________________________________________________________________*/
+
 #include "SystemManager.h"
 #include "LinkedList.h"
 #include "Controls.h"
@@ -32,7 +41,10 @@ void SM_DeleteFromAllSystems(GameObject* g)
 		}
 	}
 }
-
+/*!
+@brief Inits all systems
+@return void
+*/
 void SM_SystemsInit()
 {
 	SM_isPaused = false;
@@ -45,7 +57,10 @@ void SM_SystemsInit()
 	AIM_Init();
 	Init_Controls();
 }
-
+/*!
+@brief Update systems at the start of the frame
+@return void
+*/
 void SM_SystemsPreUpdate()
 {
 	//physics if there is
@@ -83,7 +98,11 @@ void SM_SystemsPreUpdate()
 	}
 	LL_Clear(&clr);
 }
-
+/*!
+@brief Update systems
+@param isPause - boolean for if pause or not
+@return void
+*/
 void SM_SystemsUpdate(int isPause)
 {
 	SM_isPaused = isPause;
@@ -94,7 +113,10 @@ void SM_SystemsUpdate(int isPause)
 	if(!isPause)
 		AIM_Update();
 }
-
+/*!
+@brief Update systems at the end of the frame
+@return void
+*/
 void SM_SystemsLateUpdate()
 {
 	LinkedList* arr = SM_delList;
@@ -107,7 +129,10 @@ void SM_SystemsLateUpdate()
 	RM_Render();
 	DM_LateUpdate();
 }
-
+/*!
+@brief Exit and clean up systems
+@return void
+*/
 void SM_SystemsExit()
 {
 	AM_Clear();
@@ -118,12 +143,20 @@ void SM_SystemsExit()
 	AIM_Clear();
 	Exit_Controls();
 }
-
+/*!
+@brief Getter for SM pause state.
+@return bool Pause state of SystemManager.
+*/
 bool SM_IsPaused()
 {
 	return SM_isPaused;
 }
-
+/*!
+@brief Find component that is attached to gameobject
+@param g - gameobject to find
+@param c - component id to find for
+@return ptr of component
+*/
 void* SM_GetComponent(GameObject* g, COMPONENT c)
 {
 	void* ret = NULL;
@@ -141,12 +174,21 @@ void* SM_GetComponent(GameObject* g, COMPONENT c)
 	}
 	return ret;
 }
-
+/*!
+@brief Delete gameobject from all systems AFTER Update()
+@param g - gameobject clean delete
+@return void
+*/
 void SM_DeleteGameObject(GameObject* g)
 {
 	LL_Add(&SM_delList, g);
 }
-
+/*!
+@brief Delete gameobject from all systems AFTER time in seconds
+@param g - gameobject clean delete
+@param t - to delete after this time has passed
+@return void
+*/
 void SM_DeleteGameObjectAfter(GameObject* g, float t)
 {
 	DeleteAfter* del = malloc(sizeof(DeleteAfter));

@@ -1,14 +1,13 @@
-#pragma once
-
 /*!
-@file SystemManager.h
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains function for all systems to initialize and exit cleanly
+@file		SystemManager.h
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		System manager that controls all the systems and their order of function calls.
+			It makes it easier for scenes to call updates, inits and clears all systems.
 *//*______________________________________________________________________*/
+
+#pragma once
 
 
 #include "GameObjectManager.h"
@@ -21,6 +20,9 @@
 #define ONCLICK_TAG "Click"
 //Prefix: SM
 
+/*!
+@brief enum for existing component for systems
+*/
 typedef enum COMPONENT
 {
 	COM_RENDERER,
@@ -31,7 +33,6 @@ typedef enum COMPONENT
 
 /*!
 @brief Struct to hold the object and delete after et overs delAfter
-@return void
 */
 typedef struct DeleteAfter
 {

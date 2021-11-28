@@ -1,3 +1,11 @@
+/*!
+@file            Objectives.c
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for all level objectives.
+*//*______________________________________________________________________*/
+
 #include "Objectives.h"
 #include "SystemManager.h"
 #include "LevelEditor.h"
@@ -9,6 +17,7 @@
 #include "Colors.h"
 #include "Controls.h"
 #include "SceneManager.h"
+#include "Player.h"
 
 int iUpdatePlayer;
 CP_Vector vObjectiveOnePos, vObjectiveTwoPos, vObjectiveThreePos;
@@ -19,11 +28,29 @@ int iNumObjectives;
 int iCurrentObjective;
 GameObject* g_ObjectiveUI[MAX_OBJECTIVES];
 Renderer* g_ObjectiveTileOverlay[MAX_OBJECTIVES];
+//GameObject* OBJ_FloatingTextHint[MAX_OBJECTIVES];
+#define OVERLAY_BLINK_DEFAULT CP_Color_Create(0, 100, 0, 255)
+#define OVERLAY_BLINK_TARGET CP_Color_Create(0, 100 , 0, 50)
+#define OVERLAY_BLINK_TIME 2.0f
+#define OVERLAY_BLINK_STROKE_WEIGHT 4.0f
+
+/*!
+@brief Initialises OBJ_FloatingTextHint[index]
+@param index - index of array to be init
+@param pos - pos of flt text obj
+@return void
+*/
+//void InitFloatingText(int index, CP_Vector pos);
 
 int iAllObjectivesComplete;
 int iPrintExit;
 char* cWire;
 
+/// <summary>
+/// Handles the collision of the the GameObjects based on the left and right collider parameters.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void Objectives_onCollision(Collider* left, Collider* right)
 {
     //me, other
@@ -45,6 +72,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                 OB_ConnectTrigger();
                 iUpdatePlayer = 0; 
             }
+            PLY_ShowInteractHint();
         }
 
         // FIX BOAT
@@ -70,6 +98,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                     DM_PrintDialogue("Not Enough Boat Parts!", DIALOGUE_CLOSEBUTTON);
                 }
             }
+            PLY_ShowInteractHint();
         }
 
         // BREAK COCONUT
@@ -88,6 +117,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                 OB_BreakCoconutTrigger();
                 iUpdatePlayer = 0;
             }
+            PLY_ShowInteractHint();
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "Exit") == 0 && Objectives_GetCompleteAll())
@@ -104,6 +134,11 @@ void Objectives_onCollision(Collider* left, Collider* right)
     }
 }
 
+/// <summary>
+/// Initialises the variables in this file.
+/// </summary>
+/// <param name="fScreenWidth"></param>
+/// <param name="fScreenHeight"></param>
 void Objectives_Init(float fScreenWidth, float fScreenHeight)
 {
     //here is where ill load objectives
@@ -133,6 +168,9 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
     cWire = malloc(sizeof(char) * 100);
 }
 
+/// <summary>
+/// Update.
+/// </summary>
 void Objectives_Update()
 {
     if (iNumObjectives == 0)
@@ -158,6 +196,7 @@ void Objectives_Update()
 
     if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective1Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective1Complete";
@@ -172,6 +211,7 @@ void Objectives_Update()
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective2Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective2Complete";
@@ -186,6 +226,7 @@ void Objectives_Update()
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective3Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective3Complete";
@@ -202,7 +243,7 @@ void Objectives_Update()
     if (iAllObjectivesComplete == iNumObjectives && !iPrintExit)
     {
         iPrintExit = 1;
-
+        g_ObjectiveUI[0]->position.x = screenWidth * 0.065f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[0]);
         RM_SetText(rObjUI, "Find the Exit!");
 
@@ -261,8 +302,12 @@ void Objectives_Update()
     OB_ConnectUpdate();
     OB_BreakCoconutUpdate();
     OB_FixBoatUpdate();
+
 }
 
+/// <summary>
+/// Exit.
+/// </summary>
 void Objectives_Exit()
 {
     //for (int i = 0; i < MAX_OBJECTIVES; i++)
@@ -278,16 +323,27 @@ void Objectives_Exit()
     free(gObjectives);
 }
 
+/// <summary>
+/// Toggles the player update when doing objectives.
+/// </summary>
+/// <param name="iSetter"></param>
 void Objectives_SetPlayerUpdate(int iSetter)
 {
     iUpdatePlayer = iSetter;
 }
 
+/// <summary>
+/// Render the Objectives Taskbar UI
+/// </summary>
 int Objectives_GetPlayerUpdate()
 {
     return iUpdatePlayer;
 }
 
+/// <summary>
+/// Returns the variable that handles the toggle of player update.
+/// </summary>
+/// <returns>int</returns>
 void Objectives_RenderUI()
 {
     GameObject* ObjectiveUIBox = GOM_Create(WALL);
@@ -315,7 +371,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.08f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.077f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveOnePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[0].cObjective);
                     r->renderPriority = PRI_UI;
@@ -324,10 +380,15 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
+                    g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("CONNECT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
+
+                    Animation* anim = AM_AddComponent(g_ObjectiveTileOverlay[i]->go);
+                    AM_SetBlink(anim, OVERLAY_BLINK_DEFAULT, OVERLAY_BLINK_TARGET, OVERLAY_BLINK_TIME, 1, 1);
+                    anim->forcedRenderer = g_ObjectiveTileOverlay[i];
+                    //InitFloatingText(i, gLoadedGrids->gGrid[j][k]->position);
                     ++i;
                 }
 
@@ -348,10 +409,15 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
+                    g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("BOAT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
+
+                    Animation* anim = AM_AddComponent(g_ObjectiveTileOverlay[i]->go);
+                    AM_SetBlink(anim, OVERLAY_BLINK_DEFAULT, OVERLAY_BLINK_TARGET, OVERLAY_BLINK_TIME, 1, 1);
+                    anim->forcedRenderer = g_ObjectiveTileOverlay[i];
+                    //InitFloatingText(i, gLoadedGrids->gGrid[j][k]->position);
                     ++i;
                 }
 
@@ -364,7 +430,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.11f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.1025f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveThreePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[2].cObjective);
                     r->renderPriority = PRI_UI;
@@ -373,10 +439,15 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
+                    g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("COCO: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
+
+                    Animation* anim = AM_AddComponent(g_ObjectiveTileOverlay[i]->go);
+                    AM_SetBlink(anim, OVERLAY_BLINK_DEFAULT, OVERLAY_BLINK_TARGET, OVERLAY_BLINK_TIME, 1, 1);
+                    anim->forcedRenderer = g_ObjectiveTileOverlay[i];
+                    //InitFloatingText(i, gLoadedGrids->gGrid[j][k]->position);
                     ++i;
                 }
             }
@@ -384,7 +455,26 @@ void Objectives_RenderUI()
     }
 }
 
+/// <summary>
+/// Checks if player has completed all the objectives of the level.
+/// </summary>
+/// <returns>int</returns>
 int Objectives_GetCompleteAll()
 {
     return (iAllObjectivesComplete == iNumObjectives);
 }
+
+//void InitFloatingText(int index, CP_Vector pos)
+//{
+//    CP_Vector scale = CP_Vector_Set(100, 100);
+//    GameObject* g = GOM_Create2(EMPTY, pos, 0, scale);
+//    Renderer* r = RM_AddComponent(g);
+//    char temp[10] = {0};
+//    sprintf_s(temp, 10, "Press %c", cControls->cInteract);
+//    RM_SetText(r, temp);
+//    r->textScale = CP_Vector_Set(0.5f,0.5f);
+//    Animation* an = AM_AddComponent(g);
+//    AM_SetUpFloatDownState(an, pos, CP_Vector_Set(pos.x, pos.y - 20), 5.0f, 0.5f, 2.0f);
+//    g->isEnabled = 0;
+//    OBJ_FloatingTextHint[index] = g;
+//}

@@ -1,20 +1,40 @@
+/*!
+@file		AnimationManager.h
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		A system that contains the declaration animation functions and struct entity
+*/
+
 #pragma once
 
 //prefix: AM
 #include "../CProcessing/inc/cprocessing.h"
 #include "GameObject.h"
 
-//Cam also use for particles generation. dw create so many manager class
 
+/// <summary>
+/// Enum type of animation
+/// </summary>
 typedef enum ANIM_TYPE
 {
 	ANIM_SPRITE,
 	ANIM_SHAKE,
 	ANIM_ZOOM,
 	ANIM_WALKSAND,
-	ANIM_COLORBLINK
+	ANIM_COLORBLINK,
+	ANIM_TRANSLATELERP,
+	ANIM_TRANSLATEFLOAT,
+	ANIM_UFDSTATEUP,//up float down state up
+	ANIM_UFDSTATEFLT,
+	ANIM_UFDSTATEFLTTRANSIT,
+	ANIM_UFDSTATEDOWN
 } ANIM_TYPE;
-//think as a big struct that holds all the values for any animation sad
+/// <summary>
+/// Animation entity.
+/// Contains all variables for all types of animation.
+/// Some animation types reuse other type's variables.
+/// </summary>
 typedef struct Animation
 {
 	GameObject* go;
@@ -47,10 +67,27 @@ typedef struct Animation
 	//for blink
 	CP_Color targetColor;
 	CP_Color defaultColor;
+	Renderer* forcedRenderer; //force animation to use this renderer
 	//use looptime to go from default to target to default
 	//use is continuous
 	//use elapsedtime for et
 	//use index for mode
+
+	//translate lerp
+	//use defaultScale for defaultpos
+	//use targetScale for targetpos
+	//use scaleToTime for time from default to target
+	//use elapsedtime for et
+	//use isFlipped to flip
+
+	//translate float
+	//use oldPos for position
+	//rotateAngle for amplitude
+	//use looptime for t
+	//use elapsedtime for et
+
+	//for upfloatdownstate
+	int isNextStateFlag;
 
 }Animation;
 
@@ -137,3 +174,37 @@ void AM_SetWalk(Animation*);
 @return void
 */
 void AM_SetBlink(Animation* a, CP_Color defaultColor, CP_Color targetColor, float loopTime, int isContinuous, int mode);
+
+/*!
+@brief Set Animation for object to translate from pa to pb in this time
+@param a - animation to be set
+@param pa - from position
+@param pb - to position
+@param t - time taken from pa to pb
+@param isFlipped - start from to and end at from
+@return void
+*/
+void AM_SetLerp(Animation* a, CP_Vector pa, CP_Vector pb, float t, int isFlipped);
+
+/*!
+@brief Set Animation for object to float about point p (sin curve up and down)
+@param a - animation to be set
+@param p - from position
+@param amplitude - amplitude of sin curve
+@param t - time taken to complete one sin
+@return void
+*/
+void AM_SetFloat(Animation* a, CP_Vector p, float amplitude, float t);
+
+/*!
+@brief Set Animation that contain states and uses flag for object to (appear) move up, float and down (disappear)
+	treat this like a specified state machine animator
+@param a - animation to be set
+@param pa - from position
+@param pb - floating position
+@param amplitude - amplitude of float
+@param t - time taken to go from start pos to floating pos
+@param ft - time taken for float to complete one sin curve
+@return void
+*/
+void AM_SetUpFloatDownState(Animation* a, CP_Vector pa, CP_Vector pb, float amplitude, float t, float ft);

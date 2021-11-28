@@ -1,3 +1,12 @@
+/*!
+@file		RendereManager.h
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		Render Manager that handles all entities that renders on screen. Also defines the world
+			space and screen space system which the entities renders on. Also sorts render orders based on priority.
+*/
+
 #pragma once
 
 #include "GameObject.h"
@@ -15,6 +24,9 @@ this is the worldspace size vertically. rendering is based on this size.
 #define WORLD_HEIGHT 500.0f
 //#define SCREEN_HEIGHT 500.0f;
 
+/// <summary>
+/// priority of renderer. lower priority gets rendered first
+/// </summary>
 typedef enum RENDER_PRIORITY //lowest to highest
 {
 	PRI_GAME_OBJECT, //lowest of lowest
@@ -28,7 +40,9 @@ typedef enum RENDER_PRIORITY //lowest to highest
 	PRI_TOTAL
 }RENDER_PRIORITY;
 
-
+/// <summary>
+/// Entity/Component of the render
+/// </summary>
 typedef struct Renderer
 {
 	GameObject* go;
@@ -54,7 +68,9 @@ typedef struct Renderer
 	int isEnabled;
 } Renderer;
 
-
+/// <summary>
+/// debug lines for debugging purposes
+/// </summary>
 typedef struct DebugLine
 {
 	CP_Vector from, to;
@@ -62,12 +78,34 @@ typedef struct DebugLine
 	CP_Color color;
 } DebugLine;
 
-
+/// <summary>
+/// Inits the render manager
+/// </summary>
 void RM_Init();
+/// <summary>
+/// Adds render component to the game object
+/// </summary>
+/// <param name="g">- parent gameobject to have renderer added to</param>
+/// <returns>Renderer* - pointer of newly created renderer</returns>
 Renderer* RM_AddComponent(GameObject*);
+/// <summary>
+/// returns renderer if it exists for the gameobject
+/// </summary>
+/// <param name="g">- game object to find the renderer on</param>
+/// <returns>Renderer* - pointer of renderer found</returns>
 Renderer* RM_GetComponent(GameObject*);
+/// <summary>
+/// removes renderer r from manager's list
+/// </summary>
+/// <param name="r">- renderer to be removed</param>
 void RM_RemoveRenderObject(Renderer*);
+/// <summary>
+/// clears and de allocates memory for stored entities
+/// </summary>
 void RM_Clear();
+/// <summary>
+/// renders all entities
+/// </summary>
 void RM_Render();
 /*!
 @brief Set camera center point to the position param
@@ -75,8 +113,20 @@ void RM_Render();
 @return void
 */
 void RM_SetCameraPosition(CP_Vector);
+/*!
+@brief Gets camera position
+@return CP_Vector - position of camera in world space
+*/
 CP_Vector RM_GetCameraPosition();
+/*!
+@brief Sets camera scale. higher scale means render objects larger
+@param s - scale multiplied to the objects rendered
+*/
 void RM_SetCameraScale(CP_Vector);
+/*!
+@brief Gets camera scale value
+@return CP_Vector - scale of image in camera in world space
+*/
 CP_Vector RM_GetCameraScale();
 
 /*!

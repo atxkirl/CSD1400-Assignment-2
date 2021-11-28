@@ -1,8 +1,19 @@
+/*!
+@file		GameObject.h
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		Struct for gameobject to contain all the essential information of a game object
+*/
+
+
 #pragma once
 
 #include "../CProcessing/inc/cprocessing.h"
 
-
+/// <summary>
+/// enum type of game object
+/// </summary>
 typedef enum OBJECT_TYPE
 {
 	EMPTY = 0,
@@ -28,6 +39,9 @@ typedef enum OBJECT_TYPE
 
 }OBJECT_TYPE;
 
+/// <summary>
+/// enum direction of game object
+/// </summary>
 typedef enum OBJECT_DIRECTION
 {
 	// rotation counterclockwise from X-axis

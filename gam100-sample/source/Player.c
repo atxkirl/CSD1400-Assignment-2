@@ -40,6 +40,9 @@ bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_object
 bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
 bool p_walk = false;
 
+GameObject* ply_interactHint;
+#define PLY_HINTOFFSET CP_Vector_Set(25,-30)
+
 /*
 @brief Handles invincibility counter to ensure that player will not take damage when invincible.
 */
@@ -245,6 +248,15 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     g_objective1 = g_objective2 = g_objective3 = g_objective4 = g_objective5 = false;
     g_object1collect = g_object1drop = g_object1comp = false;
 
+    ply_interactHint = GOM_Create2(EMPTY, CP_Vector_Add(player->position, PLY_HINTOFFSET), 0, CP_Vector_Set(20, 10));
+    r = RM_AddComponent(ply_interactHint);
+    r->textScale = CP_Vector_Set(0.75f, 0.75f);
+    r->renderPriority = PRI_PLY;
+    char tempstr[10] = {0};
+    sprintf_s(tempstr, 10, "Press \'%c\'", cControls->cInteract);
+    RM_SetText(r, tempstr);
+    ply_interactHint->isEnabled = 0;
+
     return player;
 } 
     
@@ -253,6 +265,7 @@ void PLY_Update() { // handles input from player and checking for flags
     float currentSpd = 200.0f - (n_weight * weight);
 
     AM_GetComponent(player_fogofwar)->loopDir = -1;
+
 
     if (p_Hidden == false) 
     {
@@ -380,6 +393,10 @@ void PLY_Update() { // handles input from player and checking for flags
     RM_SetCameraPosition(player->position);
     SDM_EffectUpdate();
 
+    //Update player intereaction hint. has to hve after positional update so it wont look 1 frame lagg
+    ply_interactHint->isEnabled = 0;
+    ply_interactHint->position = CP_Vector_Add(player->position, PLY_HINTOFFSET);
+
     if (playerhealth <= 0)
     {
         SceneManager_ChangeSceneByName("gameEnd");
@@ -408,4 +425,10 @@ bool PLY_TakeDamage(void)
     }
     else
         return false;
+}
+
+
+void PLY_ShowInteractHint(void)
+{
+    ply_interactHint->isEnabled = 1;
 }

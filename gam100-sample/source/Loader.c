@@ -1,3 +1,12 @@
+/*!
+@file            Loader.c
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for loading the level
+				 and all its objectives.
+*//*______________________________________________________________________*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include"Loader.h"
@@ -20,6 +29,9 @@ float fEnemyPositionY;
 int iNumObjectives;
 int iNumBoatParts;
 
+/// <summary>
+/// Initialise Loader Variables
+/// </summary>
 void LoaderInit()
 {
 	iSize = CP_System_GetWindowHeight() / NumGrids;
@@ -78,11 +90,17 @@ void LoaderInit()
 	fEnemyPositionY = 0.f;
 }
 
+/// <summary>
+/// Update
+/// </summary>
 void LoaderUpdate()
 {
 
 }
 
+/// <summary>
+/// Exit
+/// </summary>
 void LoaderExit()
 {
 	SM_SystemsExit();
@@ -99,12 +117,12 @@ void LoaderExit()
 	free(gLoadedGrids);
 	free(gLoadedObjects);
 }
-/*!
-@brief Loads the Grid based on the cInput which is the file name.
 
-@param char* - File name
-@return void
-*/
+/// <summary>
+/// Loads the Grid based on the cInput which is the file name.
+/// </summary>
+/// <param name="cInput"></param>
+/// <param name="iLoad"></param>
 void LoadGrid(char* cInput, int iLoad)
 {
 	char cLevelFileLocation[100] = { "Levels/" };
@@ -240,6 +258,10 @@ void LoadGrid(char* cInput, int iLoad)
 	}
 }
 
+/// <summary>
+/// Load Objectives from .txt based on cInput
+/// </summary>
+/// <param name="cInput"></param>
 void LoadObjectives(char* cInput)
 {
 	char cFileLocation[100] = { "Objectives/" };
@@ -292,26 +314,47 @@ void LoadObjectives(char* cInput)
 	}
 }
 
+/// <summary>
+/// Set the Objective at iIndex to state iSetter
+/// </summary>
+/// <param name="iIndex"></param>
+/// <param name="iSetter"></param>
 void SetObjectiveComplete(int iIndex, int iSetter)
 {
 	oObjectiveList[iIndex - 1].isComplete = iSetter;
 }
 
-CP_Vector SetPlayerPosition()
+/// <summary>
+/// Returns the player position
+/// </summary>
+/// <returns>CP_Vector</returns>
+CP_Vector GetPlayerPosition()
 {
 	return CP_Vector_Set(fPlayerPositionX, fPlayerPositionY);
 }
 
-CP_Vector SetEnemyPosition()
+/// <summary>
+/// Get the enemy position.
+/// </summary>
+/// <returns>CP_Vector</returns>
+CP_Vector GetEnemyPosition()
 {
 	return CP_Vector_Set(fEnemyPositionX, fEnemyPositionY);
 }
 
+/// <summary>
+/// Get number of objectives loaded.
+/// </summary>
+/// <returns>int</returns>
 int GetNumObjectives()
 {
 	return iNumObjectives;
 }
 
+/// <summary>
+/// Get number of boat parts loaded.
+/// </summary>
+/// <returns>int</returns>
 int GetLoadedNumBoatParts()
 {
 	return iNumBoatParts;

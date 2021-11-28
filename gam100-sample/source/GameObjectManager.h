@@ -1,3 +1,12 @@
+/*!
+@file		GameObjectManager.h
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		Game Object Manager that manages the lifespan of a game object. It allocates memory for gameobjects
+			and deallocates them when they are not used
+*/
+
 #pragma once
 
 //Controls lifetime of gameobjects
@@ -63,11 +72,13 @@ void GOM_Clear();
 @return int index of the gameobject
 */
 int GOM_GetIndex(GameObject*);
+
 ///*!
 //@brief Clears all the temp objects for the frame
 //@return void
 //*/
 //void GOM_ClearTempObjects();
+
 /*!
 @brief Get the number of objects
 @return int number of objects
@@ -80,4 +91,9 @@ int GOM_GetCount();
 //*/
 //LinkedList* GOM_GetTempObjects();
 
+/// <summary>
+/// Factory pattern for game object creation <unused>
+/// </summary>
+/// <param name="type">- enum type of game object</param>
+/// <returns>- pointer to newly created game object</returns>
 GameObject* GOM_FactoryCreateGO(int type);//int according to OBJECT_TYPE

@@ -1,3 +1,11 @@
+/*!
+@file            LevelEditor.h
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for editing the levels.
+*//*______________________________________________________________________*/
+
 #include "../CProcessing/inc/cprocessing.h"
 #include "GameObject.h"
 // For sizing
@@ -26,63 +34,85 @@ typedef struct Grid
 	GridNode nGrid[NumGrids][NumGrids];
 } Grid;
 
-/*!
-@brief Initialises the variables
-@param void
-@return void
-*/
+/// <summary>
+/// Initialises the variables of this file.
+/// </summary>
 void LevelEditorInit();
 
-/*!
-@brief Update
-@param void
-@return void
-*/
+/// <summary>
+/// Update.
+/// </summary>
 void LevelEditorUpdate();
 
-/*!
-@brief Exit
-@param void
-@return void
-*/
+/// <summary>
+/// Exit.
+/// </summary>
 void LevelEditorExit();
 
+/// <summary>
+/// Places the object based on mouse input.
+/// </summary>
 void PlaceObject();
 
-/*!
-@brief Place the object in the grid based on the mouse positions.
-@param void
-@return void
-*/
-void CheckGrid(float fMouseX, float fMouseY, int iObjType);
+/// <summary>
+/// Checks the tile at the current position if it is the same iObjType.
+/// Assigns the type to the tile if it is not the same.
+/// </summary>
+/// <param name="fPositionX"></param>
+/// <param name="fPositionY"></param>
+/// <param name="iObjType - the GameObject type"></param>
+void CheckGrid(float fPositionX, float fPositionY, int iObjType);
 
-/*!
-@brief Check if the spot on the grid is taken or not.
-If it is, it will check if the tile is not the same type first before allocating.
-
-@param void
-@return void
-*/
+/// <summary>
+/// Renders the GameObjects.
+/// </summary>
 void RenderObjects();
 
-/*!
-@brief Save changes made to the grid.
-
-@param void
-@return void
-*/
+/// <summary>
+/// Saves the current grid to .txt
+/// </summary>
 void SaveGrid();
 
+/// <summary>
+/// Map Generation based on Prims Algorithm.
+/// Modified to fit the needs of the project.
+/// </summary>
 void AutoGenerateGrid();
 
+/// <summary>
+/// Checks the surrounding and adds neighbours for the Map Generation to traverse.
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="List"></param>
 void AddFrontierCell(int x, int y, LinkedList* List);
 
+/// <summary>
+/// Prints the current Object Type for user reference.
+/// </summary>
+/// <param name="iObjType"></param>
 void PrintCurrentType(int iObjType);
 
+/// <summary>
+/// Prints the current Object Direction for user reference.
+/// </summary>
+/// <param name="iObjDirection"></param>
 void PrintCurrentDirection(int iObjDirection);
 
-void AssignDirection(float fMouseX, float fMouseY, int iDirection);
+/// <summary>
+/// Assigns a direction to the Tile at current position.
+/// </summary>
+/// <param name="fPositionX"></param>
+/// <param name="fPositionY"></param>
+/// <param name="iDirection"></param>
+void AssignDirection(float fPositionX, float fPositionY, int iDirection);
 
+/// <summary>
+/// Loads the tile images based on the Object Type.
+/// </summary>
 void LoadTileImage();
 
+/// <summary>
+/// Loads previously saved map.
+/// </summary>
 void LoadSavedMap();

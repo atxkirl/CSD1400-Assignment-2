@@ -1,4 +1,15 @@
+/*!
+@file		CollisionManager.c
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		Collision manager that handles all the colliders entity by checking for collisions among
+			the entities
+*/
+
+
 #include "CollisionManager.h"
+
 #include <math.h> //for fabs()
 #include "Helpers.h" //for FLT_EPS
 #include <stdlib.h> //for malloc/calloc
@@ -164,14 +175,27 @@ void SnapBoxOutOfBox(Collider* l, Collider* r)
 
 }
 
+/// <summary>
+/// Inits the collision manager
+/// </summary>
 void CLM_Init()
 {
 
 }
+/// <summary>
+/// Adds collider to collision manager
+/// </summary>
+/// <param name="c">- Collider entity to be added to manager's list</param>
 void CLM_Add(Collider* c)
 {
 	LL_Add(&CLM_objects, (void*)c);
 }
+/// <summary>
+/// Sets the collider entity to type with response
+/// </summary>
+/// <param name="c">- Collider entity to be set</param>
+/// <param name="t">- type of collider</param>
+/// <param name="func">- response func pointer to be stored</param>
 void CLM_Set(Collider* c, COLLIDER_TYPE t, OnCollision func)
 {
 	c->type = t;
@@ -183,6 +207,11 @@ void CLM_Set(Collider* c, COLLIDER_TYPE t, OnCollision func)
 	}
 	c->OnCollision = func;
 }
+/// <summary>
+/// Adds collider component to game object
+/// </summary>
+/// <param name="g">- parent game object to have collider added</param>
+/// <returns>- pointer to the newly created collider</returns>
 Collider* CLM_AddComponent(GameObject* g)
 {
 	Collider* c = malloc(sizeof(Collider));
@@ -206,6 +235,11 @@ Collider* CLM_AddComponent(GameObject* g)
 	}
 	return c;
 }
+/// <summary>
+/// Removes collider from manager
+/// </summary>
+/// <param name="c">- collier to be removed</param>
+/// <returns>int - 0</returns>
 int CLM_Remove(Collider* c)
 {
 	LL_RemovePtr(&CLM_objects, (void*)(c));
@@ -228,6 +262,10 @@ void* findGO(void* curr, void* arg)
 		return curr;
 	return NULL;
 }
+/// <summary>
+/// Remove collider containing parent go
+/// </summary>
+/// <param name="go">- parent of the collider to be removed</param>
 void CLM_RemoveGO(GameObject* go)
 {
 	Collider* c = LL_Find(CLM_objects, findGO, go);
@@ -238,6 +276,19 @@ void CLM_RemoveGO(GameObject* go)
 		free(c);
 	}
 }
+/// <summary>
+/// Returns collider component of game object if exists
+/// </summary>
+/// <param name="go">- game object to find collider</param>
+/// <returns>- pointer of collider if exists</returns>
+Collider* CLM_GetComponent(GameObject* go)
+{
+	return LL_Find(CLM_objects, findGO, go);
+}
+
+/// <summary>
+/// Clears and deletes memory allocated for collision manager
+/// </summary>
 void CLM_Clear()
 {
 	LinkedList* l = CLM_objects;
@@ -248,10 +299,18 @@ void CLM_Clear()
 	}
 	LL_Clear(&CLM_objects);
 }
+/// <summary>
+/// returns index of collider in collision manager
+/// </summary>
+/// <param name="c">- collider to find index of</param>
+/// <returns>int - index of the collider in manager</returns>
 int CLM_GetIndex(Collider* c)
 {
 	return LL_GetIndexPtr(CLM_objects, c);
 }
+/// <summary>
+/// updates the collision manager every frame
+/// </summary>
 void CLM_Update()
 {
 	//void** objArray = LL_ToArray(CLM_objects);
@@ -309,6 +368,12 @@ void CLM_Update()
 	}
 }
 
+/// <summary>
+/// checks if collider left and collide right collides with each other
+/// </summary>
+/// <param name="left">- one of the collider to be checked</param>
+/// <param name="right">- other one of the collider to be checked</param>
+/// <returns>int - 1 if is colliding, 0 if is not</returns>
 int IsCollide(Collider* left, Collider* right)
 {
 	switch (left->type)
@@ -346,6 +411,12 @@ int IsCollide(Collider* left, Collider* right)
 	}
 	return 0;
 }
+/// <summary>
+/// check if circle collide w circle
+/// </summary>
+/// <param name="left">- circle a</param>
+/// <param name="right">- circle b</param>
+/// <returns>int - true or false if collide</returns>
 int IsCircleCollideCircle(Collider* left, Collider* right)
 {
 	CP_Vector posLeft = ((GameObject*)left->obj)->position;
@@ -356,6 +427,12 @@ int IsCircleCollideCircle(Collider* left, Collider* right)
 		return 1;
 	return 0;
 }
+/// <summary>
+/// check if box collide w box
+/// </summary>
+/// <param name="left">- box a</param>
+/// <param name="right">- box b</param>
+/// <returns>int - true or false if collide</returns>
 int IsBoxCollideBox(Collider* left, Collider* right)
 {
 	CP_Vector posLeft = ((GameObject*)left->obj)->position;
@@ -367,6 +444,12 @@ int IsBoxCollideBox(Collider* left, Collider* right)
 		return 1;
 	return 0;
 }
+/// <summary>
+/// check if point collide w point
+/// </summary>
+/// <param name="left">- point a</param>
+/// <param name="right">- point b</param>
+/// <returns>int - true or false if collide</returns>
 int IsPointCollidePoint(Collider* left, Collider* right) //No such thing well...
 {
 	CP_Vector posLeft = ((GameObject*)left->obj)->position;
@@ -377,7 +460,12 @@ int IsPointCollidePoint(Collider* left, Collider* right) //No such thing well...
 		return 1;
 	return 0;
 }
-
+/// <summary>
+/// check if circle collide w box
+/// </summary>
+/// <param name="left">- circle a</param>
+/// <param name="right">- box b</param>
+/// <returns>int - true or false if collide</returns>
 int IsCircleCollideBox(Collider* left, Collider* right)
 {
 	CP_Vector posLeft = ((GameObject*)left->obj)->position;
@@ -389,6 +477,12 @@ int IsCircleCollideBox(Collider* left, Collider* right)
 		return 1;
 	return 0;
 }
+/// <summary>
+/// check if circle collide w point
+/// </summary>
+/// <param name="left">- circle a</param>
+/// <param name="right">- point b</param>
+/// <returns>int - true or false if collide</returns>
 int IsCircleCollidePoint(Collider* left, Collider* right)
 {
 	CP_Vector posLeft = ((GameObject*)left->obj)->position;
@@ -399,6 +493,12 @@ int IsCircleCollidePoint(Collider* left, Collider* right)
 		return 1;
 	return 0;
 }
+/// <summary>
+/// check if box collide w point
+/// </summary>
+/// <param name="left">- box a</param>
+/// <param name="right">- point b</param>
+/// <returns>int - true or false if collide</returns>
 int IsBoxCollidePoint(Collider* left, Collider* right)
 {
 	CP_Vector posLeft = ((GameObject*)left->obj)->position;
@@ -410,10 +510,4 @@ int IsBoxCollidePoint(Collider* left, Collider* right)
 		fabsf(relative.y) < left->height * 0.5f)
 		return 1;
 	return 0;
-}
-
-
-Collider* CLM_GetComponent(GameObject* go)
-{
-	return LL_Find(CLM_objects, findGO, go);
 }
