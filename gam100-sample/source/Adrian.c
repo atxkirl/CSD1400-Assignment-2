@@ -1,12 +1,12 @@
-/*!
-@file Adrian.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
-*//*______________________________________________________________________*/
+/*
+* @file		Adrian.c
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		12/10/2021
+* @brief	TEST scene to test out A* pathfinding algorithm by displaying a grid
+*           and calling A* to get a path between 2 selected grid cells.
+*//*--------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,6 +41,9 @@ static CP_Color pathColor;
 static AStar_Node* startNode;
 static AStar_Node* endNode;
 
+/// <summary>
+/// Calls A* pathfinding to calculate a path between the startNode and endNode, and calculates the time taken in milliseconds.
+/// </summary>
 void Adrian_CallAStar(void)
 {
     // Clear the map of paths
@@ -65,6 +68,9 @@ void Adrian_CallAStar(void)
     printf("Time taken for A* (ms): %d\n", t);
 }
 
+/// <summary>
+/// Renders the grid every frame.
+/// </summary>
 void Adrian_Render(void)
 {
     // Clear the window.
@@ -130,6 +136,9 @@ void Adrian_Render(void)
     }
 }
 
+/// <summary>
+/// Handles user inputs.
+/// </summary>
 void Adrian_Input(void)
 {
     // Toggle cell state.
@@ -213,6 +222,9 @@ void Adrian_Input(void)
     }
 }
 
+/// <summary>
+/// Initializes scene variables as well as A* system.
+/// </summary>
 void Adrian_init(void)
 {
     SM_SystemsInit();
@@ -245,6 +257,9 @@ void Adrian_init(void)
     }
 }
 
+/// <summary>
+/// Update loop called every frame.
+/// </summary>
 void Adrian_update(void)
 {
     SM_SystemsPreUpdate();
@@ -260,6 +275,9 @@ void Adrian_update(void)
     CP_Settings_Fill(CP_Color_Create(128, 128, 128, 255));
 }
 
+/// <summary>
+/// Exit function that's called before scene change.
+/// </summary>
 void Adrian_exit(void)
 {
     // Release memory for map.map
@@ -274,6 +292,12 @@ void Adrian_exit(void)
     printf("Exitting Scene Adrian!\n");
 }
 
+/// <summary>
+/// Called by SceneManager to pass function pointers for this scene's init, update and exit.
+/// </summary>
+/// <param name="init">Function pointer to scene init.</param>
+/// <param name="update">Function pointer to scene update.</param>
+/// <param name="exit">Funciton pointer to scene exit.</param>
 void Adrian_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = Adrian_init;

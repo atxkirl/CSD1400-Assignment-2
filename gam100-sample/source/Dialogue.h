@@ -1,3 +1,12 @@
+/*
+* @file		Dialogue.h
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		07/11/2021
+* @brief	Contains functions to display and handle dialogue boxes in the game.
+*//*--------------------------------------------------------------------------*/
+
 #pragma once
 
 #include <stdio.h>
@@ -34,18 +43,44 @@ GameObject* closeButton;
 Renderer* closeButtonRenderer;
 Collider* closeButtonCollider;
 
+/// <summary>
+/// Handling function for when dialoguebox close button is clicked.
+/// </summary>
+/// <param name="left">Collider for mouse click.</param>
+/// <param name="right">Collider for close button.</param>
 static void DM_Handle_CloseButton(Collider* left, Collider* right);
 
-static void DM_Handle_PressForNext();
-
+/// <summary>
+/// Displays a dialogue box with the provided text.
+/// </summary>
+/// <param name="text =">Text to display.</param>
+/// <param name="type =">Type of Dialogue box.</param>
 void DM_PrintDialogue(char* text, DialogueType type);
 
+/// <summary>
+/// Displays a dialogue box with the provided text.
+/// </summary>
+/// <param name="text =">Text to display.</param>
+/// <param name="type =">Type of Dialogue box.</param>
+/// <param name="color =">Color of the text.</param>
 void DM_PrintDialogueColored(char* text, DialogueType type, CP_Color color);
 
+/// <summary>
+/// Initializes dialogue box variables.
+/// </summary>
 void DM_Init();
 
+/// <summary>
+/// Clears any dynamically allocated memory upon overall game shutdown.
+/// </summary>
 void DM_Clear();
 
+/// <summary>
+/// Update loop for dialogue, called every frame.
+/// </summary>
 void DM_Update();
 
+/// <summary>
+/// Late update loop for dialogue, called at the end of every frame.
+/// </summary>
 void DM_LateUpdate();

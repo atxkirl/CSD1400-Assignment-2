@@ -3,7 +3,7 @@
 * @author	Adrian Tan (t.xingkhiangadrian)
 * @course	CSD1400 Software Engineering Project 1
 * @Team		BananaBoi
-* @date		26/11/2021
+* @date		06/11/2021
 * @brief	Contains structs that hold data relevant for AI statemachine, and AI
 *			pathfinding.
 *//*--------------------------------------------------------------------------*/
@@ -20,7 +20,7 @@
 #include "CollisionManager.h"
 
 typedef struct FSM FSM;
-typedef void (*StateFunctionPtr)(FSM*, CP_Vector*); // (FSM* controller, CP_Vector* newTargetPosition)
+typedef void (*StateFunctionPtr)(FSM*); // (FSM* controller)
 
 /// <summary>
 /// Each FSM will hold references to state functions, which will be changed when changing states.

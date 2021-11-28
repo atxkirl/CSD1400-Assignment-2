@@ -1,8 +1,25 @@
+/*
+* @file		SceneManager.c
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @coauthor Ow Hong Yu (ow.h)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		06/10/2021
+* @brief	Contains functions to register and change scenes during runtime.
+*//*----------------------------------------------------------------------*/
+
 #include "SceneManager.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Scene Struct */
+/// <summary>
+/// Creates a Scene struct to hold data on a single scene to allow for easy scene changing.
+/// </summary>
+/// <param name="name">Human readable name of the scene.</param>
+/// <param name="init">Function pointer to the scene's init function.</param>
+/// <param name="update">Function pointer to the scene's update function.</param>
+/// <param name="exit">Function pointer to the scene's exit function.</param>
+/// <returns>Pointer to a scene struct.</returns>
 Scene* CreateScene(char* name, FunctionPtr init, FunctionPtr update, FunctionPtr exit)
 {
 	if (init && update && exit)
@@ -21,7 +38,9 @@ Scene* CreateScene(char* name, FunctionPtr init, FunctionPtr update, FunctionPtr
 	return NULL;
 }
 
-/* SceneManager */
+/// <summary>
+/// Initializes the scene manager and registers individual scenes.
+/// </summary>
 void SceneManager_Initialize()
 {
 	FunctionPtr init, update, exit;
@@ -85,6 +104,10 @@ void SceneManager_Initialize()
 	LL_Add(&sceneList, temp);
 }
 
+/// <summary>
+/// Changes a scene, based on a pointer to the next scene.
+/// </summary>
+/// <param name="nextScene">Pointer to the next scene.</param>
 void SceneManager_ChangeScene(Scene* nextScene)
 {
 	if (nextScene)
@@ -94,6 +117,12 @@ void SceneManager_ChangeScene(Scene* nextScene)
 	}
 }
 
+/// <summary>
+/// Searches through a Linked List containing all registered Scene structs to find a matching scene.
+/// </summary>
+/// <param name="curr">Void pointer to fill with scene data.</param>
+/// <param name="arg">Void pointer containing the name of the scene to look for.</param>
+/// <returns>Pointer to the scene, if there is a matching one, if not, returns NULL.</returns>
 void* findScene(void* curr, void* arg) 
 {
 	char* name = (char*)arg;
@@ -103,6 +132,11 @@ void* findScene(void* curr, void* arg)
 		return curr;
 	return NULL;
 }
+
+/// <summary>
+/// Changes scenes by searching for matching scenes of the same name.
+/// </summary>
+/// <param name="sceneName">Human readable name of the scene to change to.</param>
 void SceneManager_ChangeSceneByName(char* sceneName)
 {
 	Scene* nextScene = LL_Find(sceneList, findScene, (void*)sceneName);

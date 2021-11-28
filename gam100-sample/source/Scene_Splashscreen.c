@@ -1,12 +1,12 @@
-/*!
-@file game.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
-*//*______________________________________________________________________*/
+/*
+* @file		Scene_Splashscreen.c
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		14/11/2021
+* @brief	Scene that displays the DigiPen logo, as well as the team logo when
+*           the game is first launched.
+*//*--------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include "cprocessing.h"
@@ -29,6 +29,9 @@ static Renderer* digipenRenderer;
 static GameObject* bananaObj;
 static Renderer* bananaRenderer;
 
+/// <summary>
+/// Update loop for the DigiPen logo.
+/// </summary>
 void update_digipen(void)
 {
     if (digipenState == 3)
@@ -64,7 +67,9 @@ void update_digipen(void)
         logoFadeSpeed *= -1;
     }
 }
-
+/// <summary>
+/// Update loop for the BananaBoi logo.
+/// </summary>
 void update_bananaboi(void)
 {
     if (bananaState == 3)
@@ -101,6 +106,9 @@ void update_bananaboi(void)
     }
 }
 
+/// <summary>
+/// Initializes scene variables.
+/// </summary>
 void splashscreen_init(void)
 {
     SM_SystemsInit();
@@ -131,7 +139,9 @@ void splashscreen_init(void)
     bananaState = 0;
     elapsedTime = 0.f;
 }
-
+/// <summary>
+/// Update loop that's called every frame.
+/// </summary>
 void splashscreen_update(void)
 {
     if (CP_Input_KeyTriggered(KEY_ESCAPE))
@@ -156,7 +166,9 @@ void splashscreen_update(void)
     SM_SystemsUpdate(0);
     SM_SystemsLateUpdate();
 }
-
+/// <summary>
+/// Exit function that's called before scene change.
+/// </summary>
 void splashscreen_exit(void)
 {
     SM_SystemsExit();
@@ -165,6 +177,12 @@ void splashscreen_exit(void)
     SDM_PlayBgMusic(1);
 }
 
+/// <summary>
+/// Called by SceneManager to pass function pointers for this scene's init, update and exit.
+/// </summary>
+/// <param name="init">Function pointer to scene init.</param>
+/// <param name="update">Function pointer to scene update.</param>
+/// <param name="exit">Funciton pointer to scene exit.</param>
 void splashscreen_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = splashscreen_init;

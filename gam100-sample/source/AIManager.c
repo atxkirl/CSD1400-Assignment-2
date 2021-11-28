@@ -3,7 +3,7 @@
 * @author	Adrian Tan (t.xingkhiangadrian)
 * @course	CSD1400 Software Engineering Project 1
 * @Team		BananaBoi
-* @date		26/11/2021
+* @date		06/11/2021
 * @brief	Contains functions to create, modify, and control the behaviors,
 *			and movements of Enemy AI.
 *//*----------------------------------------------------------------------*/
@@ -52,7 +52,7 @@ void AIM_Update()
 			continue;
 
 		// Update State
-		enemy->onUpdate(enemy, NULL);
+		enemy->onUpdate(enemy);
 		if (strcmp(enemy->currentState, enemy->nextState) != 0)
 		{
 			AIM_ChangeStates(enemy->nextState, enemy);
@@ -208,7 +208,7 @@ void AIM_InitFSM(FSM* controller, char* startStateName, GameObject* targetObject
 	controller->onUpdate = startState->onUpdate;
 
 	// Invoke fsm's current state OnEnter function.
-	controller->onEnter(controller, controller->targetPosition);
+	controller->onEnter(controller);
 }
 
 void AIM_ChangeStates(char* stateName, FSM* controller)
@@ -221,7 +221,7 @@ void AIM_ChangeStates(char* stateName, FSM* controller)
 	}
 
 	// Invoke the onExit function for the current state before changing.
-	controller->onExit(controller, NULL);
+	controller->onExit(controller);
 
 	// Update function ptrs
 	controller->onEnter = state->onEnter;
@@ -233,7 +233,7 @@ void AIM_ChangeStates(char* stateName, FSM* controller)
 	controller->nextState = state->name;
 
 	// Invoke the onEnter function for the new state.
-	controller->onEnter(controller, NULL);
+	controller->onEnter(controller);
 }
 
 State* AIM_FindState(char* stateName)

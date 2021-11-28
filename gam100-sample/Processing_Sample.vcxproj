@@ -260,7 +260,6 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\Objective_Pickup.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\RenderManager.h" />
-    <ClInclude Include="source\Scene.h" />
     <ClInclude Include="source\SceneManager.h" />
     <ClInclude Include="source\SoundManager.h" />
     <ClInclude Include="source\SystemManager.h" />

@@ -1,3 +1,13 @@
+/*
+* @file		SceneManager.c
+* @author	Adrian Tan (t.xingkhiangadrian)
+* @coauthor Ow Hong Yu (ow.h)
+* @course	CSD1400 Software Engineering Project 1
+* @Team		BananaBoi
+* @date		06/10/2021
+* @brief	Contains functions to register and change scenes during runtime.
+*//*----------------------------------------------------------------------*/
+
 #pragma once
 
 #include "cprocessing.h"
@@ -28,13 +38,31 @@ typedef struct
 	FunctionPtr exit;
 }Scene;
 
+/// <summary>
+/// Creates a Scene struct to hold data on a single scene to allow for easy scene changing.
+/// </summary>
+/// <param name="name">Human readable name of the scene.</param>
+/// <param name="init">Function pointer to the scene's init function.</param>
+/// <param name="update">Function pointer to the scene's update function.</param>
+/// <param name="exit">Function pointer to the scene's exit function.</param>
+/// <returns>Pointer to a scene struct.</returns>
 Scene* CreateScene(char* name, FunctionPtr init, FunctionPtr update, FunctionPtr exit);
 
 /* Scene Manager */
+/// <summary>
+/// Initializes the scene manager and registers individual scenes.
+/// </summary>
 void SceneManager_Initialize();
+/// <summary>
+/// Changes a scene, based on a pointer to the next scene.
+/// </summary>
+/// <param name="nextScene">Pointer to the next scene.</param>
 void SceneManager_ChangeScene(Scene* nextScene);
+/// <summary>
+/// Changes scenes by searching for matching scenes of the same name.
+/// </summary>
+/// <param name="sceneName">Human readable name of the scene to change to.</param>
 void SceneManager_ChangeSceneByName(char* sceneName);
 
-Scene* currentScene;
-
-LinkedList* sceneList;
+Scene* currentScene;	// Pointer to the current scene.
+LinkedList* sceneList;	// Linked List holding all registered scene structs.

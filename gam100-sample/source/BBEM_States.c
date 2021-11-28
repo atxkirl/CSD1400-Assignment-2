@@ -3,7 +3,7 @@
 * @author	Adrian Tan (t.xingkhiangadrian)
 * @course	CSD1400 Software Engineering Project 1
 * @Team		BananaBoi
-* @date		26/11/2021
+* @date		10/11/2021
 * @brief	Contains function definitions for the statemachine functions to
 *			implement the Big Bad Evil Monkey behaviors.
 *//*----------------------------------------------------------------------*/
@@ -22,7 +22,11 @@
 
 static const float idleSpeed = 0.f;
 
-void FSMState_BBEM_Idle_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnEnter function for Idle state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Idle_OnEnter(FSM* controller)
 {
 	printf("BBEM_Idle_OnEnter()\n");
 
@@ -31,14 +35,20 @@ void FSMState_BBEM_Idle_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 	controller->elapsedTime = 0.f;
 	controller->moveSpeed = idleSpeed;
 }
-
-void FSMState_BBEM_Idle_OnExit(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnExit function for Idle state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Idle_OnExit(FSM* controller)
 {
 	controller->waitTime = 0.f;
 	controller->elapsedTime = 0.f;
 }
-
-void FSMState_BBEM_Idle_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnUpdate function for Idle state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Idle_OnUpdate(FSM* controller)
 {
 	// Is Player too near me?
 	CP_Vector directionToPlayer = CP_Vector_Subtract(controller->targetObject->position, controller->controlledObject->position);
@@ -73,7 +83,11 @@ static const float roamSpeed = 100.f;
 static const int roamRadiusMin = 1;		// Minimum radius around player.
 static const int roamRadiusMax = 2;
 
-void FSMState_BBEM_Roam_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnEnter function for Roam state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Roam_OnEnter(FSM* controller)
 {
 	printf("BBEM_Roam_OnEnter()\n");
 
@@ -90,12 +104,18 @@ void FSMState_BBEM_Roam_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 	// Calculate path to target position.
 	AStar_GetPathWorldPosition(controller->controlledObject->position, *controller->targetPosition, &controller->movementPath, controller->map);
 }
-
-void FSMState_BBEM_Roam_OnExit(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnExit function for Roam state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Roam_OnExit(FSM* controller)
 {
 }
-
-void FSMState_BBEM_Roam_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnUpdate function for Roam state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Roam_OnUpdate(FSM* controller)
 {
 	// Is Player too near me?
 	CP_Vector directionToPlayer = CP_Vector_Subtract(controller->targetObject->position, controller->controlledObject->position);
@@ -130,7 +150,11 @@ static const int chaseLoseRadius = 6;
 static const float chaseRepathDist = 0.5f;
 static const float chaseDamageDist = 1.2f;
 
-void FSMState_BBEM_Chase_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnEnter function for Chase state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Chase_OnEnter(FSM* controller)
 {
 	printf("BBEM_Chase_OnEnter()\n");
 
@@ -145,14 +169,20 @@ void FSMState_BBEM_Chase_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 	// Save the targetPosition.
 	controller->targetPrevPosition = *controller->targetPosition;
 }
-
-void FSMState_BBEM_Chase_OnExit(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnExit function for Chase state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Chase_OnExit(FSM* controller)
 {
 	// Keep track of Player position.
 	*controller->targetPosition = controller->targetObject->position;
 }
-
-void FSMState_BBEM_Chase_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnUpdate function for Chase state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Chase_OnUpdate(FSM* controller)
 {
 	// Keep track of Player position.
 	*controller->targetPosition = controller->targetObject->position;
@@ -233,7 +263,11 @@ static const int searchMax = 3;
 static const int searchRadiusMin = 0;		// Minimum radius around player.
 static const int searchRadiusMax = 2;
 
-void FSMState_BBEM_Search_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnEnter function for Search state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Search_OnEnter(FSM* controller)
 {
 	printf("BBEM_Search_OnEnter()\n");
 
@@ -251,13 +285,19 @@ void FSMState_BBEM_Search_OnEnter(FSM* controller, CP_Vector* newTargetPosition)
 	AStar_GetPathWorldPosition(controller->controlledObject->position, *controller->targetPosition, &controller->movementPath, controller->map);
 	--controller->searchCount;
 }
-
-void FSMState_BBEM_Search_OnExit(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnExit function for Search state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Search_OnExit(FSM* controller)
 {
 
 }
-
-void FSMState_BBEM_Search_OnUpdate(FSM* controller, CP_Vector* newTargetPosition)
+/// <summary>
+/// OnUpdate function for Search state of the BBEM AI.
+/// </summary>
+/// <param name="controller">The unique FSM instance calling this function.</param>
+void FSMState_BBEM_Search_OnUpdate(FSM* controller)
 {
 	// Is Player too near me and visible?
 	CP_Vector directionToPlayer = CP_Vector_Subtract(controller->targetObject->position, controller->controlledObject->position);

@@ -146,9 +146,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\Scene.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="source\LevelEditor.h">
       <Filter>Header</Filter>
     </ClInclude>

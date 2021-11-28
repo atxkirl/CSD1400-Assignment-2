@@ -3,7 +3,7 @@
 * @author	Adrian Tan (t.xingkhiangadrian)
 * @course	CSD1400 Software Engineering Project 1
 * @Team		BananaBoi
-* @date		26/11/2021
+* @date		06/11/2021
 * @brief	Contains functions to create, modify, and control the behaviors,
 *			and movements of Enemy AI.
 *//*----------------------------------------------------------------------*/
