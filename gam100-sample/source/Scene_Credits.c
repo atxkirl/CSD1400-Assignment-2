@@ -4,8 +4,8 @@
 #include "SceneManager.h"
 #include "SystemManager.h"
 
-GameObject* credits, * credits_cross;
-Renderer* credits_render;
+GameObject* credits, *credits_cross;
+Renderer* credits_render, *credits_cross_highlight;
 
 
 void SceneCredits_OnCollision(Collider* left, Collider* right)
@@ -14,7 +14,13 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
     {
         if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
             SceneManager_ChangeSceneByName("mainmenu");
-
+    }
+    if (strcmp(((GameObject*)right->obj)->tag, "Mouse") == 0)
+    {
+        if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
+        {
+            credits_cross_highlight->isEnabled = true;
+        }
     }
 }
 
@@ -47,6 +53,9 @@ void SceneCredits_init(void)
     credits_render = RM_AddComponent(credits_cross);
     credits_render->renderPriority = PRI_UI;
     RM_LoadImage(credits_render, "Assets/cross.png");
+    credits_cross_highlight = RM_AddComponent(credits_cross);
+    credits_cross_highlight->renderPriority = PRI_UI;
+    RM_LoadImage(credits_cross_highlight, "Assets/crosshighlight.png");
  
     SM_SystemsInit();
 
@@ -55,6 +64,7 @@ void SceneCredits_init(void)
 
 void SceneCredits_update(void)
 {
+    credits_cross_highlight->isEnabled = false;
 
     SM_SystemsPreUpdate();
     SM_SystemsUpdate(0);
