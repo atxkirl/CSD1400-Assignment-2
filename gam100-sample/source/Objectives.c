@@ -196,6 +196,7 @@ void Objectives_Update()
 
     if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective1Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective1Complete";
@@ -210,6 +211,7 @@ void Objectives_Update()
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective2Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective2Complete";
@@ -224,6 +226,7 @@ void Objectives_Update()
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective3Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective3Complete";
@@ -240,7 +243,7 @@ void Objectives_Update()
     if (iAllObjectivesComplete == iNumObjectives && !iPrintExit)
     {
         iPrintExit = 1;
-
+        g_ObjectiveUI[0]->position.x = screenWidth * 0.065f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[0]);
         RM_SetText(rObjUI, "Find the Exit!");
 
@@ -368,7 +371,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.08f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.077f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveOnePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[0].cObjective);
                     r->renderPriority = PRI_UI;
@@ -427,7 +430,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.11f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.1025f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveThreePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[2].cObjective);
                     r->renderPriority = PRI_UI;

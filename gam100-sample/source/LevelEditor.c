@@ -63,7 +63,7 @@ void CheckGridInt(int iX, int iY, int iObjType)
 {
 	if (isTileMode)
 	{
-		if (objType >= OBJECT_START)
+		if (iObjType >= OBJECT_START)
 			return;
 
 		if (gGrids.gGrid[iY][iX]->type != iObjType)
@@ -73,7 +73,7 @@ void CheckGridInt(int iX, int iY, int iObjType)
 	}
 	else
 	{
-		if (objType <= OBJECT_START)
+		if (iObjType <= OBJECT_START)
 			return;
 
 		if (gObjectGrids.gGrid[iY][iX]->type != iObjType)
@@ -144,6 +144,7 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 			}
 			else
 			{
+				CheckGridInt(iX, iY, ENEMY_SPAWN);
 				gObjectGrids.gGrid[iY][iX]->tag = "EnemySpawn";
 				printf("Enemy Spawn set\n");
 			}
@@ -349,7 +350,7 @@ void LevelEditorUpdate()
 		LoadTileImage();
 	}
 
-	if (CP_Input_MouseDown(MOUSE_BUTTON_1))
+	if (CP_Input_MouseTriggered(MOUSE_BUTTON_1))
 	{
 		GameObject* clickPoint = GOM_CreateTemp(FLOOR);
 		clickPoint->position = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
@@ -371,7 +372,7 @@ void LevelEditorUpdate()
 		clickPoint->scale = CP_Vector_Set(10.0f, 10.0f);
 		RM_AddComponent(clickPoint);
 	}
-	if (CP_Input_MouseDown(MOUSE_BUTTON_2))
+	if (CP_Input_MouseTriggered(MOUSE_BUTTON_2))
 	{
 		GameObject* clickPoint = GOM_CreateTemp(FLOOR);
 		clickPoint->position = RM_MousePositionToWorldSpace(CP_Input_GetMouseX(), CP_Input_GetMouseY());
@@ -566,7 +567,7 @@ void SaveGrid()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gGrids.gGrid[i][j]->type !=  EMPTY && iObjNum < 900)
+			if (gGrids.gGrid[j][i]->type !=  EMPTY && iObjNum < 900)
 			{
 				char ObjType[10];
 				char ObjPosX[10];
@@ -576,7 +577,7 @@ void SaveGrid()
 				{
 					if (GridObj[iObjNum])
 					{
-						sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]->type);
+						sprintf_s(ObjType, 10, "%d", gGrids.gGrid[j][i]->type);
 						strcpy_s(GridObj[iObjNum], 70, ObjType); //type
 						strcat_s(GridObj[iObjNum], 70, ",");
 
@@ -589,11 +590,11 @@ void SaveGrid()
 						strcat_s(GridObj[iObjNum], 70, ",");
 						printf("%s\n", GridObj[iObjNum]);
 
-						sprintf_s(cObjDirection, 10, "%d", (int)gGrids.gGrid[i][j]->oDirection);
+						sprintf_s(cObjDirection, 10, "%d", (int)gGrids.gGrid[j][i]->oDirection);
 						strcat_s(GridObj[iObjNum], 70, cObjDirection); // dir
 						strcat_s(GridObj[iObjNum], 70, ",");
 
-						sprintf_s(cObjDirection, 30, "%s", gGrids.gGrid[i][j]->tag);
+						sprintf_s(cObjDirection, 30, "%s", gGrids.gGrid[j][i]->tag);
 						strcat_s(GridObj[iObjNum], 70, cObjDirection); // tag
 						strcat_s(GridObj[iObjNum], 70, "\n");
 
@@ -636,7 +637,7 @@ void SaveGrid()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gObjectGrids.gGrid[i][j]->type != EMPTY && iObjNum < 900)
+			if (gObjectGrids.gGrid[j][i]->type != EMPTY && iObjNum < 900)
 			{
 				char ObjType[10];
 				char ObjPosX[10];
@@ -646,7 +647,7 @@ void SaveGrid()
 				{
 					if (GridObjects[iObjNum])
 					{
-						sprintf_s(ObjType, 10, "%d", gObjectGrids.gGrid[i][j]->type);
+						sprintf_s(ObjType, 10, "%d", gObjectGrids.gGrid[j][i]->type);
 						strcpy_s(GridObjects[iObjNum], 70, ObjType); //type
 						strcat_s(GridObjects[iObjNum], 70, ",");
 
@@ -659,11 +660,11 @@ void SaveGrid()
 						strcat_s(GridObjects[iObjNum], 70, ",");
 						printf("%s\n", GridObjects[iObjNum]);
 
-						sprintf_s(cObjDirection, 10, "%d", (int)gObjectGrids.gGrid[i][j]->oDirection);
+						sprintf_s(cObjDirection, 10, "%d", (int)gObjectGrids.gGrid[j][i]->oDirection);
 						strcat_s(GridObjects[iObjNum], 70, cObjDirection); // dir
 						strcat_s(GridObjects[iObjNum], 70, ",");
 
-						sprintf_s(cObjDirection, 30, "%s", gObjectGrids.gGrid[i][j]->tag);
+						sprintf_s(cObjDirection, 30, "%s", gObjectGrids.gGrid[j][i]->tag);
 						strcat_s(GridObjects[iObjNum], 70, cObjDirection); // tag
 						strcat_s(GridObjects[iObjNum], 70, "\n");
 
@@ -1282,6 +1283,16 @@ void LoadSavedMap()
 		strcat_s(cLevelFileLocation, 100, ".txt");
 		strcat_s(cObjectFileLocation, 100, cInput);
 		strcat_s(cObjectFileLocation, 100, ".txt");
+	}
+
+	// comment this part if loading gives problem
+	for (int i = 1; i < NumGrids; i++)
+	{
+		for (int j = 1; j < NumGrids; j++)
+		{
+			gObjectGrids.gGrid[i][j]->type = EMPTY;
+			RM_GetComponent(gObjectGrids.gGrid[i][j])->sprite = NULL;
+		}
 	}
 
 	Map* objList = new_Map();
