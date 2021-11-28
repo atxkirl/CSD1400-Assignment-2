@@ -129,9 +129,10 @@ void AM_Remove(Animation*);
 @param y - size of y split
 @param f - number of frames
 @param fps - fps of animation to be played
+@param r - null if use RM_GeTComponent(), else pass in a renderer to overwrite the RM_GEtcomponent
 @return void
 */
-void AM_SetSprite(Animation* ,int, int, int, float);
+void AM_SetSprite(Animation* ,int, int, int, float, Renderer* r);
 
 
 /*!

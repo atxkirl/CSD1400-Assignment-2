@@ -119,7 +119,7 @@ void HongYu_init(void)
     r = RM_AddComponent(wall);
     RM_LoadImage(r, "Assets/testspritesheet.png");
     Animation* a = AM_AddComponent(wall);
-    AM_SetSprite(a, 4, 2, 8, 4);
+    AM_SetSprite(a, 4, 2, 8, 4, NULL);
     CLM_Set(CLM_AddComponent(wall), COL_BOX, hy_OnCollision);
     
     wall = GOM_Create2(CIRCLE,

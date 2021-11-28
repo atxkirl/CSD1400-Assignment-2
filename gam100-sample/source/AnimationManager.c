@@ -52,6 +52,8 @@ void Update_SpriteAnimation(Animation* a, float dt)
 		float t = (a->index / a->splitX) * h;
 
 		Renderer* r = RM_GetComponent(a->go);
+		if (a->forcedRenderer)
+			r = a->forcedRenderer;
 		r->startUV = CP_Vector_Set(l,t);
 		r->endUV = CP_Vector_Set(l + w, t + h);
 	}
@@ -447,7 +449,7 @@ void AM_Remove(Animation* a)
 /// <param name="y">- size of y split</param>
 /// <param name="f">- number of frames</param>
 /// <param name="fps">- fps of animation to be played</param>
-void AM_SetSprite(Animation* a, int x, int y, int f, float fps)
+void AM_SetSprite(Animation* a, int x, int y, int f, float fps, Renderer* r)
 {
 	a->elapsedTime = 0.0f;
 	a->splitX = x;
@@ -457,14 +459,17 @@ void AM_SetSprite(Animation* a, int x, int y, int f, float fps)
 	a->type = ANIM_SPRITE;
 	a->loopDir = 1;
 	a->isContinuous = 1;
+	a->forcedRenderer = r;
 
 	float w = 1.0f / a->splitX;
 	float h = 1.0f / a->splitY;
 	float l = (a->index % a->splitX) * (w);
 	float t = (a->index / a->splitX) * h;
-	Renderer* r = RM_GetComponent(a->go);
-	r->startUV = CP_Vector_Set(l, t);
-	r->endUV = CP_Vector_Set(l + w, t + h);
+	Renderer* tr = RM_GetComponent(a->go);
+	if (a->forcedRenderer)
+		tr = a->forcedRenderer;
+	tr->startUV = CP_Vector_Set(l, t);
+	tr->endUV = CP_Vector_Set(l + w, t + h);
 }
 /// <summary>
 /// Set shake animation for component
