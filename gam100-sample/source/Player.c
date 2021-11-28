@@ -20,8 +20,12 @@ GameObject* player_invulBubble = NULL;
 GameObject* heart1 = NULL;
 GameObject* heart2 = NULL;
 GameObject* heart3 = NULL;
-Renderer* render = NULL;
+#define RENDER_COUNT 8
+//0 = face back, 1 = face front, 2 = face left, 3 = face right,
+//4 = back spritesheet, 5 = front spritesheet, 6 = left spritesheet, 7 = rightspritesheet
+Renderer* render[RENDER_COUNT] = { NULL };
 time_t startTime;
+#define PLY_SPRITE_FPS 3
 
 
 // Player Parameters
@@ -189,14 +193,44 @@ void Player_OnCollision(Collider* left, Collider* right)
 
 GameObject* PLY_CreatePlayer(float x, float y) {
 
+
     player = GOM_Create2(RECTANGLE, CP_Vector_Set(x,y), 0.0f, CP_Vector_Set(50, 50)); //makes the player object
     player->tag ="player";
-    render = RM_AddComponent(player);
-    render->renderPriority = PRI_PLY;
-    RM_LoadImage(render, "Assets/bananaboi.png");
+
     CLM_Set(CLM_AddComponent(player),COL_BOX,Player_OnCollision);
     Animation* a = AM_AddComponent(player);
     AM_SetWalk(a);
+
+    //Load back image of player
+    render[0] = RM_AddComponent(player);
+    render[0]->renderPriority = PRI_PLY;
+    RM_LoadImage(render[0], "Assets/bananaboi/bananaboi-back.png");
+
+    render[1] = RM_AddComponent(player);
+    render[1]->renderPriority = PRI_PLY;
+    RM_LoadImage(render[1], "Assets/bananaboi/bananaboi-front.png");
+    //todo load the rest
+    //...
+
+    //loading right sprite sheet
+    render[7] = RM_AddComponent(player);
+    render[7]->renderPriority = PRI_PLY;
+    RM_LoadImage(render[7], "Assets/bananaboi/bananaboi-side-sprite.png");
+    render[7]->isXFlipped = 1;
+    a = AM_AddComponent(player);
+    AM_SetSprite(a, 6, 1, 6, PLY_SPRITE_FPS, render[7]); //have to add this for all spritesheets. to force the animation to run using this spritesheet
+
+    //Disable all renderers and only enable the front facing one
+    for (int i = 0; i < RENDER_COUNT; i++)
+    {
+        if (render[i]!=NULL)
+        render[i]->isEnabled = 0;
+    }
+    render[1]->isEnabled = 1;
+
+    //reset all booleans
+    player->oDirection = DOWN;
+
 
     playerhealth = 3;
 
@@ -207,7 +241,7 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     RM_LoadImage(r, "Assets/fow2.png");
     r->renderPriority = PRI_UI;
     a = AM_AddComponent(temp);
-    AM_SetSprite(a, 4, 1, 4, 10.0f);
+    AM_SetSprite(a, 4, 1, 4, 10.0f, NULL);
     a->isContinuous = 0;
     a->loopDir = -1;
     player_fogofwar = temp;
@@ -218,26 +252,26 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     heart2 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 85, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
     heart3 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 80, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
 
-    render = RM_AddComponent(heart1);
-    RM_LoadImage(render, "Assets/heart.png");
-    render->renderPriority = PRI_UI;
+    r = RM_AddComponent(heart1);
+    RM_LoadImage(r, "Assets/heart.png");
+    r->renderPriority = PRI_UI;
 
-    render = RM_AddComponent(heart2);
-    RM_LoadImage(render, "Assets/heart.png");
-    render->renderPriority = PRI_UI;
+    r = RM_AddComponent(heart2);
+    RM_LoadImage(r, "Assets/heart.png");
+    r->renderPriority = PRI_UI;
 
-    render = RM_AddComponent(heart3);
-    RM_LoadImage(render, "Assets/heart.png");
-    render->renderPriority = PRI_UI;
+    r = RM_AddComponent(heart3);
+    RM_LoadImage(r, "Assets/heart.png");
+    r->renderPriority = PRI_UI;
 
     // Player Invulnerability Bubble
     player_invulBubble = GOM_Create2(RECTANGLE, CP_Vector_Set(x, y), 0.0f, CP_Vector_Set(50, 50));
     player_invulBubble->tag = "playerBubble";
-    render = RM_AddComponent(player_invulBubble);
-    render->renderPriority = PRI_PLY;
-    RM_LoadImage(render, "Assets/bananaboi/bubble-sprite.png");
+    r = RM_AddComponent(player_invulBubble);
+    r->renderPriority = PRI_PLY;
+    RM_LoadImage(r, "Assets/bananaboi/bubble-sprite.png");
     a = AM_AddComponent(player_invulBubble);
-    AM_SetSprite(a, 2, 1, 2, 2.f);
+    AM_SetSprite(a, 2, 1, 2, 2.f, NULL);
     a->isContinuous = 1;
     a->loopDir = 1;
 
@@ -265,7 +299,7 @@ void PLY_Update() { // handles input from player and checking for flags
     float currentSpd = 200.0f - (n_weight * weight);
 
     AM_GetComponent(player_fogofwar)->loopDir = -1;
-
+    
 
     if (p_Hidden == false) 
     {
@@ -292,11 +326,15 @@ void PLY_Update() { // handles input from player and checking for flags
         if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) {
             player->position.y += currentSpd * dt; 
             SDM_PlayWEffect();
+
+            player->oDirection = DOWN;
         } // down
 
         if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) {
             player->position.x += currentSpd * dt;
             SDM_PlayWEffect();
+
+            player->oDirection = RIGHT;
         } // right
     }
      
@@ -396,6 +434,24 @@ void PLY_Update() { // handles input from player and checking for flags
     //Update player intereaction hint. has to hve after positional update so it wont look 1 frame lagg
     ply_interactHint->isEnabled = 0;
     ply_interactHint->position = CP_Vector_Add(player->position, PLY_HINTOFFSET);
+
+    //set the correct sprite for player
+    //first reset all 
+    for (int i = 0; i < RENDER_COUNT; i++)
+    {
+        if (render[i]!=NULL)
+        render[i]->isEnabled = 0;
+    }
+
+
+    if (player->oDirection == DOWN)
+    {
+        render[1]->isEnabled = 1;
+    }
+    else if (player->oDirection == RIGHT)
+    {
+        render[7]->isEnabled = 1;
+    }
 
     if (playerhealth <= 0)
     {
