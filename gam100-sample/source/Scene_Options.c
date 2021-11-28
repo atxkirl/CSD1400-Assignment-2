@@ -31,8 +31,8 @@ int iEditUp, iEditDown, iEditLeft, iEditRight,iEditInteract;
 
 GameObject* options_Sliders[4]; //0 bgm bg, 1 bgm knob, 2 sfx bg, 3 sfx knob
 GameObject* Options_HoldSlider;
-#define MAX_OPTIONSHIGHLIGHTS 7
-Renderer* options_highlight[MAX_OPTIONSHIGHLIGHTS]; //0 bgm, sfx, wsade
+#define MAX_OPTIONSHIGHLIGHTS 8
+Renderer* options_highlight[MAX_OPTIONSHIGHLIGHTS]; //0 bgm, sfx, wsade, save
 #define KNOB_HIGHLIGHTCOLOR CP_Color_Create(120,120,120,60);
 #define KEYMAP_HIGHLIGHTCOLOR COLOR_YELLOW
 #define KEYMAP_STROKEWEIGHT 5.0f
@@ -178,6 +178,10 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
         {
             options_highlight[1]->isEnabled = 1;
         }
+        else if (strcmp(((GameObject*)left->obj)->tag, "ButtonSave") == 0)
+        {
+            options_highlight[7]->isEnabled = 1;
+        }
     }
     return;
 }
@@ -200,11 +204,13 @@ void SceneOptions_init(void)
 
     Collider* c = NULL;
     //title
-    Options_Title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(800, 100));
+    Options_Title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0,
+        CP_Vector_Set(screenWidth * 0.6f, 180));
     Renderer* r = RM_AddComponent(Options_Title);
-    r->color.a = 0;
+    //r->color.a = 0;
     //r->text = "Options";
     RM_SetText(r, "Options");
+    RM_LoadImage(r, "Assets/Backgrounds/title-light.png");
     r->renderPriority = PRI_UI;
     r->textScale = CP_Vector_Set(3.0f, 3.0f);
 
@@ -213,7 +219,8 @@ void SceneOptions_init(void)
     r = RM_AddComponent(Options_Background);
     r->color = CP_Color_Create(200, 200, 200, 255);
     r->renderPriority = PRI_UI;
-    Options_Background->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
+    RM_LoadImage(r, "Assets/Backgrounds/objective-light.png");
+    Options_Background->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.75f);
     Options_Background->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
 
     //cross
@@ -246,6 +253,7 @@ void SceneOptions_init(void)
     GameObject* g = GOM_Create2(RECTANGLE, labelStartPos, 0, labelScale);
     r = RM_AddComponent(g);
     r->renderPriority = PRI_UI;
+    r->color.a = 0;
     RM_SetText(r, "Music");
     r->textScale = labelTextScale;
     r->strokeWeight = 0.0f;
@@ -277,6 +285,7 @@ void SceneOptions_init(void)
     g = GOM_Create2(RECTANGLE, CP_Vector_Set(labelStartPos.x, labelStartPos.y + ygap), 0, labelScale);
     r = RM_AddComponent(g);
     r->renderPriority = PRI_UI;
+    r->color.a = 0;
     RM_SetText(r, "SFX");
     r->textScale = labelTextScale;
     r->strokeWeight = 0.0f;
@@ -573,6 +582,13 @@ void SceneOptionsUI_Buttons()
     CLM_Set(c, COL_BOX, SceneOptions_OnCollision);
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
+
+    r = RM_AddComponent(ButtonSave);
+    r->renderPriority = PRI_UI;
+    r->color = KNOB_HIGHLIGHTCOLOR;
+    r->color.a = 100;
+    r->isEnabled = 0;
+    options_highlight[7] = r;
 }
 
 /// <summary>
