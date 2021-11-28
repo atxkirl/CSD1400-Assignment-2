@@ -1,9 +1,22 @@
+/*!
+@file            Controls.c
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions handling the player
+                 controls.
+*//*______________________________________________________________________*/
+
+
 #include "Controls.h"
 #include "FileParser.h"
 #include "SoundManager.h"
 #include <stdio.h>
 #include <stdlib.h>
 
+/// <summary>
+/// Initialises the controls based on .txt
+/// </summary>
 void Init_Controls()
 {
     if(!cControls)
@@ -25,6 +38,9 @@ void Init_Controls()
     SDM_SetSFXVolume((int)cRightText[6]);
 }
 
+/// <summary>
+/// Exit
+/// </summary>
 void Exit_Controls()
 {
     if (cControls)

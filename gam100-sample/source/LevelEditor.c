@@ -1,3 +1,11 @@
+/*!
+@file            LevelEditor.c
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for editing the levels.
+*//*______________________________________________________________________*/
+
 #include "LevelEditor.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -44,6 +52,13 @@ Renderer* renderImage;
 
 int isTileMode;
 
+/// <summary>
+/// Checks the tile at the mouse click position if it is the same iObjType.
+/// Assigns the type to the tile if it is not the same.
+/// </summary>
+/// <param name="fMouseX"></param>
+/// <param name="fMouseY"></param>
+/// <param name="iDirection"></param>
 void CheckGridInt(int iX, int iY, int iObjType)
 {
 	if (isTileMode)
@@ -68,6 +83,12 @@ void CheckGridInt(int iX, int iY, int iObjType)
 	}
 }
 
+/// <summary>
+/// Assigns a direction to the Tile at mouse input.
+/// </summary>
+/// <param name="fMouseX"></param>
+/// <param name="fMouseY"></param>
+/// <param name="iDirection"></param>
 void AssignDirectionInt(int iX, int iY, int iDirection)
 {
 	if (isTileMode)
@@ -88,6 +109,11 @@ void AssignDirectionInt(int iX, int iY, int iDirection)
 	}
 }
 
+/// <summary>
+/// Handles the collision of the the GameObjects based on the left and right collider parameters.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 {
 	if (strcmp(l->obj->tag, "grid") == 0)
@@ -145,11 +171,9 @@ void LevelEditor_OnClickGrid(Collider* l, Collider* r)
 	}
 }
 
-/*!
-@brief Initialises the variables
-@param void
-@return void
-*/
+/// <summary>
+/// Initialises the variables of this file.
+/// </summary>
 void LevelEditorInit()
 {
 	objType = WALL; // initialize to 0;
@@ -238,11 +262,9 @@ void LevelEditorInit()
 	LoadTileImage();
 }
 
-/*!
-@brief Update
-@param void
-@return void
-*/
+/// <summary>
+/// Update.
+/// </summary>
 void LevelEditorUpdate()
 {
 	SM_SystemsPreUpdate();
@@ -393,11 +415,9 @@ void LevelEditorUpdate()
 	//RM_Render();
 }
 
-/*!
-@brief Exit
-@param void
-@return void
-*/
+/// <summary>
+/// Exit.
+/// </summary>
 void LevelEditorExit()
 {
 	SM_SystemsExit();
@@ -414,11 +434,9 @@ void LevelEditorExit()
 	//free(gGrids.gGrid);
 }
 
-/*!
-@brief Renders the grid and objects.
-@param void
-@return void
-*/
+/// <summary>
+/// Renders the GameObjects.
+/// </summary>
 void RenderObjects()
 {
 	//CP_Settings_ApplyMatrix(mScale);
@@ -446,11 +464,9 @@ void RenderObjects()
 	//}
 }
 
-/*!
-@brief Place the object in the grid based on the mouse positions.
-@param void
-@return void
-*/
+/// <summary>
+/// Places the object based on mouse input.
+/// </summary>
 void PlaceObject()
 {
 	// Global = (A)Local
@@ -500,21 +516,21 @@ void PlaceObject()
 	}
 }
 
-/*!
-@brief Check if the spot on the grid is taken or not. 
-If it is, it will check if the tile is not the same type first before allocating.
-
-@param void
-@return void
-*/
-void CheckGrid(float fMouseX, float fMouseY, int iObjType)
+/// <summary>
+/// Checks the tile at the current position if it is the same iObjType.
+/// Assigns the type to the tile if it is not the same.
+/// </summary>
+/// <param name="fPositionX"></param>
+/// <param name="fPositionY"></param>
+/// <param name="iObjType - the GameObject type"></param>
+void CheckGrid(float fPositionX, float fPositionY, int iObjType)
 {
 	// find the difference to the nearest edge of the grid
-	int iModPosX = (int)fMouseX % (int)iSize;
-	int iModPosY = (int)fMouseY % (int)iSize;
+	int iModPosX = (int)fPositionX % (int)iSize;
+	int iModPosY = (int)fPositionY % (int)iSize;
 
-	int iCurrentX = (int)(fMouseX - iModPosX) / iSize;
-	int iCurrentY = (int)(fMouseY - iModPosY) / iSize;
+	int iCurrentX = (int)(fPositionX - iModPosX) / iSize;
+	int iCurrentY = (int)(fPositionY - iModPosY) / iSize;
 
 	if (gGrids.gGrid[iCurrentY][iCurrentX]->type != iObjType)
 	{
@@ -522,12 +538,9 @@ void CheckGrid(float fMouseX, float fMouseY, int iObjType)
 	}
 }
 
-/*!
-@brief Save changes made to the grid.
-
-@param void
-@return void
-*/
+/// <summary>
+/// Saves the current grid to .txt
+/// </summary>
 void SaveGrid()
 {
 	char cFileName[50];
@@ -686,6 +699,10 @@ void SaveGrid()
 	free(GridObjects);
 }
 
+/// <summary>
+/// Map Generation based on Prims Algorithm.
+/// Modified to fit the needs of the project.
+/// </summary>
 void AutoGenerateGrid()
 {
 	////code here is for seed if i need it
@@ -693,8 +710,6 @@ void AutoGenerateGrid()
 	//printf("Insert Seed: ");
 	//scanf_s("%d", &iCount);
 	//srand(iSeed);
-
-	// i referenced prims algorithm.
 
 	/*
 	//for (int i = 1; i < NumGrids - 1; i++)
@@ -992,6 +1007,12 @@ void AutoGenerateGrid()
 	iAutoGenerate = 0;
 }
 
+/// <summary>
+/// Checks the surrounding and adds neighbours for the Map Generation to traverse.
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="List"></param>
 void AddFrontierCell(int x, int y, LinkedList* List)
 {
 	int offset = 1;
@@ -1025,6 +1046,10 @@ void AddFrontierCell(int x, int y, LinkedList* List)
 	}
 }
 
+/// <summary>
+/// Prints the current Object Type for user reference.
+/// </summary>
+/// <param name="iObjType"></param>
 void PrintCurrentType(int iObjType)
 {
 	/*
@@ -1114,6 +1139,10 @@ void PrintCurrentType(int iObjType)
 	}
 }
 
+/// <summary>
+/// Prints the current Object Direction for user reference.
+/// </summary>
+/// <param name="iObjDirection"></param>
 void PrintCurrentDirection(int iObjDirection)
 {
 	switch (iObjDirection)
@@ -1139,13 +1168,19 @@ void PrintCurrentDirection(int iObjDirection)
 	}
 }
 
-void AssignDirection(float fMouseX, float fMouseY, int iDirection)
+/// <summary>
+/// Assigns a direction to the Tile at current position.
+/// </summary>
+/// <param name="fPositionX"></param>
+/// <param name="fPositionY"></param>
+/// <param name="iDirection"></param>
+void AssignDirection(float fPositionX, float fPositionY, int iDirection)
 {
-	int iModPosX = (int)fMouseX % (int)iSize;
-	int iModPosY = (int)fMouseY % (int)iSize;
+	int iModPosX = (int)fPositionX % (int)iSize;
+	int iModPosY = (int)fPositionY % (int)iSize;
 
-	int iCurrentX = (int)(fMouseX - iModPosX) / iSize;
-	int iCurrentY = (int)(fMouseY - iModPosY) / iSize;
+	int iCurrentX = (int)(fPositionX - iModPosX) / iSize;
+	int iCurrentY = (int)(fPositionY - iModPosY) / iSize;
 
 	if (gGrids.gGrid[iCurrentY][iCurrentX]->oDirection != iDirection)
 	{
@@ -1153,6 +1188,9 @@ void AssignDirection(float fMouseX, float fMouseY, int iDirection)
 	}
 }
 
+/// <summary>
+/// Loads the tile images based on the Object Type.
+/// </summary>
 void LoadTileImage()
 {
 	//render obj
@@ -1227,6 +1265,9 @@ void LoadTileImage()
 	}
 }
 
+/// <summary>
+/// Loads previously saved map.
+/// </summary>
 void LoadSavedMap()
 {
 	char cLevelFileLocation[100] = { "Levels/" };

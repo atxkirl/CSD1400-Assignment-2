@@ -1,46 +1,74 @@
+/*!
+@file            Loader.h
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the functions for loading the level
+				 and all its objectives.
+*//*______________________________________________________________________*/
+
 #pragma once
 typedef struct Grid Grid;
 typedef union CP_Vector CP_Vector;
 
 Grid* gLoadedGrids;
 Grid *gLoadedObjects;
-/*!
-@brief Initialises the variables
-@param void
-@return void
-*/
+
+/// <summary>
+/// Initialise Loader Variables
+/// </summary>
 void LoaderInit();
 
-/*!
-@brief Update
-@param void
-@return void
-*/
+/// <summary>
+/// Update
+/// </summary>
 void LoaderUpdate();
 
-/*!
-@brief Exit
-@param void
-@return void
-*/
+/// <summary>
+/// Exit
+/// </summary>
 void LoaderExit();
 
-/*!
-@brief Loads the Grid based on the cInput which is the file name.
-
-@param char* - File name
-@return void
-*/
+/// <summary>
+/// Loads the Grid based on the cInput which is the file name.
+/// </summary>
+/// <param name="cInput"></param>
+/// <param name="iLoad"></param>
 void LoadGrid(char* cInput, int iLoad);
 
+/// <summary>
+/// Load Objectives from .txt based on cInput
+/// </summary>
+/// <param name="cInput"></param>
 void LoadObjectives(char* cInput);
 
+/// <summary>
+/// Set the Objective at iIndex to state iSetter
+/// </summary>
+/// <param name="iIndex"></param>
+/// <param name="iSetter"></param>
 void SetObjectiveComplete(int iIndex, int iSetter);
 
-CP_Vector SetPlayerPosition();
+/// <summary>
+/// Returns the player position
+/// </summary>
+/// <returns>CP_Vector</returns>
+CP_Vector GetPlayerPosition();
 
-CP_Vector SetEnemyPosition();
+/// <summary>
+/// Get the enemy position.
+/// </summary>
+/// <returns>CP_Vector</returns>
+CP_Vector GetEnemyPosition();
 
+/// <summary>
+/// Get number of objectives loaded.
+/// </summary>
+/// <returns>int</returns>
 int GetNumObjectives();
 
+/// <summary>
+/// Get number of boat parts loaded.
+/// </summary>
+/// <returns>int</returns>
 int GetLoadedNumBoatParts();

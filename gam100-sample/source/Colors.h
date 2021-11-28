@@ -1,3 +1,12 @@
+/*!
+@file            Colors.h
+@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD 1400
+@section         C
+@brief           This file contains the definitions for colors for easier
+				 use.
+*//*______________________________________________________________________*/
+
 #pragma once
 
 #define COLOR_RED CP_Color_Create(255, 0, 0, 255)
