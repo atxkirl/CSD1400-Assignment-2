@@ -120,7 +120,7 @@ void LevelOne_init(void)
 
     // Enemies
     {
-        enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", CP_Vector_Set(133.f, 66.f), bananaBoi, &map);
+        enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", GetEnemyPosition(), bananaBoi, &map);
     }
 
     SDM_Init();

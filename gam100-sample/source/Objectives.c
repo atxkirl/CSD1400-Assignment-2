@@ -29,8 +29,8 @@ int iCurrentObjective;
 GameObject* g_ObjectiveUI[MAX_OBJECTIVES];
 Renderer* g_ObjectiveTileOverlay[MAX_OBJECTIVES];
 //GameObject* OBJ_FloatingTextHint[MAX_OBJECTIVES];
-#define OVERLAY_BLINK_DEFAULT CP_Color_Create(120,0,255,255)
-#define OVERLAY_BLINK_TARGET CP_Color_Create(120,0,255,50)
+#define OVERLAY_BLINK_DEFAULT CP_Color_Create(0, 100, 0, 255)
+#define OVERLAY_BLINK_TARGET CP_Color_Create(0, 100 , 0, 50)
 #define OVERLAY_BLINK_TIME 2.0f
 #define OVERLAY_BLINK_STROKE_WEIGHT 4.0f
 
@@ -196,6 +196,7 @@ void Objectives_Update()
 
     if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective1Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective1Complete";
@@ -210,6 +211,7 @@ void Objectives_Update()
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective2Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective2Complete";
@@ -224,6 +226,7 @@ void Objectives_Update()
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective3Done") == 0)
     {
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective3Complete";
@@ -240,7 +243,7 @@ void Objectives_Update()
     if (iAllObjectivesComplete == iNumObjectives && !iPrintExit)
     {
         iPrintExit = 1;
-
+        g_ObjectiveUI[0]->position.x = screenWidth * 0.065f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[0]);
         RM_SetText(rObjUI, "Find the Exit!");
 
@@ -368,7 +371,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.08f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.077f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveOnePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[0].cObjective);
                     r->renderPriority = PRI_UI;
@@ -377,8 +380,7 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
                     g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("CONNECT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
@@ -407,8 +409,7 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
                     g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("BOAT: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
@@ -429,7 +430,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.11f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.1025f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveThreePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[2].cObjective);
                     r->renderPriority = PRI_UI;
@@ -438,8 +439,7 @@ void Objectives_RenderUI()
                     CLM_Set(c, COL_BOX, Objectives_onCollision);
                     c->isTrigger = 1;
                     g_ObjectiveTileOverlay[i] = RM_AddComponent(c->obj);
-                    g_ObjectiveTileOverlay[i]->color = COLOR_RED;
-                    g_ObjectiveTileOverlay[i]->color.a = 120;
+                    g_ObjectiveTileOverlay[i]->color = CP_Color_Create(0, 255, 0, 90);
                     g_ObjectiveTileOverlay[i]->strokeWeight = OVERLAY_BLINK_STROKE_WEIGHT;
                     printf("COCO: %d\n", i);
                     gObjectives[i] = gLoadedGrids->gGrid[j][k];
