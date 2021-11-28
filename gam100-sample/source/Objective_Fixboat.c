@@ -1,3 +1,12 @@
+/*!
+@file		Objective_Fixboat.c
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		One of the objectives. It is a fix the boat puzzle where
+			player has to drag parts and fit into the right slot
+*/
+
 #include "Objective_Fixboat.h"
 #include "SystemManager.h"
 #include "Colors.h"
@@ -24,12 +33,18 @@ GameObject* ofb_clickHints[OFB_HINTSIZE];
 #define OFB_CLICKBOXSIZE 50
 #define OFB_CLICKSTROKESIZE 3
 
+/// <summary>
+/// Sets the images based on the current status of the puzzle
+/// </summary>
 void FixBoatEnableImage()
 {
 	ofb_fixed1->isEnabled = ofb_isFixed1;
 	ofb_fixed2->isEnabled = ofb_isFixed2;
 	ofb_fixed3->isEnabled = ofb_isFixed3;
 }
+/// <summary>
+/// Randomise the parts spawn points
+/// </summary>
 void FixBoatRandomisePartsTransform()
 {
 	float xlb = 0.325f, xub = 0.675f, ylb = 0.65f, yub = 0.75f;
@@ -60,7 +75,11 @@ void FixBoatRandomisePartsTransform()
 	}
 
 }
-
+/// <summary>
+/// On collision response for fix boat objective objects
+/// </summary>
+/// <param name="left">- the collider of the owner of this response</param>
+/// <param name="right">- the collider of the other object</param>
 void OB_FixBoatOnCollision(Collider* left, Collider* right)
 {
 	if (strcmp(right->obj->tag, "Click") == 0)
@@ -106,7 +125,9 @@ void OB_FixBoatOnCollision(Collider* left, Collider* right)
 	}
 	
 }
-
+/// <summary>
+/// Inits the fix boat objective
+/// </summary>
 void OB_FixBoatInit()
 {
 	float screenWidth, screenHeight;
@@ -276,7 +297,9 @@ void OB_FixBoatInit()
 	for (int i = 0; i < OFB_HINTSIZE; i++)
 		ofb_clickHints[i]->isEnabled = 0;
 }
-
+/// <summary>
+/// Updates the fix boat objective every frame
+/// </summary>
 void OB_FixBoatUpdate()
 {
 	if (isActive == 0)
@@ -326,7 +349,9 @@ void OB_FixBoatUpdate()
 		RM_SetText(r, "Boat fixed!");
 	}
 }
-
+/// <summary>
+/// Triggers / activates the fix boat objective
+/// </summary>
 void OB_FixBoatTrigger()
 {
 	ofb_title->isEnabled = ofb_UI->isEnabled = ofb_cross->isEnabled = 1;
@@ -353,7 +378,9 @@ void OB_FixBoatTrigger()
 	for (int i = 0; i < OFB_HINTSIZE; i++)
 		ofb_clickHints[i]->isEnabled = 0;
 }
-
+/// <summary>
+/// Untriggers / unactivates the fix boat objective
+/// </summary>
 void OB_FixBoatUnTrigger()
 {
 	ofb_title->isEnabled = ofb_UI->isEnabled = ofb_cross->isEnabled = 0;
@@ -371,17 +398,26 @@ void OB_FixBoatUnTrigger()
 	for (int i = 0; i < OFB_HINTSIZE; i++)
 		ofb_clickHints[i]->isEnabled = 0;
 }
-
+/// <summary>
+/// returns true or false if the fix boat objective is complete
+/// </summary>
+/// <returns>int</returns>
 int OB_IsFixBoatComplete()
 {
 	return ofb_isFixed1 && ofb_isFixed2 && ofb_isFixed3;
 }
-
+/// <summary>
+/// returns true of false for objective if it is active or not
+/// </summary>
+/// <returns>int</returns>
 int OB_IsFixBoatActive()
 {
 	return isActive;
 }
-
+/// <summary>
+/// Sets active or not active for the fixboat objective
+/// </summary>
+/// <param name="iSetter">- 1 or 0 for active</param>
 void OB_SetFixBoatActive(int iSetter)
 {
 	isActive = iSetter;

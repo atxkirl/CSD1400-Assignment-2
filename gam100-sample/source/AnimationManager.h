@@ -1,11 +1,21 @@
+/*!
+@file		AnimationManager.h
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		A system that contains the declaration animation functions and struct entity
+*/
+
 #pragma once
 
 //prefix: AM
 #include "../CProcessing/inc/cprocessing.h"
 #include "GameObject.h"
 
-//Cam also use for particles generation. dw create so many manager class
 
+/// <summary>
+/// Enum type of animation
+/// </summary>
 typedef enum ANIM_TYPE
 {
 	ANIM_SPRITE,
@@ -20,7 +30,11 @@ typedef enum ANIM_TYPE
 	ANIM_UFDSTATEFLTTRANSIT,
 	ANIM_UFDSTATEDOWN
 } ANIM_TYPE;
-//think as a big struct that holds all the values for any animation sad
+/// <summary>
+/// Animation entity.
+/// Contains all variables for all types of animation.
+/// Some animation types reuse other type's variables.
+/// </summary>
 typedef struct Animation
 {
 	GameObject* go;

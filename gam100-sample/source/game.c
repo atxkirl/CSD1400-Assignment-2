@@ -1,11 +1,9 @@
 /*!
-@file game.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
+@file       game.c
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		This is a main menu scenes. It contains all the UI in main menu
 *//*______________________________________________________________________*/
 
 #define BUTTON_WIDTH 60.f
@@ -31,13 +29,29 @@ Collider* MainMenuStartCollider, *MainMenuOptionsCollider, *MainMenuCreditsColli
 #define MainMenuOptsCredsMaxScale CP_Vector_Set(180.0f, 50.0f)
 #define MainMenuOptsCredsScaleSpd CP_Vector_Set(150.0f, 150.0f)
 
+/// <summary>
+/// renders the game ui using cp processing
+/// </summary>
 void gameUI_render();
 
+/// <summary>
+/// Checks if point x,y is inside button
+/// </summary>
+/// <param name="x">- x value of point</param>
+/// <param name="y">- y value of point</param>
+/// <param name="buttonX">- x pos of button</param>
+/// <param name="buttonY">- y pos of button</param>
+/// <returns>int - true or false if is collide</returns>
 int is_btn_colliding(float x, float y, float buttonX, float buttonY) {
     return x >= buttonX && x <= buttonX + BUTTON_WIDTH &&
         y >= buttonY && y <= buttonY + BUTTON_HEIGHT;
 }
 
+/// <summary>
+/// Main menu collision response function
+/// </summary>
+/// <param name="left">- the collider of the owner of this response</param>
+/// <param name="right">- the collider of the other object</param>
 void game_OnCollision(Collider* left, Collider* right)
 {
     //me, other
@@ -67,6 +81,9 @@ void game_OnCollision(Collider* left, Collider* right)
 
 }
 
+/// <summary>
+/// Inits the main menu
+/// </summary>
 void game_init(void)
 {
     SM_SystemsInit();
@@ -210,7 +227,9 @@ void game_init(void)
     MainMenuCreditsCollider->space = COLSPC_SCREEN;
     MainMenuCreditsCollider->isTrigger = 1;
 }
-
+/// <summary>
+/// updates the main menu every frame
+/// </summary>
 void game_update(void)
 {
     SM_SystemsPreUpdate();
@@ -310,14 +329,21 @@ void game_update(void)
 
     //RM_Render();
 }
-
+/// <summary>
+/// exits the main menu
+/// </summary>
 void game_exit(void)
 {
     SM_SystemsExit();
     //SDM_StopAll();
     //SDM_FreeSounds();
 }
-
+/// <summary>
+/// assign function pointers of main menu's init, update and exit to scene manager to call
+/// </summary>
+/// <param name="init">- pointer to assign main menu init</param>
+/// <param name="update">- pointer to assign main menu update</param>
+/// <param name="exit">- pointer to assign main menu exit</param>
 void game_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = game_init;
@@ -325,6 +351,9 @@ void game_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
     *exit = game_exit;
 }
 
+/// <summary>
+/// renders the game ui using cp processing
+/// </summary>
 void gameUI_render()
 {
     CP_Settings_Fill(COLOR_WHITE); // r, g, b, a

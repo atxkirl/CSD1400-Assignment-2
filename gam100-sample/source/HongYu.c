@@ -1,12 +1,10 @@
 /*!
-@file HongYu.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
-*//*______________________________________________________________________*/
+@file       HongYu.c
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		A test scene for hong yu to edit and test his functions
+*/
 
 #include <stdio.h>
 #include "cprocessing.h"
@@ -16,12 +14,17 @@
 #include "Objective_BreakCoconut.h"
 #include "Player.h"
 
-GameObject* g = NULL;
-int tempSize = 0;
-GameObject* grass = NULL;
+static GameObject* g = NULL;
+static int tempSize = 0;
+static GameObject* grass = NULL;
 
-int itempickedup = 0;
+static int itempickedup = 0;
 
+/// <summary>
+/// hy's test scene collision response function
+/// </summary>
+/// <param name="left">- the collider of the owner of this response</param>
+/// <param name="right">- the collider of the other object</param>
 void hy_OnCollision(Collider* left, Collider* right)
 {
     //me, other
@@ -83,6 +86,9 @@ void hy_OnCollision(Collider* left, Collider* right)
     }
 }
 
+/// <summary>
+/// hy's test scene init
+/// </summary>
 void HongYu_init(void)
 {
     SM_SystemsInit();
@@ -182,6 +188,9 @@ void HongYu_init(void)
     OB_BreakCoconutInit();
 }
 
+/// <summary>
+/// hy's test scene update
+/// </summary>
 void HongYu_update(void)
 {
     SM_SystemsPreUpdate();
@@ -248,11 +257,20 @@ void HongYu_update(void)
     SM_SystemsLateUpdate();
 }
 
+/// <summary>
+/// hy's test scene exit
+/// </summary>
 void HongYu_exit(void)
 {
     SM_SystemsExit();
 }
 
+/// <summary>
+/// assign function pointers of hy's test scene init, update and exit to scene manager to call
+/// </summary>
+/// <param name="init">- pointer to assign hy's test scene init</param>
+/// <param name="update">- pointer to assign hy's test scene update</param>
+/// <param name="exit">- pointer to assign hy's test scene exit</param>
 void HongYu_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = HongYu_init;

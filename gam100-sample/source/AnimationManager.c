@@ -1,3 +1,12 @@
+/*!
+@file		AnimationManager.c
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		A system that contains the logics of all animations and updates the entities 
+			every frame.
+*/
+
 #include "SystemManager.h"
 #include "LinkedList.h"
 #include <stdlib.h>
@@ -8,6 +17,11 @@ LinkedList* animationList;
 
 #define MY_PI 3.141592f
 
+/// <summary>
+/// Updates specifically sprite animation every frame
+/// </summary>
+/// <param name="a">- Animation entity with type sprite</param>
+/// <param name="dt">- delta time of frames</param>
 void Update_SpriteAnimation(Animation* a, float dt)
 {
 	a->elapsedTime += CP_System_GetDt();
@@ -42,6 +56,11 @@ void Update_SpriteAnimation(Animation* a, float dt)
 		r->endUV = CP_Vector_Set(l + w, t + h);
 	}
 }
+/// <summary>
+/// Updates specifically shaking animation every frame
+/// </summary>
+/// <param name="a">- Animation entity with type shake</param>
+/// <param name="dt">- delta time of frames</param>
 void Update_ShakeAnimation(Animation* a, float dt)
 {
 	a->elapsedTime += CP_System_GetDt();
@@ -67,6 +86,11 @@ void Update_ShakeAnimation(Animation* a, float dt)
 		a->loopCounter = 0;
 	}
 }
+/// <summary>
+/// Updates specifically zooming animation every frame
+/// </summary>
+/// <param name="a">- Animation entity with type zoom</param>
+/// <param name="dt">- delta time of frames</param>
 void Update_ZoomAnimation(Animation* a, float dt)
 {
 	a->elapsedTime += CP_System_GetDt();
@@ -94,6 +118,11 @@ void Update_ZoomAnimation(Animation* a, float dt)
 
 	
 }
+/// <summary>
+/// Updates specifically walking animation for the player every frame
+/// </summary>
+/// <param name="a">- Animation entity with type walk</param>
+/// <param name="dt">- delta time of frames</param>
 void Update_WalkAnimation(Animation* a, float dt)
 {
 	if (CP_Vector_Distance(a->oldPos, a->go->position) > FLT_EPS)
@@ -282,10 +311,16 @@ void Update_TranslateFloating(Animation* a, float dt)
 
 }
 
+/// <summary>
+/// Inits animation manager
+/// </summary>
 void AM_Init()
 {
 }
 
+/// <summary>
+/// Updates animation manager every frame
+/// </summary>
 void AM_Update()
 {
 	//int count = LL_GetCount(animationList);
@@ -327,6 +362,9 @@ void AM_Update()
 	}
 }
 
+/// <summary>
+/// Clears animation manager and clean up memory used
+/// </summary>
 void AM_Clear()
 {
 	LinkedList* node = animationList;
@@ -337,7 +375,11 @@ void AM_Clear()
 	//animationList = LL_Clear(animationList);
 	LL_Clear(&animationList);
 }
-
+/// <summary>
+/// Adds and creates a animation component and store it in manager's list
+/// </summary>
+/// <param name="go">- Parent game object of the animation component created</param>
+/// <returns></returns>
 Animation* AM_AddComponent(GameObject* go)
 {
 	Animation* ani = malloc(sizeof(Animation));
@@ -377,12 +419,19 @@ void* FindAnimation(void* curr, void* arg)
 		return a;
 	return NULL;
 }
-
+/// <summary>
+/// Returns the animation component of the gameobject if it exists
+/// </summary>
+/// <param name="go">- Parent game object of animation to be found</param>
+/// <returns></returns>
 Animation* AM_GetComponent(GameObject* go)
 {
 	return LL_Find(animationList, FindAnimation, go);
 }
-
+/// <summary>
+/// Removes the animation component from manager's list
+/// </summary>
+/// <param name="a">- Animation component to be removed</param>
 void AM_Remove(Animation* a)
 {
 	if (!LL_ContainsPtr(animationList, a))
@@ -390,7 +439,14 @@ void AM_Remove(Animation* a)
 	LL_RemovePtr(&animationList, (void*)a);
 	free(a);
 }
-
+/// <summary>
+/// Sets animation to be of sprite animation
+/// </summary>
+/// <param name="a">- animation to be set</param>
+/// <param name="x">- size of x split</param>
+/// <param name="y">- size of y split</param>
+/// <param name="f">- number of frames</param>
+/// <param name="fps">- fps of animation to be played</param>
 void AM_SetSprite(Animation* a, int x, int y, int f, float fps)
 {
 	a->elapsedTime = 0.0f;
@@ -410,7 +466,14 @@ void AM_SetSprite(Animation* a, int x, int y, int f, float fps)
 	r->startUV = CP_Vector_Set(l, t);
 	r->endUV = CP_Vector_Set(l + w, t + h);
 }
-
+/// <summary>
+/// Set shake animation for component
+/// </summary>
+/// <param name="a">- animation to be set</param>
+/// <param name="rotateAngle">- max angle to rotate</param>
+/// <param name="loopTime">- how long for one sin curve</param>
+/// <param name="loopCount">- how many loops</param>
+/// <param name="isContinuous">- if the shake continues nonstop</param>
 void AM_SetShake(Animation* a, float rotateAngle, float loopTime, int loopCount, int isContinuous)
 {
 	a->elapsedTime = 0.0f;
@@ -422,7 +485,14 @@ void AM_SetShake(Animation* a, float rotateAngle, float loopTime, int loopCount,
 
 	a->defaultRotate = a->go->rotation;
 }
-
+/// <summary>
+/// Set zoom animation for component
+/// </summary>
+/// <param name="a">- animation to be set</param>
+/// <param name="defaultScale">- defaultscale of obj</param>
+/// <param name="targetScale">- target scale value</param>
+/// <param name="scaleToTime">- time from default to scale to target</param>
+/// <param name="isFlipped">- is scale from default to target or flipped = target to default</param>
 void AM_SetZoom(Animation* a, CP_Vector defaultScale, CP_Vector targetScale, float scaleToTime, int isFlipped)
 {
 	a->elapsedTime = 0.0f;
@@ -432,7 +502,10 @@ void AM_SetZoom(Animation* a, CP_Vector defaultScale, CP_Vector targetScale, flo
 	a->isFlipped = isFlipped;
 	a->type = ANIM_ZOOM;
 }
-
+/// <summary>
+/// Set a particle generator to generate particles when player walks/moves
+/// </summary>
+/// <param name="a">- animation to be set</param>
 void AM_SetWalk(Animation* a)
 {
 	a->type = ANIM_WALKSAND;
@@ -440,7 +513,15 @@ void AM_SetWalk(Animation* a)
 	a->loopTime = 0.5f;
 	a->oldPos = a->go->position;
 }
-
+/// <summary>
+/// Set animation to blinking color
+/// </summary>
+/// <param name="a">- animation to be set</param>
+/// <param name="defaultColor">- default color</param>
+/// <param name="targetColor">- target color</param>
+/// <param name="loopTime">- time to loop from default to target to default</param>
+/// <param name="isContinuous">- will it continue non stop</param>
+/// <param name="mode">- 0 for fill, 1 for stroke, 2 for both</param>
 void AM_SetBlink(Animation* a, CP_Color defaultColor, CP_Color targetColor, float loopTime, int isContinuous, int mode)
 {
 	a->type = ANIM_COLORBLINK;
@@ -452,7 +533,14 @@ void AM_SetBlink(Animation* a, CP_Color defaultColor, CP_Color targetColor, floa
 	a->index = mode;
 	a->forcedRenderer = NULL;
 }
-
+/// <summary>
+/// Set Animation for object to translate from pa to pb in this time
+/// </summary>
+/// <param name="a">- animation to be set</param>
+/// <param name="pa">- from position</param>
+/// <param name="pb">- to position</param>
+/// <param name="t">- time taken from pa to pb</param>
+/// <param name="isFlipped">- start from to and end at from</param>
 void AM_SetLerp(Animation* a, CP_Vector pa, CP_Vector pb, float t, int isFlipped)
 {
 	a->type = ANIM_TRANSLATELERP;
@@ -462,7 +550,13 @@ void AM_SetLerp(Animation* a, CP_Vector pa, CP_Vector pb, float t, int isFlipped
 	a->elapsedTime = 0.0f;
 	a->isFlipped = isFlipped;
 }
-
+/// <summary>
+/// Set Animation for object to float about point p (sin curve up and down)
+/// </summary>
+/// <param name="a">- animation to be set</param>
+/// <param name="p">- from position</param>
+/// <param name="amplitude">- amplitude of sin curve</param>
+/// <param name="t">- time taken to complete one sin</param>
 void AM_SetFloat(Animation* a, CP_Vector p, float amplitude, float t)
 {
 	a->type = ANIM_TRANSLATEFLOAT;
@@ -471,7 +565,16 @@ void AM_SetFloat(Animation* a, CP_Vector p, float amplitude, float t)
 	a->loopTime = t;
 	a->elapsedTime = 0.0f;
 }
-
+/// <summary>
+/// Set Animation that contain states and uses flag for object to (appear) move up, float and down (disappear)
+/// treat this like a specified state machine animator
+/// </summary>
+/// <param name="a">- animation to be set</param>
+/// <param name="pa">- from position</param>
+/// <param name="pb">- floating position</param>
+/// <param name="amplitude">- amplitude of float</param>
+/// <param name="t">- time taken to go from start pos to floating pos</param>
+/// <param name="ft">- time taken for float to complete one sin curve</param>
 void AM_SetUpFloatDownState(Animation* a, CP_Vector pa, CP_Vector pb, float amplitude, float t, float ft)
 {
 	a->type = ANIM_UFDSTATEUP;

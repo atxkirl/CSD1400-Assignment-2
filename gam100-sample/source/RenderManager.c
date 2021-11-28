@@ -1,3 +1,12 @@
+/*!
+@file		RendereManager.c
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		Render Manager that handles all entities that renders on screen. Also defines the world
+			space and screen space system which the entities renders on. Also sorts render orders based on priority.
+*/
+
 #include "RenderManager.h"
 #include "GameObjectManager.h"
 #include "MatrixStack.h"
@@ -14,8 +23,16 @@ CP_Vector cameraScale;
 float zoom = 1.0f;
 
 //private functions
+
+/// <summary>
+/// Renders all objects in this list
+/// </summary>
+/// <param name="list">- list of objects to be rendered</param>
 void RenderAllInList(LinkedList* list);
 
+/// <summary>
+/// Inits the render manager
+/// </summary>
 void RM_Init() 
 {
 	matrixStack = MS_InitIdentity();
@@ -27,6 +44,11 @@ void RM_Init()
 
 	CP_Settings_ImageFilterMode(CP_IMAGE_FILTER_NEAREST);
 }
+/// <summary>
+/// Adds render component to the game object
+/// </summary>
+/// <param name="g">- parent gameobject to have renderer added to</param>
+/// <returns>Renderer* - pointer of newly created renderer</returns>
 Renderer* RM_AddComponent(GameObject* g)
 {
 	Renderer* r = (Renderer*)malloc(sizeof(Renderer));
@@ -56,6 +78,12 @@ Renderer* RM_AddComponent(GameObject* g)
 	LL_Add(&renderObjects, r);
 	return r;
 }
+/// <summary>
+/// Finds Renderer that contains game object arg
+/// </summary>
+/// <param name="curr">- current node's data</param>
+/// <param name="arg">- gameobject to be compared</param>
+/// <returns>- renderer of the game object</returns>
 void* FindRenderer(void* curr, void* arg)
 {
 	Renderer* c = (Renderer*)curr;
@@ -64,15 +92,27 @@ void* FindRenderer(void* curr, void* arg)
 		return curr;
 	return NULL;
 }
+/// <summary>
+/// returns renderer if it exists for the gameobject
+/// </summary>
+/// <param name="g">- game object to find the renderer on</param>
+/// <returns>Renderer* - pointer of renderer found</returns>
 Renderer* RM_GetComponent(GameObject* g)
 {
 	return LL_Find(renderObjects, FindRenderer, g);
 }
+/// <summary>
+/// removes renderer r from manager's list
+/// </summary>
+/// <param name="r">- renderer to be removed</param>
 void RM_RemoveRenderObject(Renderer* r)
 {
 	LL_RemovePtr(&renderObjects, r);
 	free(r);
 }
+/// <summary>
+/// clears and de allocates memory for stored entities
+/// </summary>
 void RM_Clear()
 {
 	LinkedList* node = renderObjects;
@@ -98,7 +138,10 @@ void RM_Clear()
 	LL_Clear(&debugLinesList);
 	matrixStack = MS_Clear(matrixStack);
 }
-
+/// <summary>
+/// Calculates and returns the view matrix according to world space
+/// </summary>
+/// <returns>CP_Matrix - matrix of view</returns>
 CP_Matrix RM_GetViewMatrix()
 {
 	float w = (float)CP_System_GetWindowWidth();
@@ -111,6 +154,9 @@ CP_Matrix RM_GetViewMatrix()
 	CP_Matrix view = CP_Matrix_Multiply(CP_Matrix_Scale(cameraScale), CP_Matrix_Translate(CP_Vector_Negate(camFinalPos)));
 	return view;
 }
+/// <summary>
+/// renders all entities
+/// </summary>
 void RM_Render()
 {
 	CP_Graphics_ClearBackground(CP_Color_Create(112, 228, 204, 255));
@@ -174,26 +220,45 @@ void RM_Render()
 	
 }
 
+/*!
+@brief Set camera center point to the position param
+@param position - Position for the camera to focus/look at
+@return void
+*/
 void RM_SetCameraPosition(CP_Vector pos)
 {
 	cameraPos = pos;
 }
-
+/*!
+@brief Gets camera position
+@return CP_Vector - position of camera in world space
+*/
 CP_Vector RM_GetCameraPosition()
 {
 	return cameraPos;
 }
-
+/*!
+@brief Sets camera scale. higher scale means render objects larger
+@param s - scale multiplied to the objects rendered
+*/
 void RM_SetCameraScale(CP_Vector s)
 {
 	cameraScale = s;
 }
-
+/*!
+@brief Gets camera scale value
+@return CP_Vector - scale of image in camera in world space
+*/
 CP_Vector RM_GetCameraScale()
 {
 	return cameraScale;
 }
-
+/*!
+@brief Loads and attach image to renderer from file path
+@param r - Renderer for image to be added to
+@param filepath - filepath of the image
+@return ptr of the renderer attached
+*/
 Renderer* RM_LoadImage(Renderer* r , const char* filepath)
 {
 	r->sprite = CP_Image_Load(filepath);
@@ -201,7 +266,12 @@ Renderer* RM_LoadImage(Renderer* r , const char* filepath)
 	r->height = CP_Image_GetHeight(r->sprite);
 	return r;
 }
-
+/*!
+@brief attach image to renderer
+@param r - Renderer for image to be added to
+@param img - image to be attached to renderer
+@return ptr of the renderer attached
+*/
 Renderer* RM_AddImage(Renderer* r, CP_Image img)
 {
 	r->sprite = img;
@@ -209,14 +279,24 @@ Renderer* RM_AddImage(Renderer* r, CP_Image img)
 	r->height = CP_Image_GetHeight(img);
 	return r;
 }
-
+/*!
+@brief deletes image from renderer
+@param r - Renderer for image to be deleted
+@return ptr of the renderer
+*/
 Renderer* RM_DeleteImage(Renderer* r)
 {
 	if (r->sprite)
 		CP_Image_Free(&r->sprite);
 	return r;
 }
-
+/*!
+@brief assigns the width and height of screen/world size
+@param width - ptr for width value to be assigned
+@param height - ptr for height value to be assigned
+@param space - which space of the width and height
+@return void
+*/
 void RM_GetRenderSize(float* width, float* height, RENDER_PRIORITY space)
 {
 	float w = (float)CP_System_GetWindowWidth();
@@ -234,7 +314,12 @@ void RM_GetRenderSize(float* width, float* height, RENDER_PRIORITY space)
 		break;
 	}
 }
-
+/*!
+@brief Returns mouse position on world space
+@param x - x pos of the mouse in screen pixel space
+@param y - y pos of the mouse in screen pixel space
+@return CP_Vector position of the mouse in worldspace
+*/
 CP_Vector RM_MousePositionToWorldSpace(float x, float y)
 {
 	float mposx = CP_Input_GetMouseX();
@@ -248,12 +333,21 @@ CP_Vector RM_MousePositionToWorldSpace(float x, float y)
 		wh / h * mposy - wh * 0.5f + campos.y);
 	return ret;
 }
-
+/*!
+@brief Zooms in the camera. Renders objects larger
+@param z - zoom by value. 2.0 zoom means can see half of original screen
+@return void
+*/
 void RM_SetCameraZoom(float z)
 {
 	zoom = z;
 }
-
+/*!
+@brief Set text to r->text
+@param r - renderer for text to be set
+@param text - null terminated text to be set
+@return void
+*/
 void RM_SetText(Renderer* r, const char* text)
 {
 	if (r == NULL)
@@ -273,7 +367,14 @@ void RM_SetText(Renderer* r, const char* text)
 	if (r->text)
 		strcpy_s(r->text, count + 1, text);
 }
-
+/*!
+@brief draw line from position to position in space. it will delete itself after drawn in frame
+@param from - start position of line
+@param to - end position of line
+@param space - space of line world or screen
+@param color - color of line
+@return void
+*/
 void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Color color)
 {
 	DebugLine* line = malloc(sizeof(DebugLine));
@@ -286,7 +387,10 @@ void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Co
 	}
 	LL_Add(&debugLinesList, line);
 }
-
+/// <summary>
+/// Renders all objects in this list
+/// </summary>
+/// <param name="list">- list of objects to be rendered</param>
 void RenderAllInList(LinkedList* list)
 {
 	LinkedList* currNode = list;

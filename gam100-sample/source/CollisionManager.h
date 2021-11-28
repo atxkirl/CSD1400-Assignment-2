@@ -1,3 +1,12 @@
+/*!
+@file		CollisionManager.h
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		Collision manager that handles all the colliders entity by checking for collisions among
+			the entities
+*/
+
 #pragma once
 
 //PREFIX: CLM
@@ -52,12 +61,13 @@ typedef enum COLLIDER_LAYER
 	COLLAY_WALL
 } COLLIDER_LAYER;
 
+
+typedef struct Collider Collider;
+typedef void (*OnCollision)(Collider*, Collider*);
 /*
 GameObject* obj: reference to the gameobject. needs its positional information
 OnCollision OnCollision: function pointer to the OnCollide() response. To be passed in during init if there is a collision 	response expected. Function pointer has to match int(Collider*, Collider*)
 */
-typedef struct Collider Collider;
-typedef void (*OnCollision)(Collider*, Collider*);
 typedef struct Collider
 {
 	GameObject* obj;
@@ -77,21 +87,106 @@ typedef struct Collider
 
 } Collider;
 
-
+/// <summary>
+/// Inits the collision manager
+/// </summary>
 void CLM_Init();
+/// <summary>
+/// Adds collider to collision manager
+/// </summary>
+/// <param name="c">- Collider entity to be added to manager's list</param>
 void CLM_Add(Collider* );
+/// <summary>
+/// Sets the collider entity to type with response
+/// </summary>
+/// <param name="c">- Collider entity to be set</param>
+/// <param name="t">- type of collider</param>
+/// <param name="func">- response func pointer to be stored</param>
 void CLM_Set(Collider*, COLLIDER_TYPE, OnCollision);
+/// <summary>
+/// Adds collider component to game object
+/// </summary>
+/// <param name="g">- parent game object to have collider added</param>
+/// <returns>- pointer to the newly created collider</returns>
 Collider* CLM_AddComponent(GameObject*);
+/// <summary>
+/// Returns collider component of game object if exists
+/// </summary>
+/// <param name="go">- game object to find collider</param>
+/// <returns>- pointer of collider if exists</returns>
 Collider* CLM_GetComponent(GameObject*);
+/// <summary>
+/// Removes collider from manager
+/// </summary>
+/// <param name="c">- collier to be removed</param>
+/// <returns>int - 0</returns>
 int CLM_Remove(Collider*);
+/// <summary>
+/// Remove collider containing parent go
+/// </summary>
+/// <param name="go">- parent of the collider to be removed</param>
 void CLM_RemoveGO(GameObject*);
+/// <summary>
+/// Clears and deletes memory allocated for collision manager
+/// </summary>
 void CLM_Clear();
+/// <summary>
+/// returns index of collider in collision manager
+/// </summary>
+/// <param name="c">- collider to find index of</param>
+/// <returns>int - index of the collider in manager</returns>
 int CLM_GetIndex(Collider*);
+/// <summary>
+/// checks if collider left and collide right collides with each other
+/// </summary>
+/// <param name="left">- one of the collider to be checked</param>
+/// <param name="right">- other one of the collider to be checked</param>
+/// <returns>int - 1 if is colliding, 0 if is not</returns>
 int IsCollide(Collider* left, Collider* right);
+/// <summary>
+/// updates the collision manager every frame
+/// </summary>
 void CLM_Update();
+
+/// <summary>
+/// check if circle collide w circle
+/// </summary>
+/// <param name="left">- circle a</param>
+/// <param name="right">- circle b</param>
+/// <returns>int - true or false if collide</returns>
 int IsCircleCollideCircle(Collider* left, Collider* right);
+/// <summary>
+/// check if box collide w box
+/// </summary>
+/// <param name="left">- box a</param>
+/// <param name="right">- box b</param>
+/// <returns>int - true or false if collide</returns>
 int IsBoxCollideBox(Collider* left, Collider* right);
+/// <summary>
+/// check if point collide w point
+/// </summary>
+/// <param name="left">- point a</param>
+/// <param name="right">- point b</param>
+/// <returns>int - true or false if collide</returns>
 int IsPointCollidePoint(Collider* left, Collider* right);
+/// <summary>
+/// check if circle collide w box
+/// </summary>
+/// <param name="left">- circle a</param>
+/// <param name="right">- box b</param>
+/// <returns>int - true or false if collide</returns>
 int IsCircleCollideBox(Collider* left, Collider* right);
+/// <summary>
+/// check if circle collide w point
+/// </summary>
+/// <param name="left">- circle a</param>
+/// <param name="right">- point b</param>
+/// <returns>int - true or false if collide</returns>
 int IsCircleCollidePoint(Collider* left, Collider* right);
+/// <summary>
+/// check if box collide w point
+/// </summary>
+/// <param name="left">- box a</param>
+/// <param name="right">- point b</param>
+/// <returns>int - true or false if collide</returns>
 int IsBoxCollidePoint(Collider* left, Collider* right);

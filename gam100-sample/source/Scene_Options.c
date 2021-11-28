@@ -1,7 +1,7 @@
 /*!
 @file            Scene_Options.c
 @author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
-@co-author       Ow Hong Yu (ow.hy)
+@co-author       Ow Hong Yu (ow.h)
 @course          CSD 1400
 @section         C
 @brief           This file contains the functions for the Scene Options.

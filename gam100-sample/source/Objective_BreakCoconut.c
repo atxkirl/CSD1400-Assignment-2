@@ -1,3 +1,12 @@
+/*!
+@file		Objective_BreakCoconut.c
+@author		Ow Hong Yu (ow.h)
+@course		CSD 1400
+@section	A
+@brief		One of the objectives. It is a click on the coconut a few times
+			until it is broken for objective complete
+*/
+
 #include "Objective_BreakCoconut.h"
 #include "SystemManager.h"
 
@@ -13,13 +22,22 @@ GameObject* obc_coconut;
 Renderer* r1, *r2, *r3, *r4;
 int isActive;
 
+/// <summary>
+/// Enables or disable images based on current stage of breaking coconut
+/// </summary>
+/// <param name="_stage"></param>
 void EnableImage(int _stage)
 {
-	r1->isEnabled = obc_stage == 0;
-	r2->isEnabled = obc_stage == 1;
-	r3->isEnabled = obc_stage == 2;
-	r4->isEnabled = obc_stage == 3;
+	r1->isEnabled = _stage == 0;
+	r2->isEnabled = _stage == 1;
+	r3->isEnabled = _stage == 2;
+	r4->isEnabled = _stage == 3;
 }
+/// <summary>
+/// On collision response for break coconut objective objects
+/// </summary>
+/// <param name="left">- the collider of the owner of this response</param>
+/// <param name="right">- the collider of the other object</param>
 void OB_BreakCoconutOnCollision(Collider* left, Collider* right)
 {
 	if (strcmp(right->obj->tag, "Click") == 0)
@@ -41,6 +59,9 @@ void OB_BreakCoconutOnCollision(Collider* left, Collider* right)
 		}
 	}
 }
+/// <summary>
+/// Inits the break coconut objective
+/// </summary>
 void OB_BreakCoconutInit()
 {
 	float screenWidth, screenHeight;
@@ -100,6 +121,9 @@ void OB_BreakCoconutInit()
 	obc_stage = 0;
 	OB_BreakCoconutUnTrigger();
 }
+/// <summary>
+/// Updates the break coconut objective every frame
+/// </summary>
 void OB_BreakCoconutUpdate()
 {	
 	static float et = 0.0f;
@@ -119,6 +143,9 @@ void OB_BreakCoconutUpdate()
 		RM_SetText(r, "Coconut broken!");
 	}
 }
+/// <summary>
+/// Triggers / activates the break coconut objective
+/// </summary>
 void OB_BreakCoconutTrigger()
 {
 	EnableImage(obc_stage);
@@ -130,6 +157,9 @@ void OB_BreakCoconutTrigger()
 	Renderer* r = RM_GetComponent(obc_title);
 	RM_SetText(r, "Break the coconut!");
 }
+/// <summary>
+/// Untriggers / de-activates the break coconut objective
+/// </summary>
 void OB_BreakCoconutUnTrigger()
 {
 	obc_stage = 0;
@@ -144,17 +174,26 @@ void OB_BreakCoconutUnTrigger()
 	obc_canHit = 1;
 	isActive = 0;
 }
-
+/// <summary>
+/// returns true or false if the objective is complete
+/// </summary>
+/// <returns>int</returns>
 int OB_IsBreakCoconutComplete()
 {
 	return obc_stage == obc_MAX_STAGE;
 }
-
+/// <summary>
+/// returns true of false for objective if it is active or not
+/// </summary>
+/// <returns>int</returns>
 int OB_IsBreakCoconutActive()
 {
 	return isActive;
 }
-
+/// <summary>
+/// Sets active or not active for the objective
+/// </summary>
+/// <param name="iSetter">- 1 or 0 for active</param>
 void OB_SetBreakCoconutActive(int iSetter)
 {
 	isActive = iSetter;
