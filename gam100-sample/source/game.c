@@ -165,13 +165,12 @@ void game_init(void)
 #endif
 
     //START BUTTON ==========
-    button = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(0.5f*screenWidth, screenHeight * 0.85f), 0.0f, MainMenuStartDefaultScale);
-    r = RM_AddComponent(button);
+    button = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f*screenWidth, screenHeight * 0.85f), 0.0f, MainMenuStartDefaultScale);
     button->tag = "game"; //For collision
+    r = RM_AddComponent(button);
     r->renderPriority = PRI_UI;
+    RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
     RM_SetText(r, "Start");
-    r->color.a = 0;
     r->textScale = CP_Vector_Set(2, 2);
     MainMenuStartCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuStartCollider, COL_BOX, game_OnCollision);
@@ -182,46 +181,38 @@ void game_init(void)
     float subPosY = 0.685f * screenHeight;
     //CP_Vector subPos = CP_Vector_Set(subPosX, subPosY);
 
-    button = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(subPosX, subPosY),
-        0.0f, MainMenuOptsCredsDefaultScale);
-    r = RM_AddComponent(button);
+    button = GOM_Create2(RECTANGLE, CP_Vector_Set(subPosX, subPosY), 0.0f, MainMenuOptsCredsDefaultScale);
     button->tag = "howtoplay"; //For collision
+    r = RM_AddComponent(button);
     r->renderPriority = PRI_UI;
-    //RM_LoadImage(r, "Assets/creditsicon.png");
+    RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
     RM_SetText(r, "How To Play");
     r->textScale = CP_Vector_Set(1.8f, 1.8f);
-    r->color.a = 0;
     MainMenuHTPCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuHTPCollider, COL_BOX, game_OnCollision);
     MainMenuHTPCollider->space = COLSPC_SCREEN;
     MainMenuHTPCollider->isTrigger = 1;
 
-    button = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(subPosX, subPosY + MainMenuOptsCredsDefaultScale.y * 1.5f), 0.0f, MainMenuOptsCredsDefaultScale);
-    r = RM_AddComponent(button);
+    button = GOM_Create2(RECTANGLE, CP_Vector_Set(subPosX, subPosY + MainMenuOptsCredsDefaultScale.y * 1.5f), 0.0f, MainMenuOptsCredsDefaultScale);
     button->tag = "options"; //For collision
+    r = RM_AddComponent(button);
     r->renderPriority = PRI_UI;
+    RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
     RM_SetText(r, "Options");
     r->textScale = CP_Vector_Set(1.8f, 1.8f);
-    r->color.a = 0;
-    //RM_LoadImage(r, "Assets/optionsicon.png");
     MainMenuOptionsCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuOptionsCollider, COL_BOX, game_OnCollision);
     MainMenuOptionsCollider->space = COLSPC_SCREEN;
     MainMenuOptionsCollider->isTrigger = 1;
 
     //float spacing = 1.5f * MainMenuOptsCredsDefaultScale.x;
-    button = GOM_Create2(RECTANGLE,
-        CP_Vector_Set(subPosX, subPosY + MainMenuOptsCredsDefaultScale.y * 3.0f),
-        0.0f, MainMenuOptsCredsDefaultScale);
-    r = RM_AddComponent(button);
+    button = GOM_Create2(RECTANGLE, CP_Vector_Set(subPosX, subPosY + MainMenuOptsCredsDefaultScale.y * 3.0f), 0.0f, MainMenuOptsCredsDefaultScale);
     button->tag = "credits"; //For collision
+    r = RM_AddComponent(button);
     r->renderPriority = PRI_UI;
-    //RM_LoadImage(r, "Assets/creditsicon.png");
+    RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
     RM_SetText(r, "Credits");
     r->textScale = CP_Vector_Set(1.8f, 1.8f);
-    r->color.a = 0;
     MainMenuCreditsCollider = CLM_AddComponent(button);
     CLM_Set(MainMenuCreditsCollider, COL_BOX, game_OnCollision);
     MainMenuCreditsCollider->space = COLSPC_SCREEN;
@@ -257,6 +248,7 @@ void game_update(void)
         c->isTrigger = 1;
 
         GameObject* button = (GameObject*)MainMenuStartCollider->obj;
+        //Renderer* renderer = RM_GetComponent(button);
         if (IsBoxCollidePoint(MainMenuStartCollider, c))
         {
             button->scale.x += MainMenuStartScaleSpd.x * CP_System_GetDt();
