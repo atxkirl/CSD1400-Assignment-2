@@ -1303,15 +1303,15 @@ void LoadSavedMap()
 			//gLoadedGrids.gGrid[iY][iX]->color = CP_Color_Create(255, 255, 255, 255);
 			r->color = CP_Color_Create(255, 255, 255, 255);
 
-			switch (gGrids.gGrid[iY][iX]->type)
-			{
-			case(WALL):
-			case(CORNER):
-				CLM_AddComponent(gGrids.gGrid[iY][iX]);
-				break;
-			default:
-				break;
-			}
+			//switch (gGrids.gGrid[iY][iX]->type)
+			//{
+			//case(WALL):
+			//case(CORNER):
+			//	CLM_AddComponent(gGrids.gGrid[iY][iX]);
+			//	break;
+			//default:
+			//	break;
+			//}
 		}
 	}
 
