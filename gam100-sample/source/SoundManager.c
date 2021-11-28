@@ -5,7 +5,7 @@
 
 CP_Sound bg, bg2, foot, wood1, wood2, wood3, electric1, electric2, electric3, hurt1, hurt2, hurt3, drop1;
 
-
+float volBg, volSfx;
 static int bgVolume, sfxVolume;
 int playing = 0;
 time_t startT;
@@ -51,7 +51,7 @@ void SDM_StopBgMusic(void) {
 void SDM_PlayWEffect(void) {
 	float random = CP_Random_RangeFloat(0.5f, 1.0f);
 	if (playing == 0) {
-		CP_Sound_PlayAdvanced(foot, 1.0f, random, FALSE, CP_SOUND_GROUP_SFX);
+		CP_Sound_PlayAdvanced(foot, 0.5f, random, FALSE, CP_SOUND_GROUP_SFX);
 		playing = 1;
 		startT = clock();
 	}
@@ -60,6 +60,7 @@ void SDM_PlayWEffect(void) {
 void SDM_EffectUpdate(void) {
 	walk_timer();
 }
+
 
 void SDM_PlaySFX(int name) {
 	switch (name) {
@@ -109,13 +110,14 @@ void SDM_FreeSounds(void) {
 	CP_Sound_Free(&electric3);
 	CP_Sound_Free(&drop1);
 	CP_Sound_Free(&wood1);
+	CP_Sound_Free(&bg2);
 	
 }
 
 void walk_timer(void) {
 	time_t Current_T = clock();
 
-	if (difftime(Current_T, startT) >= 650.0f) {
+	if (difftime(Current_T, startT) >= 400.0f) {
 		playing = 0;
 	}
 }
@@ -128,6 +130,8 @@ void walk_timer(void) {
 void SDM_SetBGVolume(int v)
 {
 	bgVolume = v;
+	volBg = (1.0f / 100.0f) * bgVolume;
+	CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, volBg);
 }
 /*!
 @brief Gets the BGM volume
@@ -145,6 +149,8 @@ int SDM_GetBGVolume()
 void SDM_SetSFXVolume(int v)
 {
 	sfxVolume = v;
+	volSfx = (1.0f / 100.0f) * sfxVolume;
+	CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, volSfx);
 }
 /*!
 @brief Gets the SFX volume
