@@ -54,6 +54,8 @@ typedef struct Renderer
 
 	CP_Vector startUV;
 	CP_Vector endUV;
+	int isXFlipped;
+	int isYFlipped;
 
 	char* text;//to be directly rendered on top of object
 	CP_Color textColor;//defaulted black

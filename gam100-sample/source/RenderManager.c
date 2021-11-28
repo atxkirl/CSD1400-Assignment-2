@@ -43,6 +43,8 @@ void RM_Init()
 	zoom = 1.0f;
 
 	CP_Settings_ImageFilterMode(CP_IMAGE_FILTER_NEAREST);
+
+	CP_Font_Set(CP_Font_Load("Assets/pixel-font.ttf"));
 }
 /// <summary>
 /// Adds render component to the game object
@@ -63,6 +65,8 @@ Renderer* RM_AddComponent(GameObject* g)
 
 		r->startUV = CP_Vector_Set(0, 0);
 		r->endUV = CP_Vector_Set(1, 1);
+		r->isXFlipped = 0;
+		r->isYFlipped = 0;
 
 		r->text = NULL;
 		r->textColor = CP_Color_Create(0, 0, 0, 255);
@@ -417,9 +421,27 @@ void RenderAllInList(LinkedList* list)
 		
 		if (r->sprite)
 		{
+			float s0 = r->startUV.x * (float)r->width;
+			float t0 = r->startUV.y * (float)r->height;
+			float s1 = r->endUV.x * (float)r->width;
+			float t1 = r->endUV.y * (float)r->height;
+			if (r->isXFlipped)
+			{
+				float temp = s0;
+				s0 = s1;
+				s1 = temp;
+			}
+			if (r->isYFlipped)
+			{
+				float temp = t0;
+				t0 = t1;
+				t1 = temp;
+			}
+
+
 			CP_Image_DrawSubImage(r->sprite, 0, 0, go->scale.x, go->scale.y,
-				r->startUV.x * (float)r->width, r->startUV.y * (float)r->height,
-				r->endUV.x * (float)r->width, r->endUV.y * (float)r->height,
+				s0, t0,
+				s1, t1,
 				r->color.a);
 		}
 		else
