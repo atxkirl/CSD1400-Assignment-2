@@ -32,44 +32,44 @@ static GameObject* bananaBoi = NULL;
 static AStar_Map map;
 FSM* enemy;
 
-int IsGamePaused;
+static GameObject* howtoplay = NULL;
+static GameObject* close = NULL;
+static bool isPaused;
 LinkedList* pauseMenus;
-/*!
-@brief This function initialises the pause menu
-the function will return value 0x87654321.
-@return void
-*//*______________________________________________________________*/
+
+/// <summary>
+/// Function declaration for: Initializes the pause menu.
+/// </summary>
 void InitPause();
-/*!
-@brief Sets if pause is on or off
-@param isPause - 1 to pause 0 to unpause
-@return void
-*//*______________________________________________________________*/
+/// <summary>
+/// Function declaration for: Setter for pause state.
+/// </summary>
+/// <param name="isPause">New pause state.</param>
 void SetPause(int isPause);
-/*!
-@brief This function checks if pauses is on
-@return int - true or false of pause state
-*//*______________________________________________________________*/
+/// <summary>
+/// Function declaration for: Checks if game is paused or not.
+/// </summary>
+/// <returns>Pause state of the game.</returns>
 int IsPaused();
-/*!
-@brief This function clears memory used by pause menu
-@return void
-*//*______________________________________________________________*/
+/// <summary>
+/// Function declaration for: Clears memory allocated by pause.
+/// </summary>
 void ClearPause();
 
 GameObject* GameFpsCounterObj;
-/*!
-@brief Initialises the fps counter gameobject
-@return void
-*//*______________________________________________________________*/
+/// <summary>
+/// Function declaration for: Initializes framerate display object.
+/// </summary>
 void InitDrawFPS();
 
-/*!
-@brief Initialises AStar map grid for this level.
-@return void
-*//*______________________________________________________________*/
+/// <summary>
+/// Initializes A* Pathfinding for this level.
+/// </summary>
 void LevelOne_AStarInit(void);
 
+/// <summary>
+/// Called whenever collision occurs.
+/// </summary>
 void LevelOne_OnCollision(Collider* left, Collider* right)
 {
     if (strcmp(right->obj->tag, ONCLICK_TAG) == 0)
@@ -82,9 +82,18 @@ void LevelOne_OnCollision(Collider* left, Collider* right)
         {
             SceneManager_ChangeSceneByName("mainmenu");
         }
+        else if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
+        {
+            howtoplay->isEnabled = 0;
+            close->isEnabled = 0;
+            SetPause(false);
+        }
     }
 }
 
+/// <summary>
+/// Initializes this level.
+/// </summary>
 void LevelOne_init(void)
 {
     SM_SystemsInit();
@@ -110,6 +119,27 @@ void LevelOne_init(void)
     InitPause();
     InitDrawFPS();
 
+    // Scene UI
+    {
+        // render how to play
+        howtoplay = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
+        howtoplay->tag = "credits";
+        Renderer* howtoplayRenderer = RM_AddComponent(howtoplay);
+        howtoplayRenderer->renderPriority = PRI_UI;
+        RM_LoadImage(howtoplayRenderer, "Assets/scenes/howtoplay.png");
+        // close button
+        close = GOM_Create(RECTANGLE);
+        close->position = CP_Vector_Set(screenWidth * 0.975f, screenHeight * 0.045f);
+        close->scale = CP_Vector_Set(50, 50);
+        close->tag = "exit";
+        Collider* closeCollider = CLM_AddComponent(close);
+        CLM_Set(closeCollider, COL_BOX, LevelOne_OnCollision);
+        closeCollider->space = COLSPC_SCREEN;
+        Renderer* closeRender = RM_AddComponent(close);
+        closeRender->renderPriority = PRI_UI;
+        RM_LoadImage(closeRender, "Assets/cross.png");
+    }
+
     // AStar
     {
         AStar_InitializeMap(&map, NumGrids, NumGrids);
@@ -125,8 +155,14 @@ void LevelOne_init(void)
 
     SDM_Init();
     SDM_PlayBgMusic(2);
+
+    // Set game to be paused at the start.
+    SetPause(true);
 }
 
+/// <summary>
+/// Update loop called every frame.
+/// </summary>
 void LevelOne_update(void)
 {
     SM_SystemsPreUpdate();
@@ -148,9 +184,11 @@ void LevelOne_update(void)
     RM_SetText(r, t);
 
     SM_SystemsLateUpdate();
-    LevelOneUI_render(); 
 }
 
+/// <summary>
+/// Called upon scene exit.
+/// </summary>
 void LevelOne_exit(void)
 {
     ClearPause();
@@ -161,6 +199,12 @@ void LevelOne_exit(void)
     SDM_FreeSounds();
 }
 
+/// <summary>
+/// Called by SceneManager to register function pointers for scene init, update and exit.
+/// </summary>
+/// <param name="init">Init function for this scene.</param>
+/// <param name="update">Update function for this scene</param>
+/// <param name="exit">Exit function for this scene</param>
 void LevelOne_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = LevelOne_init;
@@ -168,14 +212,9 @@ void LevelOne_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exi
     *exit = LevelOne_exit;
 }
 
-void LevelOneUI_render()
-{
-    CP_Settings_Fill(COLOR_WHITE); // r, g, b, a
-    //CP_Graphics_DrawRect(50.f, 170.f, 75.f, 50.f);
-    CP_Settings_Fill(COLOR_BLACK); // r, g, b, a
-    //CP_Font_DrawText("Objective", 55, 200);
-}
-
+/// <summary>
+/// Initializes all colliders within this scene.
+/// </summary>
 void LevelOneGridColliderInit()
 {
     for (int i = 0; i < NumGrids; i++)
@@ -195,11 +234,9 @@ void LevelOneGridColliderInit()
     }
 }
 
-/*!
-@brief This function initialises the pause menu
-the function will return value 0x87654321.
-@return void
-*//*______________________________________________________________*/
+/// <summary>
+/// Initializes the pause menu.
+/// </summary>
 void InitPause()
 {
     pauseMenus = NULL;
@@ -256,8 +293,13 @@ void InitPause()
         t->isEnabled = 0;
     }
 }
+/// <summary>
+/// Setter for pause state.
+/// </summary>
+/// <param name="isPause">New pause state.</param>
 void SetPause(int isPause)
 {
+    isPaused = isPause;
     LinkedList* n = pauseMenus;
     for (; n; n = n->next)
     {
@@ -265,21 +307,21 @@ void SetPause(int isPause)
         g->isEnabled = isPause;
     }
 }
-/*!
-@brief This function checks if pauses is on
-@return int - true or false of pause state
-*//*______________________________________________________________*/
+/// <summary>
+/// Checks if game is paused or not.
+/// </summary>
+/// <returns>Pause state of the game.</returns>
 int IsPaused()
 {
     if (CP_Input_KeyTriggered((CP_KEY)KEY_ESCAPE) || CP_Input_KeyTriggered((CP_KEY)KEY_P))
     {
         SetPause(1);
     }
-    int b_IsPaused = 0;
+    isPaused = false;
     if (pauseMenus)
-        b_IsPaused = ((GameObject*)pauseMenus->curr)->isEnabled;
+        isPaused = ((GameObject*)pauseMenus->curr)->isEnabled;
     
-    if (b_IsPaused)
+    if (isPaused)
     {
         LinkedList* n = pauseMenus; GameObject* button = NULL;
         for (; n; n = n->next)
@@ -324,22 +366,20 @@ int IsPaused()
         }
 
     }
-    
 
-
-
-    return b_IsPaused;
+    return isPaused;
 }
-/*!
-@brief This function clears memory used by pause menu
-@return void
-*//*______________________________________________________________*/
+/// <summary>
+/// Clears memory allocated by pause.
+/// </summary>
 void ClearPause()
 {
     LL_Clear(&pauseMenus);
     pauseMenus = NULL;
 }
-
+/// <summary>
+/// Initializes framerate display object.
+/// </summary>
 void InitDrawFPS()
 {
     RM_GetRenderSize(&screenWidth, &screenHeight, PRI_UI);
@@ -358,15 +398,16 @@ void InitDrawFPS()
     GameFpsCounterObj->isEnabled = 1;
 #endif
 }
-
+/// <summary>
+/// Renders the framerate counter.
+/// </summary>
 void RenderFpsCounter()
 {
 }
 
-/*!
-@brief Initialises AStar map grid for this level.
-@return void
-*//*______________________________________________________________*/
+/// <summary>
+/// Initialises AStar map grid for this level.
+/// </summary>
 void LevelOne_AStarInit(void)
 {
     for (int r = 0; r < map.rows; ++r)
