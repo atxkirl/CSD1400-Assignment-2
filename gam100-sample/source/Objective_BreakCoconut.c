@@ -71,17 +71,17 @@ void OB_BreakCoconutInit()
 
 	obc_title = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(screenWidth * 0.6f, 60));
 	r = RM_AddComponent(obc_title);
-	r->color.a = 200;
-	RM_SetText(r, "Break the coconut!");
+	r->color = CP_Color_Create(115, 62, 58, 255);
 	r->renderPriority = PRI_UI;
 	r->textScale = CP_Vector_Set(3.0f, 3.0f);
+	RM_SetText(r, "Break the coconut!");
 
 	obc_UI = GOM_Create(RECTANGLE);
-	r = RM_AddComponent(obc_UI);
-	r->color = CP_Color_Create(200, 200, 200, 255);
-	r->renderPriority = PRI_UI;
 	obc_UI->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
 	obc_UI->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
+	r = RM_AddComponent(obc_UI);
+	r->renderPriority = PRI_UI;
+	RM_LoadImage(r, "Assets/Backgrounds/objective-light.png");
 
 	obc_cross = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.775f, screenHeight * 0.225f), 0 , CP_Vector_Set(50, 50));
 	obc_cross->tag = "cross";

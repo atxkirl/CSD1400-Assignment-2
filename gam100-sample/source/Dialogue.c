@@ -69,10 +69,10 @@ void DM_Init()
 	dialogueBox = GOM_Create2(RECTANGLE, CP_Vector_Set(CP_System_GetWindowWidth() / 2.f, CP_System_GetWindowHeight() / 2.f), 0.f, CP_Vector_Set(dialogueBoxWidth, dialogueBoxHeight));
 	
 	dialogueBoxRenderer = RM_AddComponent(dialogueBox);
-	dialogueBoxRenderer->textColor = CP_Color_Create(255, 255, 255, 255);
+	dialogueBoxRenderer->color = CP_Color_Create(115, 62, 58, 255);
+	dialogueBoxRenderer->textColor = CP_Color_Create(0, 0, 0, 255);
 	dialogueBoxRenderer->renderPriority = PRI_UI;
 	dialogueBoxRenderer->textScale = CP_Vector_Set(dialogueTextScale, dialogueTextScale);
-	//RM_LoadImage(dialogueBoxRenderer, "Assets/testbuttonbackground.jpg");
 
 	// Create and register the close button's GameObject, Renderer and Collider.
 	closeButton = GOM_Create2(CIRCLE, dialogueBox->position, 0.f, CP_Vector_Set(closeButtonDiameter, closeButtonDiameter));

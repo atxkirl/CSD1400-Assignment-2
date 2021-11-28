@@ -106,7 +106,7 @@ void LevelOneAStar_init(void)
         c->space = COLSPC_SCREEN;
         CLM_Set(c, COL_BOX, LevelOneAStar_OnCollision);
 
-
+        // Objective UI background.
         GameObject* ObjectiveUIBox = GOM_Create(WALL);
         ObjectiveUIBox->scale = CP_Vector_Set(200.f, 70.f);
         ObjectiveUIBox->position = CP_Vector_Set(120.0f, 50.0f);

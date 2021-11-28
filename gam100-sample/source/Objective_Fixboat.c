@@ -136,18 +136,19 @@ void OB_FixBoatInit()
 
 	ofb_title = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(screenWidth * 0.6f, 60));
 	Renderer* r = RM_AddComponent(ofb_title);
-	r->color.a = 200;
+	r->color = CP_Color_Create(115, 62, 58, 255);
 	//r->text = "Fix the boat!";
-	RM_SetText(r, "Fix the boat!");
 	r->renderPriority = PRI_UI;
 	r->textScale = CP_Vector_Set(3.0f, 3.0f);
+	RM_SetText(r, "Fix the boat!");
 
 	ofb_UI = GOM_Create(RECTANGLE);
+	ofb_UI->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
+	ofb_UI->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
 	r = RM_AddComponent(ofb_UI);
 	r->color = CP_Color_Create(200,200,200,255);
 	r->renderPriority = PRI_UI;
-	ofb_UI->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.7f);
-	ofb_UI->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
+	RM_LoadImage(r, "Assets/Backgrounds/objective-light.png");
 
 	ofb_cross = GOM_Create(RECTANGLE);
 	ofb_cross->position = CP_Vector_Set(screenWidth * 0.775f, screenHeight * 0.225f);
