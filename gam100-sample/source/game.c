@@ -20,7 +20,6 @@
 
 
 //Animation* MainMenuStartAnim1, *MainMenuStartAnim2;
-Collider* MainMenuStartCollider, *MainMenuOptionsCollider, *MainMenuCreditsCollider;
 #define MainMenuStartDefaultScale CP_Vector_Set(200.0f, 50.0f)
 #define MainMenuStartMaxScale CP_Vector_Set(300.0f, 75.0f)
 #define MainMenuStartScaleSpd CP_Vector_Set(500.0f, 350.0f)
@@ -29,8 +28,12 @@ Collider* MainMenuStartCollider, *MainMenuOptionsCollider, *MainMenuCreditsColli
 #define MainMenuOptsCredsMaxScale CP_Vector_Set(180.0f, 50.0f)
 #define MainMenuOptsCredsScaleSpd CP_Vector_Set(150.0f, 150.0f)
 
-#define buttonCount 4
-GameObject* buttons[buttonCount]; // Array holding all the buttons for main menu. "Start", "How to Play", "Options", "Credits"
+#define MainMenuQuitDefaultScale CP_Vector_Set(100.0f, 40.0f)
+#define MainMenuQuitMaxScale CP_Vector_Set(120.0f, 50.0f)
+#define MainMenuQuitScaleSpd CP_Vector_Set(150.0f, 150.0f)
+
+#define MainMenu_ButtonCount 4
+Collider* MainMenuButtons[MainMenu_ButtonCount]; // Array holding all the buttons for main menu. "Start", "How to Play", "Options", "Credits"
 
 /// <summary>
 /// renders the game ui using cp processing
@@ -60,7 +63,7 @@ void game_OnCollision(Collider* left, Collider* right)
     //me, other
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
-        if (strcmp(((GameObject*)left->obj)->tag,"adrian") == 0)
+        if (strcmp(((GameObject*)left->obj)->tag, "adrian") == 0)
             SceneManager_ChangeSceneByName("leveloneastar");
         else if (strcmp(((GameObject*)left->obj)->tag, "astartest") == 0)
             SceneManager_ChangeSceneByName("adrian");
@@ -80,6 +83,9 @@ void game_OnCollision(Collider* left, Collider* right)
             SceneManager_ChangeSceneByName("credits");
         else if (strcmp(((GameObject*)left->obj)->tag, "howtoplay") == 0) //TODO
             SceneManager_ChangeSceneByName("credits");
+        else if (strcmp(((GameObject*)left->obj)->tag, "quit") == 0) //TODO
+            CP_Engine_Terminate();
+        
     }
 
 }
@@ -179,10 +185,11 @@ void game_init(void)
     RM_SetText(r, "Start");
     r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = CP_Vector_Set(2, 2);
-    MainMenuStartCollider = CLM_AddComponent(button);
-    CLM_Set(MainMenuStartCollider, COL_BOX, game_OnCollision);
-    MainMenuStartCollider->space = COLSPC_SCREEN;
-    MainMenuStartCollider->isTrigger = 1;
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
+    MainMenuButtons[0] = c;
 
     button = GOM_Create2(RECTANGLE, CP_Vector_Set(centerButtonX + (-1.25f * MainMenuStartDefaultScale.x), centerButtonY), 0.0f, MainMenuOptsCredsDefaultScale);
     button->tag = "options"; //For collision
@@ -192,10 +199,11 @@ void game_init(void)
     RM_SetText(r, "Options");
     r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = CP_Vector_Set(1.8f, 1.8f);
-    MainMenuOptionsCollider = CLM_AddComponent(button);
-    CLM_Set(MainMenuOptionsCollider, COL_BOX, game_OnCollision);
-    MainMenuOptionsCollider->space = COLSPC_SCREEN;
-    MainMenuOptionsCollider->isTrigger = 1;
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
+    MainMenuButtons[1] = c;
 
     button = GOM_Create2(RECTANGLE, CP_Vector_Set(centerButtonX + (1.25f * MainMenuStartDefaultScale.x), centerButtonY), 0.0f, MainMenuOptsCredsDefaultScale);
     button->tag = "credits"; //For collision
@@ -205,10 +213,25 @@ void game_init(void)
     RM_SetText(r, "Credits");
     r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = CP_Vector_Set(1.8f, 1.8f);
-    MainMenuCreditsCollider = CLM_AddComponent(button);
-    CLM_Set(MainMenuCreditsCollider, COL_BOX, game_OnCollision);
-    MainMenuCreditsCollider->space = COLSPC_SCREEN;
-    MainMenuCreditsCollider->isTrigger = 1;
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
+    MainMenuButtons[2] = c;
+
+    button = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.93f, screenHeight* 0.95f), 0.0f, MainMenuQuitDefaultScale);
+    button->tag = "quit"; //For collision
+    r = RM_AddComponent(button);
+    r->renderPriority = PRI_UI;
+    RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
+    RM_SetText(r, "Quit Game");
+    r->textColor = COLOR_LIGHTYELLOW;
+    r->textScale = CP_Vector_Set(1.25f, 1.25f);
+    c = CLM_AddComponent(button);
+    CLM_Set(c, COL_BOX, game_OnCollision);
+    c->space = COLSPC_SCREEN;
+    c->isTrigger = 1;
+    MainMenuButtons[3] = c;
 }
 /// <summary>
 /// updates the main menu every frame
@@ -239,56 +262,45 @@ void game_update(void)
     c->space = COLSPC_SCREEN;
     c->isTrigger = 1;
 
-    GameObject* button = (GameObject*)MainMenuStartCollider->obj;
-    //Renderer* renderer = RM_GetComponent(button);
-    if (IsBoxCollidePoint(MainMenuStartCollider, c))
+    for (int i = 0; i < MainMenu_ButtonCount; ++i)
     {
-        button->scale.x += MainMenuStartScaleSpd.x * CP_System_GetDt();
-        button->scale.y += MainMenuStartScaleSpd.y * CP_System_GetDt();
-        button->scale.x = min(button->scale.x, MainMenuStartMaxScale.x);
-        button->scale.y = min(button->scale.y, MainMenuStartMaxScale.y);
-    }
-    else
-    {
-        //scale down
-        button->scale.x -= MainMenuStartScaleSpd.x * CP_System_GetDt();
-        button->scale.y -= MainMenuStartScaleSpd.y * CP_System_GetDt();
-        button->scale.x = max(button->scale.x, MainMenuStartDefaultScale.x);
-        button->scale.y = max(button->scale.y, MainMenuStartDefaultScale.y);
-    }
+        GameObject* button = MainMenuButtons[i]->obj;
+        CP_Vector spd = MainMenuStartScaleSpd;
+        CP_Vector maxv = MainMenuStartMaxScale;
+        CP_Vector def = MainMenuStartDefaultScale;
+        switch (i)
+        {
+        case 1:
+        case 2:
+            spd = MainMenuOptsCredsScaleSpd;
+            maxv = MainMenuOptsCredsMaxScale;
+            def = MainMenuOptsCredsDefaultScale;
+            break;
+        case 3:
+            spd = MainMenuQuitScaleSpd;
+            maxv = MainMenuQuitMaxScale;
+            def = MainMenuQuitDefaultScale;
+        }
+        if (IsBoxCollidePoint(MainMenuButtons[i], c))
+        {
+            button->scale.x += spd.x * CP_System_GetDt();
+            button->scale.y += spd.y * CP_System_GetDt();
+            button->scale.x = min(button->scale.x, maxv.x);
+            button->scale.y = min(button->scale.y, maxv.y);
+        }
+        else
+        {
+            //scale down
+            button->scale.x -= spd.x * CP_System_GetDt();
+            button->scale.y -= spd.y * CP_System_GetDt();
+            button->scale.x = max(button->scale.x, def.x);
+            button->scale.y = max(button->scale.y, def.y);
+        }
+        
 
-    button = (GameObject*)MainMenuOptionsCollider->obj;
-    if (IsBoxCollidePoint(MainMenuOptionsCollider, c))
-    {
-        button->scale.x += MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
-        button->scale.y += MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
-        button->scale.x = min(button->scale.x, MainMenuOptsCredsMaxScale.x);
-        button->scale.y = min(button->scale.y, MainMenuOptsCredsMaxScale.y);
+       
     }
-    else
-    {
-        button->scale.x -= MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
-        button->scale.y -= MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
-        button->scale.x = max(button->scale.x, MainMenuOptsCredsDefaultScale.x);
-        button->scale.y = max(button->scale.y, MainMenuOptsCredsDefaultScale.y);
-    }
-
-    button = (GameObject*)MainMenuCreditsCollider->obj;
-    if (IsBoxCollidePoint(MainMenuCreditsCollider, c))
-    {
-        button->scale.x += MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
-        button->scale.y += MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
-        button->scale.x = min(button->scale.x, MainMenuOptsCredsMaxScale.x);
-        button->scale.y = min(button->scale.y, MainMenuOptsCredsMaxScale.y);
-    }
-    else
-    {
-        button->scale.x -= MainMenuOptsCredsScaleSpd.x * CP_System_GetDt();
-        button->scale.y -= MainMenuOptsCredsScaleSpd.y * CP_System_GetDt();
-        button->scale.x = max(button->scale.x, MainMenuOptsCredsDefaultScale.x);
-        button->scale.y = max(button->scale.y, MainMenuOptsCredsDefaultScale.y);
-    }
-
+    
     SM_SystemsUpdate(0);
 
     //gameUI_render();

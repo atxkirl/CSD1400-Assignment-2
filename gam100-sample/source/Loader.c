@@ -116,9 +116,11 @@ void LoaderExit()
 
 	if(gLoadedGrids)
 		free(gLoadedGrids);
+	gLoadedGrids = NULL;
 
 	if(gLoadedObjects)
 		free(gLoadedObjects);
+	gLoadedObjects = NULL;
 }
 
 /// <summary>

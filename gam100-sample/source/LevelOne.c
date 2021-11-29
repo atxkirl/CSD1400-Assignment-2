@@ -106,7 +106,7 @@ void LevelOne_OnCollision(Collider* left, Collider* right)
     {
         if (strcmp(left->obj->tag, "pauseClose") == 0)
         {
-            pauseCloseHighlight->isEnabled = 1;
+            //pauseCloseHighlight->isEnabled = 1;
         }
         else if (strcmp(left->obj->tag, "howtoplayClose") == 0)
         {
@@ -218,7 +218,7 @@ void LevelOne_update(void)
     else
     {
         howtoplayCloseHighlight->isEnabled = 0;
-        pauseCloseHighlight->isEnabled = 0;
+        //pauseCloseHighlight->isEnabled = 0;
     }
     SM_SystemsUpdate(IsPaused());
 
@@ -293,6 +293,7 @@ void InitPause()
     g->scale = CP_Vector_Set(screenHeight * 0.5f, screenHeight * 0.5f);
     Renderer* r = RM_AddComponent(g);
     r->renderPriority = PRI_UI;
+    RM_LoadImage(r, "Assets/Backgrounds/objective-light.png");
     LL_Add(&pauseMenus, g);
     GameObject* temp = g;
 
@@ -302,11 +303,14 @@ void InitPause()
     r->renderPriority = PRI_UI;
     r->textScale = CP_Vector_Set(3.0f, 3.0f);
     RM_SetText(r, "Pause");
+    r->textColor = COLOR_LIGHTYELLOW;
     LL_Add(&pauseMenus, g);
 
     g = GOM_Create(RECTANGLE);
-    g->position = CP_Vector_Set(temp->position.x + temp->scale.x * 0.5f, temp->position.y - temp->scale.y * 0.5f);
-    g->scale = CP_Vector_Set(50, 50);
+    //g->position = CP_Vector_Set(temp->position.x + temp->scale.x * 0.5f, temp->position.y - temp->scale.y * 0.5f);
+    //g->scale = CP_Vector_Set(50, 50);
+    g->position = CP_Vector_Set(temp->position.x, temp->position.y + temp->scale.y * 0.2f - 70);
+    g->scale = CP_Vector_Set(220, 50);
     g->tag = "pauseClose";
     Collider* c = CLM_AddComponent(g);
     CLM_Set(c, COL_BOX, LevelOne_OnCollision);
@@ -316,11 +320,14 @@ void InitPause()
     // Close Button unhighlighted.
     r = RM_AddComponent(g);
     r->renderPriority = PRI_UI;
-    RM_LoadImage(r, "Assets/cross.png");
+    RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
+    RM_SetText(r, "Resume Game");
+    r->textColor = COLOR_LIGHTYELLOW;
+    r->textScale = CP_Vector_Set(1.5f, 1.5f);
     // Close Button highlighted.
-    pauseCloseHighlight = RM_AddComponent(g);
-    pauseCloseHighlight->renderPriority = PRI_UI;
-    RM_LoadImage(pauseCloseHighlight, "Assets/crosshighlight.png");
+    //pauseCloseHighlight = RM_AddComponent(g);
+    //pauseCloseHighlight->renderPriority = PRI_UI;
+    //RM_LoadImage(pauseCloseHighlight, "Assets/crosshighlight.png");
 
     g = GOM_Create(RECTANGLE);
     g->position = CP_Vector_Set(temp->position.x, temp->position.y + temp->scale.y * 0.2f);
@@ -328,9 +335,10 @@ void InitPause()
     g->tag = "ReturnToMainMenu";
     r = RM_AddComponent(g);
     r->renderPriority = PRI_UI;
-    r->color = CP_Color_Create(255, 255, 255, 255);
+    RM_LoadImage(r, "Assets/Backgrounds/button-light.png");
     r->textScale = CP_Vector_Set(1.5f, 1.5f);
-    RM_SetText(r, "Return to main menu");
+    RM_SetText(r, "Return to Main Menu");
+    r->textColor = COLOR_LIGHTYELLOW;
     c = CLM_AddComponent(g);
     CLM_Set(c, COL_BOX, LevelOne_OnCollision);
     c->space = COLSPC_SCREEN;
@@ -375,47 +383,46 @@ int IsPaused()
     if (isPaused)
     {
         LinkedList* n = pauseMenus; GameObject* button = NULL;
+
+        float mouseX = CP_Input_GetMouseX();
+        float mouseY = CP_Input_GetMouseY();
+        GameObject* tempMouse = GOM_CreateTemp(EMPTY);
+        tempMouse->position = CP_Vector_Set(mouseX, mouseY);
+        Collider* c = CLM_AddComponent(tempMouse);
+        CLM_Set(c, COL_POINT, NULL);
+        c->space = COLSPC_SCREEN;
+        c->isTrigger = 1;
+
+        CP_Vector spd = CP_Vector_Set(200, 100);
+        CP_Vector def = CP_Vector_Set(220, 50);
+        CP_Vector max = CP_Vector_Set(260, 70);
+
         for (; n; n = n->next)
         {
             GameObject* tn = (GameObject*)n->curr;
-            if (strcmp(tn->tag, "ReturnToMainMenu") == 0)
+            if (strcmp(tn->tag, "ReturnToMainMenu") == 0 || strcmp(tn->tag, "pauseClose") == 0)
             {
                 button = tn;
-                break;
+
+                Collider* buttonc = CLM_GetComponent(button);
+                if (IsBoxCollidePoint(buttonc, c))
+                {
+                    button->scale.x += spd.x * CP_System_GetDt();
+                    button->scale.y += spd.y * CP_System_GetDt();
+                    button->scale.x = min(button->scale.x, max.x);
+                    button->scale.y = min(button->scale.y, max.y);
+                }
+                else
+                {
+                    //scale down
+                    button->scale.x -= spd.x * CP_System_GetDt();
+                    button->scale.y -= spd.y * CP_System_GetDt();
+                    button->scale.x = max(button->scale.x, def.x);
+                    button->scale.y = max(button->scale.y, def.y);
+                }
+
             }
         }
-        if (button)
-        {
-            float mouseX = CP_Input_GetMouseX();
-            float mouseY = CP_Input_GetMouseY();
-            GameObject* tempMouse = GOM_CreateTemp(EMPTY);
-            tempMouse->position = CP_Vector_Set(mouseX, mouseY);
-            Collider* c = CLM_AddComponent(tempMouse);
-            CLM_Set(c, COL_POINT, NULL);
-            c->space = COLSPC_SCREEN;
-            c->isTrigger = 1;
-
-            Collider* buttonc = CLM_GetComponent(button);
-            CP_Vector spd = CP_Vector_Set(200, 100);
-            CP_Vector def = CP_Vector_Set(220, 50);
-            CP_Vector max = CP_Vector_Set(260, 70);
-            if (IsBoxCollidePoint(buttonc, c))
-            {
-                button->scale.x += spd.x * CP_System_GetDt();
-                button->scale.y += spd.y * CP_System_GetDt();
-                button->scale.x = min(button->scale.x, max.x);
-                button->scale.y = min(button->scale.y, max.y);
-            }
-            else
-            {
-                //scale down
-                button->scale.x -= spd.x * CP_System_GetDt();
-                button->scale.y -= spd.y * CP_System_GetDt();
-                button->scale.x = max(button->scale.x, def.x);
-                button->scale.y = max(button->scale.y, def.y);
-            }
-        }
-
     }
 
     return isPaused;
