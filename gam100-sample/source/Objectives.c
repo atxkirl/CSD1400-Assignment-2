@@ -363,7 +363,7 @@ void Objectives_RenderUI()
 
     for (int i = 0; i < iNumObjectives;)
     {
-        g_ObjectiveUI[i] = malloc(sizeof(GameObject*));
+        g_ObjectiveUI[i] = GOM_Create(EMPTY);
         for (int j = 0; j < NumGrids; j++)
         {
             for (int k = 0; k < NumGrids; k++)
