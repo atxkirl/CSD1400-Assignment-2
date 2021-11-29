@@ -43,6 +43,7 @@ bool p_Hideable = false;
 bool g_objective1 = false, g_objective2 = false , g_objective3 = false, g_objective4 = false, g_objective5 = false;
 bool g_object1collect = false, g_object1drop = false, g_object1comp = false;
 bool p_walk = false;
+bool p_GODMODE = false;
 
 GameObject* ply_interactHint;
 #define PLY_HINTOFFSET CP_Vector_Set(25,-30)
@@ -337,11 +338,18 @@ void PLY_Update() { // handles input from player and checking for flags
             player->oDirection = RIGHT;
         } // right
     }
+
+    // Toggle GODMODE
+    if (CP_Input_KeyTriggered(KEY_RIGHT_SHIFT))
+        p_GODMODE = !p_GODMODE;
      
     // update and checks for invincibility
-    if (p_Invincible == 1) 
+    if (p_Invincible || p_GODMODE)
     {
-        counter();
+        // Only start counter if player is invincible and not godmode.
+        if(p_Invincible && !p_GODMODE)
+            counter();
+
         player_invulBubble->isEnabled = 1;
         player_invulBubble->position = player->position;
     }
@@ -471,7 +479,7 @@ int PLY_IsInvincible(void)
 
 bool PLY_TakeDamage(void)
 {
-    if (!p_Invincible)
+    if (!p_Invincible && !p_GODMODE)
     {
         startTime = clock(); //holds information on when the player was last hit according to the time
         p_Invincible = true;

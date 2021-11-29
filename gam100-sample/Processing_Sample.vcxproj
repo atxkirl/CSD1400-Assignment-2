@@ -243,6 +243,7 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClInclude Include="source\CollisionManager.h" />
     <ClInclude Include="source\Colors.h" />
     <ClInclude Include="source\Controls.h" />
+    <ClInclude Include="source\DetectMemoryLeak.h" />
     <ClInclude Include="source\Dialogue.h" />
     <ClInclude Include="source\FileParser.h" />
     <ClInclude Include="source\FSM.h" />

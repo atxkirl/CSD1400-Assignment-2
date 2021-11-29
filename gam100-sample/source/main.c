@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "cprocessing.h"
 #include "SceneManager.h"
+#include "DetectMemoryLeak.h"
 
 /* Entry point */
 int main(void)
@@ -32,5 +33,6 @@ int main(void)
 #endif // _DEBUG
     CP_Engine_Run();
 
+    _CrtDumpMemoryLeaks();
     return 0;
 }

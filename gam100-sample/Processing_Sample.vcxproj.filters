@@ -227,5 +227,8 @@
     <ClInclude Include="source\Controls.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="source\DetectMemoryLeak.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
