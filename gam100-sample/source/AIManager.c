@@ -28,6 +28,8 @@ void AIM_Clear(void)
 		if (enemy)
 		{
 			free(enemy->targetPosition);
+			LL_Clear(&enemy->movementPath);
+			free(enemy);
 		}
 	}
 
@@ -70,7 +72,8 @@ void AIM_Update()
 			distance = CP_Vector_Subtract(enemy->controlledObject->position, currentNode->position);
 			if (CP_Vector_Length(distance) <= (distanceTillReached * enemy->tileSize))
 			{
-				enemy->movementPath = enemy->movementPath->next;
+				//enemy->movementPath = enemy->movementPath->next;
+				LL_RemoveIndex(&enemy->movementPath, 0);
 			}
 			else
 			{

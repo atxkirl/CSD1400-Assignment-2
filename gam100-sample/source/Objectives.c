@@ -154,7 +154,7 @@ void Objectives_Init(float fScreenWidth, float fScreenHeight)
     {
         if (gObjectives)
         {
-            *(gObjectives+ i) = malloc(sizeof(GameObject));
+            *(gObjectives + i) = GOM_Create(EMPTY);
         }
     }
     iCurrentObjective = 0;

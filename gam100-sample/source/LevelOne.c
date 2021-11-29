@@ -237,6 +237,7 @@ void LevelOne_update(void)
 void LevelOne_exit(void)
 {
     ClearPause();
+    AStar_ClearMap(&map);
     SM_SystemsExit();
     Objectives_Exit();
     LoaderExit();
