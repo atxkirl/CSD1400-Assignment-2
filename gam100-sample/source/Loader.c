@@ -103,16 +103,7 @@ void LoaderUpdate()
 /// </summary>
 void LoaderExit()
 {
-	SM_SystemsExit();
-
-	//for (int i = 0; i < NumGrids; ++i)
-	//{
-	//	for (int j = 0; j < NumGrids; ++j)
-	//	{
-	//		free(gLoadedGrids->gGrid[i][j]);
-	//		free(gLoadedObjects->gGrid[i][j]);
-	//	}
-	//}
+	//SM_SystemsExit();
 
 	free(gLoadedGrids);
 	free(gLoadedObjects);
@@ -256,6 +247,11 @@ void LoadGrid(char* cInput, int iLoad)
 			}
 		}
 	}
+
+	if (objList)
+		free(objList);
+	if (objList2)
+		free(objList2);
 }
 
 /// <summary>
@@ -311,6 +307,15 @@ void LoadObjectives(char* cInput)
 				++iNumObjectives;
 			}
 		}
+	}
+
+	if (cObjectiveList)
+	{
+		for (int i = 0; i < MAX_OBJECTIVES; i++)
+		{
+			free(cObjectiveList[i]);
+		}
+		free(cObjectiveList);
 	}
 }
 

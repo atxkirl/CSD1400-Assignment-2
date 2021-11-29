@@ -431,8 +431,6 @@ void LevelEditorExit()
 			free(gObjectGrids.gGrid[i][j]);
 		}
 	}*/
-
-	//free(gGrids.gGrid);
 }
 
 /// <summary>
@@ -688,21 +686,11 @@ void SaveGrid()
 	{
 		if (GridObj)
 		{
-			for (int j = 0; j < 70; ++j)
-			{
-				free(GridObj[i][j]);
-			}
-
 			free(GridObj[i]);
 		}
 
 		if (GridObjects)
 		{
-			for (int j = 0; j < 70; ++j)
-			{
-				free(GridObjects[i][j]);
-			}
-
 			free(GridObjects[i]);
 		}
 	}

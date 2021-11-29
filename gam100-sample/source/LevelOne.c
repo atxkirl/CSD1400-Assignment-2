@@ -237,8 +237,8 @@ void LevelOne_update(void)
 void LevelOne_exit(void)
 {
     ClearPause();
-    LoaderExit();
     Objectives_Exit();
+    LoaderExit();
     SM_SystemsExit();
     SDM_StopAll();
     SDM_FreeSounds();
