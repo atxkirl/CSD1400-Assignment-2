@@ -1,8 +1,8 @@
 /*!
 @file		Objective_Fixboat.h
 @author		Ow Hong Yu (ow.h)
-@course		CSD 1400
-@section	A
+@course		CSD1400 Software Engineering Project 1
+@Team            BananaBoi
 @brief		One of the objectives. It is a fix the boat puzzle where
 			player has to drag parts and fit into the right slot
 */

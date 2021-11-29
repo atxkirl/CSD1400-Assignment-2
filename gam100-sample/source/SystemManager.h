@@ -1,8 +1,8 @@
 /*!
 @file		SystemManager.h
 @author		Ow Hong Yu (ow.h)
-@course		CSD 1400
-@section	A
+@course		CSD1400 Software Engineering Project 1
+@Team            BananaBoi
 @brief		System manager that controls all the systems and their order of function calls.
 			It makes it easier for scenes to call updates, inits and clears all systems.
 *//*______________________________________________________________________*/

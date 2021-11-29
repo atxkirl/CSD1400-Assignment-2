@@ -1,8 +1,8 @@
 /*!
 @file		Objective_BreakCoconut.c
 @author		Ow Hong Yu (ow.h)
-@course		CSD 1400
-@section	A
+@course		CSD1400 Software Engineering Project 1
+@Team            BananaBoi
 @brief		One of the objectives. It is a click on the coconut a few times
 			until it is broken for objective complete
 */

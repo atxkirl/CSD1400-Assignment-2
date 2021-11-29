@@ -1,8 +1,8 @@
 /*!
 @file		CollisionManager.h
 @author		Ow Hong Yu (ow.h)
-@course		CSD 1400
-@section	A
+@course		CSD1400 Software Engineering Project 1
+@Team            BananaBoi
 @brief		Collision manager that handles all the colliders entity by checking for collisions among
 			the entities
 */

@@ -1,8 +1,8 @@
 /*!
 @file       HongYu.c
 @author		Ow Hong Yu (ow.h)
-@course		CSD 1400
-@section	A
+@course		CSD1400 Software Engineering Project 1
+@Team       BananaBoi
 @brief		A test scene for hong yu to edit and test his functions
 */
 

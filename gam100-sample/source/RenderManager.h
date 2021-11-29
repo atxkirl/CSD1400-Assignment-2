@@ -1,8 +1,8 @@
 /*!
 @file		RendereManager.h
 @author		Ow Hong Yu (ow.h)
-@course		CSD 1400
-@section	A
+@course		CSD1400 Software Engineering Project 1
+@Team            BananaBoi
 @brief		Render Manager that handles all entities that renders on screen. Also defines the world
 			space and screen space system which the entities renders on. Also sorts render orders based on priority.
 */

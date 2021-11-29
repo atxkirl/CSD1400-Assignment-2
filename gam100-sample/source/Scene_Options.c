@@ -2,8 +2,8 @@
 @file            Scene_Options.c
 @author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
 @co-author       Ow Hong Yu (ow.h)
-@course          CSD 1400
-@section         C
+@course          CSD1400 Software Engineering Project 1
+@Team            BananaBoi
 @brief           This file contains the functions for the Scene Options.
                  Player can edit the sounds and controls.
 *//*______________________________________________________________________*/

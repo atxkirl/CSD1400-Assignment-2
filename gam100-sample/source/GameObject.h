@@ -1,8 +1,8 @@
 /*!
 @file		GameObject.h
 @author		Ow Hong Yu (ow.h)
-@course		CSD 1400
-@section	A
+@course		CSD1400 Software Engineering Project 1
+@Team            BananaBoi
 @brief		Struct for gameobject to contain all the essential information of a game object
 */
 

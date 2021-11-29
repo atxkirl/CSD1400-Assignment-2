@@ -1,8 +1,8 @@
 /*!
 @file            Objective_Connect.c
 @author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
-@course          CSD 1400
-@section         C
+@course          CSD1400 Software Engineering Project 1
+@Team            BananaBoi
 @brief           This file contains the functions for Objective Connect
 				 Wire.
 *//*______________________________________________________________________*/
