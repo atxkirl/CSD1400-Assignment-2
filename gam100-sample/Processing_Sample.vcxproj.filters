@@ -4,9 +4,6 @@
     <ClCompile Include="source\game.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Scene.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="source\LevelEditor.c">
       <Filter>Source</Filter>
     </ClCompile>

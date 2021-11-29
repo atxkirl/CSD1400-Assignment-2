@@ -29,6 +29,9 @@ float fEnemyPositionY;
 int iNumObjectives;
 int iNumBoatParts;
 
+Map* objList;
+Map* objList2;
+
 /// <summary>
 /// Initialise Loader Variables
 /// </summary>
@@ -44,7 +47,8 @@ void LoaderInit()
 		oObjectiveList[i].isSet = 0;
 	}
 
-	gLoadedGrids = malloc(sizeof(Grid));
+	if(!gLoadedGrids)
+		gLoadedGrids = malloc(sizeof(Grid));
 
 	if (gLoadedGrids)
 	{// set all to empty first
@@ -64,7 +68,9 @@ void LoaderInit()
 		}
 	}
 
-	gLoadedObjects = malloc(sizeof(Grid));
+	if(!gLoadedObjects)
+		gLoadedObjects = malloc(sizeof(Grid));
+
 	if (gLoadedObjects)
 	{// set all to empty first
 		for (int i = 0; i < NumGrids; i++)
@@ -105,8 +111,14 @@ void LoaderExit()
 {
 	//SM_SystemsExit();
 
-	free(gLoadedGrids);
-	free(gLoadedObjects);
+	free_Map(objList);
+	free_Map(objList2);
+
+	if(gLoadedGrids)
+		free(gLoadedGrids);
+
+	if(gLoadedObjects)
+		free(gLoadedObjects);
 }
 
 /// <summary>
@@ -128,7 +140,7 @@ void LoadGrid(char* cInput, int iLoad)
 	float fScale = fWorldHeight / NumGrids * 4.f; //fit 30 grids vertically in the screen
 
 	Renderer* r;
-	Map* objList = new_Map();
+	objList = new_Map();
 	ReadLevelFromFile(cLevelFileLocation, objList);
 	for (int i = 0; i < objList->iSize; i++)
 	{
@@ -185,7 +197,7 @@ void LoadGrid(char* cInput, int iLoad)
 		}
 	}
 
-	Map* objList2 = new_Map();
+	objList2 = new_Map();
 	ReadLevelFromFile(cObjectFileLocation, objList2);
 	for (int i = 0; i < objList2->iSize; i++)
 	{
@@ -247,11 +259,6 @@ void LoadGrid(char* cInput, int iLoad)
 			}
 		}
 	}
-
-	if (objList)
-		free(objList);
-	if (objList2)
-		free(objList2);
 }
 
 /// <summary>
@@ -260,6 +267,7 @@ void LoadGrid(char* cInput, int iLoad)
 /// <param name="cInput"></param>
 void LoadObjectives(char* cInput)
 {
+	iNumObjectives = 0;
 	char cFileLocation[100] = { "Objectives/" };
 
 	strcat_s(cFileLocation, 100, cInput);

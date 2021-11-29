@@ -45,6 +45,26 @@ Map* new_Map()
 	return goMap;
 }
 
+void free_Map(Map* mToFree)
+{
+	if (mToFree)
+	{
+		if (mToFree->fObjList)
+		{
+			for (int i = 0; i < 900; i++)
+			{
+				if (mToFree->fObjList[i])
+				{
+					free(mToFree->fObjList[i]->cTag);
+				}
+				free(mToFree->fObjList[i]);
+			}
+			free(mToFree->fObjList);
+		}
+		free(mToFree);
+	}
+}
+
 /// <summary>
 /// Read the Map Tiles based on cFileName.txt
 /// </summary>

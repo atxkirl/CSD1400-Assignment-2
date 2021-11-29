@@ -32,6 +32,12 @@ typedef struct StoreMap
 Map* new_Map();
 
 /// <summary>
+/// Frees a Map* variable.
+/// </summary>
+/// <param name="mToFree"></param>
+void free_Map(Map* mToFree);
+
+/// <summary>
 /// Read the Map Tiles based on cFileName.txt
 /// </summary>
 /// <param name="cFileName"></param>

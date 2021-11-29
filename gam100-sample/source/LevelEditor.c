@@ -1355,4 +1355,7 @@ void LoadSavedMap()
 	}
 	LoadTileImage();
 	free(cInput);
+
+	free_Map(objList);
+	free_Map(objList2);
 }

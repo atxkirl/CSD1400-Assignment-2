@@ -127,7 +127,7 @@ void LevelOne_init(void)
     // Loader
     {
         LoaderInit();
-        LoadGrid("level01", 0);
+        LoadGrid("Level01", 0);
 
         //Insert spawn x,y here
         CP_Vector PlayerPos = GetPlayerPosition();
@@ -237,9 +237,9 @@ void LevelOne_update(void)
 void LevelOne_exit(void)
 {
     ClearPause();
+    SM_SystemsExit();
     Objectives_Exit();
     LoaderExit();
-    SM_SystemsExit();
     SDM_StopAll();
     SDM_FreeSounds();
 }

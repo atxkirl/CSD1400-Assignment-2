@@ -321,6 +321,12 @@ void Objectives_Exit()
     //}
     free(cWire);
     free(gObjectives);
+    //for (int i = 0; i < iNumObjectives; ++i)
+    //{
+    //    if (g_ObjectiveUI[i])
+    //        free(g_ObjectiveUI[i]);
+    //}
+
 }
 
 /// <summary>
