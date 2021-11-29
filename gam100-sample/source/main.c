@@ -33,6 +33,8 @@ int main(void)
 #endif // _DEBUG
     CP_Engine_Run();
 
+    SceneManager_Exit();
+
     _CrtDumpMemoryLeaks();
     return 0;
 }

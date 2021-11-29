@@ -1,7 +1,6 @@
 /*
 * @file		SceneManager.c
 * @author	Adrian Tan (t.xingkhiangadrian)
-* @coauthor Ow Hong Yu (ow.h)
 * @course	CSD1400 Software Engineering Project 1
 * @Team		BananaBoi
 * @date		06/10/2021
@@ -11,6 +10,9 @@
 #include "SceneManager.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+Scene* currentScene;	// Pointer to the current scene.
+LinkedList* sceneList;	// Linked List holding all registered scene structs.
 
 /// <summary>
 /// Creates a Scene struct to hold data on a single scene to allow for easy scene changing.
@@ -141,4 +143,18 @@ void SceneManager_ChangeSceneByName(char* sceneName)
 {
 	Scene* nextScene = LL_Find(sceneList, findScene, (void*)sceneName);
 	SceneManager_ChangeScene(nextScene);
+}
+
+/// <summary>
+/// Cleans memory allocated for scenes
+/// </summary>
+void SceneManager_Exit()
+{
+	LinkedList* node = sceneList;
+	while (node)
+	{
+		free(node->curr);
+		node = node->next;
+	}
+	LL_Clear(&sceneList);
 }

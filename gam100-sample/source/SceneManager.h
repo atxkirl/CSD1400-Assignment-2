@@ -1,7 +1,6 @@
 /*
 * @file		SceneManager.c
 * @author	Adrian Tan (t.xingkhiangadrian)
-* @coauthor Ow Hong Yu (ow.h)
 * @course	CSD1400 Software Engineering Project 1
 * @Team		BananaBoi
 * @date		06/10/2021
@@ -63,6 +62,7 @@ void SceneManager_ChangeScene(Scene* nextScene);
 /// </summary>
 /// <param name="sceneName">Human readable name of the scene to change to.</param>
 void SceneManager_ChangeSceneByName(char* sceneName);
-
-Scene* currentScene;	// Pointer to the current scene.
-LinkedList* sceneList;	// Linked List holding all registered scene structs.
+/// <summary>
+/// Cleans memory allocated for scenes
+/// </summary>
+void SceneManager_Exit();
