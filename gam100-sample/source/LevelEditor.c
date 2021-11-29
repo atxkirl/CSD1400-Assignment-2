@@ -51,6 +51,8 @@ extern GameObject *GameObjectList;
 Renderer* renderImage;
 
 int isTileMode;
+Map* objList;
+Map* objList2;
 
 /// <summary>
 /// Checks the tile at the mouse click position if it is the same iObjType.
@@ -421,6 +423,10 @@ void LevelEditorUpdate()
 /// </summary>
 void LevelEditorExit()
 {
+
+	free_Map(objList);
+	free_Map(objList2);
+
 	SM_SystemsExit();
 
 	/*for (int i = 0; i < NumGrids; i++)
@@ -1293,7 +1299,7 @@ void LoadSavedMap()
 		}
 	}
 
-	Map* objList = new_Map();
+	objList = new_Map();
 	ReadLevelFromFile(cLevelFileLocation, objList);
 	Renderer* r;
 	for (int i = 0; i < objList->iSize; i++)
@@ -1324,7 +1330,7 @@ void LoadSavedMap()
 		}
 	}
 
-	Map* objList2 = new_Map();
+	objList2 = new_Map();
 	ReadLevelFromFile(cObjectFileLocation, objList2);
 	for (int i = 0; i < objList2->iSize; i++)
 	{
@@ -1356,6 +1362,4 @@ void LoadSavedMap()
 	LoadTileImage();
 	free(cInput);
 
-	free_Map(objList);
-	free_Map(objList2);
 }
