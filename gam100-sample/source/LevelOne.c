@@ -29,7 +29,7 @@ void LevelOneGridColliderInit();
 
 static GameObject* bananaBoi = NULL;
 static AStar_Map map;
-FSM* enemy;
+FSM* enemy, *enemy2, *enemy3, *enemy4;
 
 static GameObject* howtoplay = NULL;
 static GameObject* close = NULL;
@@ -37,6 +37,14 @@ static Renderer* pauseCloseHighlight = NULL;
 static Renderer* howtoplayCloseHighlight = NULL;
 static bool isPaused;
 LinkedList* pauseMenus;
+
+static const int minSpawnTimer = 5;
+static const int maxSpawnTimer = 15;
+static float spawnElapsedTime = 0.f;
+static float spawnTimer = 0.f;
+
+static const int maxEnemyCount = 6;
+static int enemyCount = 0;
 
 /// <summary>
 /// Function declaration for: Initializes the pause menu.
@@ -56,6 +64,10 @@ int IsPaused();
 /// Function declaration for: Clears memory allocated by pause.
 /// </summary>
 void ClearPause();
+/// <summary>
+/// Loop that slowly spawns more and more enemies into the level.
+/// </summary>
+void SpawnEnemies();
 
 GameObject* GameFpsCounterObj;
 /// <summary>
@@ -167,7 +179,17 @@ void LevelOne_init(void)
 
     // Enemies
     {
-        enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", GetEnemyPosition(), bananaBoi, &map);
+        //enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", GetEnemyPosition(), bananaBoi, &map);
+        //enemy2 = AIM_CreateEnemy("BBEM", "BBEM_Roam", GetEnemyPosition(), bananaBoi, &map);
+        //enemy3 = AIM_CreateEnemy("BBEM", "BBEM_Roam", GetEnemyPosition(), bananaBoi, &map);
+        //enemy4 = AIM_CreateEnemy("BBEM", "BBEM_Idle", GetEnemyPosition(), bananaBoi, &map);
+
+        AIM_CreateEnemy("BBEM", "BBEM_Idle", GetEnemyPosition(), bananaBoi, &map);
+        enemyCount = 1;
+
+        // Set a random timer for next spawner
+        spawnTimer = FRAND(minSpawnTimer, maxSpawnTimer);
+        spawnElapsedTime = 0.f;
     }
 
     SDM_Init();
@@ -191,6 +213,7 @@ void LevelOne_update(void)
             PLY_Update();
         }
         Objectives_Update();
+        SpawnEnemies();
     }
     else
     {
@@ -404,6 +427,30 @@ void ClearPause()
     LL_Clear(&pauseMenus);
     pauseMenus = NULL;
 }
+
+/// <summary>
+/// Loop that slowly spawns more and more enemies into the level.
+/// </summary>
+void SpawnEnemies()
+{
+    spawnElapsedTime += CP_System_GetDt();
+    if (enemyCount >= maxEnemyCount)
+        return;
+    else if (spawnElapsedTime < spawnTimer)
+        return;
+
+    printf("Spawning an Enemy!!\n");
+    // Spawn an enemy.
+    CP_Vector spawnPos = CP_Vector_Zero();
+    AStar_GetTile(&spawnPos, bananaBoi->position, &map, 3, 6);
+    AIM_CreateEnemy("BBEM", "BBEM_Idle", spawnPos, bananaBoi, &map);
+    ++enemyCount;
+
+    // Reset timer and get new spawn timer.
+    spawnTimer = FRAND(minSpawnTimer, maxSpawnTimer);
+    spawnElapsedTime -= spawnElapsedTime;
+}
+
 /// <summary>
 /// Initializes framerate display object.
 /// </summary>

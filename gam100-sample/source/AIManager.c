@@ -270,7 +270,8 @@ FSM* AIM_CreateEnemy(char* enemyName, char* startStateName, CP_Vector enemyPos, 
 	RM_LoadImage(enemy->controlledRenderer, "Assets/monke/bigmonke-front.png");
 	// Collider
 	enemy->controlledCollider = CLM_AddComponent(enemy->controlledObject);
-	CLM_Set(enemy->controlledCollider, COL_BOX, NULL);			// TODO: Add function in Enemy to handle collisions with Player to deal damage or something.
+	CLM_Set(enemy->controlledCollider, COL_BOX, NULL);
+	enemy->controlledCollider->isTrigger = 1;
 
 	// Pathfinding
 	enemy->map = levelMap;
