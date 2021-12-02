@@ -25,7 +25,7 @@ GameObject* heart3 = NULL;
 //4 = back spritesheet, 5 = front spritesheet, 6 = left spritesheet, 7 = rightspritesheet
 Renderer* render[RENDER_COUNT] = { NULL };
 time_t startTime;
-#define PLY_SPRITE_FPS 3
+#define PLY_SPRITE_FPS 6
 
 
 // Player Parameters
@@ -34,6 +34,7 @@ float spd;
 int playerhealth;
 float n_weight = 0;
 float weight = 50.0f;
+int p_Walking = 0;
 
 // Insert all flags that are needed below
 bool p_Slowed = false;
@@ -212,6 +213,32 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     RM_LoadImage(render[1], "Assets/bananaboi/bananaboi-front.png");
     //todo load the rest
     //...
+    render[2] = RM_AddComponent(player);
+    render[2]->renderPriority = PRI_PLY;
+    RM_LoadImage(render[2], "Assets/bananaboi/bananaboi-side.png");
+
+    render[3] = RM_AddComponent(player);
+    render[3]->renderPriority = PRI_PLY;
+    RM_LoadImage(render[3], "Assets/bananaboi/bananaboi-side.png");
+    render[3]->isXFlipped = 1;
+
+    render[4] = RM_AddComponent(player);
+    render[4]->renderPriority = PRI_PLY;
+    RM_LoadImage(render[4], "Assets/bananaboi/bananaboi-back-sprite.png");
+    a = AM_AddComponent(player);
+    AM_SetSprite(a, 6, 1, 6, PLY_SPRITE_FPS, render[4]);
+
+    render[5] = RM_AddComponent(player);
+    render[5]->renderPriority = PRI_PLY;
+    RM_LoadImage(render[5], "Assets/bananaboi/bananaboi-front-sprite.png");
+    a = AM_AddComponent(player);
+    AM_SetSprite(a, 6, 1, 6, PLY_SPRITE_FPS, render[5]);
+
+    render[6] = RM_AddComponent(player);
+    render[6]->renderPriority = PRI_PLY;
+    RM_LoadImage(render[6], "Assets/bananaboi/bananaboi-side-sprite.png");
+    a = AM_AddComponent(player);
+    AM_SetSprite(a, 6, 1, 6, PLY_SPRITE_FPS, render[6]);
 
     //loading right sprite sheet
     render[7] = RM_AddComponent(player);
@@ -317,16 +344,23 @@ void PLY_Update() { // handles input from player and checking for flags
         if (CP_Input_KeyDown((CP_KEY)cControls->cUp)) {
             player->position.y -= currentSpd * dt;
             SDM_PlayWEffect();
+            p_Walking = 1;
+
+            player->oDirection = UP;
         }// up
 
         if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) {
             player->position.x -= currentSpd * dt;
             SDM_PlayWEffect();
+            p_Walking = 1;
+
+            player->oDirection = LEFT;
         }  // left
 
         if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) {
             player->position.y += currentSpd * dt; 
             SDM_PlayWEffect();
+            p_Walking = 1;
 
             player->oDirection = DOWN;
         } // down
@@ -334,6 +368,7 @@ void PLY_Update() { // handles input from player and checking for flags
         if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) {
             player->position.x += currentSpd * dt;
             SDM_PlayWEffect();
+            p_Walking = 1;
 
             player->oDirection = RIGHT;
         } // right
@@ -451,15 +486,43 @@ void PLY_Update() { // handles input from player and checking for flags
         render[i]->isEnabled = 0;
     }
 
-
-    if (player->oDirection == DOWN)
+    if (player->oDirection == DOWN && p_Walking == 1) 
     {
-        render[1]->isEnabled = 1;
+        render[5]->isEnabled = 1;
     }
-    else if (player->oDirection == RIGHT)
+    if (player->oDirection == UP && p_Walking == 1)
+    {
+        render[4]->isEnabled = 1;
+    }
+    if (player->oDirection == LEFT && p_Walking == 1)
+    {
+        render[6]->isEnabled = 1;
+    }
+    else if (player->oDirection == RIGHT && p_Walking == 1)
     {
         render[7]->isEnabled = 1;
     }
+
+    if (p_Walking == 0) {
+        if (player->oDirection == DOWN)
+        {
+            render[1]->isEnabled = 1;
+        }
+        if (player->oDirection == UP)
+        {
+            render[0]->isEnabled = 1;
+        }
+        if (player->oDirection == LEFT)
+        {
+            render[2]->isEnabled = 1;
+        }
+        else if (player->oDirection == RIGHT)
+        {
+            render[3]->isEnabled = 1;
+        }
+    }
+
+    p_Walking = 0;
 
     if (playerhealth <= 0)
     {
