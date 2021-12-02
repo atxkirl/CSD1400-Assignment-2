@@ -59,11 +59,9 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 	}
 	if (starting == ending)
 	{
-		printf("Warning! Starting and Ending node is the same. [LinkedList* GetPath]\n");
+		printf("Warning! Starting and Ending nodes are the same. [LinkedList* GetPath]\n");
 		return;
 	}
-
-	printf("Calculating new path... Start [%d, %d]  End [%d, %d]\n", starting->row, starting->column, ending->row, ending->column);
 
 	LinkedList* openList = NULL; // List of nodes that we want to test.
 	LinkedList* closedList = NULL; // List of nodes that we've already tested.
@@ -112,7 +110,6 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 					printf("Circular parenting!\n");
 					break;
 				}
-				printf("path\n");
 				LL_Add(path, lowestF);
 				prevNode = lowestF;
 			}

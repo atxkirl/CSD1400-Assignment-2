@@ -132,8 +132,6 @@ void AIM_Update()
 				CP_Matrix rotation;
 				CP_Vector rotateForward;
 
-				// Draw forward
-				RM_DebugDrawLine(go->position, enemy->fovDetectionForward, PRI_GAME_OBJECT, c);
 				// Draw fov extents
 				c = CP_Color_Create(0, 255, 0, 255);
 				rotation = CP_Matrix_Rotate(enemy->fovDetectionHalfAngle);
