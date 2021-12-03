@@ -43,7 +43,7 @@ static const int maxSpawnTimer = 15;
 static float spawnElapsedTime = 0.f;
 static float spawnTimer = 0.f;
 
-static const int maxEnemyCount = 6;
+static const int maxEnemyCount = 1;
 static int enemyCount = 0;
 
 /// <summary>

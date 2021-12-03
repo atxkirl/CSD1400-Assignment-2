@@ -134,9 +134,7 @@ void AIM_Update()
 				char str[100] = { 0 };
 				sprintf_s(str, 100, "%s\n%2d", enemy->currentState, LL_GetCount(enemy->movementPath));
 				RM_SetText(RM_GetComponent(go), str);
-#endif
 
-				// Show AI detection cone.
 				c = CP_Color_Create(255, 0, 0, 255);
 				CP_Matrix rotation;
 				CP_Vector rotateForward;
@@ -151,6 +149,18 @@ void AIM_Update()
 				rotateForward = CP_Vector_MatrixMultiply(rotation, enemy->controlledObjForward);
 				rotateForward = CP_Vector_Normalize(rotateForward);
 				RM_DebugDrawLine(go->position, CP_Vector_Add(go->position, CP_Vector_Scale(rotateForward, enemy->fovDetectionRadius * enemy->tileSize)), PRI_GAME_OBJECT, c, 0);
+#endif
+
+				// Show AI detection cone.
+				// Calculate angle between up vector and GO's forward vector
+				CP_Vector upVec = CP_Vector_Subtract(enemy->controlledObject->position, CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Set(0, 64)));
+				CP_Vector forVec = enemy->controlledObjForward;
+				float angle = CP_Vector_Angle(forVec, upVec);
+				if (CP_Vector_DotProduct(CP_Vector_Set(1, 0), forVec) > 0)
+					angle *= -1;
+
+				enemy->controlledFOVObject->rotation = angle;
+				enemy->controlledFOVObject->position = CP_Vector_Add(enemy->controlledObject->position, CP_Vector_Scale(enemy->controlledObjForward, 1.75f * enemy->tileSize));
 			}
 		}
 	}
@@ -283,19 +293,25 @@ FSM* AIM_CreateEnemy(char* enemyName, char* startStateName, CP_Vector enemyPos, 
 	CLM_Set(enemy->controlledCollider, COL_BOX, NULL);
 	enemy->controlledCollider->isTrigger = 1;
 
+
 	// Pathfinding
 	enemy->map = levelMap;
 	enemy->movementPath = NULL;
 	enemy->moveSpeed = 0.f;
-	
+
+
 	// Initialize StateMachine
 	AIM_InitFSM(enemy, startStateName, targetObj);
 
+
+	// FOV GameObject
+	enemy->controlledFOVObject = GOM_Create2(CIRCLE, enemyPos, 0.f, CP_Vector_Set(enemy->tileSize * enemy->fovDetectionRadius, enemy->tileSize * enemy->fovDetectionRadius));
+	// FOV Renderer
+	enemy->controlledFOVRenderer = RM_AddComponent(enemy->controlledFOVObject);
+	RM_LoadImage(enemy->controlledFOVRenderer, "Assets/fov.png");
+
+
+	// Add it to the list of all enemies.
 	LL_Add(&allEnemies, enemy);
 	return enemy;
 }
-
-// TODO:
-// - Add detection cone with variable detection angle (FOV)
-// - Add "hideable" tiles to Search state.
-// - Add "emotion" GameObject and Renderers above AI's head. (To display stuff like "??" when AI is searching for Player, and "!!" when AI finds player.

@@ -32,6 +32,9 @@ struct FSM
 	CP_Vector controlledObjForward;	// The forward vector of the controlled GameObject.
 	Renderer* controlledRenderer;
 	Collider* controlledCollider;
+
+	GameObject* controlledFOVObject;
+	Renderer* controlledFOVRenderer;
 	// Enemy State Display:
 	GameObject* displayObject;
 	Renderer* displayRenderer;
