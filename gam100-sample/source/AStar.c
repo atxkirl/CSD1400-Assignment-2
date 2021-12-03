@@ -247,7 +247,8 @@ void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* ma
 	int dRow, dCol;
 	int negativeRow, negativeCol;
 	int row, col;
-	int detectInfLoop = 0;
+	int detectInf1, detectInf2, detectInf3;
+	detectInf1 = detectInf2 = detectInf3 = 0;
 
 	// Get the row and column values of the Player.
 	if (!AStar_GetRowCol(epicenter, map, &row, &col))
@@ -259,9 +260,10 @@ void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* ma
 	// Look to find valid position in map
 	while (true)
 	{
-		if (detectInfLoop++ >= INFINITE_LOOP)
+		if (detectInf1++ >= INFINITE_LOOP)
 		{
-			printf("WARNING! Stuck in an infinite loop!!!\n");
+			printf("AStar_GetTile(). Main Loop. Breaking out of infinite loop!\n");
+			AStar_GetRowCol(epicenter, map, &row, &col);
 			break;
 		}
 
@@ -271,8 +273,15 @@ void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* ma
 		negativeCol = RAND(0, 1);
 
 		// Look for valid row number
-		while (1)
+		while (true)
 		{
+			if (detectInf2++ >= INFINITE_LOOP)
+			{
+				printf("AStar_GetTile(). Row Loop. Breaking out of infinite loop!\n");
+				AStar_GetRowCol(epicenter, map, &row, &col);
+				break;
+			}
+
 			if (negativeRow && (row - dRow) >= 0)
 			{
 				row -= dRow;
@@ -287,8 +296,15 @@ void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* ma
 		}
 
 		// Look for valid col number
-		while (1)
+		while (true)
 		{
+			if (detectInf3++ >= INFINITE_LOOP)
+			{
+				printf("AStar_GetTile(). Column Loop. Breaking out of infinite loop!\n");
+				AStar_GetRowCol(epicenter, map, &row, &col);
+				break;
+			}
+
 			if (negativeCol && (col - dCol) >= 0)
 			{
 				col -= dCol;
