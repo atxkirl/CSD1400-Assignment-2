@@ -122,6 +122,7 @@ void game_init(void)
 
     GameObject* button;
     Renderer* r;
+    Collider* c;
 
 #if _DEBUG
     button = GOM_Create2(RECTANGLE, CP_Vector_Set(80.0f, 25.0f), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -130,7 +131,7 @@ void game_init(void)
     r->renderPriority = PRI_UI;
     //r->text = "marcus";
     RM_SetText(r, "marcus");
-    Collider* c = CLM_AddComponent(button);
+    c = CLM_AddComponent(button);
     CLM_Set(c, COL_BOX, game_OnCollision);
     c->space = COLSPC_SCREEN;
 

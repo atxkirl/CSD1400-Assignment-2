@@ -94,7 +94,6 @@ void AIM_Update()
 			if (enemy)
 			{
 				CP_Color c;
-				GameObject* go = enemy->controlledObject;
 
 				// Show AI state and movement path.
 				int di = 0;
@@ -131,6 +130,7 @@ void AIM_Update()
 				}
 
 #ifdef _DEBUG
+				GameObject* go = enemy->controlledObject;
 				char str[100] = { 0 };
 				sprintf_s(str, 100, "%s\n%2d", enemy->currentState, LL_GetCount(enemy->movementPath));
 				RM_SetText(RM_GetComponent(go), str);
