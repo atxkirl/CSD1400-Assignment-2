@@ -377,7 +377,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.077f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.074f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveOnePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[0].cObjective);
                     r->renderPriority = PRI_UI;
@@ -436,7 +436,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.1025f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.096f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveThreePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[2].cObjective);
                     r->renderPriority = PRI_UI;

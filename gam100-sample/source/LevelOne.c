@@ -127,7 +127,26 @@ void LevelOne_init(void)
     // Loader
     {
         LoaderInit();
-        LoadGrid("Level01", 0);
+
+        int iRandLevel = rand() % 3;
+        printf("Level : %d\n", iRandLevel + 1);
+        switch (iRandLevel)
+        {
+        case(0):
+            LoadGrid("Level01", 0);
+            break;
+
+        case(1):
+            LoadGrid("Level02", 0);
+            break;
+
+        case(2):
+            LoadGrid("Level03", 0);
+            break;
+
+        default:
+            break;
+        }
 
         //Insert spawn x,y here
         CP_Vector PlayerPos = GetPlayerPosition();

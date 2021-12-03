@@ -88,7 +88,7 @@ void ReadLevelFromFile(char* cFileName, Map* mMap)
 			if (cFileRead[0] == '\n')
 				break;
 
-			printf("%s", cFileRead);
+			//printf("%s", cFileRead);
 
 			if (cFileRead != NULL)
 			{
@@ -194,7 +194,7 @@ void ReadObjectivesFromFile(char* cFileName, char** cOutputObjectives)
 		{
 			int i = 0, j = 0;
 
-			printf("%s", cFileRead);
+			//printf("%s", cFileRead);
 
 			if (cFileRead != NULL)
 			{

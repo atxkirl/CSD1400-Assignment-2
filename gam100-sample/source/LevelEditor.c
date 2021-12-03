@@ -571,7 +571,7 @@ void SaveGrid()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gGrids.gGrid[j][i]->type !=  EMPTY && iObjNum < 900)
+			if (gGrids.gGrid[i][j]->type !=  EMPTY && iObjNum < 900)
 			{
 				char ObjType[10];
 				char ObjPosX[10];
@@ -581,7 +581,7 @@ void SaveGrid()
 				{
 					if (GridObj[iObjNum])
 					{
-						sprintf_s(ObjType, 10, "%d", gGrids.gGrid[j][i]->type);
+						sprintf_s(ObjType, 10, "%d", gGrids.gGrid[i][j]->type);
 						strcpy_s(GridObj[iObjNum], 70, ObjType); //type
 						strcat_s(GridObj[iObjNum], 70, ",");
 
@@ -594,11 +594,11 @@ void SaveGrid()
 						strcat_s(GridObj[iObjNum], 70, ",");
 						printf("%s\n", GridObj[iObjNum]);
 
-						sprintf_s(cObjDirection, 10, "%d", (int)gGrids.gGrid[j][i]->oDirection);
+						sprintf_s(cObjDirection, 10, "%d", (int)gGrids.gGrid[i][j]->oDirection);
 						strcat_s(GridObj[iObjNum], 70, cObjDirection); // dir
 						strcat_s(GridObj[iObjNum], 70, ",");
 
-						sprintf_s(cObjDirection, 30, "%s", gGrids.gGrid[j][i]->tag);
+						sprintf_s(cObjDirection, 30, "%s", gGrids.gGrid[i][j]->tag);
 						strcat_s(GridObj[iObjNum], 70, cObjDirection); // tag
 						strcat_s(GridObj[iObjNum], 70, "\n");
 
@@ -641,7 +641,7 @@ void SaveGrid()
 	{
 		for (int j = 0; j < NumGrids; j++)
 		{
-			if (gObjectGrids.gGrid[j][i]->type != EMPTY && iObjNum < 900)
+			if (gObjectGrids.gGrid[i][j]->type != EMPTY && iObjNum < 900)
 			{
 				char ObjType[10];
 				char ObjPosX[10];
@@ -651,7 +651,7 @@ void SaveGrid()
 				{
 					if (GridObjects[iObjNum])
 					{
-						sprintf_s(ObjType, 10, "%d", gObjectGrids.gGrid[j][i]->type);
+						sprintf_s(ObjType, 10, "%d", gObjectGrids.gGrid[i][j]->type);
 						strcpy_s(GridObjects[iObjNum], 70, ObjType); //type
 						strcat_s(GridObjects[iObjNum], 70, ",");
 
@@ -664,11 +664,11 @@ void SaveGrid()
 						strcat_s(GridObjects[iObjNum], 70, ",");
 						printf("%s\n", GridObjects[iObjNum]);
 
-						sprintf_s(cObjDirection, 10, "%d", (int)gObjectGrids.gGrid[j][i]->oDirection);
+						sprintf_s(cObjDirection, 10, "%d", (int)gObjectGrids.gGrid[i][j]->oDirection);
 						strcat_s(GridObjects[iObjNum], 70, cObjDirection); // dir
 						strcat_s(GridObjects[iObjNum], 70, ",");
 
-						sprintf_s(cObjDirection, 30, "%s", gObjectGrids.gGrid[j][i]->tag);
+						sprintf_s(cObjDirection, 30, "%s", gObjectGrids.gGrid[i][j]->tag);
 						strcat_s(GridObjects[iObjNum], 70, cObjDirection); // tag
 						strcat_s(GridObjects[iObjNum], 70, "\n");
 
