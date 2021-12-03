@@ -3,7 +3,7 @@
 14,16,4,0,object
 14,6,5,0,object
 15,4,6,0,object
-15,12,6,0,object
+13,12,6,0,EnemySpawn
 14,3,7,0,object
 14,6,7,0,object
 14,10,7,0,object
