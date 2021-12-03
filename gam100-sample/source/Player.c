@@ -254,7 +254,8 @@ GameObject* PLY_CreatePlayer(float x, float y) {
         if (render[i]!=NULL)
         render[i]->isEnabled = 0;
     }
-    render[1]->isEnabled = 1;
+    if (render[1])
+        render[1]->isEnabled = 1;
 
     //reset all booleans
     player->oDirection = DOWN;
@@ -331,11 +332,15 @@ void PLY_Update() { // handles input from player and checking for flags
 
     if (p_Hidden == false) 
     {
-        RM_GetComponent(player)->color.a = 255;
+        for (int i = 0; i < RENDER_COUNT; i++)
+            render[i]->color.a = 255;
+        //RM_GetComponent(player)->color.a = 255;
     }
     else
     {
-        RM_GetComponent(player)->color.a = 122;
+        for (int i = 0; i < RENDER_COUNT; i++)
+            render[i]->color.a = 122;
+        //RM_GetComponent(player)->color.a = 122;
     }
 
     if (!p_Hideable)
@@ -349,14 +354,6 @@ void PLY_Update() { // handles input from player and checking for flags
             player->oDirection = UP;
         }// up
 
-        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) {
-            player->position.x -= currentSpd * dt;
-            SDM_PlayWEffect();
-            p_Walking = 1;
-
-            player->oDirection = LEFT;
-        }  // left
-
         if (CP_Input_KeyDown((CP_KEY)cControls->cDown)) {
             player->position.y += currentSpd * dt; 
             SDM_PlayWEffect();
@@ -364,6 +361,14 @@ void PLY_Update() { // handles input from player and checking for flags
 
             player->oDirection = DOWN;
         } // down
+
+        if (CP_Input_KeyDown((CP_KEY)cControls->cLeft)) {
+            player->position.x -= currentSpd * dt;
+            SDM_PlayWEffect();
+            p_Walking = 1;
+
+            player->oDirection = LEFT;
+        }  // left
 
         if (CP_Input_KeyDown((CP_KEY)cControls->cRight)) {
             player->position.x += currentSpd * dt;
@@ -506,18 +511,22 @@ void PLY_Update() { // handles input from player and checking for flags
     if (p_Walking == 0) {
         if (player->oDirection == DOWN)
         {
+            if (render[1])
             render[1]->isEnabled = 1;
         }
         if (player->oDirection == UP)
         {
+            if (render[0])
             render[0]->isEnabled = 1;
         }
         if (player->oDirection == LEFT)
         {
+            if (render[2])
             render[2]->isEnabled = 1;
         }
         else if (player->oDirection == RIGHT)
         {
+            if (render[3])
             render[3]->isEnabled = 1;
         }
     }
