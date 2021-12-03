@@ -198,11 +198,6 @@ void LevelOne_init(void)
 
     // Enemies
     {
-        //enemy = AIM_CreateEnemy("BBEM", "BBEM_Idle", GetEnemyPosition(), bananaBoi, &map);
-        //enemy2 = AIM_CreateEnemy("BBEM", "BBEM_Roam", GetEnemyPosition(), bananaBoi, &map);
-        //enemy3 = AIM_CreateEnemy("BBEM", "BBEM_Roam", GetEnemyPosition(), bananaBoi, &map);
-        //enemy4 = AIM_CreateEnemy("BBEM", "BBEM_Idle", GetEnemyPosition(), bananaBoi, &map);
-
         AIM_CreateEnemy("BBEM", "BBEM_Idle", GetEnemyPosition(), bananaBoi, &map);
         enemyCount = 1;
 
