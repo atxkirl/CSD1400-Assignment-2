@@ -201,9 +201,20 @@ void RM_Render()
 					CP_Settings_ApplyMatrix(RM_GetViewMatrix());
 				}
 
-				CP_Settings_Stroke(line->color);
-				CP_Graphics_DrawLine(line->from.x, line->from.y, line->to.x, line->to.y);
-				CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+				if (line->type == 1)
+				{
+					CP_Settings_Stroke(line->color);
+					CP_Settings_Fill(line->color);
+					CP_Graphics_DrawCircle(line->from.x, line->from.y, line->to.x);
+					//CP_Graphics_DrawLine(line->from.x, line->from.y, line->to.x, line->to.y);
+				}
+				else
+				{
+					CP_Settings_Stroke(line->color);
+					CP_Graphics_DrawLine(line->from.x, line->from.y, line->to.x, line->to.y);
+					CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+				}
+
 
 				CP_Settings_ResetMatrix();
 				free(node->curr);
@@ -379,7 +390,7 @@ void RM_SetText(Renderer* r, const char* text)
 @param color - color of line
 @return void
 */
-void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Color color)
+void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Color color, int type)
 {
 	DebugLine* line = malloc(sizeof(DebugLine));
 	if (line)
@@ -388,6 +399,7 @@ void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Co
 		line->to = to;
 		line->space = space;
 		line->color = color;
+		line->type = type;
 	}
 	LL_Add(&debugLinesList, line);
 }

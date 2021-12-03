@@ -78,6 +78,7 @@ typedef struct DebugLine
 	CP_Vector from, to;
 	RENDER_PRIORITY space;
 	CP_Color color;
+	int type; //0 = line, 1 = circle. last min add 
 } DebugLine;
 
 /// <summary>
@@ -190,6 +191,7 @@ void RM_SetText(Renderer*, const char* );
 @param to - end position of line
 @param space - space of line world or screen
 @param color - color of line
+@param type - type of 'line'
 @return void
 */
-void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Color color);
+void RM_DebugDrawLine(CP_Vector from, CP_Vector to, RENDER_PRIORITY space, CP_Color color, int type);

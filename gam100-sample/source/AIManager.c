@@ -102,22 +102,31 @@ void AIM_Update()
 				{
 					LinkedList* n = enemy->movementPath;
 					c = CP_Color_Create(255, 0, 0, 255);
-					for (; n; n = n->next, di++)
+					CP_Vector maxs = CP_Vector_Set(10.0f, 10.0f);
+					CP_Vector mins = CP_Vector_Set(5.0f, 5.0f);
+					int len = LL_GetCount(enemy->movementPath);
+					for (int j = 0; n; n = n->next, di++, j++)
 					{
 						AStar_Node* an = (AStar_Node*)n->curr;
-						AStar_Node* ann = NULL;
-						if (n->next)
-							ann = (AStar_Node*)n->next->curr;
+						//AStar_Node* ann = NULL;
+						//if (n->next)
+						//	ann = (AStar_Node*)n->next->curr;
 
-						if (an && ann)
-						{
-							if (di > 12)
-								di = 0;
+						//if (an && ann)
+						//{
+						//	if (di > 12)
+						//		di = 0;
 
-							CP_Color tc = CP_Color_Create(c.r - di * 40, c.g + di * 40, c.b, c.a);
-							RM_DebugDrawLine(an->position, ann->position, PRI_GAME_OBJECT, tc);
-						}
-
+						//	CP_Color tc = CP_Color_Create(c.r - di * 40, c.g + di * 40, c.b, c.a);
+						//	RM_DebugDrawLine(an->position, ann->position, PRI_GAME_OBJECT, tc, 1);
+						//}
+						float dsx = maxs.x - mins.x;
+						dsx = maxs.x - dsx * (j / (len - 1.0f));
+						float dsy = maxs.y - mins.y;
+						dsy = maxs.y - dsy * (j / (len - 1.0f));
+						CP_Vector ts = CP_Vector_Set(dsx, dsy);
+						CP_Color tc = CP_Color_Create(25, 25, 25, (int)(200.0f - (j/ (len - 1.0f) * (200.f - 20.f))) );
+						RM_DebugDrawLine(an->position, ts, PRI_GAME_OBJECT, tc, 1);
 					}
 				}
 
@@ -137,11 +146,11 @@ void AIM_Update()
 				rotation = CP_Matrix_Rotate(enemy->fovDetectionHalfAngle);
 				rotateForward = CP_Vector_MatrixMultiply(rotation, enemy->controlledObjForward);
 				rotateForward = CP_Vector_Normalize(rotateForward);
-				RM_DebugDrawLine(go->position, CP_Vector_Add(go->position, CP_Vector_Scale(rotateForward, enemy->fovDetectionRadius * enemy->tileSize)), PRI_GAME_OBJECT, c);
+				RM_DebugDrawLine(go->position, CP_Vector_Add(go->position, CP_Vector_Scale(rotateForward, enemy->fovDetectionRadius * enemy->tileSize)), PRI_GAME_OBJECT, c, 0);
 				rotation = CP_Matrix_Rotate(-enemy->fovDetectionHalfAngle);
 				rotateForward = CP_Vector_MatrixMultiply(rotation, enemy->controlledObjForward);
 				rotateForward = CP_Vector_Normalize(rotateForward);
-				RM_DebugDrawLine(go->position, CP_Vector_Add(go->position, CP_Vector_Scale(rotateForward, enemy->fovDetectionRadius * enemy->tileSize)), PRI_GAME_OBJECT, c);
+				RM_DebugDrawLine(go->position, CP_Vector_Add(go->position, CP_Vector_Scale(rotateForward, enemy->fovDetectionRadius * enemy->tileSize)), PRI_GAME_OBJECT, c, 0);
 			}
 		}
 	}

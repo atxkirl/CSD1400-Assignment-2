@@ -1,5 +1,5 @@
-#define BUTTON_WIDTH 80.f
-#define BUTTON_HEIGHT 40.f
+#define BUTTON_WIDTH 230.f
+#define BUTTON_HEIGHT 50.f
 
 #include <stdio.h>
 #include "cprocessing.h"
@@ -44,7 +44,10 @@ void gameEnd_init(void)
     gEnd->space = COLSPC_SCREEN;
     rEnd = RM_AddComponent(eButton);
     rEnd->renderPriority = PRI_UI;
-    RM_SetText(rEnd, "Main Menu");
+    RM_LoadImage(rEnd, "Assets/Backgrounds/button-light.png");
+    rEnd->textColor = COLOR_LIGHTYELLOW;
+    rEnd->textScale = CP_Vector_Set(1.5f, 1.5f);
+    RM_SetText(rEnd, "Return to Main Menu");
 
     GameObject* rButton = GOM_Create2(RECTANGLE, CP_Vector_Set(50 * xScale, 80 * yScale), 0.0f, CP_Vector_Set(BUTTON_WIDTH, BUTTON_HEIGHT));
     rButton->tag = "restart";
@@ -53,7 +56,10 @@ void gameEnd_init(void)
     gEnd->space = COLSPC_SCREEN;
     rEnd = RM_AddComponent(rButton);
     rEnd->renderPriority = PRI_UI;
-    RM_SetText(rEnd, "Restart");
+    RM_LoadImage(rEnd, "Assets/Backgrounds/button-light.png");
+    rEnd->textColor = COLOR_LIGHTYELLOW;
+    rEnd->textScale = CP_Vector_Set(1.5f, 1.5f);
+    RM_SetText(rEnd, "Restart Game");
 
     SDM_Init();
     SDM_PlayBgMusic(1);
