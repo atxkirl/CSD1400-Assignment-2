@@ -76,16 +76,29 @@ void game_OnCollision(Collider* left, Collider* right)
         else if (strcmp(((GameObject*)left->obj)->tag, "xinyun") == 0)
             SceneManager_ChangeSceneByName("xinyun");
         else if (strcmp(((GameObject*)left->obj)->tag, "game") == 0)
+        {
             SceneManager_ChangeSceneByName("levelone");
+            SDM_ChangeBgMusic(2);
+        }
         else if (strcmp(((GameObject*)left->obj)->tag, "options") == 0)
+        {
             SceneManager_ChangeSceneByName("options");
-        else if (strcmp(((GameObject*)left->obj)->tag, "credits") == 0)
+            SDM_ChangeBgMusic(1);
+        }
+        else if (strcmp(((GameObject*)left->obj)->tag, "credits") == 0) {
             SceneManager_ChangeSceneByName("credits");
-        else if (strcmp(((GameObject*)left->obj)->tag, "howtoplay") == 0) //TODO
+            SDM_ChangeBgMusic(1);
+        }
+        else if (strcmp(((GameObject*)left->obj)->tag, "howtoplay") == 0) {
             SceneManager_ChangeSceneByName("credits");
-        else if (strcmp(((GameObject*)left->obj)->tag, "quit") == 0) //TODO
+            SDM_ChangeBgMusic(1);
+        } //TODO
+        else if (strcmp(((GameObject*)left->obj)->tag, "quit") == 0)
+        {
             CP_Engine_Terminate();
-        
+            SDM_StopAll();
+            SDM_FreeSounds();
+        }  
     }
 
 }

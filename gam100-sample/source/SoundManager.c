@@ -10,6 +10,11 @@ static int bgVolume, sfxVolume;
 int playing = 0;
 time_t startT;
 
+
+/// <summary>
+/// Inits and loads all the sound to memory.
+/// </summary>
+/// <param name=""></param>
 void SDM_Init(void) {
 	bg = CP_Sound_LoadMusic("Assets/Sounds/MainBg.ogg");
 	bg2 = CP_Sound_LoadMusic("Assets/Sounds/bg2.ogg");
@@ -34,6 +39,11 @@ void SDM_PlayBgMusic(int name) {
 		CP_Sound_PlayAdvanced(bg2, 0.7f, 1.0f, TRUE, CP_SOUND_GROUP_MUSIC);
 		break;
 	}
+}
+
+void SDM_ChangeBgMusic(int name) {
+	CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
+	SDM_PlayBgMusic(name);
 }
 
 void SDM_PauseBgMusic(void) {

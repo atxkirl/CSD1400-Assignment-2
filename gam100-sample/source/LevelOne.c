@@ -206,9 +206,6 @@ void LevelOne_init(void)
         spawnElapsedTime = 0.f;
     }
 
-    SDM_Init();
-    SDM_PlayBgMusic(2);
-
     // Set game to be paused at the start.
     SetPause(true);
 }
@@ -255,8 +252,9 @@ void LevelOne_exit(void)
     SM_SystemsExit();
     Objectives_Exit();
     LoaderExit();
-    SDM_StopAll();
-    SDM_FreeSounds();
+    SDM_ChangeBgMusic(1);
+    //SDM_StopAll();
+    //SDM_FreeSounds();
 }
 
 /// <summary>

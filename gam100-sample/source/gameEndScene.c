@@ -17,9 +17,16 @@ void gameEnd_OnCollision(Collider* left, Collider* right) {
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
         if (strcmp(((GameObject*)left->obj)->tag, "restart") == 0)
+        {
             SceneManager_ChangeSceneByName("levelone");
-        else if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
+            SDM_ChangeBgMusic(2);
+        }
+
+        else if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0) {
             SceneManager_ChangeSceneByName("mainmenu");
+            SDM_ChangeBgMusic(1);
+        }
+
     }
 }
 
@@ -66,7 +73,6 @@ void gameEnd_init(void)
     RM_SetText(rEnd, "Restart Game");
     gameEnd_buttons[1] = gEnd;
 
-    SDM_Init();
     SDM_PlayBgMusic(1);
 
 }
@@ -122,8 +128,6 @@ void gameEnd_update(void)
 void gameEnd_exit(void)
 {
     SM_SystemsExit();
-    SDM_StopAll();
-    SDM_FreeSounds();
 }
 
 void gameEnd_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)

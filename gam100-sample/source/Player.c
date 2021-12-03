@@ -53,6 +53,10 @@ GameObject* ply_interactHint;
 @brief Handles invincibility counter to ensure that player will not take damage when invincible.
 */
 
+/// <summary>
+/// Function handles the invincibility timing that is required for the player game object.
+/// </summary>
+/// <param name=""></param>
 void counter(void) {
     time_t Current_time = clock();
 
@@ -63,8 +67,12 @@ void counter(void) {
     }
 }
 
-// collider 
-
+/// <summary>
+/// Handles player collisions to check for hits from the enviroment and also the enemies in the
+/// game.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void Player_OnCollision(Collider* left, Collider* right)
 {
     if (p_Invincible == 0) {
@@ -193,12 +201,18 @@ void Player_OnCollision(Collider* left, Collider* right)
 
 }
 
+/// <summary>
+/// Creates the player game object and preps all the required integration to the different systems
+/// in the game.
+/// </summary>
+/// <param name="x">Render x position of the game object.</param>
+/// <param name="y">Render y position of the game object.</param>
+/// <returns>Returns a pointer to the game object that is created for storage in linked lists </returns>
 GameObject* PLY_CreatePlayer(float x, float y) {
 
-
+    // Creats the Player game object.
     player = GOM_Create2(RECTANGLE, CP_Vector_Set(x,y), 0.0f, CP_Vector_Set(50, 50)); //makes the player object
     player->tag ="player";
-
     CLM_Set(CLM_AddComponent(player),COL_BOX,Player_OnCollision);
     Animation* a = AM_AddComponent(player);
     AM_SetWalk(a);
@@ -260,7 +274,7 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     //reset all booleans
     player->oDirection = DOWN;
 
-
+    //inits player starting health.
     playerhealth = 3;
 
     float screenWidth, screenHeight;
@@ -275,20 +289,23 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     a->loopDir = -1;
     player_fogofwar = temp;
 
+    // Used for positioning the hearts
     float xD = (float)CP_System_GetWindowWidth() / 100, yD = (float)CP_System_GetWindowHeight() / 100;
 
+    // Renders Heart 1
     heart1 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 90, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
-    heart2 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 85, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
-    heart3 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 80, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
-
     r = RM_AddComponent(heart1);
     RM_LoadImage(r, "Assets/heart.png");
     r->renderPriority = PRI_UI;
 
+    //Renders Heart 2
+    heart2 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 85, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
     r = RM_AddComponent(heart2);
     RM_LoadImage(r, "Assets/heart.png");
     r->renderPriority = PRI_UI;
 
+    //Renders Heart 3
+    heart3 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 80, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
     r = RM_AddComponent(heart3);
     RM_LoadImage(r, "Assets/heart.png");
     r->renderPriority = PRI_UI;
@@ -322,7 +339,13 @@ GameObject* PLY_CreatePlayer(float x, float y) {
 
     return player;
 } 
-    
+  
+
+/// <summary>
+/// Function contains the required updates that the player game object needs in order to 
+/// function in the game. These include the movement of the player object, the invincibility
+/// and all the sound effects that are tied to the player.
+/// </summary>
 void PLY_Update() { // handles input from player and checking for flags
     float dt = CP_System_GetDt();
     float currentSpd = 200.0f - (n_weight * weight);
@@ -449,7 +472,7 @@ void PLY_Update() { // handles input from player and checking for flags
         }
     }
 
-
+    // Handles the player health generation.
     switch (playerhealth) {
     case 3: {
         heart1->isEnabled = true;
@@ -539,16 +562,35 @@ void PLY_Update() { // handles input from player and checking for flags
     }
 }
 
+
+/// <summary>
+/// Returns information on whether the player is hidden in a hideable object.
+/// </summary>
+/// <param name=""></param>
+/// <returns></returns>
 int PLY_IsHidden(void)
 {
     return p_Hidden;
 }
 
+
+/// <summary>
+/// Returns information on if the player is invincible or not.
+/// </summary>
+/// <param name=""></param>
+/// <returns></returns>
 int PLY_IsInvincible(void)
 {
     return p_Invincible;
 }
 
+
+/// <summary>
+/// Handles player damage taking, and updates information on when the player has taken damage,
+/// to allow the invincibility timer to run.
+/// </summary>
+/// <param name=""></param>
+/// <returns>True/False on if the player has taken damage.</returns>
 bool PLY_TakeDamage(void)
 {
     if (!p_Invincible && !p_GODMODE)

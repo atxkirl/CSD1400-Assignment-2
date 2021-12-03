@@ -24,6 +24,8 @@ void SDM_EffectUpdate(void);
 
 void walk_timer(void);
 
+void SDM_ChangeBgMusic(int name);
+
 /*!
 @brief Sets the BGM volume
 @param int - the volume 0-100 to be set
