@@ -5,8 +5,8 @@
 @course		CSD1400 Software Engineering Project 1
 @Team		BananaBoi
 @date		06/10/2021
-@brief		Contains helpful functions to calculate various things, like random
-			values, or the sizes of arrays.
+@brief		Contains helpful functions to calculate various things, like
+			random values, or the sizes of arrays.
 *//*______________________________________________________________________*/
 
 #pragma once
