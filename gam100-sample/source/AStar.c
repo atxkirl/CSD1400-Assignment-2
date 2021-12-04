@@ -274,8 +274,7 @@ void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* ma
 		if (detectInf1++ >= INFINITE_LOOP)
 		{
 			printf("AStar_GetTile(). Main Loop. Breaking out of infinite loop!\n");
-			AStar_GetRowCol(epicenter, map, &row, &col);
-			break;
+			return;
 		}
 
 		dRow = RAND(radiusMin, radiusMax);
@@ -289,8 +288,7 @@ void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* ma
 			if (detectInf2++ >= INFINITE_LOOP)
 			{
 				printf("AStar_GetTile(). Row Loop. Breaking out of infinite loop!\n");
-				AStar_GetRowCol(epicenter, map, &row, &col);
-				break;
+				return;
 			}
 
 			if (negativeRow && (row - dRow) >= 0)
@@ -312,8 +310,7 @@ void AStar_GetTile(CP_Vector* returnPosition, CP_Vector epicenter, AStar_Map* ma
 			if (detectInf3++ >= INFINITE_LOOP)
 			{
 				printf("AStar_GetTile(). Column Loop. Breaking out of infinite loop!\n");
-				AStar_GetRowCol(epicenter, map, &row, &col);
-				break;
+				return;
 			}
 
 			if (negativeCol && (col - dCol) >= 0)
