@@ -1,11 +1,11 @@
 /*!
-@file LevelOne.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
+@file           LevelOne.c
+@author         Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@co-author		Ow Hong Yu (ow.h)
+@co-author	    Adrian Tan (t.xingkhiangadrian)
+@course         CSD1400 Software Engineering Project 1
+@Team           BananaBoi
+@brief          This file contains functions of game init, update, exit
 *//*______________________________________________________________________*/
 
 #include <stdio.h>
@@ -43,7 +43,7 @@ static const int maxSpawnTimer = 15;
 static float spawnElapsedTime = 0.f;
 static float spawnTimer = 0.f;
 
-static const int maxEnemyCount = 1;
+static const int maxEnemyCount = 6;
 static int enemyCount = 0;
 
 /// <summary>
@@ -463,8 +463,11 @@ void SpawnEnemies()
     // Spawn an enemy.
     CP_Vector spawnPos = CP_Vector_Zero();
     AStar_GetTile(&spawnPos, bananaBoi->position, &map, 3, 6);
-    AIM_CreateEnemy("BBEM", "BBEM_Idle", spawnPos, bananaBoi, &map);
-    ++enemyCount;
+    if (spawnPos.x != 0 && spawnPos.y != 0)
+    {
+        AIM_CreateEnemy("BBEM", "BBEM_Idle", spawnPos, bananaBoi, &map);
+        ++enemyCount;
+    }
 
     // Reset timer and get new spawn timer.
     spawnTimer = FRAND(minSpawnTimer, maxSpawnTimer);

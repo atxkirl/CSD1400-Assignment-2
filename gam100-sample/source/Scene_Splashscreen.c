@@ -1,12 +1,12 @@
 /*
-* @file		Scene_Splashscreen.c
-* @author	Adrian Tan (t.xingkhiangadrian)
-* @course	CSD1400 Software Engineering Project 1
-* @Team		BananaBoi
-* @date		14/11/2021
-* @brief	Scene that displays the DigiPen logo, as well as the team logo when
-*           the game is first launched.
-*//*--------------------------------------------------------------------------*/
+@file	Scene_Splashscreen.c
+@author	Adrian Tan (t.xingkhiangadrian)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@date	14/11/2021
+@brief	Scene that displays the DigiPen logo, as well as the team logo when
+        the game is first launched.
+*//*______________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"
@@ -121,7 +121,7 @@ void splashscreen_init(void)
     bgRenderer->color = CP_Color_Create(0, 0, 0, 255);
     
     // Create Digipen Logo
-    digipenObj = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.25f));
+    digipenObj = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f));
     digipenRenderer = RM_AddComponent(digipenObj);
     digipenRenderer->renderPriority = PRI_UI;
     digipenRenderer->color = CP_Color_Create(0, 0, 0, 0); // Start off as transparent.

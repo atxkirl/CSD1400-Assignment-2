@@ -1,3 +1,11 @@
+/*!
+@file            Scene_Credits.c
+@author          Koh Xin Yun (xinyun.k)
+@course          CSD1400 Software Engineering Project 1
+@Team            BananaBoi
+@brief           Scene that displays the credits
+*//*______________________________________________________________________*/
+
 #include <stdio.h>
 #include "cprocessing.h"
 #include "Helpers.h"
@@ -7,7 +15,11 @@
 GameObject* credits, *credits2, *credits_cross, *credits_right, *credits_left;
 Renderer* credits_render, * credits1_render, *credits2_render, *credits_cross_highlight, *credits_rightbtn, *credits_leftbtn;
 
-
+/// <summary>
+/// Handles the collision of the the GameObjects based on the left and right collider parameters.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void SceneCredits_OnCollision(Collider* left, Collider* right)
 {
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
@@ -42,6 +54,9 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
     }
 }
 
+/// <summary>
+/// Initialises variables in this scene.
+/// </summary>
 void SceneCredits_init(void)
 {
     float screenWidth, screenHeight;
@@ -114,6 +129,9 @@ void SceneCredits_init(void)
     
 }
 
+/// <summary>
+/// Update.
+/// </summary>
 void SceneCredits_update(void)
 {
     credits_cross_highlight->isEnabled = false;
@@ -123,11 +141,20 @@ void SceneCredits_update(void)
     SM_SystemsLateUpdate();
 }
 
+/// <summary>
+/// Exit function that's called before scene change.
+/// </summary>
 void SceneCredits_exit(void)
 {
     SM_SystemsExit();
 }
 
+/// <summary>
+/// Called by SceneManager to pass function pointers for this scene's init, update and exit.
+/// </summary>
+/// <param name="init">Function pointer to scene init.</param>
+/// <param name="update">Function pointer to scene update.</param>
+/// <param name="exit">Funciton pointer to scene exit.</param>
 void SceneCredits_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = SceneCredits_init;

@@ -1,3 +1,11 @@
+/*
+@file	Player.c
+@author	Tan Wee Yi (weeyi.t)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@brief	Script that will handle the player functionality, and all the updates that 
+is required
+*//*______________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"
@@ -77,14 +85,6 @@ void Player_OnCollision(Collider* left, Collider* right)
 {
     if (p_Invincible == 0) {
         while (1) {
-            //// Checks for enemy hits
-            //if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "BBEM") == 0) {
-            //    printf("hit");
-            //    startTime = clock(); //holds information on when the player was last hit according to the time
-            //    p_Invincible = true;
-            //    playerhealth--;
-            //    break;
-            //}
 
             // Pick-up minigame
             if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "wood") == 0) {
@@ -115,12 +115,6 @@ void Player_OnCollision(Collider* left, Collider* right)
             }
             if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "obj5") == 0) {
                 g_objective5 = true;
-                break;
-            }
-
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "mud") == 0) { // testing collisions currently not working to slow player down
-                n_weight = 1;
-                printf("SLOWED!");
                 break;
             }
 
@@ -167,12 +161,6 @@ void Player_OnCollision(Collider* left, Collider* right)
             }
             if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "obj5") == 0) {
                 g_objective5 = true;
-                break;
-            }
-
-            if (strcmp(left->obj->tag, "player") == 0 && strcmp(right->obj->tag, "mud") == 0) { // testing collisions currently not working to slow player down
-                spd = 100.0f;
-                printf("SLOWED!");
                 break;
             }
 
@@ -606,6 +594,10 @@ bool PLY_TakeDamage(void)
 }
 
 
+/// <summary>
+/// handles showing the interact hint for players 
+/// </summary>
+/// <param name=""></param>
 void PLY_ShowInteractHint(void)
 {
     ply_interactHint->isEnabled = 1;

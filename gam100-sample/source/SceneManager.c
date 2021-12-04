@@ -1,15 +1,15 @@
 /*
-* @file		SceneManager.c
-* @author	Adrian Tan (t.xingkhiangadrian)
-* @course	CSD1400 Software Engineering Project 1
-* @Team		BananaBoi
-* @date		06/10/2021
-* @brief	Contains functions to register and change scenes during runtime.
-*//*----------------------------------------------------------------------*/
+@file	SceneManager.c
+@author	Adrian Tan (t.xingkhiangadrian)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@date	06/10/2021
+@brief	Contains functions to register and change scenes during runtime.
+*//*______________________________________________________________________*/
 
-#include "SceneManager.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "SceneManager.h"
 
 Scene* currentScene;	// Pointer to the current scene.
 LinkedList* sceneList;	// Linked List holding all registered scene structs.
@@ -55,10 +55,6 @@ void SceneManager_Initialize()
 
 	game_sceneInit(&init, &update, &exit);
 	temp = CreateScene("mainmenu", init, update, exit);
-	LL_Add(&sceneList, temp);
-
-	game2_sceneInit(&init, &update, &exit);
-	temp = CreateScene("game2", init, update, exit);
 	LL_Add(&sceneList, temp);
 
 	Marcus_sceneInit(&init, &update, &exit);

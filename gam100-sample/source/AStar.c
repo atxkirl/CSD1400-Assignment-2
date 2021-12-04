@@ -1,11 +1,11 @@
 /*
-* @file		AStar.c
-* @author	Adrian Tan (t.xingkhiangadrian)
-* @course	CSD1400 Software Engineering Project 1
-* @Team		BananaBoi
-* @date		27/10/2021
-* @brief	Contains functions to implement the AStar Pathfinding algorithm.
-*//*--------------------------------------------------------------------------*/
+@file	AStar.c
+@author	Adrian Tan (t.xingkhiangadrian)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@date	27/10/2021
+@brief	Contains functions to implement the AStar Pathfinding algorithm.
+*//*______________________________________________________________________*/
 
 #include "AStar.h"
 
@@ -149,6 +149,17 @@ void AStar_GetPath(AStar_Node* starting, AStar_Node* ending, LinkedList** path, 
 			// Check diagonal if they have walls for neighbours.
 			int cornerRow = lowestRow + deltaRowNeighbour[i];
 			int cornerCol = lowestCol + deltaColNeighbour[i];
+			// Checks for out of bound indexes.
+			if (cornerRow < 0)
+				cornerRow = 0;
+			else if (cornerRow >= map->rows)
+				cornerRow = map->rows - 1;
+			if (cornerCol < 0)
+				cornerCol = 0;
+			else if (cornerCol >= map->columns)
+				cornerCol = map->columns - 1;
+
+			// Checks to see if the selected node is a unpathable.
 			if ((&map->map[lowestRow][cornerCol])->type == NODE_WALL || (&map->map[cornerRow][lowestCol])->type == NODE_WALL)
 				continue;
 

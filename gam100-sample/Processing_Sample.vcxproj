@@ -204,7 +204,6 @@ xcopy "$(ProjectDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q</Command>
     <ClCompile Include="source\Dialogue.c" />
     <ClCompile Include="source\FileParser.c" />
     <ClCompile Include="source\game.c" />
-    <ClCompile Include="source\game2.c" />
     <ClCompile Include="source\gameEndScene.c" />
     <ClCompile Include="source\GameObjectManager.c" />
     <ClCompile Include="source\Helpers.c" />

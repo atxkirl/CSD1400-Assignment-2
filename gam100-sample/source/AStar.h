@@ -1,11 +1,11 @@
 /*
-* @file		AStar.h
-* @author	Adrian Tan (t.xingkhiangadrian)
-* @course	CSD1400 Software Engineering Project 1
-* @Team		BananaBoi
-* @date		27/10/2021
-* @brief	Contains functions to implement the AStar Pathfinding algorithm.
-*//*--------------------------------------------------------------------------*/
+@file	AStar.h
+@author	Adrian Tan (t.xingkhiangadrian)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@date	27/10/2021
+@brief	Contains functions to implement the AStar Pathfinding algorithm.
+*//*______________________________________________________________________*/
 
 #pragma once
 

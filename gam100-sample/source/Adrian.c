@@ -1,12 +1,12 @@
 /*
-* @file		Adrian.c
-* @author	Adrian Tan (t.xingkhiangadrian)
-* @course	CSD1400 Software Engineering Project 1
-* @Team		BananaBoi
-* @date		12/10/2021
-* @brief	TEST scene to test out A* pathfinding algorithm by displaying a grid
-*           and calling A* to get a path between 2 selected grid cells.
-*//*--------------------------------------------------------------------------*/
+@file	Adrian.c
+@author	Adrian Tan (t.xingkhiangadrian)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@date	12/10/2021
+@brief	TEST scene to test out A* pathfinding algorithm by displaying a grid
+        and calling A* to get a path between 2 selected grid cells.
+*//*______________________________________________________________________*/
 
 #include <stdio.h>
 #include <stdlib.h>

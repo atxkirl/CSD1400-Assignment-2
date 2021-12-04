@@ -1,11 +1,11 @@
-/*!
-@file LevelOne_AStar.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
+/*
+@file	LevelOne_AStar.c
+@author	Adrian Tan (t.xingkhiangadrian)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@date	12/10/2021
+@brief	TEST scene to test out A* pathfinding algorithm, in conjunction with
+        Enemy movement in the actual game.
 *//*______________________________________________________________________*/
 
 #include <stdio.h>
