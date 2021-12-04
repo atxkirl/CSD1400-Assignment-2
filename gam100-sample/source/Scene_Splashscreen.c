@@ -16,7 +16,7 @@
 #include "SoundManager.h"
 
 static float logoFadeSpeed = 250.f;
-static float logoWaitTimer = 1.5f;
+static float logoWaitTimer = 2.f;
 static float elapsedTime = 0.f;
 
 static int digipenState;
@@ -121,11 +121,11 @@ void splashscreen_init(void)
     bgRenderer->color = CP_Color_Create(0, 0, 0, 255);
     
     // Create Digipen Logo
-    digipenObj = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.4f));
+    digipenObj = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.25f));
     digipenRenderer = RM_AddComponent(digipenObj);
     digipenRenderer->renderPriority = PRI_UI;
     digipenRenderer->color = CP_Color_Create(0, 0, 0, 0); // Start off as transparent.
-    RM_LoadImage(digipenRenderer, "Assets/Logo_Digipen.png");
+    RM_LoadImage(digipenRenderer, "Assets/Logo_Digipen_Temp.png");
 
     // Create BananaBoi Logo
     bananaObj = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.35f));
