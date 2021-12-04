@@ -388,6 +388,7 @@ Animation* AM_AddComponent(GameObject* go)
 	if (ani)
 	{
 		ani->go = go;
+		ani->isEnabled = 1;
 		ani->splitX = 1;
 		ani->splitY = 1;
 		ani->elapsedTime = 0.0f;
