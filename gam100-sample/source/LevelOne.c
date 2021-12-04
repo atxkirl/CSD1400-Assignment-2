@@ -463,8 +463,11 @@ void SpawnEnemies()
     // Spawn an enemy.
     CP_Vector spawnPos = CP_Vector_Zero();
     AStar_GetTile(&spawnPos, bananaBoi->position, &map, 3, 6);
-    AIM_CreateEnemy("BBEM", "BBEM_Idle", spawnPos, bananaBoi, &map);
-    ++enemyCount;
+    if (spawnPos.x != 0 && spawnPos.y != 0)
+    {
+        AIM_CreateEnemy("BBEM", "BBEM_Idle", spawnPos, bananaBoi, &map);
+        ++enemyCount;
+    }
 
     // Reset timer and get new spawn timer.
     spawnTimer = FRAND(minSpawnTimer, maxSpawnTimer);
