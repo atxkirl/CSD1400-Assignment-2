@@ -1,11 +1,9 @@
 /*!
-@file Xinyun.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
+@file            Xinyun.c
+@author          Koh Xin Yun (xinyun.k)
+@course          CSD1400 Software Engineering Project 1
+@Team            BananaBoi
+@brief           This file contains functions of game init, update, exit
 *//*______________________________________________________________________*/
 
 #include <stdio.h>
@@ -22,6 +20,11 @@
 
 GameObject* credits_button;
 
+/// <summary>
+/// Handles the collision of the the GameObjects based on the left and right collider parameters.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void xy_OnCollision(Collider* left, Collider* right)
 {
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
@@ -32,6 +35,9 @@ void xy_OnCollision(Collider* left, Collider* right)
     }
 }
 
+/// <summary>
+/// Initialises variables in this scene.
+/// </summary>
 void Xinyun_init(void)
 {
     float xScale = CP_System_GetWindowWidth() / 100.0f, yScale = CP_System_GetWindowHeight() / 100.0f;
@@ -54,6 +60,9 @@ void Xinyun_init(void)
     OB_PickupInit();
 }
 
+/// <summary>
+/// Update.
+/// </summary>
 void Xinyun_update(void)
 {
     SM_SystemsPreUpdate();
@@ -68,6 +77,9 @@ void Xinyun_update(void)
 
 }
 
+/// <summary>
+/// Exit function that's called before scene change.
+/// </summary>
 void Xinyun_exit(void)
 {
     SM_SystemsExit();
@@ -75,6 +87,12 @@ void Xinyun_exit(void)
     _CrtDumpMemoryLeaks();
 }
 
+/// <summary>
+/// Called by SceneManager to pass function pointers for this scene's init, update and exit.
+/// </summary>
+/// <param name="init">Function pointer to scene init.</param>
+/// <param name="update">Function pointer to scene update.</param>
+/// <param name="exit">Funciton pointer to scene exit.</param>
 void Xinyun_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = Xinyun_init;

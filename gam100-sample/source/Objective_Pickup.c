@@ -1,3 +1,12 @@
+/*!
+@file            Objective_Pickup.c
+@author          Koh Xin Yun (xinyun.k)
+@co-author		 Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course          CSD1400 Software Engineering Project 1
+@Team            BananaBoi
+@brief           This file contains functions for Objective Pickup.
+*//*______________________________________________________________________*/
+
 #pragma once
 #include "Objective_Pickup.h"
 #include "SystemManager.h"
@@ -10,6 +19,11 @@
 int iBoatPartsPicked;
 #include <stdio.h>
 
+/// <summary>
+/// Handles the collision of the the GameObjects based on the left and right collider parameters.
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void OB_PickupOnCollision(Collider* left, Collider* right)
 {
 	if (left->obj->type == BOAT_PARTS && strcmp(right->obj->tag, "player") == 0) {
@@ -20,6 +34,9 @@ void OB_PickupOnCollision(Collider* left, Collider* right)
 	}
 }
 
+/// <summary>
+/// Initialises variables in this scene.
+/// </summary>
 void OB_PickupInit()
 {
 	iBoatPartsPicked = 0;
@@ -35,6 +52,9 @@ void OB_PickupInit()
 	}
 }
 
+/// <summary>
+/// Update.
+/// </summary>
 void OB_PickupUpdate()
 {
 	//SM_SystemsPreUpdate();
@@ -46,11 +66,19 @@ void OB_PickupUpdate()
 	//SM_SystemsLateUpdate();
 }
 
+/// <summary>
+/// returns true of false for objective if it is picked
+/// </summary>
+/// <returns>int</returns>
 int GetBoatParts()
 {
 	return iBoatPartsPicked;
 }
 
+/// <summary>
+/// Sets active or not active for the objective
+/// </summary>
+/// <param name="iSetter">- 1 or 0 for active</param>
 void SetBoatParts(int iSetter)
 {
 	iBoatPartsPicked = iSetter;
