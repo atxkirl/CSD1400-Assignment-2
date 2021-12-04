@@ -461,12 +461,12 @@ void SpawnEnemies()
     else if (spawnElapsedTime < spawnTimer)
         return;
 
-    printf("Spawning an Enemy!!\n");
     // Spawn an enemy.
     CP_Vector spawnPos = CP_Vector_Zero();
     AStar_GetTile(&spawnPos, bananaBoi->position, &map, 3, 6);
     if (spawnPos.x != 0 && spawnPos.y != 0)
     {
+        printf("Spawning an Enemy!!\n");
         AIM_CreateEnemy("BBEM", "BBEM_Idle", spawnPos, bananaBoi, &map);
         ++enemyCount;
     }
