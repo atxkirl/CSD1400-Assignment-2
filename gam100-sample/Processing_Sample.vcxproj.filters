@@ -13,9 +13,6 @@
     <ClCompile Include="source\FileParser.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="source\game2.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="source\Marcus.c">
       <Filter>Scenes</Filter>
     </ClCompile>
