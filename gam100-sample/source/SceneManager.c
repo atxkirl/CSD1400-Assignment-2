@@ -1,11 +1,11 @@
 /*
-* @file		SceneManager.c
-* @author	Adrian Tan (t.xingkhiangadrian)
-* @course	CSD1400 Software Engineering Project 1
-* @Team		BananaBoi
-* @date		06/10/2021
-* @brief	Contains functions to register and change scenes during runtime.
-*//*----------------------------------------------------------------------*/
+@file	SceneManager.c
+@author	Adrian Tan (t.xingkhiangadrian)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@date	06/10/2021
+@brief	Contains functions to register and change scenes during runtime.
+*//*______________________________________________________________________*/
 
 #include "SceneManager.h"
 #include <stdio.h>
