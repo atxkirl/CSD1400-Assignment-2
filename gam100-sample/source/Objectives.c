@@ -54,7 +54,7 @@ char* cWire;
 void Objectives_onCollision(Collider* left, Collider* right)
 {
     //me, other
-    if (strcmp(((GameObject*)right->obj)->tag, "player") == 0)
+    if (strcmp(((GameObject*)right->obj)->tag, "player") == 0 && iUpdatePlayer)
     {
         // CONNECT WIRES
         if (strcmp(((GameObject*)left->obj)->tag, "Objective1Read") == 0)
@@ -67,6 +67,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                         && ((GameObject*)left->obj)->position.y == gObjectives[i]->position.y)
                     {
                         iCurrentObjective = i;
+                        break;
                     }
                 }
                 OB_ConnectTrigger();
@@ -88,6 +89,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                             && ((GameObject*)left->obj)->position.y == gObjectives[i]->position.y)
                         {
                             iCurrentObjective = i;
+                            break;
                         }
                     }
                     OB_FixBoatTrigger();
@@ -112,6 +114,7 @@ void Objectives_onCollision(Collider* left, Collider* right)
                         && ((GameObject*)left->obj)->position.y == gObjectives[i]->position.y)
                     {
                         iCurrentObjective = i;
+                        break;
                     }
                 }
                 OB_BreakCoconutTrigger();
@@ -196,7 +199,7 @@ void Objectives_Update()
 
     if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective1Done") == 0)
     {
-        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.054f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective1Complete";
@@ -211,7 +214,7 @@ void Objectives_Update()
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective2Done") == 0)
     {
-        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.054f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective2Complete";
@@ -226,7 +229,7 @@ void Objectives_Update()
     }
     else if (strcmp(gObjectives[iCurrentObjective]->tag, "Objective3Done") == 0)
     {
-        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.057f;
+        g_ObjectiveUI[iCurrentObjective]->position.x = screenWidth * 0.054f;
         Renderer* rObjUI = RM_GetComponent(g_ObjectiveUI[iCurrentObjective]);
         RM_SetText(rObjUI, "Complete!");
         gObjectives[iCurrentObjective]->tag = "Objective3Complete";
@@ -282,7 +285,7 @@ void Objectives_Update()
 
     for (int i = 0; i < MAX_OBJECTIVES; ++i)
     {
-        if (strcmp(g_ObjectiveUI[i]->tag, "ObjectiveUI2") == 0)
+        if (strcmp(g_ObjectiveUI[i]->tag, "ObjectiveUI2") == 0 && (!Objectives_GetCompleteAll() || i != iCurrentObjective))
         {
             if (GetLoadedNumBoatParts() == GetBoatParts())
             {
@@ -436,7 +439,7 @@ void Objectives_RenderUI()
                     r = RM_AddComponent(g_ObjectiveUI[i]);
                     r->color = CP_Color_Create(255, 255, 255, 0);
                     RM_SetText(r, "");
-                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.096f, screenHeight * 0.05f + i * screenHeight * 0.025f);
+                    g_ObjectiveUI[i]->position = CP_Vector_Set(screenWidth * 0.0959f, screenHeight * 0.05f + i * screenHeight * 0.025f);
                     vObjectiveThreePos = g_ObjectiveUI[i]->position;
                     RM_SetText(r, oObjectiveList[2].cObjective);
                     r->renderPriority = PRI_UI;

@@ -305,6 +305,7 @@ void LoadObjectives(char* cInput)
 		}
 	}
 
+	int iHaveBoat = 0;
 	for (int i = 0; i < NumGrids; i++)
 	{
 		for (int j = 0; j < NumGrids; j++)
@@ -312,9 +313,24 @@ void LoadObjectives(char* cInput)
 			if (strcmp(gLoadedGrids->gGrid[i][j]->tag, "Objective") == 0)
 			{
 				int iRandom = rand() % MAX_OBJECTIVES;
+
+				if (iRandom == 1)
+					iHaveBoat = 1;
 				snprintf(gLoadedGrids->gGrid[i][j]->tag, 30, "Objective%d", iRandom + 1);
 				printf("%s\n", gLoadedGrids->gGrid[i][j]->tag);
 				++iNumObjectives;
+			}
+		}
+	}
+
+	if (!iHaveBoat)
+	{
+		for (int i = 0; i < NumGrids; i++)
+		{
+			for (int j = 0; j < NumGrids; j++)
+			{
+				if (gLoadedObjects->gGrid[i][j]->type == BOAT_PARTS)
+					gLoadedObjects->gGrid[i][j]->isEnabled = 0;
 			}
 		}
 	}
