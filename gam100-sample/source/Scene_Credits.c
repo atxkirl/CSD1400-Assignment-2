@@ -4,17 +4,35 @@
 #include "SceneManager.h"
 #include "SystemManager.h"
 
-GameObject* credits, *credits_cross;
-Renderer* credits_render, *credits_cross_highlight;
+GameObject* credits, *credits2, *credits_cross, *credits_right, *credits_left;
+Renderer* credits_render, * credits1_render, *credits2_render, *credits_cross_highlight, *credits_rightbtn, *credits_leftbtn;
 
 
 void SceneCredits_OnCollision(Collider* left, Collider* right)
 {
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
+        // close scene
         if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
             SceneManager_ChangeSceneByName("mainmenu");
+
+        // to page 2
+        if (strcmp(((GameObject*)left->obj)->tag, "page2") == 0) {
+            credits2_render->color = CP_Color_Create(0, 0, 0, 255);
+            credits1_render->color = CP_Color_Create(0, 0, 0, 0);
+            credits_rightbtn->color = CP_Color_Create(0, 0, 0, 0);
+            credits_leftbtn->color = CP_Color_Create(0, 0, 0, 255);
+        }
+
+        // back to page 1
+        if (strcmp(((GameObject*)left->obj)->tag, "page1") == 0) {
+            credits2_render->color = CP_Color_Create(0, 0, 0, 0);
+            credits1_render->color = CP_Color_Create(0, 0, 0, 255);
+            credits_rightbtn->color = CP_Color_Create(0, 0, 0, 255);
+            credits_leftbtn->color = CP_Color_Create(0, 0, 0, 0);
+        }
     }
+
     if (strcmp(((GameObject*)right->obj)->tag, "Mouse") == 0)
     {
         if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
@@ -38,9 +56,17 @@ void SceneCredits_init(void)
     // render credits scene
     credits = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
     credits->tag = "credits";
-    credits_render = RM_AddComponent(credits);
-    credits_render->renderPriority = PRI_UI;
-    RM_LoadImage(credits_render, "Assets/scenes/credits.png");
+    credits1_render = RM_AddComponent(credits);
+    credits1_render->renderPriority = PRI_UI;
+    RM_LoadImage(credits1_render, "Assets/scenes/credits.png");
+
+    // render credits page 2
+    credits2 = GOM_Create2(RECTANGLE, CP_Vector_Set(0.5f * screenWidth, 0.5f * screenHeight), 0.0f, CP_Vector_Set(screenWidth, screenHeight));
+    credits2->tag = "credits";
+    credits2_render = RM_AddComponent(credits2);
+    credits2_render->renderPriority = PRI_UI;
+    credits2_render->color = CP_Color_Create(0, 0, 0, 0); // Start off as transparent.
+    RM_LoadImage(credits2_render, "Assets/scenes/credits2.png");
 
     // close button
     credits_cross = GOM_Create(RECTANGLE);
@@ -56,6 +82,32 @@ void SceneCredits_init(void)
     credits_cross_highlight = RM_AddComponent(credits_cross);
     credits_cross_highlight->renderPriority = PRI_UI;
     RM_LoadImage(credits_cross_highlight, "Assets/crosshighlight.png");
+
+    // right arrow
+    credits_right = GOM_Create(RECTANGLE);
+    credits_right->position = CP_Vector_Set(screenWidth * 0.92f, screenHeight * 0.5f);
+    credits_right->scale = CP_Vector_Set(50, 50);
+    credits_right->tag = "page2";
+    Collider* credits_rightarrow = CLM_AddComponent(credits_right);
+    CLM_Set(credits_rightarrow, COL_BOX, SceneCredits_OnCollision);
+    credits_rightarrow->space = COLSPC_SCREEN;
+    credits_rightbtn = RM_AddComponent(credits_right);
+    credits_rightbtn->renderPriority = PRI_UI;
+    RM_LoadImage(credits_rightbtn, "Assets/arrow.png");
+
+    // left arrow
+    credits_left = GOM_Create(RECTANGLE);
+    credits_left->position = CP_Vector_Set(screenWidth * 0.08f, screenHeight * 0.5f);
+    credits_left->scale = CP_Vector_Set(50, 50);
+    credits_left->tag = "page1";
+    Collider* credits_leftarrow = CLM_AddComponent(credits_left);
+    CLM_Set(credits_leftarrow, COL_BOX, SceneCredits_OnCollision);
+    credits_leftarrow->space = COLSPC_SCREEN;
+    credits_leftbtn = RM_AddComponent(credits_left);
+    credits_leftbtn->renderPriority = PRI_UI;
+    RM_LoadImage(credits_leftbtn, "Assets/arrow.png");
+    credits_leftbtn->isXFlipped = 1;
+    credits_leftbtn->color = CP_Color_Create(0, 0, 0, 0);
  
     SM_SystemsInit();
 
