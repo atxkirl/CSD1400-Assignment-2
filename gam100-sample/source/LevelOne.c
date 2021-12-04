@@ -1,11 +1,11 @@
 /*!
-@file LevelOne.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
+@file           LevelOne.c
+@author         Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@co-author		Ow Hong Yu (ow.h)
+@co-author	    Adrian Tan (t.xingkhiangadrian)
+@course         CSD1400 Software Engineering Project 1
+@Team           BananaBoi
+@brief          This file contains functions of game init, update, exit
 *//*______________________________________________________________________*/
 
 #include <stdio.h>

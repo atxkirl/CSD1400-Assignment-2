@@ -1,11 +1,9 @@
 /*!
-@file Marcus.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
+@file       Marcus.c
+@author     Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course     CSD1400 Software Engineering Project 1
+@Team       BananaBoi
+@brief      This file contains functions used for Marcus's scene
 *//*______________________________________________________________________*/
 
 #include <stdio.h>
@@ -18,8 +16,16 @@
 #define BUTTON_WIDTH 60.f
 #define BUTTON_HEIGHT 30.f
 
+/// <summary>
+/// Declaration for render function
+/// </summary>
 void MarcusUI_render();
 
+/// <summary>
+/// Handles collision between left and right
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void Marcus_OnCollision(Collider* left, Collider* right)
 {
     //me, other
@@ -35,6 +41,10 @@ void Marcus_OnCollision(Collider* left, Collider* right)
     return;
 }
 
+/// <summary>
+/// Initialises variables
+/// </summary>
+/// <param name=""></param>
 void Marcus_init(void)
 {
     SM_SystemsInit();
@@ -82,6 +92,10 @@ void Marcus_init(void)
     c->space = COLSPC_SCREEN;
 }
 
+/// <summary>
+/// Update.
+/// </summary>
+/// <param name=""></param>
 void Marcus_update(void)
 {
     SM_SystemsPreUpdate();
@@ -92,11 +106,21 @@ void Marcus_update(void)
     SM_SystemsLateUpdate();
 }
 
+/// <summary>
+/// Exit.
+/// </summary>
+/// <param name=""></param>
 void Marcus_exit(void)
 {
     SM_SystemsExit();
 }
 
+/// <summary>
+/// For scene change use.
+/// </summary>
+/// <param name="init"></param>
+/// <param name="update"></param>
+/// <param name="exit"></param>
 void Marcus_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = Marcus_init;
@@ -104,6 +128,9 @@ void Marcus_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
     *exit = Marcus_exit;
 }
 
+/// <summary>
+/// Render function.
+/// </summary>
 void MarcusUI_render()
 {
     CP_Settings_Fill(COLOR_WHITE); // r, g, b, a
