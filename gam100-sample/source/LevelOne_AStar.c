@@ -4,8 +4,8 @@
 @course	CSD1400 Software Engineering Project 1
 @Team	BananaBoi
 @date	12/10/2021
-@brief	TEST scene to test out A* pathfinding algorithm by displaying a grid
-        and calling A* to get a path between 2 selected grid cells.
+@brief	TEST scene to test out A* pathfinding algorithm, in conjunction with
+        Enemy movement in the actual game.
 *//*______________________________________________________________________*/
 
 #include <stdio.h>
