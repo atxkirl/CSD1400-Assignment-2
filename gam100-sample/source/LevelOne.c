@@ -247,6 +247,8 @@ void LevelOne_update(void)
 /// </summary>
 void LevelOne_exit(void)
 {
+    DM_CloseDialogueBox();
+
     ClearPause();
     AStar_ClearMap(&map);
     SM_SystemsExit();

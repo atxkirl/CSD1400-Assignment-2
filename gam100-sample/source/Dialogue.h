@@ -67,6 +67,11 @@ void DM_PrintDialogue(char* text, DialogueType type);
 void DM_PrintDialogueColored(char* text, DialogueType type, CP_Color color);
 
 /// <summary>
+/// Closes any open dialogue boxes.
+/// </summary>
+void DM_CloseDialogueBox();
+
+/// <summary>
 /// Initializes dialogue box variables.
 /// </summary>
 void DM_Init();

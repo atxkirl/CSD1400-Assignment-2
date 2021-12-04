@@ -62,7 +62,6 @@ void DM_PrintDialogue(char* text, DialogueType type)
 	dialogueBox->scale = CP_Vector_Set(dialogueBoxWidth, dialogueBoxHeight);
 
 	dialogueType = type;
-	//dialogueBoxRenderer->text = text;
 	RM_SetText(dialogueBoxRenderer, text);
 	dialogueBox->isEnabled = 1;
 }
@@ -78,6 +77,16 @@ void DM_PrintDialogueColored(char* text, DialogueType type, CP_Color color)
 	dialogueBoxRenderer->textColor = color;
 	DM_PrintDialogue(text, type);
 }
+
+/// <summary>
+/// Closes any open dialogue boxes.
+/// </summary>
+void DM_CloseDialogueBox()
+{
+	dialogueBox->isEnabled = 0;
+	closeButton->isEnabled = 0;
+}
+
 
 /// <summary>
 /// Initializes dialogue box variables.
