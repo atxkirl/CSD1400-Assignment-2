@@ -13,7 +13,11 @@
 #include "SystemManager.h"
 
 GameObject* credits, *credits2, *credits_cross, *credits_right, *credits_left;
-Renderer* credits_render, * credits1_render, *credits2_render, *credits_cross_highlight, *credits_rightbtn, *credits_leftbtn;
+Renderer* credits_render, * credits1_render, * credits2_render, * credits_cross_highlight;
+Renderer* credits_rightbtn, * credits_rightbtn_highlight, * credits_leftbtn, * credits_leftbtn_highlight;
+
+int on_page1 = 0;
+int on_page2 = 0;
 
 /// <summary>
 /// Handles the collision of the the GameObjects based on the left and right collider parameters.
@@ -30,18 +34,24 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
 
         // to page 2
         if (strcmp(((GameObject*)left->obj)->tag, "page2") == 0) {
-            credits2_render->color = CP_Color_Create(0, 0, 0, 255);
-            credits1_render->color = CP_Color_Create(0, 0, 0, 0);
+            credits2_render->isEnabled = true;
+            credits1_render->isEnabled = false;
             credits_rightbtn->color = CP_Color_Create(0, 0, 0, 0);
             credits_leftbtn->color = CP_Color_Create(0, 0, 0, 255);
+
+            on_page2 = 1;
+            on_page1 = 0;
         }
 
         // back to page 1
         if (strcmp(((GameObject*)left->obj)->tag, "page1") == 0) {
-            credits2_render->color = CP_Color_Create(0, 0, 0, 0);
-            credits1_render->color = CP_Color_Create(0, 0, 0, 255);
+            credits2_render->isEnabled = false;
+            credits1_render->isEnabled = true;
             credits_rightbtn->color = CP_Color_Create(0, 0, 0, 255);
             credits_leftbtn->color = CP_Color_Create(0, 0, 0, 0);
+
+            on_page1 = 1;
+            on_page2 = 0;
         }
     }
 
@@ -50,6 +60,14 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
         if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
         {
             credits_cross_highlight->isEnabled = true;
+        }
+
+        if (strcmp(((GameObject*)left->obj)->tag, "page1") == 0) {
+            credits_leftbtn_highlight->isEnabled = true;
+        }
+
+        if (strcmp(((GameObject*)left->obj)->tag, "page2") == 0) {
+            credits_rightbtn_highlight->isEnabled = true;
         }
     }
 }
@@ -73,6 +91,7 @@ void SceneCredits_init(void)
     credits->tag = "credits";
     credits1_render = RM_AddComponent(credits);
     credits1_render->renderPriority = PRI_UI;
+    credits1_render->isEnabled = true;
     RM_LoadImage(credits1_render, "Assets/scenes/credits.png");
 
     // render credits page 2
@@ -80,7 +99,7 @@ void SceneCredits_init(void)
     credits2->tag = "credits";
     credits2_render = RM_AddComponent(credits2);
     credits2_render->renderPriority = PRI_UI;
-    credits2_render->color = CP_Color_Create(0, 0, 0, 0); // Start off as transparent.
+    credits2_render->isEnabled = false;
     RM_LoadImage(credits2_render, "Assets/scenes/credits2.png");
 
     // close button
@@ -109,6 +128,9 @@ void SceneCredits_init(void)
     credits_rightbtn = RM_AddComponent(credits_right);
     credits_rightbtn->renderPriority = PRI_UI;
     RM_LoadImage(credits_rightbtn, "Assets/arrow.png");
+    credits_rightbtn_highlight = RM_AddComponent(credits_right);
+    credits_rightbtn_highlight->renderPriority = PRI_UI;
+    RM_LoadImage(credits_rightbtn_highlight, "Assets/arrowhighlight.png");
 
     // left arrow
     credits_left = GOM_Create(RECTANGLE);
@@ -123,6 +145,10 @@ void SceneCredits_init(void)
     RM_LoadImage(credits_leftbtn, "Assets/arrow.png");
     credits_leftbtn->isXFlipped = 1;
     credits_leftbtn->color = CP_Color_Create(0, 0, 0, 0);
+    credits_leftbtn_highlight = RM_AddComponent(credits_left);
+    credits_leftbtn_highlight->renderPriority = PRI_UI;
+    RM_LoadImage(credits_leftbtn_highlight, "Assets/arrowhighlight.png");
+    credits_leftbtn_highlight->isXFlipped = 1;
  
     SM_SystemsInit();
 
@@ -135,6 +161,21 @@ void SceneCredits_init(void)
 void SceneCredits_update(void)
 {
     credits_cross_highlight->isEnabled = false;
+    credits_rightbtn_highlight->isEnabled = false;
+    credits_leftbtn_highlight->isEnabled = false;
+
+    if (on_page1 == 1) {
+        credits_leftbtn_highlight->color = CP_Color_Create(0, 0, 0, 0);
+    }
+    else {
+        credits_leftbtn_highlight->color = CP_Color_Create(0, 0, 0, 255);
+    }
+    if (on_page2 == 1) {
+        credits_rightbtn_highlight->color = CP_Color_Create(0, 0, 0, 0);
+    }
+    else {
+        credits_rightbtn_highlight->color = CP_Color_Create(0, 0, 0, 255);
+    }
 
     SM_SystemsPreUpdate();
     SM_SystemsUpdate(0);

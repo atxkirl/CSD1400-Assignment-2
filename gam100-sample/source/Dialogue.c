@@ -8,6 +8,7 @@
 *//*______________________________________________________________________*/
 
 #include "Dialogue.h"
+#include "Colors.h"
 
 /// <summary>
 /// Handling function for when dialoguebox close button is clicked.
@@ -98,9 +99,10 @@ void DM_Init()
 	
 	dialogueBoxRenderer = RM_AddComponent(dialogueBox);
 	dialogueBoxRenderer->color = CP_Color_Create(115, 62, 58, 255);
-	dialogueBoxRenderer->textColor = CP_Color_Create(0, 0, 0, 255);
+	dialogueBoxRenderer->textColor = COLOR_LIGHTYELLOW;
 	dialogueBoxRenderer->renderPriority = PRI_UI;
 	dialogueBoxRenderer->textScale = CP_Vector_Set(dialogueTextScale, dialogueTextScale);
+	//RM_LoadImage(dialogueBoxRenderer, "Assets/Backgrounds/background-light.png");
 
 	// Create and register the close button's GameObject, Renderer and Collider.
 	closeButton = GOM_Create2(CIRCLE, dialogueBox->position, 0.f, CP_Vector_Set(closeButtonDiameter, closeButtonDiameter));

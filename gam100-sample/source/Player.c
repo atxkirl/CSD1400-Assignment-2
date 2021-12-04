@@ -281,19 +281,19 @@ GameObject* PLY_CreatePlayer(float x, float y) {
     float xD = (float)CP_System_GetWindowWidth() / 100, yD = (float)CP_System_GetWindowHeight() / 100;
 
     // Renders Heart 1
-    heart1 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 90, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+    heart1 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 95, yD * 92), 0, CP_Vector_Set(40.0f, 40.0f));
     r = RM_AddComponent(heart1);
     RM_LoadImage(r, "Assets/heart.png");
     r->renderPriority = PRI_UI;
 
     //Renders Heart 2
-    heart2 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 85, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+    heart2 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 91, yD * 92), 0, CP_Vector_Set(40.0f, 40.0f));
     r = RM_AddComponent(heart2);
     RM_LoadImage(r, "Assets/heart.png");
     r->renderPriority = PRI_UI;
 
     //Renders Heart 3
-    heart3 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 80, yD * 90), 0, CP_Vector_Set(50.0f, 50.0f));
+    heart3 = GOM_Create2(RECTANGLE, CP_Vector_Set(xD * 87, yD * 92), 0, CP_Vector_Set(40.0f, 40.0f));
     r = RM_AddComponent(heart3);
     RM_LoadImage(r, "Assets/heart.png");
     r->renderPriority = PRI_UI;

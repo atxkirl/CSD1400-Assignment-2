@@ -9,6 +9,7 @@
 
 #include "Objective_BreakCoconut.h"
 #include "SystemManager.h"
+#include "Colors.h"
 
 
 int obc_stage = 0;
@@ -19,7 +20,7 @@ const float obc_delayHit = 0.5f;
 GameObject* obc_cross;
 GameObject* obc_UI, * obc_title;
 GameObject* obc_coconut;
-Renderer* r1, *r2, *r3, *r4;
+Renderer* r1, *r2, *r3, *r4, *cross_highlight;
 int isActive;
 
 /// <summary>
@@ -58,6 +59,13 @@ void OB_BreakCoconutOnCollision(Collider* left, Collider* right)
 			OB_BreakCoconutUnTrigger();
 		}
 	}
+	if (strcmp(((GameObject*)right->obj)->tag, "Mouse") == 0)
+	{
+		if (strcmp(((GameObject*)left->obj)->tag, "cross") == 0)
+		{
+			cross_highlight->isEnabled = true;
+		}
+	}
 }
 /// <summary>
 /// Inits the break coconut objective
@@ -72,6 +80,7 @@ void OB_BreakCoconutInit()
 	obc_title = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(screenWidth * 0.6f, 60));
 	r = RM_AddComponent(obc_title);
 	r->color = CP_Color_Create(115, 62, 58, 255);
+	r->textColor = COLOR_LIGHTYELLOW;
 	r->renderPriority = PRI_UI;
 	r->textScale = CP_Vector_Set(3.0f, 3.0f);
 	RM_SetText(r, "Break the coconut!");
@@ -83,7 +92,7 @@ void OB_BreakCoconutInit()
 	r->renderPriority = PRI_UI;
 	RM_LoadImage(r, "Assets/Backgrounds/objective-light.png");
 
-	obc_cross = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.775f, screenHeight * 0.225f), 0 , CP_Vector_Set(50, 50));
+	obc_cross = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.8f, screenHeight * 0.18f), 0 , CP_Vector_Set(50, 50));
 	obc_cross->tag = "cross";
 	r = RM_AddComponent(obc_cross);
 	RM_LoadImage(r, "Assets/cross.png");
@@ -92,6 +101,9 @@ void OB_BreakCoconutInit()
 	CLM_Set(c, COL_BOX, OB_BreakCoconutOnCollision);
 	c->space = COLSPC_SCREEN;
 	c->isTrigger = 1;
+	cross_highlight = RM_AddComponent(obc_cross);
+	cross_highlight->renderPriority = PRI_UI;
+	RM_LoadImage(cross_highlight, "Assets/crosshighlight.png");
 
 	obc_coconut = GOM_Create2(CIRCLE, CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f),
 		0, CP_Vector_Set(screenHeight * 0.5f, screenHeight * 0.5f));
@@ -142,6 +154,8 @@ void OB_BreakCoconutUpdate()
 		Renderer* r = RM_GetComponent(obc_title);
 		RM_SetText(r, "Coconut broken!");
 	}
+
+	cross_highlight->isEnabled = false;
 }
 /// <summary>
 /// Triggers / activates the break coconut objective

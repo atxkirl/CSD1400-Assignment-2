@@ -133,6 +133,7 @@ void OB_ConnectInit()
 	OBJ_Title = GOM_Create2(RECTANGLE, CP_Vector_Set(screenWidth * 0.5f, 75), 0, CP_Vector_Set(screenWidth * 0.6f, 60));
 	Renderer* r = RM_AddComponent(OBJ_Title);
 	r->color = CP_Color_Create(115, 62, 58, 255);
+	r->textColor = COLOR_LIGHTYELLOW;
 	//r->text = "Connect The Wires!";
 	r->renderPriority = PRI_UI;
 	r->textScale = CP_Vector_Set(3.0f, 3.0f);
@@ -149,7 +150,7 @@ void OB_ConnectInit()
 
 	//cross
 	cross = GOM_Create(RECTANGLE);
-	cross->position = CP_Vector_Set(screenWidth * 0.775f, screenHeight * 0.2f);
+	cross->position = CP_Vector_Set(screenWidth * 0.8f, screenHeight * 0.18f);
 	cross->scale = CP_Vector_Set(50, 50);
 	cross->tag = "cross";
 	r = RM_AddComponent(cross);

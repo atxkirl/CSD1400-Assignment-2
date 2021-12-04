@@ -207,30 +207,31 @@ void SceneOptions_init(void)
     SaveFile = "Controls/controls.txt";
 
     Collider* c = NULL;
+
+    //UI Background
+    Options_Background = GOM_Create(RECTANGLE);
+    Renderer* r = RM_AddComponent(Options_Background);
+    r->color = CP_Color_Create(200, 200, 200, 255);
+    r->renderPriority = PRI_UI;
+    RM_LoadImage(r, "Assets/Backgrounds/objective-light.png");
+    Options_Background->scale = CP_Vector_Set(screenWidth * 0.7f, screenHeight * 0.8f);
+    Options_Background->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
+
     //title
-    Options_Title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 75), 0,
+    Options_Title = GOM_Create2(EMPTY, CP_Vector_Set(screenWidth * 0.5f, 135), 0,
         CP_Vector_Set(screenWidth * 0.6f, 180));
-    Renderer* r = RM_AddComponent(Options_Title);
+    r = RM_AddComponent(Options_Title);
     //r->color.a = 0;
     //r->text = "Options";
     RM_SetText(r, "Options");
-    RM_LoadImage(r, "Assets/Backgrounds/title-light.png");
+    //RM_LoadImage(r, "Assets/Backgrounds/title-light.png");
     r->renderPriority = PRI_UI;
     r->textColor = COLOR_LIGHTYELLOW;
     r->textScale = CP_Vector_Set(3.0f, 3.0f);
 
-    //UI Background
-    Options_Background = GOM_Create(RECTANGLE);
-    r = RM_AddComponent(Options_Background);
-    r->color = CP_Color_Create(200, 200, 200, 255);
-    r->renderPriority = PRI_UI;
-    RM_LoadImage(r, "Assets/Backgrounds/objective-light.png");
-    Options_Background->scale = CP_Vector_Set(screenWidth * 0.6f, screenHeight * 0.75f);
-    Options_Background->position = CP_Vector_Set(screenWidth * 0.5f, screenHeight * 0.5f);
-
     //cross
     Options_Cross = GOM_Create(RECTANGLE);
-    Options_Cross->position = CP_Vector_Set(screenWidth * 0.775f, screenHeight * 0.2f);
+    Options_Cross->position = CP_Vector_Set(screenWidth * 0.846f, screenHeight * 0.123f);
     Options_Cross->scale = CP_Vector_Set(50, 50);
     Options_Cross->tag = "cross";
     c = CLM_AddComponent(Options_Cross);
