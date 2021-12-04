@@ -1,11 +1,9 @@
-/*!
-@file Weiyi.c
-@author TODO
-@course TODO
-@section TODO
-@tutorial TODO
-@date TODO
-@brief This file contains functions of game init, update, exit
+/*
+@file	Weiyi.c
+@author	Tan Wee Yi (weeyi.t)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@brief	TEST scene to test out player script for the functionailty.
 *//*______________________________________________________________________*/
 
 #include <stdio.h>
@@ -29,6 +27,11 @@ GameObject* e5 = NULL;
 Collider* k;
 Renderer* r;
 
+/// <summary>
+/// Handles collision that is in the scene
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void wy_OnCollision(Collider* left, Collider* right) {
 
     if (strcmp(left->obj->tag, "obj1") == 0 && strcmp(right->obj->tag, "player") == 0) SM_DeleteGameObject(e3);
@@ -43,6 +46,11 @@ void wy_OnCollision(Collider* left, Collider* right) {
     return;
 
 }
+
+/// <summary>
+/// Inits the scene with buttons and also the colliders for them.
+/// </summary>
+/// <param name=""></param>
 void Weiyi_init(void)
 {
     SM_SystemsInit();
@@ -99,6 +107,11 @@ void Weiyi_init(void)
     SDM_PlayBgMusic(2);
 }
 
+/// <summary>
+/// Updates the game scene to check for when there is a mouse press and also handles the drawing of
+/// the buttons.
+/// </summary>
+/// <param name=""></param>
 void Weiyi_update(void)
 {
     SM_SystemsPreUpdate();
@@ -109,6 +122,10 @@ void Weiyi_update(void)
     SM_SystemsLateUpdate();
 }
 
+/// <summary>
+/// Exits the scene.
+/// </summary>
+/// <param name=""></param>
 void Weiyi_exit(void)
 {
     SM_SystemsExit();
@@ -117,6 +134,12 @@ void Weiyi_exit(void)
     SDM_StopBgMusic();
 }
 
+/// <summary>
+/// Inits the scene for the scenemanager so that it can 
+/// </summary>
+/// <param name="init"></param>
+/// <param name="update"></param>
+/// <param name="exit"></param>
 void Weiyi_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = Weiyi_init;

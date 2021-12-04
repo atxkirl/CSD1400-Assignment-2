@@ -1,3 +1,11 @@
+/*
+@file	gameEndScene.c 
+@author	Tan Wee Yi (weeyi.t)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@brief	Scene that will be at the end of the game / when the player loses.
+*//*______________________________________________________________________*/
+
 #define BUTTON_WIDTH 230.f
 #define BUTTON_HEIGHT 50.f
 
@@ -12,6 +20,11 @@
 #define GAMEEND_MAXBUTTONS 2
 Collider* gameEnd_buttons[GAMEEND_MAXBUTTONS];
 
+/// <summary>
+/// Handles the collision inside of the game scene
+/// </summary>
+/// <param name="left"></param>
+/// <param name="right"></param>
 void gameEnd_OnCollision(Collider* left, Collider* right) {
 
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
@@ -30,6 +43,10 @@ void gameEnd_OnCollision(Collider* left, Collider* right) {
     }
 }
 
+/// <summary>
+/// Inits the scene with buttons and also the colliders for them.
+/// </summary>
+/// <param name=""></param>
 void gameEnd_init(void)
 {
     float xScale = CP_System_GetWindowWidth() / 100.0f, yScale = CP_System_GetWindowHeight()/100.0f;
@@ -77,6 +94,11 @@ void gameEnd_init(void)
 
 }
 
+/// <summary>
+/// Updates the game scene to check for when there is a mouse press and also handles the drawing of
+/// the buttons.
+/// </summary>
+/// <param name=""></param>
 void gameEnd_update(void)
 {
     SM_SystemsPreUpdate();
@@ -125,11 +147,21 @@ void gameEnd_update(void)
     SM_SystemsLateUpdate();
 }
 
+/// <summary>
+/// Exits the scene.
+/// </summary>
+/// <param name=""></param>
 void gameEnd_exit(void)
 {
     SM_SystemsExit();
 }
 
+/// <summary>
+/// Inits the scene for the scenemanager so that it can 
+/// </summary>
+/// <param name="init"></param>
+/// <param name="update"></param>
+/// <param name="exit"></param>
 void gameEnd_sceneInit(FunctionPtr* init, FunctionPtr* update, FunctionPtr* exit)
 {
     *init = gameEnd_init;
