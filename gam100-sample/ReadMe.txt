@@ -1,14 +1,32 @@
-Hello! Thank you for play-testing BananaBois' game!
+Module		: CSD1400 Software Engineering Project 1
+Class-Section	: Section A & C
+Year		: 2021
+Game Name	: BananaBoi
+Team Name	: Team BananaBoi
+Team Members	: Adrian Tan Xing Khiang <t.xingkhiangadrian@digipen.edu>
+		  Ow Hong Yu 		 <ow.h@digipen.edu>
+		  Lim Guan Sheng, Marcus <l.guanshengmarcus@digipen.edu>
+		  Tan Wee Yi 		 <weeyi.t@digipen.edu>
+		  Koh Xin Yun 		 <xinyun.k@digipen.edu>
 
-In case you need help, here are some things to help you get started.
+Description:
+============
+Welcome to BananaBoi!
+In this game, you play as a living, breathing Banana Boi - who just got stranded on an island!
+Your job is to collect resources and fix your boat to escape, all the while keeping an eye out
+for the hungry monkeys that live on the island who want to gobble you up!
 
-Check the options to see the controls. You can edit the controls to your preference.
 
-In the game, you need to complete tasks around the map. The type of tasks are specified on the top left of the screen.
+Default Controls:
+=================
+Movement:
+W - Move Up
+A - Move Left
+S - Move Down
+D - Move Right
+E - Interact
 
-There is an enemy in the map! Avoid the enemy or face his wrath. Taking too much damage will result in Game Over.
-
-Complete all objectives and escape the island on the boat to win!
-
-We value your feedback, please take a moment to fill up our survey:
-https://forms.gle/vsXDEAGAz7mpwVXb9
+Options Menu:
+=============
+- Controls can be rebound here.
+- Volumes for game music, and game effects
