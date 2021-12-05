@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include "cprocessing.h"
+#include "SoundManager.h"
 #include "Helpers.h"
 #include "SceneManager.h"
 #include "SystemManager.h"
@@ -31,7 +32,11 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
     {
         // close scene
         if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
+        {
             SceneManager_ChangeSceneByName("mainmenu");
+            SDM_PlaySFX(4);
+        }
+            
 
         // to page 2
         if (strcmp(((GameObject*)left->obj)->tag, "page2") == 0) {
@@ -42,6 +47,7 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
 
             on_page2 = 1;
             on_page1 = 0;
+            SDM_PlaySFX(4);
         }
 
         // back to page 1
@@ -53,6 +59,7 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
 
             on_page1 = 1;
             on_page2 = 0;
+            SDM_PlaySFX(4);
         }
     }
 
@@ -61,10 +68,12 @@ void SceneCredits_OnCollision(Collider* left, Collider* right)
         if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0)
         {
             credits_cross_highlight->isEnabled = true;
+
         }
 
         if (strcmp(((GameObject*)left->obj)->tag, "page1") == 0) {
             credits_leftbtn_highlight->isEnabled = true;
+
         }
 
         if (strcmp(((GameObject*)left->obj)->tag, "page2") == 0) {

@@ -74,12 +74,16 @@ void SceneOptions_OnCollision(Collider* left, Collider* right)
     //me, other
     if (strcmp(((GameObject*)right->obj)->tag, "Click") == 0)
     {
-        if (strcmp(((GameObject*)left->obj)->tag, "cross") == 0)
+        if (strcmp(((GameObject*)left->obj)->tag, "cross") == 0) {
             SceneManager_ChangeSceneByName("mainmenu");
+            SDM_PlaySFX(4);
+        }
+            
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonSave") == 0)
         {
             WriteControlsToFile(SaveFile, cRightText, 5);
             SceneManager_ChangeSceneByName("mainmenu");
+            SDM_PlaySFX(4);
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "ButtonUp") == 0)
