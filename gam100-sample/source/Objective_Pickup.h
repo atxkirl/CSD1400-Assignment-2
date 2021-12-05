@@ -21,13 +21,13 @@ void OB_PickupInit();
 void OB_PickupUpdate();
 
 /// <summary>
-/// returns true of false for objective if it is picked
+/// returns the number of boat parts
 /// </summary>
 /// <returns>int</returns>
 int GetBoatParts();
 
 /// <summary>
-/// Sets active or not active for the objective
+/// Sets the number of boat parts
 /// </summary>
 /// <param name="iSetter">- 1 or 0 for active</param>
 void SetBoatParts(int iSetter);

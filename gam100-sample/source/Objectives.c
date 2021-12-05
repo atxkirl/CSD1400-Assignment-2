@@ -286,7 +286,7 @@ void Objectives_Update()
 
     for (int i = 0; i < MAX_OBJECTIVES; ++i)
     {
-        if (strcmp(g_ObjectiveUI[i]->tag, "ObjectiveUI2") == 0 && (!Objectives_GetCompleteAll() || i != iCurrentObjective))
+        if (strcmp(g_ObjectiveUI[i]->tag, "ObjectiveUI2") == 0 && !Objectives_GetCompleteAll())
         {
             if (GetLoadedNumBoatParts() == GetBoatParts())
             {
@@ -302,6 +302,21 @@ void Objectives_Update()
             }
         }
     }
+
+    //if (CP_Input_KeyTriggered(KEY_RIGHT_SHIFT))
+    //{
+    //    SetBoatParts(GetLoadedNumBoatParts());
+    //    for (int i = 0; i < NumGrids; ++i)
+    //    {
+    //        for (int j = 0; j < NumGrids; ++j)
+    //        {
+    //            if (gLoadedObjects->gGrid[i][j]->type == BOAT_PARTS)
+    //            {
+    //                gLoadedObjects->gGrid[i][j]->isEnabled = 0;
+    //            }
+    //        }
+    //    }
+    //}
 
     OB_ConnectUpdate();
     OB_BreakCoconutUpdate();
