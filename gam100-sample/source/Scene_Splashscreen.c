@@ -1,12 +1,13 @@
 /*
-@file	Scene_Splashscreen.c
-@author	Adrian Tan (t.xingkhiangadrian)
-@course	CSD1400 Software Engineering Project 1
-@Team	BananaBoi
-@date	14/11/2021
-@brief	Scene that displays the DigiPen logo, as well as the team logo when
-        the game is first launched.
-*//*______________________________________________________________________*/
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file	    Scene_Splashscreen.c
+@author	    Adrian Tan (t.xingkhiangadrian)
+@course	    CSD1400 Software Engineering Project 1
+@Team	    BananaBoi
+@date	    14/11/2021
+@brief	    Scene that displays the DigiPen logo, as well as the team logo when the game is first 
+            launched.
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"

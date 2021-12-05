@@ -1,10 +1,11 @@
-/*!
-@file            LevelEditor.h
-@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
-@course          CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief           This file contains the functions for editing the levels.
-*//*______________________________________________________________________*/
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file       LevelEditor.h
+@author     Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course     CSD1400 Software Engineering Project 1
+@Team       BananaBoi
+@brief      This file contains the functions for editing the levels.
+*//*________________________________________________________________________________________*/
 
 #include "../CProcessing/inc/cprocessing.h"
 #include "GameObject.h"

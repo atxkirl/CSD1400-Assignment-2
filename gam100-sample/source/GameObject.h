@@ -1,10 +1,11 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		GameObject.h
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
+@Team		BananaBoi
 @brief		Struct for gameobject to contain all the essential information of a game object
-*/
+*//*________________________________________________________________________________________*/
 
 
 #pragma once

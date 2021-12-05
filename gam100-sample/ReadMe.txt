@@ -26,7 +26,14 @@ S - Move Down
 D - Move Right
 E - Interact
 
+
 Options Menu:
 =============
-- Controls can be rebound here.
-- Volumes for game music, and game effects
+- Controls can be rebound to any other alphabet keys.
+- Volumes for game music, and game effects.
+
+
+Cheat Keys:
+===========
+ESC    - Skip Intro splashscreens (DigiPen Logo and Team Logo)
+RShift - Toggle Player Invulnerability

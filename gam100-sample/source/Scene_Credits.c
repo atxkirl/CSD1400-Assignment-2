@@ -1,10 +1,11 @@
-/*!
-@file            Scene_Credits.c
-@author          Koh Xin Yun (xinyun.k)
-@course          CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief           Scene that displays the credits
-*//*______________________________________________________________________*/
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file       Scene_Credits.c
+@author     Koh Xin Yun (xinyun.k)
+@course     CSD1400 Software Engineering Project 1
+@Team       BananaBoi
+@brief      Scene that displays the credits
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"

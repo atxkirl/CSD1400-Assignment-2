@@ -1,10 +1,11 @@
 /*
-@file	gameEndScene.c 
-@author	Tan Wee Yi (weeyi.t)
-@course	CSD1400 Software Engineering Project 1
-@Team	BananaBoi
-@brief	Scene that will be at the end of the game / when the player loses.
-*//*______________________________________________________________________*/
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file	    gameEndScene.c 
+@author	    Tan Wee Yi (weeyi.t)
+@course	    CSD1400 Software Engineering Project 1
+@Team	    BananaBoi
+@brief	    Scene that will be at the end of the game / when the player loses.
+*//*________________________________________________________________________________________*/
 
 #define BUTTON_WIDTH 230.f
 #define BUTTON_HEIGHT 50.f

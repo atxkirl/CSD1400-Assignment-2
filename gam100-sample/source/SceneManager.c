@@ -1,11 +1,12 @@
 /*
-@file	SceneManager.c
-@author	Adrian Tan (t.xingkhiangadrian)
-@course	CSD1400 Software Engineering Project 1
-@Team	BananaBoi
-@date	06/10/2021
-@brief	Contains functions to register and change scenes during runtime.
-*//*______________________________________________________________________*/
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file		SceneManager.c
+@author		Adrian Tan (t.xingkhiangadrian)
+@course		CSD1400 Software Engineering Project 1
+@Team		BananaBoi
+@date		06/10/2021
+@brief		Contains functions to register and change scenes during runtime.
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include <stdlib.h>

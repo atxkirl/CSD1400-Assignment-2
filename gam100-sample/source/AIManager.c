@@ -1,12 +1,13 @@
 /*
-@file	AIManager.c
-@author	Adrian Tan (t.xingkhiangadrian)
-@course	CSD1400 Software Engineering Project 1
-@Team	BananaBoi
-@date	06/11/2021
-@brief	Contains functions to create, modify, and control the behaviors,
-		and movements of Enemy AI.
-*//*______________________________________________________________________*/
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file		AIManager.c
+@author		Adrian Tan (t.xingkhiangadrian)
+@course		CSD1400 Software Engineering Project 1
+@Team		BananaBoi
+@date		06/11/2021
+@brief		Contains functions to create, modify, and control the behaviors, and movements of 
+			Enemy AI.
+*//*________________________________________________________________________________________*/
 
 #include "AIManager.h"
 #include "Objectives.h"

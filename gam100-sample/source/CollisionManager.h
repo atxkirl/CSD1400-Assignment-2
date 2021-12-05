@@ -1,11 +1,12 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		CollisionManager.h
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief		Collision manager that handles all the colliders entity by checking for collisions among
-			the entities
-*/
+@Team		BananaBoi
+@brief		Collision manager that handles all the colliders entity by checking for collisions 
+			among the entities
+*//*________________________________________________________________________________________*/
 
 #pragma once
 

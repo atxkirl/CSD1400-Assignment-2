@@ -1,10 +1,11 @@
-/*!
-@file            Xinyun.c
-@author          Koh Xin Yun (xinyun.k)
-@course          CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief           This file contains functions of game init, update, exit
-*//*______________________________________________________________________*/
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file       Xinyun.c
+@author     Koh Xin Yun (xinyun.k)
+@course     CSD1400 Software Engineering Project 1
+@Team       BananaBoi
+@brief      This file contains functions of game init, update, exit
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"

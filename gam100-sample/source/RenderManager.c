@@ -1,11 +1,13 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		RendereManager.c
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief		Render Manager that handles all entities that renders on screen. Also defines the world
-			space and screen space system which the entities renders on. Also sorts render orders based on priority.
-*/
+@Team		BananaBoi
+@brief		Render Manager that handles all entities that renders on screen. Also defines the 
+			world space and screen space system which the entities renders on. Also sorts 
+			render orders based on priority.
+*//*________________________________________________________________________________________*/
 
 #include "RenderManager.h"
 #include "GameObjectManager.h"

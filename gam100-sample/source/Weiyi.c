@@ -1,10 +1,11 @@
 /*
-@file	Weiyi.c
-@author	Tan Wee Yi (weeyi.t)
-@course	CSD1400 Software Engineering Project 1
-@Team	BananaBoi
-@brief	TEST scene to test out player script for the functionailty.
-*//*______________________________________________________________________*/
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file	    Weiyi.c
+@author	    Tan Wee Yi (weeyi.t)
+@course	    CSD1400 Software Engineering Project 1
+@Team	    BananaBoi
+@brief	    TEST scene to test out player script for the functionailty.
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"

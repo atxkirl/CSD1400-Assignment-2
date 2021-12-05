@@ -1,13 +1,14 @@
 /*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		Helpers.h
 @author		Adrian Tan (t.xingkhiangadrian)
 @coauthor	Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
 @Team		BananaBoi
 @date		06/10/2021
-@brief		Contains helpful functions to calculate various things, like
-			random values, or the sizes of arrays.
-*//*______________________________________________________________________*/
+@brief		Contains helpful functions to calculate various things, like random values, or the 
+			sizes of arrays.
+*//*________________________________________________________________________________________*/
 
 #pragma once
 

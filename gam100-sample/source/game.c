@@ -1,10 +1,11 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file       game.c
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
+@Team       BananaBoi
 @brief		This is a main menu scenes. It contains all the UI in main menu
-*//*______________________________________________________________________*/
+*//*________________________________________________________________________________________*/
 
 #define BUTTON_WIDTH 60.f
 #define BUTTON_HEIGHT 30.f

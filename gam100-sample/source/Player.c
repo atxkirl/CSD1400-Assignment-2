@@ -1,11 +1,12 @@
 /*
-@file	Player.c
-@author	Tan Wee Yi (weeyi.t)
-@course	CSD1400 Software Engineering Project 1
-@Team	BananaBoi
-@brief	Script that will handle the player functionality, and all the updates that 
-is required
-*//*______________________________________________________________________*/
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file	    Player.c
+@author	    Tan Wee Yi (weeyi.t)
+@course	    CSD1400 Software Engineering Project 1
+@Team	    BananaBoi
+@brief	    Script that will handle the player functionality, and all the updates that is 
+            required
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"

@@ -1,10 +1,11 @@
 /*
-@file	SoundManager.c
-@author	Tan Wee Yi (weeyi.t)
-@course	CSD1400 Software Engineering Project 1
-@Team	BananaBoi
-@brief	Script that handles the sound that is being used in the game.
-*//*______________________________________________________________________*/
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file		SoundManager.c
+@author		Tan Wee Yi (weeyi.t)
+@course		CSD1400 Software Engineering Project 1
+@Team		BananaBoi
+@brief		Script that handles the sound that is being used in the game.
+*//*________________________________________________________________________________________*/
 
 #include "cprocessing.h"
 #include "SoundManager.h"

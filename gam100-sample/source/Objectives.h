@@ -1,10 +1,11 @@
-/*!
-@file            Objectives.h
-@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
-@course          CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief           This file contains the functions for all level objectives.
-*//*______________________________________________________________________*/
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file       Objectives.h
+@author     Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course     CSD1400 Software Engineering Project 1
+@Team       BananaBoi
+@brief      This file contains the functions for all level objectives.
+*//*________________________________________________________________________________________*/
 
 #pragma once
 #define MAX_OBJECTIVES 3

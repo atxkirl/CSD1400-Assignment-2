@@ -1,12 +1,12 @@
-/*!
-@file            Objective_Pickup.h
-@author          Koh Xin Yun (xinyun.k)
-@co-author		 Lim Guan Sheng, Marcus (l.guanshengmarcus)
-@course          CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief           This file contains the declarations for functions in 
-				 Objective Pickup.
-*//*______________________________________________________________________*/
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file		Objective_Pickup.h
+@author		Koh Xin Yun (xinyun.k)
+@co-author	Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@course		CSD1400 Software Engineering Project 1
+@Team		BananaBoi
+@brief		This file contains the declarations for functions in Objective Pickup.
+*//*________________________________________________________________________________________*/
 
 #pragma once
 

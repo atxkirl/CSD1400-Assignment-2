@@ -1,12 +1,13 @@
-/*!
-@file           LevelOne.c
-@author         Lim Guan Sheng, Marcus (l.guanshengmarcus)
-@co-author		Ow Hong Yu (ow.h)
-@co-author	    Adrian Tan (t.xingkhiangadrian)
-@course         CSD1400 Software Engineering Project 1
-@Team           BananaBoi
-@brief          This file contains functions of game init, update, exit
-*//*______________________________________________________________________*/
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file       LevelOne.c
+@author     Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@co-author	Ow Hong Yu (ow.h)
+@co-author	Adrian Tan (t.xingkhiangadrian)
+@course     CSD1400 Software Engineering Project 1
+@Team       BananaBoi
+@brief      This file contains functions of game init, update, exit
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"

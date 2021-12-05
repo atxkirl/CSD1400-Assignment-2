@@ -1,12 +1,13 @@
-/*!
-@file            Scene_Options.c
-@author          Lim Guan Sheng, Marcus (l.guanshengmarcus)
-@co-author       Ow Hong Yu (ow.h)
-@course          CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief           This file contains the functions for the Scene Options.
-                 Player can edit the sounds and controls.
-*//*______________________________________________________________________*/
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file       Scene_Options.c
+@author     Lim Guan Sheng, Marcus (l.guanshengmarcus)
+@co-author  Ow Hong Yu (ow.h)
+@course     CSD1400 Software Engineering Project 1
+@Team       BananaBoi
+@brief      This file contains the functions for the Scene Options. Player can edit the sounds 
+            and controls.
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"

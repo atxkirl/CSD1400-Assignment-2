@@ -1,11 +1,12 @@
 /*
-@file	Dialogue.c
-@author	Adrian Tan (t.xingkhiangadrian)
-@course	CSD1400 Software Engineering Project 1
-@Team	BananaBoi
-@date	07/11/2021
-@brief	Contains functions to display and handle dialogue boxes in the game.
-*//*______________________________________________________________________*/
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file		Dialogue.c
+@author		Adrian Tan (t.xingkhiangadrian)
+@course		CSD1400 Software Engineering Project 1
+@Team		BananaBoi
+@date		07/11/2021
+@brief		Contains functions to display and handle dialogue boxes in the game.
+*//*________________________________________________________________________________________*/
 
 #include "Dialogue.h"
 #include "Colors.h"

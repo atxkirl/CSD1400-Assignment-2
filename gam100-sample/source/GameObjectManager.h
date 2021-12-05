@@ -1,11 +1,12 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		GameObjectManager.h
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief		Game Object Manager that manages the lifespan of a game object. It allocates memory for gameobjects
-			and deallocates them when they are not used
-*/
+@Team		BananaBoi
+@brief		Game Object Manager that manages the lifespan of a game object. It allocates memory 
+			for gameobjects and deallocates them when they are not used.
+*//*________________________________________________________________________________________*/
 
 #pragma once
 

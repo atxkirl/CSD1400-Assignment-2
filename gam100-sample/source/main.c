@@ -1,15 +1,19 @@
 /*---------------------------------------------------------
- * file:	main.c
- * author:	[NAME]
- * email:	[DIGIPEN EMAIL ADDRESS]
+* file:     main.c
+* author:	Team BananaBoi
+* email:	<t.xingkhiangadrian@digipen.edu>
+*           <ow.h@digipen.edu>
+*           <l.guanshengmarcus@digipen.edu>
+*           <weeyi.t@digipen.edu>
+*           <xinyun.k@digipen.edu>
 * 
- * brief:	Main entry point for the sample project
-			* of the CProcessing library
+* brief:    Main entry point for the sample project
+*           of the CProcessing library
 * 
- * documentation link:
- * https://inside.digipen.edu/main/GSDP:GAM100/CProcessing
+* documentation link:
+* https://inside.digipen.edu/main/GSDP:GAM100/CProcessing
 * 
- * Copyright © 2020 DigiPen, All rights reserved.
+* Copyright © 2020 DigiPen, All rights reserved.
 * ---------------------------------------------------------*/
 
 #include <stdio.h>

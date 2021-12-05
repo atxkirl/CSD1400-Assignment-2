@@ -1,11 +1,12 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		AnimationManager.c
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief		A system that contains the logics of all animations and updates the entities 
-			every frame.
-*/
+@Team		BananaBoi
+@brief		A system that contains the logics of all animations and updates the entities every 
+			frame.
+*//*________________________________________________________________________________________*/
 
 #include "SystemManager.h"
 #include "LinkedList.h"

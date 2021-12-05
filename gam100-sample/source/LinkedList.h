@@ -1,10 +1,11 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		LinkedList.h
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
+@Team       BananaBoi
 @brief		A storage container which contains functions to do what a linked list or vectors can
-*/
+*//*________________________________________________________________________________________*/
 
 #pragma once
 

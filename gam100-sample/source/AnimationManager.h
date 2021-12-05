@@ -1,10 +1,11 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		AnimationManager.h
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
+@Team		BananaBoi
 @brief		A system that contains the declaration animation functions and struct entity
-*/
+*//*________________________________________________________________________________________*/
 
 #pragma once
 

@@ -1,10 +1,11 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file       Marcus.c
 @author     Lim Guan Sheng, Marcus (l.guanshengmarcus)
 @course     CSD1400 Software Engineering Project 1
 @Team       BananaBoi
 @brief      This file contains functions used for Marcus's scene
-*//*______________________________________________________________________*/
+*//*________________________________________________________________________________________*/
 
 #include <stdio.h>
 #include "cprocessing.h"

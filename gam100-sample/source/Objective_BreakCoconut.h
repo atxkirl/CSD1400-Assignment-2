@@ -1,11 +1,12 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		Objective_BreakCoconut.h
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
-@brief		One of the objectives. It is a click on the coconut a few times
-			until it is broken for objective complete
-*/
+@Team       BananaBoi
+@brief		One of the objectives. It is a click on the coconut a few times until it is broken
+			for objective complete
+*//*________________________________________________________________________________________*/
 
 
 #pragma once

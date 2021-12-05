@@ -1,10 +1,11 @@
-/*!
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
 @file		MatrixStack.c
 @author		Ow Hong Yu (ow.h)
 @course		CSD1400 Software Engineering Project 1
-@Team            BananaBoi
+@Team		BananaBoi
 @brief		Matrix stack mainly used by render manager
-*/
+*//*________________________________________________________________________________________*/
 
 #include "MatrixStack.h"
 #include <stdio.h> //for printf debug
