@@ -314,6 +314,11 @@ void LoadObjectives(char* cInput)
 			{
 				int iRandom = rand() % MAX_OBJECTIVES;
 
+				while(iRandom == 1 && iHaveBoat)
+				{
+					iRandom = rand() % MAX_OBJECTIVES;
+				}
+
 				if (iRandom == 1)
 					iHaveBoat = 1;
 				snprintf(gLoadedGrids->gGrid[i][j]->tag, 30, "Objective%d", iRandom + 1);
