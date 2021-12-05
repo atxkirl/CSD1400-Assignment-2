@@ -1,3 +1,13 @@
+/*
+@copyright	All content © 2021 DigiPen Institute of Technology Singapore, all rights reserved.
+@file	Player.h
+@author	Tan Wee Yi (weeyi.t)
+@course	CSD1400 Software Engineering Project 1
+@Team	BananaBoi
+@brief	Script that will handle the player functionality, and all the updates that
+is required
+*//*______________________________________________________________________*/
+
 //Prefix: PLY
 
 #include <stdlib.h>
@@ -41,7 +51,8 @@ int PLY_IsInvincible(void);
 /// <returns>True/False on if the player has taken damage.</returns>
 bool PLY_TakeDamage(void);
 
-/*!
-@brief Triggers show interact hint
-*/
+/// <summary>
+/// handles showing the interact hint for players 
+/// </summary>
+/// <param name=""></param>
 void PLY_ShowInteractHint(void);

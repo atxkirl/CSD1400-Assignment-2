@@ -315,4 +315,5 @@ FSM* AIM_CreateEnemy(char* enemyName, char* startStateName, CP_Vector enemyPos, 
 	// Add it to the list of all enemies.
 	LL_Add(&allEnemies, enemy);
 	return enemy;
+
 }

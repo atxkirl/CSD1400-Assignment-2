@@ -34,11 +34,14 @@ void gameEnd_OnCollision(Collider* left, Collider* right) {
         {
             SceneManager_ChangeSceneByName("levelone");
             SDM_ChangeBgMusic(2);
+            SDM_PlayBgMusic(3);
+            SDM_PlaySFX(4);
         }
 
         else if (strcmp(((GameObject*)left->obj)->tag, "exit") == 0) {
             SceneManager_ChangeSceneByName("mainmenu");
             SDM_ChangeBgMusic(1);
+            SDM_PlaySFX(4);
         }
 
     }

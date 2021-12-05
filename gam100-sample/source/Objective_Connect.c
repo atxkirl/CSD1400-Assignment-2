@@ -10,6 +10,7 @@
 #include "Objective_Connect.h"
 #include "SystemManager.h"
 #include "Colors.h"
+#include "SoundManager.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -87,8 +88,12 @@ void OB_ConnectOnCollision(Collider* left, Collider* right)
 		{
 			if (strcmp(hold_Wire->tag, "WireConnector_R") == 0)
 			{
-				if(strcmp(((GameObject*)left->obj)->tag, "RedRight") == 0)
+				if (strcmp(((GameObject*)left->obj)->tag, "RedRight") == 0) 
+				{
 					iRedConnected = 1;
+					SDM_PlaySFX(5);
+				}
+					
 			}
 
 			else if (strcmp(hold_Wire->tag, "WireConnector_B") == 0)
@@ -96,6 +101,7 @@ void OB_ConnectOnCollision(Collider* left, Collider* right)
 				if (strcmp(((GameObject*)left->obj)->tag, "BlueRight") == 0)
 				{
 					iBlueConnected = 1;
+					SDM_PlaySFX(5);
 				}
 			}
 
@@ -104,6 +110,7 @@ void OB_ConnectOnCollision(Collider* left, Collider* right)
 				if (strcmp(((GameObject*)left->obj)->tag, "GreenRight") == 0)
 				{
 					iGreenConnected = 1;
+					SDM_PlaySFX(5);
 				}
 			}
 
@@ -112,6 +119,7 @@ void OB_ConnectOnCollision(Collider* left, Collider* right)
 				if (strcmp(((GameObject*)left->obj)->tag, "YellowRight") == 0)
 				{
 					iYellowConnected = 1;
+					SDM_PlaySFX(5);
 				}
 			}
 		}
@@ -296,6 +304,7 @@ void OB_ConnectUpdate()
 			{
 				WireConnector_R->scale = CP_Vector_Set(StartingScaleX, StartingScaleY);
 				WireConnector_R->rotation = 0;
+
 			}
 			if (!iGreenConnected)
 			{

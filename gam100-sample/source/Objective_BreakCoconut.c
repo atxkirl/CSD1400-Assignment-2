@@ -9,6 +9,7 @@
 
 #include "Objective_BreakCoconut.h"
 #include "SystemManager.h"
+#include "SoundManager.h"
 #include "Colors.h"
 
 
@@ -52,6 +53,7 @@ void OB_BreakCoconutOnCollision(Collider* left, Collider* right)
 				Animation* a = AM_GetComponent(obc_coconut);
 				a->isEnabled = 1;
 				obc_canHit = 0;
+				SDM_PlaySFX(3);
 			}
 		}
 		else if (strcmp(left->obj->tag, "cross") == 0)

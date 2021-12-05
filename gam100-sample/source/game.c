@@ -80,23 +80,29 @@ void game_OnCollision(Collider* left, Collider* right)
         {
             SceneManager_ChangeSceneByName("levelone");
             SDM_ChangeBgMusic(2);
+            SDM_PlayBgMusic(3);
+            SDM_PlaySFX(4);
         }
         else if (strcmp(((GameObject*)left->obj)->tag, "options") == 0)
         {
             SceneManager_ChangeSceneByName("options");
             SDM_ChangeBgMusic(1);
+            SDM_PlaySFX(4);
         }
         else if (strcmp(((GameObject*)left->obj)->tag, "credits") == 0) {
             SceneManager_ChangeSceneByName("credits");
             SDM_ChangeBgMusic(1);
+            SDM_PlaySFX(4);
         }
         else if (strcmp(((GameObject*)left->obj)->tag, "howtoplay") == 0) {
             SceneManager_ChangeSceneByName("credits");
             SDM_ChangeBgMusic(1);
+            SDM_PlaySFX(4);
         } //TODO
         else if (strcmp(((GameObject*)left->obj)->tag, "quit") == 0)
         {
             CP_Engine_Terminate();
+            SDM_PlaySFX(4);
             SDM_StopAll();
             SDM_FreeSounds();
         }  

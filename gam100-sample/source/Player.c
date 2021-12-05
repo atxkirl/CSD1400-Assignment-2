@@ -587,7 +587,7 @@ bool PLY_TakeDamage(void)
         startTime = clock(); //holds information on when the player was last hit according to the time
         p_Invincible = true;
         playerhealth--;
-        SDM_PlaySFX(2);
+        SDM_PlaySFX(1);
         return true;
     }
     else

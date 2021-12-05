@@ -91,15 +91,18 @@ void LevelOne_OnCollision(Collider* left, Collider* right)
         if (strcmp(left->obj->tag, "pauseClose") == 0)
         {
             SetPause(0);
+            SDM_PlaySFX(4);
         }
         else if (strcmp(left->obj->tag, "ReturnToMainMenu") == 0)
         {
             SceneManager_ChangeSceneByName("mainmenu");
+            SDM_PlaySFX(4);
         }
         else if (strcmp(((GameObject*)left->obj)->tag, "howtoplayClose") == 0)
         {
             howtoplay->isEnabled = 0;
             close->isEnabled = 0;
+            SDM_PlaySFX(4);
             SetPause(false);
         }
     }
@@ -470,6 +473,7 @@ void SpawnEnemies()
         printf("Spawning an Enemy!!\n");
         AIM_CreateEnemy("BBEM", "BBEM_Idle", spawnPos, bananaBoi, &map);
         ++enemyCount;
+        SDM_PlaySFX(2);
     }
 
     // Reset timer and get new spawn timer.

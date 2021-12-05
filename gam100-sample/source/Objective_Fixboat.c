@@ -10,6 +10,7 @@
 
 #include "Objective_Fixboat.h"
 #include "SystemManager.h"
+#include "SoundManager.h"
 #include "Colors.h"
 
 
@@ -105,6 +106,7 @@ void OB_FixBoatOnCollision(Collider* left, Collider* right)
 			right->obj->isEnabled = 0;
 			ofb_isFixed1 = 1;
 			ofb_clickHints[0]->isEnabled = !ofb_isFixed1; //so dont have that one frame it was enabled when fixed
+			SDM_PlaySFX(3);
 		}
 		else if (strcmp(left->obj->tag, "ofb_part2") == 0 && strcmp(right->obj->tag, "fix2") == 0)
 		{
@@ -112,6 +114,7 @@ void OB_FixBoatOnCollision(Collider* left, Collider* right)
 			right->obj->isEnabled = 0;
 			ofb_isFixed2 = 1;
 			ofb_clickHints[1]->isEnabled = !ofb_isFixed2;
+			SDM_PlaySFX(3);
 		}
 		else if (strcmp(left->obj->tag, "ofb_part3") == 0 && strcmp(right->obj->tag, "fix3") == 0)
 		{
@@ -119,6 +122,7 @@ void OB_FixBoatOnCollision(Collider* left, Collider* right)
 			right->obj->isEnabled = 0;
 			ofb_isFixed3 = 1;
 			ofb_clickHints[2]->isEnabled = !ofb_isFixed3;
+			SDM_PlaySFX(3);
 		}
 		FixBoatEnableImage();
 
